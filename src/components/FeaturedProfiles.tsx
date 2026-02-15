@@ -19,11 +19,11 @@ const FeaturedProfiles = () => {
           {/* Male */}
           <div>
             <h3 className="font-serif text-xl font-semibold text-primary mb-6 text-center">Groom Profiles</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
               {placeholders.map((_, i) => (
                 <motion.div
                   key={`m${i}`}
-                  className="aspect-square rounded-xl bg-card border border-border overflow-hidden group cursor-pointer"
+                  className="aspect-[3/4] rounded-xl bg-card border border-border overflow-hidden group cursor-pointer"
                   whileHover={{ scale: 1.03 }}
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -42,11 +42,11 @@ const FeaturedProfiles = () => {
           {/* Female */}
           <div>
             <h3 className="font-serif text-xl font-semibold text-primary mb-6 text-center">Bride Profiles</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
               {placeholders.map((_, i) => (
                 <motion.div
                   key={`f${i}`}
-                  className="aspect-square rounded-xl bg-card border border-border overflow-hidden group cursor-pointer"
+                  className="aspect-[3/4] rounded-xl bg-card border border-border overflow-hidden group cursor-pointer"
                   whileHover={{ scale: 1.03 }}
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
