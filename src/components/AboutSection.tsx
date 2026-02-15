@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 const AboutSection = () => {
   return (
-    <section id="about" className="section-cream py-20">
+    <section id="about" className="section-cream py-20 bg-slate-300">
       <div className="container mx-auto px-4">
         <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary mb-3">
@@ -18,32 +18,32 @@ const AboutSection = () => {
             </p>
             <ul className="space-y-3">
               {[
-                "10+ years experienced relationship managers",
-                "Strong expertise in NRI family match setting",
-                "Traditional values combined with modern technology",
-                "Personalized assistance for every client",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3">
+              "10+ years experienced relationship managers",
+              "Strong expertise in NRI family match setting",
+              "Traditional values combined with modern technology",
+              "Personalized assistance for every client"].
+              map((item) =>
+              <li key={item} className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ background: "hsl(var(--gold-accent))" }} />
                   <span className="text-muted-foreground">{item}</span>
                 </li>
-              ))}
+              )}
             </ul>
           </motion.div>
 
           <motion.div className="lg:w-1/2" initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}>
             <div className="grid grid-cols-2 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="aspect-square rounded-xl bg-card border border-border flex items-center justify-center">
+              {[1, 2, 3, 4].map((i) =>
+              <div key={i} className="aspect-square rounded-xl bg-card border border-border flex items-center justify-center">
                   <p className="text-sm text-muted-foreground">Upload Photo {i}</p>
                 </div>
-              ))}
+              )}
             </div>
           </motion.div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
 export default AboutSection;
