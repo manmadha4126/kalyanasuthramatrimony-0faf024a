@@ -32,39 +32,28 @@ const SuccessStories = () => {
   }, []);
 
   return (
-    <section className="py-20 section-dark relative overflow-hidden">
+    <section id="stories" className="py-20 relative overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(var(--burgundy)), hsl(var(--burgundy-deep)))" }}>
       <div className="container mx-auto px-4">
-        <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <p className="text-sm tracking-[0.2em] uppercase font-sans mb-2" style={{ color: "hsl(var(--gold))" }}>
-            LOVE STORIES
-          </p>
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold gold-text mb-4">
-            Success Stories
-          </h2>
-          <div className="ornament-line mt-4" />
+        <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary-foreground mb-3">Success Stories</h2>
+          <div className="h-[1px] w-16 mx-auto" style={{ background: "hsl(var(--gold-accent))" }} />
         </motion.div>
 
-        <div ref={scrollRef} className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide" style={{ scrollbarWidth: "none" }}>
+        <div ref={scrollRef} className="flex gap-6 overflow-x-auto pb-4" style={{ scrollbarWidth: "none" }}>
           {stories.map((s, i) => (
             <motion.div
               key={i}
-              className="flex-shrink-0 w-[300px] rounded-2xl overflow-hidden gold-border-rich"
-              style={{ background: "hsl(var(--royal-black))" }}
-              initial={{ opacity: 0, scale: 0.9 }}
+              className="flex-shrink-0 w-[300px] rounded-xl overflow-hidden bg-card border border-border"
+              initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
             >
               <img src={s.image} alt={`${s.groom} & ${s.bride}`} className="w-full h-48 object-cover" />
               <div className="p-5">
-                <h4 className="font-serif text-lg font-bold gold-text">{s.groom} & {s.bride}</h4>
-                <p className="text-xs mt-1" style={{ color: "hsl(var(--cream)/0.6)" }}>{s.city}</p>
-                <p className="text-sm mt-3" style={{ color: "hsl(var(--cream)/0.8)" }}>"{s.text}"</p>
+                <h4 className="font-serif text-base font-bold text-primary">{s.groom} & {s.bride}</h4>
+                <p className="text-xs text-muted-foreground mt-1">{s.city}</p>
+                <p className="text-sm text-muted-foreground mt-3 leading-relaxed">"{s.text}"</p>
               </div>
             </motion.div>
           ))}
