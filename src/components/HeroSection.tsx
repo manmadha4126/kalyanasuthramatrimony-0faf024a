@@ -41,7 +41,7 @@ const HeroSection = () => {
         <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
           {/* Slideshow */}
           <div className="w-full lg:w-[60%] relative">
-            <div className="relative rounded-2xl overflow-hidden aspect-[16/9] lg:aspect-[21/10]" style={{ border: "1px solid rgba(198,167,94,0.3)" }}>
+            <div className="relative rounded-2xl overflow-hidden aspect-[4/3] lg:aspect-[16/9]" style={{ border: "1px solid rgba(198,167,94,0.3)" }}>
               <img src={images[prev]} alt="" className="absolute inset-0 w-full h-full object-cover scale-110 opacity-50 blur-[3px]" />
               <AnimatePresence mode="wait">
                 <motion.img
