@@ -5,8 +5,6 @@ import { Menu, X } from "lucide-react";
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Success Stories", href: "#stories" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -41,14 +39,14 @@ const Header = () => {
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center gap-1">
           {navLinks.map((link) => (
-            <a key={link.label} href={link.href} className="nav-link-premium">
+            <a key={link.label} href={link.href} className="nav-link-premium font-bold text-base">
               {link.label}
             </a>
           ))}
           <div className="w-px h-6 mx-3" style={{ background: "hsl(var(--border))" }} />
-          <a href="#register" className="btn-burgundy text-xs">Register</a>
-          <a href="#" className="nav-link-premium text-xs">Admin Login</a>
-          <a href="#" className="nav-link-premium text-xs">Customer Login</a>
+          <a href="#register" className="btn-burgundy text-sm px-4 py-2">Register</a>
+          <a href="#" className="text-sm px-4 py-2 rounded-lg font-semibold text-primary" style={{ background: "hsl(var(--burgundy-light))" }}>Admin Login</a>
+          <a href="#" className="text-sm px-4 py-2 rounded-lg font-semibold text-primary" style={{ background: "hsl(var(--burgundy-light))" }}>Customer Login</a>
         </nav>
 
         {/* Mobile */}
