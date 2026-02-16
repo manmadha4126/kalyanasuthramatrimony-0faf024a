@@ -25,7 +25,7 @@ const Header = () => {
       }`}
       style={{ height: "80px" }}
     >
-      <div className="container mx-auto h-full flex items-center justify-between px-4">
+      <div className="container mx-auto h-full flex items-center px-4 relative">
         {/* Logo */}
         <a href="#home" className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: "hsl(var(--burgundy))" }}>
@@ -36,21 +36,24 @@ const Header = () => {
           </span>
         </a>
 
-        {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-1">
+        {/* Desktop Nav - Centered */}
+        <nav className="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
           {navLinks.map((link) => (
             <a key={link.label} href={link.href} className="nav-link-premium font-bold text-base">
               {link.label}
             </a>
           ))}
-          <div className="w-px h-6 mx-3" style={{ background: "hsl(var(--border))" }} />
+        </nav>
+
+        {/* Right side buttons */}
+        <div className="hidden lg:flex items-center gap-2 ml-auto">
           <a href="#register" className="btn-burgundy text-sm px-4 py-2">Register</a>
           <a href="#" className="text-sm px-4 py-2 rounded-lg font-semibold text-primary" style={{ background: "hsl(var(--burgundy-light))" }}>Admin Login</a>
           <a href="#" className="text-sm px-4 py-2 rounded-lg font-semibold text-primary" style={{ background: "hsl(var(--burgundy-light))" }}>Customer Login</a>
-        </nav>
+        </div>
 
         {/* Mobile */}
-        <button className="lg:hidden p-2 text-primary" onClick={() => setMobileOpen(!mobileOpen)}>
+        <button className="lg:hidden p-2 text-primary ml-auto" onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
