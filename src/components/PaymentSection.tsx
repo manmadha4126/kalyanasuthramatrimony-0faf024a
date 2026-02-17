@@ -1,12 +1,14 @@
 import { motion } from "framer-motion";
+import paymentBg from "@/assets/payment-bg.jpg";
 
 const PaymentSection = () => {
   return (
-    <section className="py-20 section-cream relative overflow-hidden">
-      {/* Subtle pattern */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
-        style={{ backgroundImage: "radial-gradient(circle, hsl(var(--burgundy)) 1px, transparent 1px)", backgroundSize: "40px 40px" }}
-      />
+    <section className="py-20 relative overflow-hidden">
+      {/* Background image at 50% opacity */}
+      <div className="absolute inset-0 pointer-events-none">
+        <img src={paymentBg} alt="" className="w-full h-full object-cover opacity-50" />
+      </div>
+      <div className="absolute inset-0 bg-background/40 pointer-events-none" />
       <div className="container mx-auto px-4 relative z-10">
         <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary mb-3">Payment Details</h2>
