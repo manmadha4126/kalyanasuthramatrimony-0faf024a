@@ -83,7 +83,7 @@ const ContactSection = () => {
             >
               <iframe
                 title="Office Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.6844!2d79.4095!3d13.6345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4d4b0f57570145%3A0x6e264b2b9e498c03!2sGovinda%20Nagar%2C%20Karakambadi%20Rd%2C%20Tirupati%2C%20Andhra%20Pradesh%20517501!5e0!3m2!1sen!2sin!4v1"
+                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d1938.8!2d79.43141!3d13.64383!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!1s0x0%3A0x0!5e1!3m2!1sen!2sin!4v1"
                 width="100%"
                 height="100%"
                 style={{ border: 0, pointerEvents: "none" }}
