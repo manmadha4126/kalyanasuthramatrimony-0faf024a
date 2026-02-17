@@ -57,10 +57,10 @@ const ContactSection = () => {
           <motion.div className="space-y-6" initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
             <div className="card-clean space-y-5">
               {[
-                { icon: MapPin, label: "Office Address", value: "Tirupati, Andhra Pradesh, India" },
+                { icon: MapPin, label: "Office Address", value: "4-23, Govinda Nagar, Karakambadi Road, Tirupati - 517501" },
                 { icon: Phone, label: "Phone", value: "9553306667 | 9866288767" },
-                { icon: Mail, label: "Email", value: "kalyanasuthra@gmail.com" },
-                { icon: Clock, label: "Working Hours", value: "Mon – Sat: 9:00 AM – 7:00 PM" },
+                { icon: Mail, label: "Email", value: "info@kalyanasuthra.com" },
+                { icon: Clock, label: "Working Hours", value: "Mon – Sat: 10:30 AM – 6:30 PM | Sunday: Holiday" },
               ].map((item) => (
                 <div key={item.label} className="flex items-start gap-3">
                   <div className="icon-burgundy-circle flex-shrink-0">
@@ -78,7 +78,7 @@ const ContactSection = () => {
             <div className="rounded-xl overflow-hidden border border-border h-48">
               <iframe
                 title="Office Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.8!2d79.4192!3d13.6288!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDM3JzQzLjciTiA3OcKwMjUnMDkuMSJF!5e0!3m2!1sen!2sin!4v1"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.6844!2d79.4095!3d13.6345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4d4b0f57570145%3A0x6e264b2b9e498c03!2sGovinda%20Nagar%2C%20Karakambadi%20Rd%2C%20Tirupati%2C%20Andhra%20Pradesh%20517501!5e0!3m2!1sen!2sin!4v1"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
