@@ -109,84 +109,25 @@ const AboutSection = () => {
       </motion.div>
     </section>
 
-    {/* Wedding images gallery */}
+    {/* Three images - full screen width, 3:4 ratio, hover zoom */}
     <section>
-      {/* First row: 2 images on sides, full-frame image in center */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-0">
-        {/* Image 1 */}
-        <motion.div
-          className="overflow-hidden aspect-[3/4] cursor-pointer group"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <img
-            src={wedding1}
-            alt="Wedding couple 1"
-            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-          />
-        </motion.div>
-
-        {/* Image 2 - Full frame spanning 2 columns */}
-        <motion.div
-          className="overflow-hidden aspect-[3/4] md:aspect-auto md:col-span-2 cursor-pointer group"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-        >
-          <img
-            src={wedding2}
-            alt="Wedding couple 2"
-            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-          />
-        </motion.div>
-
-        {/* Image 3 */}
-        <motion.div
-          className="overflow-hidden aspect-[3/4] cursor-pointer group"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          <img
-            src={wedding3}
-            alt="Wedding couple 3"
-            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-          />
-        </motion.div>
-      </div>
-
-      {/* Second row: 2 equal images */}
-      <div className="grid grid-cols-2 gap-0">
-        <motion.div
-          className="overflow-hidden aspect-[3/4] cursor-pointer group"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.45 }}
-        >
-          <img
-            src={wedding4}
-            alt="Wedding couple 4"
-            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-          />
-        </motion.div>
-        <motion.div
-          className="overflow-hidden aspect-[3/4] cursor-pointer group"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
-          <img
-            src={wedding5}
-            alt="Wedding couple 5"
-            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-          />
-        </motion.div>
+      <div className="grid grid-cols-5 gap-0">
+        {[wedding1, wedding2, wedding3, wedding4, wedding5].map((img, i) => (
+          <motion.div
+            key={i}
+            className="overflow-hidden aspect-[3/4] cursor-pointer group"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.15 }}
+          >
+            <img
+              src={img}
+              alt={`Wedding couple ${i + 1}`}
+              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+            />
+          </motion.div>
+        ))}
       </div>
     </section>
     </>
