@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Phone, Mail } from "lucide-react";
 import paymentBg from "@/assets/payment-bg.jpg";
 
 const PaymentSection = () => {
@@ -43,6 +44,30 @@ const PaymentSection = () => {
             </div>
           </div>
         </div>
+
+        {/* Need Help Contact Block */}
+        <motion.div
+          className="mt-10 max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div className="card-clean text-center py-6 px-8">
+            <h3 className="font-serif text-xl font-bold text-primary mb-3">Need Help? Contact Us</h3>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm">
+              <a href="tel:9553306667" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Phone size={16} className="text-primary" />
+                <span>9553306667 | 9866288767</span>
+              </a>
+              <span className="hidden sm:inline text-border">|</span>
+              <a href="mailto:info@kalyanasuthra.com" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Mail size={16} className="text-primary" />
+                <span>info@kalyanasuthra.com</span>
+              </a>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

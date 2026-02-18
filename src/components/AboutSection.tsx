@@ -1,12 +1,16 @@
 import { motion } from "framer-motion";
 import weddingPhoto1 from "@/assets/wedding-photo-1.jpeg";
+import wedding1 from "@/assets/wedding-1.jpeg";
+import wedding2 from "@/assets/wedding-2.jpeg";
+import wedding3 from "@/assets/wedding-3.jpeg";
 
 const AboutSection = () => {
   return (
     <section id="about" className="py-20 bg-muted/40">
       <div className="container mx-auto px-4">
+        {/* Top: Large image + text */}
         <div className="flex flex-col lg:flex-row gap-12 items-center">
-          {/* Left - Image */}
+          {/* Left - Large Image */}
           <motion.div
             className="lg:w-1/2"
             initial={{ opacity: 0, x: -30 }}
@@ -47,21 +51,47 @@ const AboutSection = () => {
             >
               Read More
             </a>
-
-            <div className="pt-4 border-t border-border">
-              <h3 className="font-serif text-2xl md:text-3xl font-bold text-primary leading-snug">
-                Exclusive Service from<br />
-                Kalyanasuthra Matrimony
-              </h3>
-              <a
-                href="#contact"
-                className="btn-burgundy inline-block text-sm font-semibold px-6 py-3 rounded-lg mt-4"
-              >
-                Contact Us
-              </a>
-            </div>
           </motion.div>
         </div>
+
+        {/* Three images row */}
+        <motion.div
+          className="grid grid-cols-3 gap-4 md:gap-6 mt-12 max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          {[wedding1, wedding2, wedding3].map((img, i) => (
+            <div key={i} className="rounded-xl overflow-hidden shadow-lg aspect-[4/3]">
+              <img
+                src={img}
+                alt={`Wedding couple ${i + 1}`}
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Exclusive Service block */}
+        <motion.div
+          className="text-center mt-14 space-y-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <h3 className="font-serif text-2xl md:text-3xl font-bold text-primary leading-snug">
+            Exclusive Service from<br />
+            Kalyanasuthra Matrimony
+          </h3>
+          <a
+            href="#contact"
+            className="btn-burgundy inline-block text-sm font-semibold px-6 py-3 rounded-lg"
+          >
+            Contact Us
+          </a>
+        </motion.div>
       </div>
     </section>
   );
