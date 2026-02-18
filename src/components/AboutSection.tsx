@@ -124,7 +124,7 @@ const AboutSection = () => {
             <img
               src={img}
               alt={`Wedding couple ${i + 1}`}
-              className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 ${i === 1 ? 'scale-110' : ''}`}
+              className={`w-full h-full object-cover transition-transform duration-700 ease-out ${i === 1 ? 'scale-110 group-hover:scale-125' : 'group-hover:scale-110'}`}
             />
           </motion.div>
         ))}
