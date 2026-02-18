@@ -14,7 +14,223 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profile_interests: {
+        Row: {
+          created_at: string
+          from_user_id: string
+          id: string
+          interest_type: string
+          to_profile_id: string
+        }
+        Insert: {
+          created_at?: string
+          from_user_id: string
+          id?: string
+          interest_type?: string
+          to_profile_id: string
+        }
+        Update: {
+          created_at?: string
+          from_user_id?: string
+          id?: string
+          interest_type?: string
+          to_profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_interests_to_profile_id_fkey"
+            columns: ["to_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profile_views: {
+        Row: {
+          id: string
+          viewed_at: string
+          viewed_profile_id: string
+          viewer_user_id: string
+        }
+        Insert: {
+          id?: string
+          viewed_at?: string
+          viewed_profile_id: string
+          viewer_user_id: string
+        }
+        Update: {
+          id?: string
+          viewed_at?: string
+          viewed_profile_id?: string
+          viewer_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_views_viewed_profile_id_fkey"
+            columns: ["viewed_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          about_me: string | null
+          additional_photos: string[] | null
+          annual_income: string | null
+          blood_group: string | null
+          caste: string | null
+          city: string | null
+          company_name: string | null
+          complexion: string | null
+          country: string
+          created_at: string
+          date_of_birth: string
+          district: string | null
+          dosham: string | null
+          education: string | null
+          education_detail: string | null
+          email: string | null
+          family_status: string | null
+          family_type: string | null
+          father_name: string | null
+          father_occupation: string | null
+          full_name: string
+          gender: string
+          gothra: string | null
+          height_cm: number | null
+          horoscope_url: string | null
+          id: string
+          is_featured: boolean
+          marital_status: string
+          mother_name: string | null
+          mother_occupation: string | null
+          mother_tongue: string | null
+          native_place: string | null
+          occupation: string | null
+          partner_expectations: string | null
+          phone: string | null
+          profile_created_by: string | null
+          profile_photo_url: string | null
+          profile_status: string
+          raasi: string | null
+          religion: string
+          siblings: string | null
+          star: string | null
+          state: string | null
+          sub_caste: string | null
+          updated_at: string
+          user_id: string | null
+          weight_kg: number | null
+          whatsapp: string | null
+          working_city: string | null
+        }
+        Insert: {
+          about_me?: string | null
+          additional_photos?: string[] | null
+          annual_income?: string | null
+          blood_group?: string | null
+          caste?: string | null
+          city?: string | null
+          company_name?: string | null
+          complexion?: string | null
+          country?: string
+          created_at?: string
+          date_of_birth: string
+          district?: string | null
+          dosham?: string | null
+          education?: string | null
+          education_detail?: string | null
+          email?: string | null
+          family_status?: string | null
+          family_type?: string | null
+          father_name?: string | null
+          father_occupation?: string | null
+          full_name: string
+          gender: string
+          gothra?: string | null
+          height_cm?: number | null
+          horoscope_url?: string | null
+          id?: string
+          is_featured?: boolean
+          marital_status?: string
+          mother_name?: string | null
+          mother_occupation?: string | null
+          mother_tongue?: string | null
+          native_place?: string | null
+          occupation?: string | null
+          partner_expectations?: string | null
+          phone?: string | null
+          profile_created_by?: string | null
+          profile_photo_url?: string | null
+          profile_status?: string
+          raasi?: string | null
+          religion?: string
+          siblings?: string | null
+          star?: string | null
+          state?: string | null
+          sub_caste?: string | null
+          updated_at?: string
+          user_id?: string | null
+          weight_kg?: number | null
+          whatsapp?: string | null
+          working_city?: string | null
+        }
+        Update: {
+          about_me?: string | null
+          additional_photos?: string[] | null
+          annual_income?: string | null
+          blood_group?: string | null
+          caste?: string | null
+          city?: string | null
+          company_name?: string | null
+          complexion?: string | null
+          country?: string
+          created_at?: string
+          date_of_birth?: string
+          district?: string | null
+          dosham?: string | null
+          education?: string | null
+          education_detail?: string | null
+          email?: string | null
+          family_status?: string | null
+          family_type?: string | null
+          father_name?: string | null
+          father_occupation?: string | null
+          full_name?: string
+          gender?: string
+          gothra?: string | null
+          height_cm?: number | null
+          horoscope_url?: string | null
+          id?: string
+          is_featured?: boolean
+          marital_status?: string
+          mother_name?: string | null
+          mother_occupation?: string | null
+          mother_tongue?: string | null
+          native_place?: string | null
+          occupation?: string | null
+          partner_expectations?: string | null
+          phone?: string | null
+          profile_created_by?: string | null
+          profile_photo_url?: string | null
+          profile_status?: string
+          raasi?: string | null
+          religion?: string
+          siblings?: string | null
+          star?: string | null
+          state?: string | null
+          sub_caste?: string | null
+          updated_at?: string
+          user_id?: string | null
+          weight_kg?: number | null
+          whatsapp?: string | null
+          working_city?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
