@@ -6,7 +6,7 @@ const PaymentSection = () => {
     <section className="py-20 relative overflow-hidden">
       {/* Background image at 50% opacity */}
       <div className="absolute inset-0 pointer-events-none">
-        <img src={paymentBg} alt="" className="w-full h-full object-cover opacity-50" />
+        <img src={paymentBg} alt="" className="w-full h-full object-cover opacity-70" />
       </div>
       <div className="absolute inset-0 bg-background/40 pointer-events-none" />
       <div className="container mx-auto px-4 relative z-10">

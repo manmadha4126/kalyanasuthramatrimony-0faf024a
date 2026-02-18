@@ -29,10 +29,10 @@ const WhyChooseUs = () => {
     <section id="why-us" className="py-20 bg-card">
       <div className="container mx-auto px-4">
         <motion.div className="text-center mb-14" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <h2 className="font-serif text-4xl md:text-5xl font-bold text-primary mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4" style={{ fontFamily: "'DM Serif Display', serif" }}>
             India's Most Trusted <span style={{ color: "hsl(var(--burgundy))" }}>Matrimony</span>
           </h2>
-          <p className="text-foreground text-lg font-semibold max-w-2xl mx-auto mb-3">
+          <p className="text-foreground text-lg max-w-2xl mx-auto mb-3" style={{ fontFamily: "'Libre Baskerville', serif" }}>
             We are committed to making your search for a life partner easier, safer, and more successful.
           </p>
         </motion.div>
