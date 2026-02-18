@@ -7,8 +7,31 @@ import wedding3 from "@/assets/wedding-3.jpeg";
 const AboutSection = () => {
   return (
     <>
-    <section id="about" className="py-20 bg-muted/40">
-      <div className="container mx-auto px-4">
+    <section id="about" className="py-20 bg-muted/40 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute top-0 left-0 w-32 h-32 md:w-48 md:h-48 opacity-20">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="0" cy="0" r="150" stroke="hsl(var(--primary))" strokeWidth="1.5" />
+          <circle cx="0" cy="0" r="120" stroke="hsl(var(--primary))" strokeWidth="1" />
+          <circle cx="0" cy="0" r="90" stroke="hsl(var(--primary))" strokeWidth="0.8" />
+        </svg>
+      </div>
+      <div className="absolute bottom-0 left-0 w-24 h-24 md:w-40 md:h-40 opacity-15">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 200 Q100 100 200 200" stroke="hsl(var(--primary))" strokeWidth="1.5" fill="none" />
+          <path d="M0 200 Q80 120 160 200" stroke="hsl(var(--primary))" strokeWidth="1" fill="none" />
+          <path d="M0 200 Q60 140 120 200" stroke="hsl(var(--primary))" strokeWidth="0.8" fill="none" />
+        </svg>
+      </div>
+      <div className="absolute bottom-0 right-0 w-32 h-32 md:w-48 md:h-48 opacity-15">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="200" cy="200" r="150" stroke="hsl(var(--primary))" strokeWidth="1.5" />
+          <circle cx="200" cy="200" r="120" stroke="hsl(var(--primary))" strokeWidth="1" />
+          <circle cx="200" cy="200" r="90" stroke="hsl(var(--primary))" strokeWidth="0.8" />
+        </svg>
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
         {/* Top row: main image + text side by side */}
         <div className="relative flex flex-col lg:flex-row items-center lg:items-stretch gap-0">
           {/* Main image */}
@@ -59,25 +82,28 @@ const AboutSection = () => {
           </motion.div>
         </div>
 
-        {/* Three images row below - full width, attached to section */}
-        <motion.div
-          className="grid grid-cols-3 gap-4 md:gap-6 mt-12"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          {[wedding1, wedding2, wedding3].map((img, i) => (
-            <div key={i} className="rounded-xl overflow-hidden shadow-lg aspect-[4/3]">
-              <img
-                src={img}
-                alt={`Wedding couple ${i + 1}`}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-          ))}
-        </motion.div>
       </div>
+    </section>
+
+    {/* Three images row - full width, edge to edge, no container padding */}
+    <section className="bg-muted/40">
+      <motion.div
+        className="grid grid-cols-3 gap-0"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+      >
+        {[wedding1, wedding2, wedding3].map((img, i) => (
+          <div key={i} className="overflow-hidden aspect-[4/5]">
+            <img
+              src={img}
+              alt={`Wedding couple ${i + 1}`}
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+        ))}
+      </motion.div>
     </section>
 
     {/* Exclusive Service - Separate Section */}
