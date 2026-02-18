@@ -3,6 +3,8 @@ import aboutMain from "@/assets/about-main.png";
 import wedding1 from "@/assets/wedding-1.jpeg";
 import wedding2 from "@/assets/wedding-2.jpeg";
 import wedding3 from "@/assets/wedding-3.jpeg";
+import wedding4 from "@/assets/wedding-4.jpeg";
+import wedding5 from "@/assets/wedding-5.jpeg";
 
 const AboutSection = () => {
   return (
@@ -109,8 +111,8 @@ const AboutSection = () => {
 
     {/* Three images - full screen width, 3:4 ratio, hover zoom */}
     <section>
-      <div className="grid grid-cols-3 gap-0">
-        {[wedding1, wedding2, wedding3].map((img, i) => (
+      <div className="grid grid-cols-5 gap-0">
+        {[wedding1, wedding2, wedding3, wedding4, wedding5].map((img, i) => (
           <motion.div
             key={i}
             className="overflow-hidden aspect-[3/4] cursor-pointer group"
