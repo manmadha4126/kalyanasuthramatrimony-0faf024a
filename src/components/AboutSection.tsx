@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import weddingPhoto1 from "@/assets/wedding-photo-1.jpeg";
+import aboutMain from "@/assets/about-main.png";
 import wedding1 from "@/assets/wedding-1.jpeg";
 import wedding2 from "@/assets/wedding-2.jpeg";
 import wedding3 from "@/assets/wedding-3.jpeg";
@@ -8,9 +8,9 @@ const AboutSection = () => {
   return (
     <section id="about" className="py-20 bg-muted/40">
       <div className="container mx-auto px-4">
-        {/* Top row: overlapping large image + text */}
+        {/* Top row: large image with overlaid small images + text */}
         <div className="relative flex flex-col lg:flex-row items-center lg:items-stretch gap-0">
-          {/* Large image - overlaps slightly */}
+          {/* Large image with three overlaid thumbnails */}
           <motion.div
             className="lg:w-[48%] relative z-10 -mb-8 lg:mb-0"
             initial={{ opacity: 0, x: -30 }}
@@ -18,12 +18,31 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="rounded-2xl overflow-hidden shadow-2xl lg:-mr-8">
+            <div className="rounded-2xl overflow-hidden shadow-2xl lg:-mr-8 relative">
               <img
-                src={weddingPhoto1}
+                src={aboutMain}
                 alt="Happy wedding couple"
                 className="w-full h-[380px] lg:h-[460px] object-cover"
               />
+              {/* Three overlay thumbnails at bottom */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 md:gap-3">
+                {[wedding1, wedding2, wedding3].map((img, i) => (
+                  <motion.div
+                    key={i}
+                    className="w-20 h-16 md:w-28 md:h-20 rounded-lg overflow-hidden shadow-lg border-2 border-background"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
+                  >
+                    <img
+                      src={img}
+                      alt={`Wedding couple ${i + 1}`}
+                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                    />
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </motion.div>
 
@@ -57,25 +76,6 @@ const AboutSection = () => {
             </div>
           </motion.div>
         </div>
-
-        {/* Three images row */}
-        <motion.div
-          className="grid grid-cols-3 gap-4 md:gap-6 mt-14 max-w-4xl mx-auto"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          {[wedding1, wedding2, wedding3].map((img, i) => (
-            <div key={i} className="rounded-xl overflow-hidden shadow-lg aspect-[4/3]">
-              <img
-                src={img}
-                alt={`Wedding couple ${i + 1}`}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-          ))}
-        </motion.div>
 
         {/* Exclusive Service block */}
         <motion.div
