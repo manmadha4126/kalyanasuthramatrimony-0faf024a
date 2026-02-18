@@ -83,6 +83,23 @@ const ServicesSection = () => {
               </motion.div>
             ))}
         </div>
+
+        <motion.div
+          className="mt-10 max-w-2xl mx-auto text-center border-2 border-dashed border-primary/30 rounded-2xl py-10 px-6"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h3 className="font-serif text-xl md:text-2xl font-bold text-foreground mb-5">
+            Want to know more about Assisted Service?
+          </h3>
+          <a
+            href="#contact"
+            className="inline-block px-8 py-3 border-2 border-primary rounded-lg text-primary font-semibold hover:bg-primary hover:text-primary-foreground transition-colors"
+          >
+            Get Free Consultation
+          </a>
+        </motion.div>
       </div>
     </section>
   );
