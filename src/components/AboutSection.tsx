@@ -6,11 +6,12 @@ import wedding3 from "@/assets/wedding-3.jpeg";
 
 const AboutSection = () => {
   return (
+    <>
     <section id="about" className="py-20 bg-muted/40">
       <div className="container mx-auto px-4">
-        {/* Top row: large image with overlaid small images + text */}
+        {/* Top row: large image with attached small images + text */}
         <div className="relative flex flex-col lg:flex-row items-center lg:items-stretch gap-0">
-          {/* Large image with three overlaid thumbnails */}
+          {/* Large image with three images attached below */}
           <motion.div
             className="lg:w-[48%] relative z-10 -mb-8 lg:mb-0"
             initial={{ opacity: 0, x: -30 }}
@@ -18,31 +19,31 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="rounded-2xl overflow-hidden shadow-2xl lg:-mr-8 relative">
+            <div className="rounded-t-2xl overflow-hidden shadow-2xl lg:-mr-8">
               <img
                 src={aboutMain}
                 alt="Happy wedding couple"
                 className="w-full h-[380px] lg:h-[460px] object-cover"
               />
-              {/* Three overlay thumbnails at bottom */}
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 md:gap-3">
-                {[wedding1, wedding2, wedding3].map((img, i) => (
-                  <motion.div
-                    key={i}
-                    className="w-20 h-16 md:w-28 md:h-20 rounded-lg overflow-hidden shadow-lg border-2 border-background"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
-                  >
-                    <img
-                      src={img}
-                      alt={`Wedding couple ${i + 1}`}
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                    />
-                  </motion.div>
-                ))}
-              </div>
+            </div>
+            {/* Three images attached directly below main image */}
+            <div className="flex lg:-mr-8">
+              {[wedding1, wedding2, wedding3].map((img, i) => (
+                <motion.div
+                  key={i}
+                  className="flex-1 h-28 md:h-36 lg:h-40 overflow-hidden"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
+                >
+                  <img
+                    src={img}
+                    alt={`Wedding couple ${i + 1}`}
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                  />
+                </motion.div>
+              ))}
             </div>
           </motion.div>
 
@@ -76,28 +77,31 @@ const AboutSection = () => {
             </div>
           </motion.div>
         </div>
-
-        {/* Exclusive Service block */}
-        <motion.div
-          className="text-center mt-14 space-y-4"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <h3 className="font-serif text-2xl md:text-3xl font-bold text-primary leading-snug">
-            Exclusive Service from<br />
-            Kalyanasuthra Matrimony
-          </h3>
-          <a
-            href="#contact"
-            className="btn-burgundy inline-block text-sm font-semibold px-6 py-3 rounded-lg"
-          >
-            Contact Us
-          </a>
-        </motion.div>
       </div>
     </section>
+
+    {/* Exclusive Service - Separate Section */}
+    <section className="py-16 bg-primary/10">
+      <motion.div
+        className="container mx-auto px-4 text-center space-y-4"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        <h3 className="font-serif text-2xl md:text-3xl font-bold text-primary leading-snug">
+          Exclusive Service from<br />
+          Kalyanasuthra Matrimony
+        </h3>
+        <a
+          href="#contact"
+          className="btn-burgundy inline-block text-sm font-semibold px-6 py-3 rounded-lg"
+        >
+          Contact Us
+        </a>
+      </motion.div>
+    </section>
+    </>
   );
 };
 
