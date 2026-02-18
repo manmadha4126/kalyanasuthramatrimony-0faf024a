@@ -3,7 +3,7 @@ import { Heart } from "lucide-react";
 const Footer = () => {
   return (
     <footer className="bg-card border-t border-border">
-      <div className="container mx-auto px-4 py-10">
+      <div className="container mx-auto px-4 py-10 bg-cyan-50 border-8 border-input opacity-100 shadow-2xl rounded-2xl">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
             <h3 className="font-serif text-lg font-bold text-primary mb-2">Kalyanasuthra Matrimony</h3>
@@ -12,9 +12,9 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-sm text-foreground mb-3">Quick Links</h4>
             <div className="space-y-2">
-              {["Home", "About", "Services", "Contact"].map((l) => (
-                <a key={l} href={`#${l.toLowerCase()}`} className="block text-sm text-muted-foreground hover:text-primary transition-colors">{l}</a>
-              ))}
+              {["Home", "About", "Services", "Contact"].map((l) =>
+              <a key={l} href={`#${l.toLowerCase()}`} className="block text-sm text-muted-foreground hover:text-primary transition-colors">{l}</a>
+              )}
             </div>
           </div>
           <div>
@@ -32,8 +32,8 @@ const Footer = () => {
           © 2025 Kalyanasuthra Matrimony. Made with <Heart size={12} className="text-primary" /> in Tirupati
         </p>
       </div>
-    </footer>
-  );
+    </footer>);
+
 };
 
 export default Footer;
