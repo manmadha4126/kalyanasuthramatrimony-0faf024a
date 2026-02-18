@@ -85,27 +85,6 @@ const AboutSection = () => {
       </div>
     </section>
 
-    {/* Three images row - full width, edge to edge, no container padding */}
-    <section className="bg-muted/40">
-      <motion.div
-        className="grid grid-cols-3 gap-0"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-      >
-        {[wedding1, wedding2, wedding3].map((img, i) => (
-          <div key={i} className="overflow-hidden aspect-[4/5]">
-            <img
-              src={img}
-              alt={`Wedding couple ${i + 1}`}
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-            />
-          </div>
-        ))}
-      </motion.div>
-    </section>
-
     {/* Exclusive Service - Separate Section */}
     <section className="py-16 bg-primary/10">
       <motion.div
@@ -126,6 +105,28 @@ const AboutSection = () => {
           Contact Us
         </a>
       </motion.div>
+    </section>
+
+    {/* Three images - full screen width, 3:4 ratio, hover zoom */}
+    <section>
+      <div className="grid grid-cols-3 gap-0">
+        {[wedding1, wedding2, wedding3].map((img, i) => (
+          <motion.div
+            key={i}
+            className="overflow-hidden aspect-[3/4] cursor-pointer group"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.15 }}
+          >
+            <img
+              src={img}
+              alt={`Wedding couple ${i + 1}`}
+              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+            />
+          </motion.div>
+        ))}
+      </div>
     </section>
     </>
   );
