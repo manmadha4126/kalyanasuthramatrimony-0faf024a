@@ -33,28 +33,14 @@ const ServicesSection = () => {
     <section id="services" className="py-20 bg-card">
       <div className="container mx-auto px-4">
         <motion.div className="text-center mb-14" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary mb-3">Assisted Matrimony Services</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-3" style={{ fontFamily: "'DM Serif Display', serif" }}>Assisted Matrimony Services</h2>
           <p className="text-muted-foreground max-w-xl mx-auto mb-3">
             Our dedicated relationship managers provide profile handling, match filtering, feedback support, and direct communication management.
           </p>
           <div className="gold-divider" />
         </motion.div>
 
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
-          {/* Left: consultant placeholder */}
-          <motion.div
-            className="lg:w-1/3 hidden lg:block"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <div className="aspect-[3/4] rounded-xl bg-muted border border-border flex items-center justify-center">
-              <p className="text-sm text-muted-foreground text-center px-4">Professional Consultant<br />Image Placeholder</p>
-            </div>
-          </motion.div>
-
-          {/* Right: packages */}
-          <div className="lg:w-2/3 grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {packages.map((pkg, pi) => (
               <motion.div
                 key={pkg.title}
@@ -96,7 +82,6 @@ const ServicesSection = () => {
                 )}
               </motion.div>
             ))}
-          </div>
         </div>
       </div>
     </section>

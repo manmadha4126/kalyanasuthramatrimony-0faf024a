@@ -12,7 +12,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-20" style={{ background: "linear-gradient(180deg, hsl(var(--cream)), hsl(var(--rose-tint)))" }}>
+    <section id="contact" className="py-20" style={{ background: "linear-gradient(135deg, hsl(var(--burgundy-light)), hsl(var(--rose-tint)), hsl(var(--cream)))" }}>
       <div className="container mx-auto px-4">
         <motion.div className="text-center mb-14" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary mb-3">Get In Touch</h2>
@@ -89,11 +89,7 @@ const ContactSection = () => {
                 style={{ border: 0, pointerEvents: "none" }}
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-transparent group-hover:bg-primary/5 transition-colors flex items-center justify-center">
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-primary-foreground text-xs font-semibold px-3 py-1.5 rounded-full shadow">
-                  Open in Google Maps
-                </span>
-              </div>
+              <div className="absolute inset-0" />
             </a>
           </motion.div>
         </div>
