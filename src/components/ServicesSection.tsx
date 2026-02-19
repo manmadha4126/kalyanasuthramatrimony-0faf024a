@@ -82,11 +82,26 @@ const ServicesSection = () => {
   };
 
   return (
-    <section id="services" className="py-20 bg-card">
+    <section
+      id="services"
+      className="py-20 relative overflow-hidden"
+      style={{
+        background: "linear-gradient(135deg, hsl(220, 60%, 10%) 0%, hsl(240, 50%, 15%) 40%, hsl(210, 55%, 12%) 100%)",
+      }}
+    >
+      {/* Decorative top shimmer */}
+      <div className="absolute top-0 left-0 right-0 h-1" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold-accent) / 0.6), transparent)" }} />
+      {/* Decorative bottom shimmer */}
+      <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold-accent) / 0.6), transparent)" }} />
+      {/* Top-right decorative circle */}
+      <div className="absolute top-0 right-0 w-72 h-72 rounded-full opacity-10 pointer-events-none" style={{ background: "radial-gradient(circle, hsl(var(--gold-accent)), transparent 70%)", transform: "translate(30%, -30%)" }} />
+      {/* Bottom-left decorative circle */}
+      <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-10 pointer-events-none" style={{ background: "radial-gradient(circle, hsl(220, 80%, 60%), transparent 70%)", transform: "translate(-30%, 30%)" }} />
       <div className="container mx-auto px-4">
         <motion.div className="text-center mb-14" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-3" style={{ fontFamily: "'DM Serif Display', serif" }}>Assisted Matrimony Services</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto mb-3">
+          <p className="text-sm uppercase tracking-[0.2em] font-semibold mb-2" style={{ color: "hsl(var(--gold-accent))", fontFamily: "'Lato', sans-serif" }}>✦ Premium Assisted Services ✦</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ fontFamily: "'DM Serif Display', serif", color: "white" }}>Assisted Matrimony Services</h2>
+          <p className="max-w-xl mx-auto mb-3" style={{ color: "hsl(220, 20%, 75%)" }}>
             Our dedicated relationship managers provide profile handling, match filtering, feedback support, and direct communication management.
           </p>
           <div className="gold-divider" />
@@ -100,7 +115,7 @@ const ServicesSection = () => {
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
         >
-          <span className="self-center text-sm font-semibold text-muted-foreground mr-1">Filter by duration:</span>
+          <span className="self-center text-sm font-semibold mr-1" style={{ color: "hsl(220, 20%, 70%)" }}>Filter by duration:</span>
           {durationOptions.map((opt) => (
             <button
               key={opt.key}
@@ -108,8 +123,8 @@ const ServicesSection = () => {
               className="px-5 py-2 rounded-full text-sm font-semibold border transition-all duration-200"
               style={
                 selected === opt.key
-                  ? { background: "hsl(var(--burgundy))", color: "white", borderColor: "hsl(var(--burgundy))" }
-                  : { background: "transparent", color: "hsl(var(--burgundy))", borderColor: "hsl(var(--burgundy))" }
+                  ? { background: "hsl(var(--gold-accent))", color: "hsl(220, 60%, 10%)", borderColor: "hsl(var(--gold-accent))" }
+                  : { background: "transparent", color: "hsl(var(--gold-accent))", borderColor: "hsl(var(--gold-accent) / 0.6)" }
               }
             >
               {opt.label}
@@ -128,25 +143,29 @@ const ServicesSection = () => {
               return (
                 <motion.div
                   key={pkg.title}
-                  className="card-clean"
-                  style={pkg.highlighted ? { borderColor: "hsl(var(--burgundy))", borderWidth: "2px" } : {}}
+                  className="rounded-2xl p-6 shadow-xl"
+                  style={
+                    pkg.highlighted
+                      ? { background: "linear-gradient(135deg, hsl(var(--burgundy) / 0.9), hsl(var(--deep-rose) / 0.8))", border: "2px solid hsl(var(--gold-accent) / 0.8)" }
+                      : { background: "hsl(220, 40%, 18%)", border: "1px solid hsl(220, 30%, 28%)" }
+                  }
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: pi * 0.1 }}
                 >
-                  <h3 className="font-serif text-lg font-bold text-primary mb-4">{pkg.title}</h3>
+                  <h3 className="font-serif text-lg font-bold mb-4" style={{ color: pkg.highlighted ? "hsl(var(--gold-accent))" : "white" }}>{pkg.title}</h3>
                   <div className="space-y-4">
                     {visiblePlans.map((plan, i) => (
-                      <div key={i} className="pb-3 border-b border-border last:border-0">
+                      <div key={i} className="pb-3 last:border-0" style={{ borderBottom: "1px solid hsl(220, 30%, 30%)" }}>
                         <div className="flex items-baseline gap-2 mb-1">
-                          <span className="font-serif text-xl font-bold text-primary">{plan.price}</span>
-                          <span className="text-xs text-muted-foreground">/ {plan.duration}</span>
+                          <span className="font-serif text-xl font-bold" style={{ color: pkg.highlighted ? "white" : "hsl(var(--gold-accent))" }}>{plan.price}</span>
+                          <span className="text-xs" style={{ color: "hsl(220, 20%, 65%)" }}>/ {plan.duration}</span>
                         </div>
                         <ul className="mt-2 space-y-1">
                           {plan.features.map((f) => (
-                            <li key={f} className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <span className="w-1 h-1 rounded-full bg-accent" />
+                            <li key={f} className="flex items-start gap-2 text-xs" style={{ color: pkg.highlighted ? "hsl(0, 0%, 90%)" : "hsl(220, 15%, 75%)" }}>
+                              <span className="w-1.5 h-1.5 rounded-full mt-1 flex-shrink-0" style={{ background: "hsl(var(--gold-accent))" }} />
                               {f}
                             </li>
                           ))}
@@ -156,10 +175,10 @@ const ServicesSection = () => {
                   </div>
                   {pkg.benefits && !selected && (
                     <div className="mt-4">
-                      <p className="text-xs uppercase tracking-wider text-accent mb-2 font-semibold">Benefits For</p>
+                      <p className="text-xs uppercase tracking-wider mb-2 font-semibold" style={{ color: "hsl(var(--gold-accent))" }}>Benefits For</p>
                       <div className="flex flex-wrap gap-1.5">
                         {pkg.benefits.map((b) => (
-                          <span key={b} className="text-[10px] px-2 py-1 rounded-full bg-muted text-muted-foreground">{b}</span>
+                          <span key={b} className="text-[10px] px-2 py-1 rounded-full font-medium" style={{ background: "hsl(0, 0%, 100% / 0.15)", color: "hsl(0, 0%, 95%)" }}>{b}</span>
                         ))}
                       </div>
                     </div>
@@ -170,22 +189,24 @@ const ServicesSection = () => {
         </div>
 
         <motion.div
-          className="mt-10 max-w-2xl mx-auto text-center border-2 border-dashed border-primary/30 rounded-2xl py-10 px-6"
+          className="mt-10 max-w-2xl mx-auto text-center rounded-2xl py-10 px-6"
+          style={{ background: "hsl(220, 40%, 18%)", border: "2px dashed hsl(var(--gold-accent) / 0.4)" }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h3 className="font-serif text-xl md:text-2xl font-bold text-foreground mb-2">
+          <h3 className="font-serif text-xl md:text-2xl font-bold mb-2" style={{ color: "white" }}>
             Want to know more about Assisted Service?
           </h3>
           {selected && (
-            <p className="text-sm text-muted-foreground mb-4">
-              Selected: <span className="font-semibold text-primary">{durationOptions.find(d => d.key === selected)?.label}</span> plan
+            <p className="text-sm mb-4" style={{ color: "hsl(220, 20%, 70%)" }}>
+              Selected: <span className="font-semibold" style={{ color: "hsl(var(--gold-accent))" }}>{durationOptions.find(d => d.key === selected)?.label}</span> plan
             </p>
           )}
           <button
             onClick={handleConsultation}
-            className="inline-flex items-center gap-2 px-8 py-3 border-2 border-primary rounded-lg text-primary font-semibold hover:bg-primary hover:text-primary-foreground transition-colors mt-3"
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-lg font-semibold transition-all duration-200 mt-3 hover:scale-105"
+            style={{ background: "hsl(var(--gold-accent))", color: "hsl(220, 60%, 10%)" }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
