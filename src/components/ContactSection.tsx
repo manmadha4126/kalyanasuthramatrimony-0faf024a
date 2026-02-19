@@ -76,14 +76,14 @@ const ContactSection = () => {
 
             {/* Map */}
             <a
-              href="https://maps.app.goo.gl/NRGQ4JQFpAA5xtaY6"
+              href="https://www.google.com/maps?q=13.64383,79.43141"
               target="_blank"
               rel="noopener noreferrer"
               className="block rounded-xl overflow-hidden border border-border h-48 relative group cursor-pointer"
             >
               <iframe
                 title="Office Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1938.8!2d79.43141!3d13.64383!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDM4JzM3LjgiTiA3OcKwMjUnNTMuMSJF!5e0!3m2!1sen!2sin!4v1"
+                src="https://maps.google.com/maps?q=13.64383,79.43141&z=17&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0, pointerEvents: "none" }}
