@@ -1,11 +1,16 @@
 import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 
+import wedding1 from "@/assets/wedding-1.jpeg";
 import wedding2 from "@/assets/wedding-2.jpeg";
 import wedding3 from "@/assets/wedding-3.jpeg";
 import wedding4 from "@/assets/wedding-4.jpeg";
+import wedding5 from "@/assets/wedding-5.jpeg";
 import wedding6 from "@/assets/wedding-6.jpeg";
+import wedding7 from "@/assets/wedding-7.jpeg";
 import wedding8 from "@/assets/wedding-8.jpeg";
+import wedding9 from "@/assets/wedding-9.jpeg";
+import wedding10 from "@/assets/wedding-10.jpeg";
 
 const stories = [
   { image: wedding2, groom: "Rajesh Kumar", bride: "Priya Devi", city: "Tirupati", text: "We found our soulmate through Kalyanasuthra. Forever grateful!" },
@@ -13,6 +18,11 @@ const stories = [
   { image: wedding4, groom: "Suresh Babu", bride: "Anjali Sharma", city: "Chennai", text: "Kalyanasuthra made our dream wedding come true!" },
   { image: wedding6, groom: "Aravind Rao", bride: "Divya Krishnan", city: "Bangalore", text: "Trusted, verified, and truly personalized matchmaking." },
   { image: wedding8, groom: "Karthik Nair", bride: "Meera Iyer", city: "Vizag", text: "Our families are so happy. Thank you Kalyanasuthra!" },
+  { image: wedding1, groom: "Srinivas Goud", bride: "Padmavathi Reddy", city: "Tirupati", text: "We met through Kalyanasuthra and couldn't be happier. A blessed union!" },
+  { image: wedding5, groom: "Ramesh Varma", bride: "Swathi Rao", city: "Guntur", text: "The relationship managers were so supportive throughout our journey. Highly recommended!" },
+  { image: wedding7, groom: "Nagaraju Pillai", bride: "Saranya Devi", city: "Nellore", text: "Found my perfect life partner within weeks. Kalyanasuthra truly understands our values." },
+  { image: wedding9, groom: "Praveen Kumar", bride: "Madhuri Latha", city: "Kurnool", text: "The best matrimony service in Andhra. Our alliance was fixed in just one meeting!" },
+  { image: wedding10, groom: "Venkat Raman", bride: "Keerthi Sree", city: "Vijayawada", text: "Professional, trustworthy and caring. Kalyanasuthra brought two families together beautifully." },
 ];
 
 const SuccessStories = () => {
@@ -47,7 +57,7 @@ const SuccessStories = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: i * 0.08 }}
             >
               <img src={s.image} alt={`${s.groom} & ${s.bride}`} className="w-full h-48 object-cover" />
               <div className="p-5">
