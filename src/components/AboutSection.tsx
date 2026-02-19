@@ -1,10 +1,29 @@
 import { motion } from "framer-motion";
+import { ShieldCheck, Heart, ThumbsUp } from "lucide-react";
 import aboutMain from "@/assets/about-main.png";
 import wedding1 from "@/assets/wedding-1.jpeg";
 import wedding2 from "@/assets/wedding-2.jpeg";
 import wedding3 from "@/assets/wedding-3.jpeg";
 import wedding4 from "@/assets/wedding-4.jpeg";
 import wedding5 from "@/assets/wedding-5.jpeg";
+
+const features = [
+  {
+    icon: ShieldCheck,
+    title: "Privacy & Security",
+    desc: "We provide 100% privacy & security against miss use of member profile and other details.",
+  },
+  {
+    icon: Heart,
+    title: "Best Matches",
+    desc: "We provide many options for search member so that any member can meet the best matches according to his/her choice.",
+  },
+  {
+    icon: ThumbsUp,
+    title: "100% Satisfaction",
+    desc: "We provide member to wider scope of search so that our member get 100% satisfied.",
+  },
+];
 
 const AboutSection = () => {
   return (
@@ -87,29 +106,70 @@ const AboutSection = () => {
       </div>
     </section>
 
-    {/* Exclusive Service - Separate Section */}
-    <section className="py-16 bg-primary/10">
-      <motion.div
-        className="container mx-auto px-4 text-center space-y-4"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-      >
-        <h3 className="font-serif text-2xl md:text-3xl font-bold text-primary leading-snug">
-          Exclusive Service from<br />
-          Kalyanasuthra Matrimony
-        </h3>
-        <a
-          href="#contact"
-          className="btn-burgundy inline-block text-sm font-semibold px-6 py-3 rounded-lg"
+    {/* Exclusive Service - Separate Section — same bg-muted/40 continued */}
+    <section className="bg-muted/40 pb-0 pt-0">
+      {/* Top divider line */}
+      <div className="h-px bg-border mx-8 opacity-50" />
+
+      {/* CTA block */}
+      <div className="py-16 bg-primary/10">
+        <motion.div
+          className="container mx-auto px-4 text-center space-y-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
         >
-          Contact Us
-        </a>
-      </motion.div>
+          <h3 className="font-serif text-2xl md:text-3xl font-bold text-primary leading-snug">
+            Exclusive Service from<br />
+            Kalyanasuthra Matrimony
+          </h3>
+          <a
+            href="#contact"
+            className="btn-burgundy inline-block text-sm font-semibold px-6 py-3 rounded-lg"
+          >
+            Contact Us
+          </a>
+        </motion.div>
+      </div>
+
+      {/* Three features below Contact Us */}
+      <div className="bg-muted/40 py-14">
+        <div className="container mx-auto px-4">
+          <motion.h3
+            className="text-center font-serif text-2xl md:text-3xl font-bold text-primary mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Our Features
+          </motion.h3>
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {features.map((f, i) => (
+              <motion.div
+                key={f.title}
+                className="flex flex-col items-center text-center gap-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+              >
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center shadow-md"
+                  style={{ background: "hsl(var(--burgundy))" }}
+                >
+                  <f.icon size={28} className="text-white" />
+                </div>
+                <h4 className="font-serif text-lg font-bold text-primary">{f.title}</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
 
-    {/* Three images - full screen width, 3:4 ratio, hover zoom */}
+    {/* Five wedding images - full screen width, 3:4 ratio, hover zoom */}
     <section>
       <div className="grid grid-cols-5 gap-0">
         {[wedding1, wedding2, wedding3, wedding4, wedding5].map((img, i) => (

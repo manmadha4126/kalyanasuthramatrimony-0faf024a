@@ -26,15 +26,54 @@ const rightFeatures = [
 
 const WhyChooseUs = () => {
   return (
-    <section id="why-us" className="py-20 bg-card">
-      <div className="container mx-auto px-4">
+    <section
+      id="why-us"
+      className="py-20 relative overflow-hidden"
+      style={{
+        background: "linear-gradient(135deg, hsl(30 33% 97%) 0%, hsl(348 40% 94%) 40%, hsl(30 25% 92%) 100%)",
+      }}
+    >
+      {/* Decorative Indian mandala-style pattern top right */}
+      <div className="absolute top-0 right-0 w-56 h-56 opacity-[0.07] pointer-events-none">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="200" cy="0" r="100" stroke="hsl(var(--burgundy))" strokeWidth="1.5"/>
+          <circle cx="200" cy="0" r="75" stroke="hsl(var(--burgundy))" strokeWidth="1"/>
+          <circle cx="200" cy="0" r="50" stroke="hsl(var(--burgundy))" strokeWidth="0.8"/>
+          <circle cx="200" cy="0" r="25" stroke="hsl(var(--gold-accent))" strokeWidth="1.5"/>
+        </svg>
+      </div>
+
+      {/* Paisley-style bottom left */}
+      <div className="absolute bottom-0 left-0 w-48 h-48 opacity-[0.07] pointer-events-none">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="60" cy="140" rx="55" ry="80" stroke="hsl(var(--burgundy))" strokeWidth="1.5" transform="rotate(-30 60 140)"/>
+          <ellipse cx="60" cy="140" rx="38" ry="58" stroke="hsl(var(--burgundy))" strokeWidth="1" transform="rotate(-30 60 140)"/>
+          <ellipse cx="60" cy="140" rx="20" ry="35" stroke="hsl(var(--gold-accent))" strokeWidth="1.2" transform="rotate(-30 60 140)"/>
+        </svg>
+      </div>
+
+      {/* Subtle gold horizontal band */}
+      <div
+        className="absolute top-0 left-0 right-0 h-1"
+        style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold-accent) / 0.5), transparent)" }}
+      />
+      <div
+        className="absolute bottom-0 left-0 right-0 h-1"
+        style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold-accent) / 0.5), transparent)" }}
+      />
+
+      <div className="container mx-auto px-4 relative z-10">
         <motion.div className="text-center mb-14" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-2" style={{ fontFamily: "'Lato', sans-serif" }}>
+            ✦ Trusted Since 2020 ✦
+          </p>
           <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4" style={{ fontFamily: "'DM Serif Display', serif" }}>
-            India's Most Trusted <span style={{ color: "hsl(var(--burgundy))" }}>Matrimony</span>
+            India's Most Trusted <span style={{ color: "hsl(var(--gold-accent))" }}>Matrimony</span>
           </h2>
           <p className="text-foreground text-lg max-w-2xl mx-auto mb-3" style={{ fontFamily: "'Libre Baskerville', serif" }}>
             We are committed to making your search for a life partner easier, safer, and more successful.
           </p>
+          <div className="gold-divider mt-4" />
         </motion.div>
 
         {/* 3-column layout */}
