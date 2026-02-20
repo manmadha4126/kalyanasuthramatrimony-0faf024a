@@ -47,9 +47,9 @@ const Header = () => {
 
         {/* Right side buttons */}
         <div className="hidden lg:flex items-center gap-2 ml-auto">
-          <a href="#register" className="btn-burgundy text-sm px-4 py-2">Register</a>
-          <a href="#" className="text-sm px-4 py-2 rounded-lg font-semibold text-primary" style={{ background: "hsl(var(--burgundy-light))" }}>Admin Login</a>
-          <a href="#" className="text-sm px-4 py-2 rounded-lg font-semibold text-primary" style={{ background: "hsl(var(--burgundy-light))" }}>Customer Login</a>
+          <a href="/register" className="btn-burgundy text-sm px-4 py-2">Register</a>
+          <a href="/login" className="text-sm px-4 py-2 rounded-lg font-semibold text-primary" style={{ background: "hsl(var(--burgundy-light))" }}>Login</a>
+          <a href="/admin" className="text-sm px-4 py-2 rounded-lg font-semibold text-primary" style={{ background: "hsl(var(--burgundy-light))" }}>Admin</a>
         </div>
 
         {/* Mobile */}
