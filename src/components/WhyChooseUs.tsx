@@ -78,20 +78,21 @@ const WhyChooseUs = () => {
         background: "linear-gradient(135deg, hsl(30 33% 97%) 0%, hsl(348 40% 94%) 40%, hsl(30 25% 92%) 100%)",
       }}
     >
-      {/* Colorful background image - 90% opacity, full coverage */}
+      {/* Colorful background image - covers bottom 55% to top 30% (i.e. top 30% clear) */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute left-0 right-0 bottom-0 pointer-events-none"
         style={{
+          top: "30%",
           backgroundImage: `url(${colorfulBg})`,
           backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundPosition: "center bottom",
           opacity: 0.9,
         }}
       />
-      {/* Slight overlay so text stays readable */}
+      {/* Slight overlay on the background area */}
       <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: "hsl(30 33% 97% / 0.35)" }}
+        className="absolute left-0 right-0 bottom-0 pointer-events-none"
+        style={{ top: "30%", background: "hsl(30 33% 97% / 0.35)" }}
       />
 
       {/* Floating love symbols in the top area */}
