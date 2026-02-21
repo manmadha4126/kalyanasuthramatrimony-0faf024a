@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, ChevronLeft, ChevronRight, Check, Upload, Star } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
-const TOTAL_STEPS = 6; // Added step 6 for full summary
+const TOTAL_STEPS = 6;
 
 const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative"];
 const genderOptions = ["Male", "Female"];
@@ -142,7 +143,6 @@ export default function Register() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      // Step 1: Sign up the user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: form.email,
         password: form.password,
@@ -153,7 +153,6 @@ export default function Register() {
       const userId = authData.user?.id;
       if (!userId) throw new Error("User ID not returned");
 
-      // Step 2: Upload photo if available
       let profilePhotoUrl: string | null = null;
       if (form.photos.length > 0) {
         const primary = form.photos[form.primaryPhotoIndex];
@@ -168,7 +167,6 @@ export default function Register() {
 
       const heightCm = parseHeightCm(form.height);
 
-      // Step 3: Use the SECURITY DEFINER function to create profile (bypasses RLS)
       const { error: profileErr } = await supabase.rpc("create_profile_on_register", {
         p_user_id: userId,
         p_full_name: form.name,
@@ -240,23 +238,22 @@ export default function Register() {
   return (
     <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4" style={{ background: "hsl(var(--cream))" }}>
       <div className="max-w-2xl mx-auto">
-        {/* Logo */}
-        <div className="text-center mb-4 sm:mb-6">
+        {/* Back + Logo */}
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <BackButton to="/" label="Home" />
           <a href="/" className="inline-flex items-center gap-2">
             <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsl(var(--burgundy))" }}>
               <span className="font-serif text-base font-bold text-white">K</span>
             </div>
-            <span className="font-serif text-base sm:text-lg font-semibold" style={{ color: "hsl(var(--burgundy))" }}>Kalyanasuthra Matrimony</span>
+            <span className="font-serif text-base sm:text-lg font-semibold" style={{ color: "hsl(var(--burgundy))" }}>Kalyanasuthra</span>
           </a>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          {/* Progress Bar */}
           <div className="h-1 bg-gray-100 relative">
             <motion.div className="absolute top-0 left-0 h-full rounded-full" style={{ background: "hsl(var(--burgundy))" }} animate={{ width: `${progress + (100 / TOTAL_STEPS)}%` }} transition={{ duration: 0.4 }} />
           </div>
 
-          {/* Step indicator */}
           <div className="px-4 sm:px-8 pt-4 sm:pt-6 pb-0 overflow-x-auto">
             <div className="flex items-center justify-between min-w-[320px]">
               {stepTitles.map((title, i) => (
@@ -283,7 +280,6 @@ export default function Register() {
             <AnimatePresence mode="wait">
               <motion.div key={step} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }}>
 
-                {/* STEP 1 */}
                 {step === 1 && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="sm:col-span-2">
@@ -300,7 +296,7 @@ export default function Register() {
                       <TextField label="Phone Number" value={form.phone} onChange={v => set("phone", v)} type="tel" required />
                       {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                     </div>
-                    <div className="relative">
+                    <div className="sm:col-span-2 relative">
                       <label className="block text-xs font-semibold text-gray-600 mb-1">Password <span className="text-red-500">*</span></label>
                       <div className="relative">
                         <input type={showPass ? "text" : "password"} value={form.password} onChange={e => set("password", e.target.value)} placeholder="Min. 8 characters" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 pr-10" />
@@ -319,7 +315,6 @@ export default function Register() {
                   </div>
                 )}
 
-                {/* STEP 2 */}
                 {step === 2 && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -349,7 +344,6 @@ export default function Register() {
                   </div>
                 )}
 
-                {/* STEP 3 */}
                 {step === 3 && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <SelectField label="Family Status" value={form.familyStatus} onChange={v => set("familyStatus", v)} options={familyStatusOptions} />
@@ -363,7 +357,6 @@ export default function Register() {
                   </div>
                 )}
 
-                {/* STEP 4 */}
                 {step === 4 && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <SelectField label="Gothram" value={form.gothram} onChange={v => set("gothram", v)} options={gothramOptions} />
@@ -387,7 +380,6 @@ export default function Register() {
                   </div>
                 )}
 
-                {/* STEP 5 - Photos */}
                 {step === 5 && (
                   <div className="space-y-6">
                     <div>
@@ -420,7 +412,6 @@ export default function Register() {
                   </div>
                 )}
 
-                {/* STEP 6 - Full Summary */}
                 {step === 6 && (
                   <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-1">
                     <SummarySection title="📋 Basic Details">
@@ -430,7 +421,6 @@ export default function Register() {
                       <SummaryRow label="Email" value={form.email} />
                       <SummaryRow label="Phone" value={form.phone} />
                     </SummarySection>
-
                     <SummarySection title="👤 Personal Details">
                       <SummaryRow label="Date of Birth" value={form.dob} />
                       <SummaryRow label="Mother Tongue" value={form.motherTongue} />
@@ -454,7 +444,6 @@ export default function Register() {
                       <SummaryRow label="Residence Type" value={form.residenceType} />
                       <SummaryRow label="Visa Type" value={form.visaType} />
                     </SummarySection>
-
                     <SummarySection title="👨‍👩‍👧‍👦 Family Details">
                       <SummaryRow label="Family Status" value={form.familyStatus} />
                       <SummaryRow label="Family Type" value={form.familyType} />
@@ -465,7 +454,6 @@ export default function Register() {
                       <SummaryRow label="Siblings" value={form.siblings} />
                       <SummaryRow label="Sibling Details" value={form.siblingDetails} />
                     </SummarySection>
-
                     <SummarySection title="🔮 Horoscope Details">
                       <SummaryRow label="Gothram" value={form.gothram} />
                       <SummaryRow label="Rashi" value={form.raashi} />
@@ -479,7 +467,6 @@ export default function Register() {
                       <SummaryRow label="Chart Style" value={form.chartStyle} />
                       <SummaryRow label="Horoscope File" value={form.horoscopeFile?.name || "Not uploaded"} />
                     </SummarySection>
-
                     <SummarySection title="📷 Photos">
                       <SummaryRow label="Photos Uploaded" value={`${form.photos.length} photo(s)`} />
                       {form.photos.length > 0 && (
@@ -502,7 +489,6 @@ export default function Register() {
               </motion.div>
             </AnimatePresence>
 
-            {/* Navigation Buttons */}
             <div className="flex gap-3 mt-6 sm:mt-8">
               {step > 1 && (
                 <button onClick={back} className="flex items-center gap-1 sm:gap-2 px-3 sm:px-5 py-2.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">

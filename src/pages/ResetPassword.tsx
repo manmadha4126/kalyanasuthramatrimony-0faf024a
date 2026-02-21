@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Check } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -40,6 +41,9 @@ export default function ResetPassword() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "hsl(var(--cream))" }}>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm">
+        <div className="mb-4">
+          <BackButton to="/login" label="Back to Login" />
+        </div>
         {done ? (
           <div className="text-center py-4">
             <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-4">

@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      consultations: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          phone: string
+          preferred_date: string
+          preferred_time: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          phone: string
+          preferred_date: string
+          preferred_time: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string
+          preferred_date?: string
+          preferred_time?: string
+          status?: string
+        }
+        Relationships: []
+      }
       profile_interests: {
         Row: {
           created_at: string

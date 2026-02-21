@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, X } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 type Profile = {
   id: string; full_name: string; gender: string; religion: string; caste: string | null;
@@ -28,9 +29,7 @@ export default function CustomerDashboard() {
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [shortlisted, setShortlisted] = useState<string[]>([]);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  useEffect(() => { checkAuth(); }, []);
 
   const checkAuth = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -47,19 +46,9 @@ export default function CustomerDashboard() {
     setLoading(false);
   };
 
-  const logout = async () => {
-    await supabase.auth.signOut();
-    navigate("/login");
-  };
-
-  const toggleShortlist = (id: string) => {
-    setShortlisted(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
-  };
-
-  const getAge = (dob: string) => {
-    const diff = Date.now() - new Date(dob).getTime();
-    return Math.floor(diff / (365.25 * 24 * 60 * 60 * 1000));
-  };
+  const logout = async () => { await supabase.auth.signOut(); navigate("/login"); };
+  const toggleShortlist = (id: string) => { setShortlisted(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]); };
+  const getAge = (dob: string) => Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(220, 20%, 97%)" }}>
@@ -71,17 +60,13 @@ export default function CustomerDashboard() {
           </div>
           <span className="font-serif text-sm font-bold leading-tight" style={{ color: "hsl(var(--burgundy))" }}>Kalyanasuthra</span>
         </div>
-
         <nav className="space-y-1 flex-1">
           {NAV.map(({ icon: Icon, label }) => (
             <button key={label} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: "hsl(var(--burgundy))", color: "white", boxShadow: "0 4px 12px hsl(var(--burgundy) / 0.3)" } : { color: "hsl(var(--burgundy))", background: "transparent" }}>
-              <Icon size={16} />
-              {label}
+              <Icon size={16} /> {label}
             </button>
           ))}
         </nav>
-
-        {/* Upgrade CTA */}
         <button onClick={() => setShowUpgrade(true)} className="mt-4 w-full rounded-xl p-3 text-left transition-all hover:scale-[1.02]" style={{ background: "linear-gradient(135deg, hsl(var(--burgundy)), hsl(var(--deep-rose, 348 50% 37%)))" }}>
           <div className="flex items-center gap-2 mb-1">
             <Star size={13} className="text-yellow-300 fill-yellow-300" />
@@ -93,7 +78,6 @@ export default function CustomerDashboard() {
             <ChevronRight size={12} className="text-white/60" />
           </div>
         </button>
-
         <button onClick={logout} className="flex items-center gap-2 px-3 py-2 text-xs font-medium mt-3 rounded-lg transition-colors" style={{ color: "hsl(var(--burgundy) / 0.7)" }}>
           <LogOut size={14} /> Sign Out
         </button>
@@ -101,18 +85,16 @@ export default function CustomerDashboard() {
 
       {/* Main */}
       <div className="flex-1 overflow-auto">
-        {/* Header */}
-        <header className="bg-white/80 backdrop-blur-sm border-b border-gray-100 px-6 py-4 sticky top-0 z-20">
-          <div className="flex items-center gap-4">
-            {/* Mobile logo */}
-            <div className="lg:hidden flex items-center gap-2">
+        <header className="bg-white/80 backdrop-blur-sm border-b border-gray-100 px-4 sm:px-6 py-4 sticky top-0 z-20">
+          <div className="flex items-center gap-3">
+            <div className="lg:hidden">
+              <BackButton to="/" label="Home" />
+            </div>
+            <div className="lg:hidden flex items-center gap-2 ml-1">
               <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: "hsl(var(--burgundy))" }}>
                 <span className="text-white font-serif font-bold text-xs">K</span>
               </div>
-              <span className="font-serif text-sm font-bold" style={{ color: "hsl(var(--burgundy))" }}>Kalyanasuthra</span>
             </div>
-
-            {/* Center nav */}
             <nav className="hidden lg:flex items-center gap-1 mx-auto">
               {["Home", "Matches", "Preferences"].map(item => (
                 <button key={item} onClick={() => setActiveNav(item)} className="px-4 py-2 rounded-lg text-sm font-semibold transition-all" style={activeNav === item ? { color: "hsl(var(--burgundy))", background: "hsl(var(--burgundy-light))" } : { color: "#888" }}>
@@ -120,8 +102,6 @@ export default function CustomerDashboard() {
                 </button>
               ))}
             </nav>
-
-            {/* Right */}
             <div className="ml-auto flex items-center gap-3">
               <button className="relative w-9 h-9 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors">
                 <Bell size={16} className="text-gray-500" />
@@ -137,38 +117,28 @@ export default function CustomerDashboard() {
           </div>
         </header>
 
-        <div className="p-6">
-          {/* Welcome */}
+        <div className="p-4 sm:p-6">
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-            <h1 className="font-serif text-2xl font-bold text-gray-800">
+            <h1 className="font-serif text-xl sm:text-2xl font-bold text-gray-800">
               Welcome back, <span style={{ color: "hsl(var(--burgundy))" }}>{userProfile?.full_name?.split(" ")[0] || "Friend"}</span> 👋
             </h1>
             <p className="text-sm text-gray-500 mt-1">Here are your recommended matches</p>
           </motion.div>
 
-          {/* Upgrade Banner */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            onClick={() => setShowUpgrade(true)}
-            className="mb-6 rounded-2xl p-5 cursor-pointer hover:scale-[1.01] transition-transform"
-            style={{ background: "linear-gradient(135deg, hsl(var(--burgundy)), hsl(340, 50%, 35%))" }}
-          >
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} onClick={() => setShowUpgrade(true)} className="mb-6 rounded-2xl p-4 sm:p-5 cursor-pointer hover:scale-[1.01] transition-transform" style={{ background: "linear-gradient(135deg, hsl(var(--burgundy)), hsl(340, 50%, 35%))" }}>
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <Star size={16} className="text-yellow-300 fill-yellow-300" />
                   <span className="text-yellow-200 text-xs font-bold uppercase tracking-wider">Premium Service</span>
                 </div>
-                <h3 className="text-white font-serif font-bold text-lg">Upgrade Assisted Matrimony Services</h3>
+                <h3 className="text-white font-serif font-bold text-base sm:text-lg">Upgrade Assisted Matrimony Services</h3>
                 <p className="text-white/70 text-xs mt-1">Get a dedicated Relationship Manager, daily feedback & faster matches</p>
               </div>
-              <ChevronRight size={24} className="text-white/60" />
+              <ChevronRight size={24} className="text-white/60 hidden sm:block" />
             </div>
           </motion.div>
 
-          {/* Profile Cards */}
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {[...Array(8)].map((_, i) => <div key={i} className="h-72 bg-gray-100 rounded-2xl animate-pulse" />)}
@@ -182,13 +152,7 @@ export default function CustomerDashboard() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {matches.map((profile, i) => (
-                <motion.div
-                  key={profile.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1 group"
-                >
+                <motion.div key={profile.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1 group">
                   <div className="relative h-48 bg-gray-100">
                     {profile.profile_photo_url ? (
                       <img src={profile.profile_photo_url} alt={profile.full_name} className="w-full h-full object-cover" />
@@ -202,19 +166,13 @@ export default function CustomerDashboard() {
                         <Star size={9} className="fill-white" /> Featured
                       </div>
                     )}
-                    <button
-                      onClick={() => toggleShortlist(profile.id)}
-                      className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all"
-                      style={{ background: "hsl(0, 0%, 100% / 0.9)" }}
-                    >
+                    <button onClick={() => toggleShortlist(profile.id)} className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all" style={{ background: "hsl(0, 0%, 100% / 0.9)" }}>
                       <Heart size={15} style={{ color: shortlisted.includes(profile.id) ? "hsl(var(--burgundy))" : "#ccc" }} className={shortlisted.includes(profile.id) ? "fill-current" : ""} />
                     </button>
                   </div>
                   <div className="p-4">
                     <h3 className="font-serif font-bold text-gray-800 text-sm">{profile.full_name}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      {getAge(profile.date_of_birth)} yrs • {profile.religion}{profile.caste ? ` • ${profile.caste}` : ""}
-                    </p>
+                    <p className="text-xs text-gray-500 mt-0.5">{getAge(profile.date_of_birth)} yrs • {profile.religion}{profile.caste ? ` • ${profile.caste}` : ""}</p>
                     <div className="mt-2 space-y-0.5">
                       {profile.occupation && <p className="text-xs text-gray-600">💼 {profile.occupation}</p>}
                       {(profile.city || profile.state) && <p className="text-xs text-gray-500">📍 {[profile.city, profile.state].filter(Boolean).join(", ")}</p>}
@@ -231,7 +189,6 @@ export default function CustomerDashboard() {
         </div>
       </div>
 
-      {/* Upgrade Modal */}
       {showUpgrade && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsl(0, 0%, 0% / 0.5)" }}>
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -244,34 +201,11 @@ export default function CustomerDashboard() {
                 <X size={16} className="text-gray-500" />
               </button>
             </div>
-
             <div className="p-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
-                {
-                  title: "Support Matrimony",
-                  plans: [
-                    { price: "₹13,000", period: "3 Months" },
-                    { price: "₹20,000", period: "6 Months" },
-                  ],
-                  features: ["Unlimited profiles", "Weekly mail updates", "Profile processing"],
-                  highlight: false,
-                },
-                {
-                  title: "Affluent Matrimony",
-                  plans: [{ price: "₹38,000", period: "Premium" }],
-                  features: ["Unlimited profiles", "Dedicated Relationship Manager", "Daily feedback", "Personal enquiry", "Up to settlement", "Well-settled profiles"],
-                  highlight: true,
-                },
-                {
-                  title: "Online Services",
-                  plans: [
-                    { price: "₹7,000", period: "3 Months" },
-                    { price: "₹10,000", period: "6 Months" },
-                    { price: "₹15,000", period: "1 Year" },
-                  ],
-                  features: ["Full online access", "Profile browsing", "Direct connect"],
-                  highlight: false,
-                },
+                { title: "Support Matrimony", plans: [{ price: "₹13,000", period: "3 Months" }, { price: "₹20,000", period: "6 Months" }], features: ["Unlimited profiles", "Weekly mail updates", "Profile processing"], highlight: false },
+                { title: "Affluent Matrimony", plans: [{ price: "₹38,000", period: "Premium" }], features: ["Unlimited profiles", "Dedicated Relationship Manager", "Daily feedback", "Personal enquiry", "Up to settlement", "Well-settled profiles"], highlight: true },
+                { title: "Online Services", plans: [{ price: "₹7,000", period: "3 Months" }, { price: "₹10,000", period: "6 Months" }, { price: "₹15,000", period: "1 Year" }], features: ["Full online access", "Profile browsing", "Direct connect"], highlight: false },
               ].map((pkg, i) => (
                 <div key={i} className="rounded-xl p-5 border-2 transition-all" style={pkg.highlight ? { borderColor: "hsl(var(--burgundy))", background: "hsl(var(--burgundy-light))" } : { borderColor: "hsl(var(--border))", background: "white" }}>
                   {pkg.highlight && <div className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: "hsl(var(--burgundy))" }}>★ Most Popular</div>}
@@ -292,13 +226,7 @@ export default function CustomerDashboard() {
                       </li>
                     ))}
                   </ul>
-                  <a
-                    href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hello! I'm interested in the ${pkg.title} plan. Please provide more details.`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full py-2 rounded-lg text-center text-xs font-semibold transition-all"
-                    style={pkg.highlight ? { background: "hsl(var(--burgundy))", color: "white" } : { background: "hsl(var(--burgundy-light))", color: "hsl(var(--burgundy))" }}
-                  >
+                  <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hello! I'm interested in the ${pkg.title} plan. Please provide more details.`)}`} target="_blank" rel="noopener noreferrer" className="block w-full py-2 rounded-lg text-center text-xs font-semibold transition-all" style={pkg.highlight ? { background: "hsl(var(--burgundy))", color: "white" } : { background: "hsl(var(--burgundy-light))", color: "hsl(var(--burgundy))" }}>
                     Get Consultation
                   </a>
                 </div>
