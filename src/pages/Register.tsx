@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, ChevronLeft, ChevronRight, Check, Upload, Star } from "lucide-react";
 
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6; // Added step 6 for full summary
 
 const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative"];
 const genderOptions = ["Male", "Female"];
@@ -37,20 +37,15 @@ const doshamOptions = ["No Dosham", "Chevvai Dosham", "Rahu Dosham", "Kethu Dosh
 const languageOptions = ["Tamil", "Telugu", "Kannada", "Malayalam", "Hindi", "Sanskrit", "English", "Other"];
 const chartStyleOptions = ["South Indian", "North Indian", "East Indian", "Sri Lankan"];
 
-const stepTitles = ["Basic Details", "Personal Details", "Family Details", "Horoscope", "Photo Upload"];
+const stepTitles = ["Basic Details", "Personal Details", "Family Details", "Horoscope", "Photo Upload", "Review & Submit"];
 
 type FormData = {
-  // Step 1
   name: string; profileFor: string; gender: string; email: string; phone: string; password: string; confirmPassword: string;
-  // Step 2
   dob: string; motherTongue: string; height: string; maritalStatus: string; religion: string; caste: string; subCaste: string;
   country: string; state: string; city: string; village: string; edu10: string; edu12: string; education: string;
   employmentType: string; occupation: string; companyName: string; annualIncome: string; citizenship: string; residenceType: string; visaType: string;
-  // Step 3
   familyStatus: string; familyType: string; fatherName: string; fatherOccupation: string; motherName: string; motherOccupation: string; siblings: string; siblingDetails: string;
-  // Step 4
   gothram: string; raashi: string; star: string; dosham: string; timeOfBirth: string; countryOfBirth: string; stateOfBirth: string; birthPlace: string; language: string; chartStyle: string; horoscopeFile: File | null;
-  // Step 5
   photos: File[]; primaryPhotoIndex: number;
 };
 
@@ -67,11 +62,7 @@ const defaultForm: FormData = {
 const SelectField = ({ label, value, onChange, options, required }: { label: string; value: string; onChange: (v: string) => void; options: string[]; required?: boolean }) => (
   <div>
     <label className="block text-xs font-semibold text-gray-600 mb-1">{label}{required && <span className="text-red-500 ml-1">*</span>}</label>
-    <select
-      value={value}
-      onChange={e => onChange(e.target.value)}
-      className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white text-gray-800"
-    >
+    <select value={value} onChange={e => onChange(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white text-gray-800">
       <option value="">Select {label}</option>
       {options.map(o => <option key={o} value={o}>{o}</option>)}
     </select>
@@ -81,13 +72,21 @@ const SelectField = ({ label, value, onChange, options, required }: { label: str
 const TextField = ({ label, value, onChange, placeholder, required, type = "text" }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string; required?: boolean; type?: string }) => (
   <div>
     <label className="block text-xs font-semibold text-gray-600 mb-1">{label}{required && <span className="text-red-500 ml-1">*</span>}</label>
-    <input
-      type={type}
-      value={value}
-      onChange={e => onChange(e.target.value)}
-      placeholder={placeholder || label}
-      className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white text-gray-800 placeholder-gray-400"
-    />
+    <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder || label} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white text-gray-800 placeholder-gray-400" />
+  </div>
+);
+
+const SummaryRow = ({ label, value }: { label: string; value: string }) => (
+  <div className="flex justify-between py-1.5 border-b border-gray-100 last:border-0">
+    <span className="text-xs font-semibold text-gray-500">{label}</span>
+    <span className="text-xs text-gray-800 text-right max-w-[55%]">{value || "—"}</span>
+  </div>
+);
+
+const SummarySection = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div className="mb-4">
+    <h4 className="text-sm font-bold mb-2 px-3 py-1.5 rounded-lg" style={{ background: "hsl(var(--burgundy-light))", color: "hsl(var(--burgundy))" }}>{title}</h4>
+    <div className="px-1">{children}</div>
   </div>
 );
 
@@ -131,9 +130,19 @@ export default function Register() {
     set("photos", combined);
   };
 
+  const parseHeightCm = (h: string): number | null => {
+    if (!h) return null;
+    const match = h.match(/(\d+)'(\d+)/);
+    if (!match) return null;
+    const feet = parseInt(match[1]);
+    const inches = parseInt(match[2]);
+    return Math.round((feet * 12 + inches) * 2.54);
+  };
+
   const handleSave = async () => {
     setSaving(true);
     try {
+      // Step 1: Sign up the user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: form.email,
         password: form.password,
@@ -144,6 +153,7 @@ export default function Register() {
       const userId = authData.user?.id;
       if (!userId) throw new Error("User ID not returned");
 
+      // Step 2: Upload photo if available
       let profilePhotoUrl: string | null = null;
       if (form.photos.length > 0) {
         const primary = form.photos[form.primaryPhotoIndex];
@@ -156,44 +166,45 @@ export default function Register() {
         }
       }
 
-      const heightCm = form.height ? Math.round((parseInt(form.height) * 12 + parseInt(form.height.split("'")[1] || "0")) * 2.54) : null;
+      const heightCm = parseHeightCm(form.height);
 
-      const { error: profileErr } = await supabase.from("profiles").insert({
-        user_id: userId,
-        full_name: form.name,
-        gender: form.gender,
-        email: form.email,
-        phone: form.phone,
-        profile_created_by: form.profileFor,
-        date_of_birth: form.dob,
-        mother_tongue: form.motherTongue,
-        height_cm: heightCm,
-        marital_status: form.maritalStatus || "Never Married",
-        religion: form.religion || "Hindu",
-        caste: form.caste,
-        sub_caste: form.subCaste,
-        country: form.country,
-        state: form.state,
-        city: form.city,
-        native_place: form.village,
-        education: form.education,
-        occupation: form.occupation,
-        company_name: form.companyName,
-        annual_income: form.annualIncome,
-        family_status: form.familyStatus,
-        family_type: form.familyType,
-        father_name: form.fatherName,
-        father_occupation: form.fatherOccupation,
-        mother_name: form.motherName,
-        mother_occupation: form.motherOccupation,
-        siblings: form.siblings,
-        gothra: form.gothram,
-        raasi: form.raashi,
-        star: form.star,
-        dosham: form.dosham,
-        whatsapp: form.phone,
-        profile_photo_url: profilePhotoUrl,
-        profile_status: "pending",
+      // Step 3: Use the SECURITY DEFINER function to create profile (bypasses RLS)
+      const { error: profileErr } = await supabase.rpc("create_profile_on_register", {
+        p_user_id: userId,
+        p_full_name: form.name,
+        p_gender: form.gender,
+        p_email: form.email,
+        p_phone: form.phone,
+        p_profile_created_by: form.profileFor,
+        p_date_of_birth: form.dob || null,
+        p_mother_tongue: form.motherTongue || null,
+        p_height_cm: heightCm,
+        p_marital_status: form.maritalStatus || "Never Married",
+        p_religion: form.religion || "Hindu",
+        p_caste: form.caste || null,
+        p_sub_caste: form.subCaste || null,
+        p_country: form.country || "India",
+        p_state: form.state || null,
+        p_city: form.city || null,
+        p_native_place: form.village || null,
+        p_education: form.education || null,
+        p_occupation: form.occupation || null,
+        p_company_name: form.companyName || null,
+        p_annual_income: form.annualIncome || null,
+        p_family_status: form.familyStatus || null,
+        p_family_type: form.familyType || null,
+        p_father_name: form.fatherName || null,
+        p_father_occupation: form.fatherOccupation || null,
+        p_mother_name: form.motherName || null,
+        p_mother_occupation: form.motherOccupation || null,
+        p_siblings: form.siblings || null,
+        p_gothra: form.gothram || null,
+        p_raasi: form.raashi || null,
+        p_star: form.star || null,
+        p_dosham: form.dosham || null,
+        p_whatsapp: form.phone || null,
+        p_profile_photo_url: profilePhotoUrl,
+        p_education_detail: form.edu10 && form.edu12 ? `10th: ${form.edu10}, 12th: ${form.edu12}` : null,
       });
 
       if (profileErr) throw profileErr;
@@ -201,6 +212,7 @@ export default function Register() {
       setDone(true);
       toast({ title: "Registration successful!", description: "Your profile has been submitted for review." });
     } catch (err: any) {
+      console.error("Registration error:", err);
       toast({ title: "Error", description: err.message || "Something went wrong.", variant: "destructive" });
     } finally {
       setSaving(false);
@@ -211,13 +223,14 @@ export default function Register() {
 
   if (done) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "hsl(var(--cream))" }}>
-        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-2xl shadow-xl p-12 text-center max-w-md">
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "hsl(var(--cream))" }}>
+        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-2xl shadow-xl p-8 sm:p-12 text-center max-w-md w-full">
           <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-6">
             <Check className="w-10 h-10 text-green-500" />
           </div>
           <h2 className="text-2xl font-serif font-bold text-gray-800 mb-2">Registration Complete!</h2>
-          <p className="text-gray-500 mb-6">Your profile has been submitted. Our team will review and activate it within 24 hours.</p>
+          <p className="text-gray-500 mb-4 text-sm">Your profile has been submitted. Our team will review and activate it within 24 hours.</p>
+          <p className="text-xs text-gray-400 mb-6">Please check your email to verify your account.</p>
           <button onClick={() => navigate("/")} className="btn-burgundy">Back to Home</button>
         </motion.div>
       </div>
@@ -225,57 +238,47 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen py-8 px-4" style={{ background: "hsl(var(--cream))" }}>
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4" style={{ background: "hsl(var(--cream))" }}>
       <div className="max-w-2xl mx-auto">
         {/* Logo */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-4 sm:mb-6">
           <a href="/" className="inline-flex items-center gap-2">
             <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsl(var(--burgundy))" }}>
               <span className="font-serif text-base font-bold text-white">K</span>
             </div>
-            <span className="font-serif text-lg font-semibold" style={{ color: "hsl(var(--burgundy))" }}>Kalyanasuthra Matrimony</span>
+            <span className="font-serif text-base sm:text-lg font-semibold" style={{ color: "hsl(var(--burgundy))" }}>Kalyanasuthra Matrimony</span>
           </a>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Progress Bar */}
           <div className="h-1 bg-gray-100 relative">
-            <motion.div
-              className="absolute top-0 left-0 h-full rounded-full"
-              style={{ background: "hsl(var(--burgundy))" }}
-              animate={{ width: `${progress + 20}%` }}
-              transition={{ duration: 0.4 }}
-            />
+            <motion.div className="absolute top-0 left-0 h-full rounded-full" style={{ background: "hsl(var(--burgundy))" }} animate={{ width: `${progress + (100 / TOTAL_STEPS)}%` }} transition={{ duration: 0.4 }} />
           </div>
 
           {/* Step indicator */}
-          <div className="px-8 pt-6 pb-0">
-            <div className="flex items-center justify-between mb-1">
+          <div className="px-4 sm:px-8 pt-4 sm:pt-6 pb-0 overflow-x-auto">
+            <div className="flex items-center justify-between min-w-[320px]">
               {stepTitles.map((title, i) => (
                 <div key={i} className="flex flex-col items-center gap-1">
-                  <div
-                    className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all"
-                    style={
-                      i + 1 < step
-                        ? { background: "hsl(var(--burgundy))", color: "white" }
-                        : i + 1 === step
-                        ? { background: "hsl(var(--burgundy))", color: "white", boxShadow: "0 0 0 3px hsl(var(--burgundy) / 0.2)" }
-                        : { background: "#f0f0f0", color: "#aaa" }
-                    }
-                  >
-                    {i + 1 < step ? <Check size={13} /> : i + 1}
+                  <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold transition-all" style={
+                    i + 1 < step ? { background: "hsl(var(--burgundy))", color: "white" }
+                    : i + 1 === step ? { background: "hsl(var(--burgundy))", color: "white", boxShadow: "0 0 0 3px hsl(var(--burgundy) / 0.2)" }
+                    : { background: "#f0f0f0", color: "#aaa" }
+                  }>
+                    {i + 1 < step ? <Check size={11} /> : i + 1}
                   </div>
-                  <span className="text-[9px] hidden sm:block" style={{ color: i + 1 === step ? "hsl(var(--burgundy))" : "#aaa", fontWeight: i + 1 === step ? 600 : 400 }}>{title}</span>
+                  <span className="text-[8px] sm:text-[9px] whitespace-nowrap" style={{ color: i + 1 === step ? "hsl(var(--burgundy))" : "#aaa", fontWeight: i + 1 === step ? 600 : 400 }}>{title}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="px-8 py-6">
-            <h2 className="text-xl font-serif font-bold mb-1" style={{ color: "hsl(var(--burgundy))" }}>
+          <div className="px-4 sm:px-8 py-4 sm:py-6">
+            <h2 className="text-lg sm:text-xl font-serif font-bold mb-1" style={{ color: "hsl(var(--burgundy))" }}>
               Step {step}: {stepTitles[step - 1]}
             </h2>
-            <p className="text-xs text-gray-400 mb-6">Fill in accurate details for the best matches</p>
+            <p className="text-xs text-gray-400 mb-4 sm:mb-6">Fill in accurate details for the best matches</p>
 
             <AnimatePresence mode="wait">
               <motion.div key={step} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }}>
@@ -384,19 +387,18 @@ export default function Register() {
                   </div>
                 )}
 
-                {/* STEP 5 */}
+                {/* STEP 5 - Photos */}
                 {step === 5 && (
                   <div className="space-y-6">
                     <div>
                       <label className="block text-xs font-semibold text-gray-600 mb-2">Upload Photos (Max 5, each below 25MB)</label>
-                      <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-8 cursor-pointer hover:border-primary/40 transition-colors">
+                      <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-6 sm:p-8 cursor-pointer hover:border-primary/40 transition-colors">
                         <Upload size={28} className="text-gray-300 mb-2" />
                         <span className="text-sm text-gray-500">Click to upload photos</span>
                         <span className="text-xs text-gray-400 mt-1">{form.photos.length}/5 uploaded</span>
                         <input type="file" className="hidden" accept="image/*" multiple onChange={e => handlePhotoUpload(e.target.files)} />
                       </label>
                     </div>
-
                     {form.photos.length > 0 && (
                       <div>
                         <p className="text-xs font-semibold text-gray-600 mb-3">Select Primary Photo <Star size={12} className="inline text-yellow-500" /></p>
@@ -415,43 +417,104 @@ export default function Register() {
                         </div>
                       </div>
                     )}
+                  </div>
+                )}
 
-                    {/* Summary */}
-                    <div className="border border-gray-100 rounded-xl p-4 bg-gray-50">
-                      <h3 className="font-semibold text-sm text-gray-700 mb-3">Registration Summary</h3>
-                      <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
-                        <div><span className="font-medium">Name:</span> {form.name || "—"}</div>
-                        <div><span className="font-medium">Gender:</span> {form.gender || "—"}</div>
-                        <div><span className="font-medium">Email:</span> {form.email || "—"}</div>
-                        <div><span className="font-medium">Phone:</span> {form.phone || "—"}</div>
-                        <div><span className="font-medium">DOB:</span> {form.dob || "—"}</div>
-                        <div><span className="font-medium">Religion:</span> {form.religion || "—"}</div>
-                        <div><span className="font-medium">Caste:</span> {form.caste || "—"}</div>
-                        <div><span className="font-medium">Education:</span> {form.education || "—"}</div>
-                        <div><span className="font-medium">Occupation:</span> {form.occupation || "—"}</div>
-                        <div><span className="font-medium">City:</span> {form.city || "—"}</div>
-                        <div><span className="font-medium">Rashi:</span> {form.raashi || "—"}</div>
-                        <div><span className="font-medium">Star:</span> {form.star || "—"}</div>
-                      </div>
-                    </div>
+                {/* STEP 6 - Full Summary */}
+                {step === 6 && (
+                  <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-1">
+                    <SummarySection title="📋 Basic Details">
+                      <SummaryRow label="Full Name" value={form.name} />
+                      <SummaryRow label="Profile Created For" value={form.profileFor} />
+                      <SummaryRow label="Gender" value={form.gender} />
+                      <SummaryRow label="Email" value={form.email} />
+                      <SummaryRow label="Phone" value={form.phone} />
+                    </SummarySection>
+
+                    <SummarySection title="👤 Personal Details">
+                      <SummaryRow label="Date of Birth" value={form.dob} />
+                      <SummaryRow label="Mother Tongue" value={form.motherTongue} />
+                      <SummaryRow label="Height" value={form.height} />
+                      <SummaryRow label="Marital Status" value={form.maritalStatus} />
+                      <SummaryRow label="Religion" value={form.religion} />
+                      <SummaryRow label="Caste" value={form.caste} />
+                      <SummaryRow label="Sub Caste" value={form.subCaste} />
+                      <SummaryRow label="Country" value={form.country} />
+                      <SummaryRow label="State" value={form.state} />
+                      <SummaryRow label="City" value={form.city} />
+                      <SummaryRow label="Village / Native" value={form.village} />
+                      <SummaryRow label="10th Education" value={form.edu10} />
+                      <SummaryRow label="12th Education" value={form.edu12} />
+                      <SummaryRow label="Education" value={form.education} />
+                      <SummaryRow label="Employment Type" value={form.employmentType} />
+                      <SummaryRow label="Occupation" value={form.occupation} />
+                      <SummaryRow label="Company Name" value={form.companyName} />
+                      <SummaryRow label="Annual Income" value={form.annualIncome} />
+                      <SummaryRow label="Citizenship" value={form.citizenship} />
+                      <SummaryRow label="Residence Type" value={form.residenceType} />
+                      <SummaryRow label="Visa Type" value={form.visaType} />
+                    </SummarySection>
+
+                    <SummarySection title="👨‍👩‍👧‍👦 Family Details">
+                      <SummaryRow label="Family Status" value={form.familyStatus} />
+                      <SummaryRow label="Family Type" value={form.familyType} />
+                      <SummaryRow label="Father's Name" value={form.fatherName} />
+                      <SummaryRow label="Father's Occupation" value={form.fatherOccupation} />
+                      <SummaryRow label="Mother's Name" value={form.motherName} />
+                      <SummaryRow label="Mother's Occupation" value={form.motherOccupation} />
+                      <SummaryRow label="Siblings" value={form.siblings} />
+                      <SummaryRow label="Sibling Details" value={form.siblingDetails} />
+                    </SummarySection>
+
+                    <SummarySection title="🔮 Horoscope Details">
+                      <SummaryRow label="Gothram" value={form.gothram} />
+                      <SummaryRow label="Rashi" value={form.raashi} />
+                      <SummaryRow label="Star" value={form.star} />
+                      <SummaryRow label="Dosham" value={form.dosham} />
+                      <SummaryRow label="Time of Birth" value={form.timeOfBirth} />
+                      <SummaryRow label="Country of Birth" value={form.countryOfBirth} />
+                      <SummaryRow label="State of Birth" value={form.stateOfBirth} />
+                      <SummaryRow label="Birth Place" value={form.birthPlace} />
+                      <SummaryRow label="Language" value={form.language} />
+                      <SummaryRow label="Chart Style" value={form.chartStyle} />
+                      <SummaryRow label="Horoscope File" value={form.horoscopeFile?.name || "Not uploaded"} />
+                    </SummarySection>
+
+                    <SummarySection title="📷 Photos">
+                      <SummaryRow label="Photos Uploaded" value={`${form.photos.length} photo(s)`} />
+                      {form.photos.length > 0 && (
+                        <div className="grid grid-cols-4 gap-2 mt-2">
+                          {form.photos.map((photo, i) => (
+                            <div key={i} className="relative">
+                              <img src={URL.createObjectURL(photo)} alt="" className="w-full aspect-square object-cover rounded-lg" />
+                              {i === form.primaryPhotoIndex && (
+                                <div className="absolute top-1 right-1">
+                                  <Star size={12} className="text-yellow-400 fill-yellow-400" />
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </SummarySection>
                   </div>
                 )}
               </motion.div>
             </AnimatePresence>
 
             {/* Navigation Buttons */}
-            <div className="flex gap-3 mt-8">
+            <div className="flex gap-3 mt-6 sm:mt-8">
               {step > 1 && (
-                <button onClick={back} className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                <button onClick={back} className="flex items-center gap-1 sm:gap-2 px-3 sm:px-5 py-2.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
                   <ChevronLeft size={16} /> Back
                 </button>
               )}
               {step < TOTAL_STEPS ? (
-                <button onClick={next} className="btn-burgundy ml-auto flex items-center gap-2">
+                <button onClick={next} className="btn-burgundy ml-auto flex items-center gap-1 sm:gap-2 text-sm">
                   Next <ChevronRight size={16} />
                 </button>
               ) : (
-                <button onClick={handleSave} disabled={saving} className="btn-burgundy ml-auto flex items-center gap-2 disabled:opacity-60">
+                <button onClick={handleSave} disabled={saving} className="btn-burgundy ml-auto flex items-center gap-1 sm:gap-2 text-sm disabled:opacity-60">
                   {saving ? "Saving..." : "Submit Registration"} <Check size={16} />
                 </button>
               )}

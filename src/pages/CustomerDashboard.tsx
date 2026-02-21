@@ -62,7 +62,7 @@ export default function CustomerDashboard() {
   };
 
   return (
-    <div className="min-h-screen flex" style={{ background: "hsl(220, 20%, 97%)" }}>
+    <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(220, 20%, 97%)" }}>
       {/* Sidebar */}
       <aside className="hidden lg:flex flex-col w-56 flex-shrink-0 py-6 px-4" style={{ background: "linear-gradient(180deg, hsl(300, 15%, 88%) 0%, hsl(310, 20%, 92%) 100%)", borderRight: "1px solid hsl(300, 15%, 82%)" }}>
         <div className="flex items-center gap-2 mb-10 px-2">
@@ -220,7 +220,7 @@ export default function CustomerDashboard() {
                       {(profile.city || profile.state) && <p className="text-xs text-gray-500">📍 {[profile.city, profile.state].filter(Boolean).join(", ")}</p>}
                       {profile.annual_income && <p className="text-xs text-gray-500">💰 {profile.annual_income}</p>}
                     </div>
-                    <button className="mt-3 w-full py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: "hsl(var(--burgundy-light))", color: "hsl(var(--burgundy))" }}>
+                    <button onClick={() => navigate(`/profile/${profile.id}`)} className="mt-3 w-full py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: "hsl(var(--burgundy-light))", color: "hsl(var(--burgundy))" }}>
                       View Profile
                     </button>
                   </div>

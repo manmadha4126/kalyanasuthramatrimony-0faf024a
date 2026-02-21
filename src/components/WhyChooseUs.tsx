@@ -68,15 +68,19 @@ const WhyChooseUs = () => {
       }}
     >
       {/* Colorful background image covering the bottom half */}
+      {/* Colorful background image covering the features area */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-[55%] pointer-events-none"
+        className="absolute top-[30%] left-0 right-0 bottom-0 pointer-events-none"
         style={{
           backgroundImage: `url(${colorfulBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          opacity: 0.12,
-          filter: "blur(2px)",
+          opacity: 0.28,
         }}
+      />
+      <div
+        className="absolute top-[30%] left-0 right-0 bottom-0 pointer-events-none"
+        style={{ background: "linear-gradient(180deg, hsl(30 33% 97% / 0.6) 0%, transparent 30%, transparent 70%, hsl(30 33% 97% / 0.6) 100%)" }}
       />
 
       {/* Decorative Indian mandala-style pattern top right */}

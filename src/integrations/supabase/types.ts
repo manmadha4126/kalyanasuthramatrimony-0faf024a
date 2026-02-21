@@ -236,7 +236,46 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_profile_on_register: {
+        Args: {
+          p_annual_income?: string
+          p_caste?: string
+          p_city?: string
+          p_company_name?: string
+          p_country?: string
+          p_date_of_birth?: string
+          p_dosham?: string
+          p_education?: string
+          p_education_detail?: string
+          p_email: string
+          p_family_status?: string
+          p_family_type?: string
+          p_father_name?: string
+          p_father_occupation?: string
+          p_full_name: string
+          p_gender: string
+          p_gothra?: string
+          p_height_cm?: number
+          p_marital_status?: string
+          p_mother_name?: string
+          p_mother_occupation?: string
+          p_mother_tongue?: string
+          p_native_place?: string
+          p_occupation?: string
+          p_phone: string
+          p_profile_created_by?: string
+          p_profile_photo_url?: string
+          p_raasi?: string
+          p_religion?: string
+          p_siblings?: string
+          p_star?: string
+          p_state?: string
+          p_sub_caste?: string
+          p_user_id: string
+          p_whatsapp?: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

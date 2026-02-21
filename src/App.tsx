@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import CustomerLogin from "./pages/CustomerLogin";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import ResetPassword from "./pages/ResetPassword";
+import ProfileDetail from "./pages/ProfileDetail";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/login" element={<CustomerLogin />} />
           <Route path="/dashboard" element={<CustomerDashboard />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/profile/:id" element={<ProfileDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

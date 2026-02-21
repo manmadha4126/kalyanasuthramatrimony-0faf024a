@@ -72,7 +72,9 @@ const Header = () => {
                   {link.label}
                 </a>
               ))}
-              <a href="#register" className="btn-burgundy text-xs mt-2" onClick={() => setMobileOpen(false)}>Register</a>
+              <a href="/register" className="btn-burgundy text-xs mt-2" onClick={() => setMobileOpen(false)}>Register</a>
+              <a href="/login" className="text-xs font-semibold" style={{ color: "hsl(var(--burgundy))" }} onClick={() => setMobileOpen(false)}>Login</a>
+              <a href="/admin" className="text-xs font-semibold text-gray-500" onClick={() => setMobileOpen(false)}>Admin</a>
             </nav>
           </motion.div>
         )}
