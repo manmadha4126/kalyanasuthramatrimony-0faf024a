@@ -58,6 +58,17 @@ const rightFeatures = [
   },
 ];
 
+// Generate floating rose petal / love symbols
+const floatingSymbols = Array.from({ length: 35 }, (_, i) => ({
+  id: i,
+  symbol: ["❤", "🌹", "💕", "🩷", "💗", "🌸", "🪻", "💐", "🌺", "♥"][i % 10],
+  left: `${(i * 17 + 7) % 100}%`,
+  top: `${(i * 13 + 3) % 30}%`,
+  size: 14 + (i % 5) * 4,
+  delay: i * 0.3,
+  duration: 6 + (i % 4) * 2,
+}));
+
 const WhyChooseUs = () => {
   return (
     <section
@@ -67,21 +78,51 @@ const WhyChooseUs = () => {
         background: "linear-gradient(135deg, hsl(30 33% 97%) 0%, hsl(348 40% 94%) 40%, hsl(30 25% 92%) 100%)",
       }}
     >
-      {/* Colorful background image covering the bottom half */}
-      {/* Colorful background image covering the features area */}
+      {/* Colorful background image - 90% opacity, full coverage */}
       <div
-        className="absolute top-[30%] left-0 right-0 bottom-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage: `url(${colorfulBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          opacity: 0.28,
+          opacity: 0.9,
         }}
       />
+      {/* Slight overlay so text stays readable */}
       <div
-        className="absolute top-[30%] left-0 right-0 bottom-0 pointer-events-none"
-        style={{ background: "linear-gradient(180deg, hsl(30 33% 97% / 0.6) 0%, transparent 30%, transparent 70%, hsl(30 33% 97% / 0.6) 100%)" }}
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "hsl(30 33% 97% / 0.35)" }}
       />
+
+      {/* Floating love symbols in the top area */}
+      <div className="absolute top-0 left-0 right-0 h-[35%] pointer-events-none overflow-hidden">
+        {floatingSymbols.map((s) => (
+          <motion.span
+            key={s.id}
+            className="absolute select-none"
+            style={{
+              left: s.left,
+              top: s.top,
+              fontSize: `${s.size}px`,
+              opacity: 0.55,
+              filter: "drop-shadow(0 1px 2px hsl(0, 0%, 0% / 0.1))",
+            }}
+            initial={{ y: 0, rotate: 0 }}
+            animate={{
+              y: [0, -15, 0, 10, 0],
+              rotate: [0, 10, -10, 5, 0],
+            }}
+            transition={{
+              duration: s.duration,
+              repeat: Infinity,
+              delay: s.delay,
+              ease: "easeInOut",
+            }}
+          >
+            {s.symbol}
+          </motion.span>
+        ))}
+      </div>
 
       {/* Decorative Indian mandala-style pattern top right */}
       <div className="absolute top-0 right-0 w-56 h-56 opacity-[0.07] pointer-events-none">
@@ -103,14 +144,8 @@ const WhyChooseUs = () => {
       </div>
 
       {/* Subtle gold horizontal band */}
-      <div
-        className="absolute top-0 left-0 right-0 h-1"
-        style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold-accent) / 0.5), transparent)" }}
-      />
-      <div
-        className="absolute bottom-0 left-0 right-0 h-1"
-        style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold-accent) / 0.5), transparent)" }}
-      />
+      <div className="absolute top-0 left-0 right-0 h-1" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold-accent) / 0.5), transparent)" }} />
+      <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold-accent) / 0.5), transparent)" }} />
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div className="text-center mb-14" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>

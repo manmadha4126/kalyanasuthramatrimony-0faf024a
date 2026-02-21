@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Heart, MapPin, Briefcase, GraduationCap, Phone, Mail, Star, Calendar, Users } from "lucide-react";
+import { Heart, MapPin, Briefcase, GraduationCap, Phone, Star, Calendar, Users } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 type Profile = {
   id: string; full_name: string; gender: string; religion: string; caste: string | null;
@@ -39,9 +40,7 @@ export default function ProfileDetail() {
   const [loading, setLoading] = useState(true);
   const [activePhoto, setActivePhoto] = useState(0);
 
-  useEffect(() => {
-    if (id) fetchProfile();
-  }, [id]);
+  useEffect(() => { if (id) fetchProfile(); }, [id]);
 
   const fetchProfile = async () => {
     const { data } = await supabase.from("profiles").select("*").eq("id", id!).maybeSingle();
@@ -73,13 +72,10 @@ export default function ProfileDetail() {
 
   return (
     <div className="min-h-screen" style={{ background: "hsl(30, 33%, 97%)" }}>
-      {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-gray-100 px-4 sm:px-6 py-3 sticky top-0 z-20">
         <div className="max-w-4xl mx-auto flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="w-9 h-9 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors">
-            <ArrowLeft size={18} className="text-gray-600" />
-          </button>
-          <div>
+          <BackButton label="Back" />
+          <div className="ml-2">
             <h1 className="font-serif font-bold text-gray-800 text-sm sm:text-base">{profile.full_name}</h1>
             <p className="text-xs text-gray-400">{getAge(profile.date_of_birth)} yrs • {profile.religion}</p>
           </div>
@@ -93,7 +89,6 @@ export default function ProfileDetail() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left - Photos */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="lg:col-span-1">
             <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
               {allPhotos.length > 0 ? (
@@ -116,8 +111,6 @@ export default function ProfileDetail() {
                   <span className="text-6xl font-serif font-bold" style={{ color: "hsl(var(--burgundy))" }}>{profile.full_name[0]}</span>
                 </div>
               )}
-
-              {/* Contact CTA */}
               <div className="p-4 space-y-2">
                 <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hi, I'm interested in the profile of ${profile.full_name}. Please share more details.`)}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.01]" style={{ background: "hsl(var(--burgundy))" }}>
                   <Phone size={15} /> Express Interest
@@ -129,19 +122,15 @@ export default function ProfileDetail() {
             </div>
           </motion.div>
 
-          {/* Right - Details */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 space-y-4">
-            {/* Basic Info Card */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <h2 className="font-serif text-xl font-bold text-gray-800 mb-1">{profile.full_name}</h2>
               <p className="text-sm text-gray-500 mb-4">{getAge(profile.date_of_birth)} years • {profile.marital_status} • {profile.religion}{profile.caste ? ` - ${profile.caste}` : ""}</p>
-
               {profile.about_me && (
                 <div className="mb-4 p-3 rounded-xl bg-gray-50">
                   <p className="text-sm text-gray-700 leading-relaxed">{profile.about_me}</p>
                 </div>
               )}
-
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
                 <InfoRow icon={Calendar} label="Date of Birth" value={profile.date_of_birth} />
                 <InfoRow icon={MapPin} label="Location" value={[profile.city, profile.state, profile.country].filter(Boolean).join(", ")} />
@@ -151,8 +140,6 @@ export default function ProfileDetail() {
                 <InfoRow label="Marital Status" value={profile.marital_status} />
               </div>
             </div>
-
-            {/* Professional Info */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <h3 className="font-serif font-bold text-gray-800 mb-3 flex items-center gap-2"><Briefcase size={16} className="text-gray-400" /> Professional Details</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
@@ -163,8 +150,6 @@ export default function ProfileDetail() {
                 <InfoRow label="Annual Income" value={profile.annual_income} />
               </div>
             </div>
-
-            {/* Family Info */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <h3 className="font-serif font-bold text-gray-800 mb-3 flex items-center gap-2"><Users size={16} className="text-gray-400" /> Family Details</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
@@ -177,8 +162,6 @@ export default function ProfileDetail() {
                 <InfoRow label="Siblings" value={profile.siblings} />
               </div>
             </div>
-
-            {/* Horoscope */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <h3 className="font-serif font-bold text-gray-800 mb-3">🔮 Horoscope Details</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
@@ -188,8 +171,6 @@ export default function ProfileDetail() {
                 <InfoRow label="Dosham" value={profile.dosham} />
               </div>
             </div>
-
-            {/* Partner Expectations */}
             {profile.partner_expectations && (
               <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
                 <h3 className="font-serif font-bold text-gray-800 mb-3">💍 Partner Expectations</h3>
