@@ -2,26 +2,60 @@ import { motion } from "framer-motion";
 import { ShieldCheck, Heart, Clock, Award, Headphones, Lock } from "lucide-react";
 import weddingPhoto1 from "@/assets/wedding-photo-1.jpeg";
 import weddingPhoto2 from "@/assets/wedding-photo-2.jpg";
-
-const featureColors = [
-  "hsl(340, 65%, 47%)",  // deep rose
-  "hsl(25, 75%, 50%)",   // warm orange
-  "hsl(45, 80%, 45%)",   // golden
-  "hsl(160, 50%, 40%)",  // teal
-  "hsl(220, 60%, 50%)",  // royal blue
-  "hsl(280, 50%, 45%)",  // purple
-];
+import colorfulBg from "@/assets/colorful-bg.png";
 
 const leftFeatures = [
-  { icon: ShieldCheck, title: "100% Verified Profiles", desc: "Every profile undergoes strict verification to ensure authenticity and safety.", color: featureColors[0] },
-  { icon: Heart, title: "Personalized Matches", desc: "Our advanced algorithm finds partners based on your preferences and compatibility.", color: featureColors[1] },
-  { icon: Clock, title: "15+ Years Experience", desc: "Trusted by millions of families with a proven track record of successful matches.", color: featureColors[2] },
+  {
+    icon: ShieldCheck,
+    title: "100% Verified Profiles",
+    desc: "Every profile undergoes strict verification to ensure authenticity and safety.",
+    bg: "linear-gradient(135deg, hsl(340, 70%, 45%), hsl(350, 60%, 55%))",
+    iconBg: "hsl(340, 65%, 47%)",
+    fontFamily: "'Playfair Display', serif",
+  },
+  {
+    icon: Heart,
+    title: "Personalized Matches",
+    desc: "Our advanced algorithm finds partners based on your preferences and compatibility.",
+    bg: "linear-gradient(135deg, hsl(25, 80%, 48%), hsl(35, 70%, 55%))",
+    iconBg: "hsl(25, 75%, 50%)",
+    fontFamily: "'DM Serif Display', serif",
+  },
+  {
+    icon: Clock,
+    title: "15+ Years Experience",
+    desc: "Trusted by millions of families with a proven track record of successful matches.",
+    bg: "linear-gradient(135deg, hsl(45, 85%, 42%), hsl(50, 75%, 52%))",
+    iconBg: "hsl(45, 80%, 45%)",
+    fontFamily: "'Libre Baskerville', serif",
+  },
 ];
 
 const rightFeatures = [
-  { icon: Award, title: "Award Winning Service", desc: "Recognized as one of India's best matrimony services by leading publications.", color: featureColors[3] },
-  { icon: Headphones, title: "24/7 Customer Support", desc: "Our dedicated team is always available to assist you on your journey.", color: featureColors[4] },
-  { icon: Lock, title: "Privacy Guaranteed", desc: "Your personal information is protected with bank-grade security measures.", color: featureColors[5] },
+  {
+    icon: Award,
+    title: "Award Winning Service",
+    desc: "Recognized as one of India's best matrimony services by leading publications.",
+    bg: "linear-gradient(135deg, hsl(160, 55%, 38%), hsl(170, 45%, 48%))",
+    iconBg: "hsl(160, 50%, 40%)",
+    fontFamily: "'Georgia', serif",
+  },
+  {
+    icon: Headphones,
+    title: "24/7 Customer Support",
+    desc: "Our dedicated team is always available to assist you on your journey.",
+    bg: "linear-gradient(135deg, hsl(220, 65%, 48%), hsl(230, 55%, 58%))",
+    iconBg: "hsl(220, 60%, 50%)",
+    fontFamily: "'Playfair Display', serif",
+  },
+  {
+    icon: Lock,
+    title: "Privacy Guaranteed",
+    desc: "Your personal information is protected with bank-grade security measures.",
+    bg: "linear-gradient(135deg, hsl(280, 55%, 42%), hsl(290, 45%, 52%))",
+    iconBg: "hsl(280, 50%, 45%)",
+    fontFamily: "'DM Serif Display', serif",
+  },
 ];
 
 const WhyChooseUs = () => {
@@ -33,6 +67,18 @@ const WhyChooseUs = () => {
         background: "linear-gradient(135deg, hsl(30 33% 97%) 0%, hsl(348 40% 94%) 40%, hsl(30 25% 92%) 100%)",
       }}
     >
+      {/* Colorful background image covering the bottom half */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-[55%] pointer-events-none"
+        style={{
+          backgroundImage: `url(${colorfulBg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: 0.12,
+          filter: "blur(2px)",
+        }}
+      />
+
       {/* Decorative Indian mandala-style pattern top right */}
       <div className="absolute top-0 right-0 w-56 h-56 opacity-[0.07] pointer-events-none">
         <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -67,9 +113,42 @@ const WhyChooseUs = () => {
           <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-semibold mb-2" style={{ fontFamily: "'Lato', sans-serif" }}>
             ✦ Trusted Since 2020 ✦
           </p>
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4" style={{ fontFamily: "'DM Serif Display', serif" }}>
-            India's Most Trusted <span style={{ color: "hsl(var(--gold-accent))" }}>Matrimony</span>
-          </h2>
+
+          {/* Arrow-style heading */}
+          <div className="flex items-center justify-center gap-0 mb-4">
+            <div
+              className="relative inline-flex items-center px-8 py-3"
+              style={{
+                background: "hsl(var(--burgundy))",
+                clipPath: "polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%)",
+              }}
+            >
+              <h2 className="text-2xl md:text-4xl font-bold text-white pr-4" style={{ fontFamily: "'DM Serif Display', serif" }}>
+                India's Most Trusted
+              </h2>
+            </div>
+            <div
+              className="relative inline-flex items-center px-8 py-3 -ml-1"
+              style={{
+                background: "hsl(var(--gold-accent))",
+                clipPath: "polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%, 24px 50%)",
+              }}
+            >
+              <h2 className="text-2xl md:text-4xl font-bold pl-4" style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--burgundy))" }}>
+                Matrimony
+              </h2>
+            </div>
+            {/* Arrow tip */}
+            <div
+              className="w-0 h-0 -ml-1"
+              style={{
+                borderTop: "28px solid transparent",
+                borderBottom: "28px solid transparent",
+                borderLeft: "20px solid hsl(var(--gold-accent))",
+              }}
+            />
+          </div>
+
           <p className="text-foreground text-lg max-w-2xl mx-auto mb-3" style={{ fontFamily: "'Libre Baskerville', serif" }}>
             We are committed to making your search for a life partner easier, safer, and more successful.
           </p>
@@ -79,22 +158,29 @@ const WhyChooseUs = () => {
         {/* 3-column layout */}
         <div className="grid lg:grid-cols-3 gap-10 items-center">
           {/* Left features */}
-          <div className="space-y-10">
+          <div className="space-y-8">
             {leftFeatures.map((f, i) => (
               <motion.div
                 key={f.title}
-                className="flex items-start gap-5"
+                className="flex items-start gap-5 rounded-2xl p-5 shadow-lg backdrop-blur-sm"
+                style={{
+                  background: `${f.bg}`,
+                  border: "1px solid hsla(0, 0%, 100%, 0.2)",
+                }}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
               >
-                <div className="w-16 h-16 rounded-xl flex-shrink-0 flex items-center justify-center shadow-md" style={{ background: f.color }}>
-                  <f.icon size={28} className="text-white" />
+                <div
+                  className="w-14 h-14 rounded-xl flex-shrink-0 flex items-center justify-center shadow-md"
+                  style={{ background: "hsla(0, 0%, 100%, 0.25)", backdropFilter: "blur(8px)" }}
+                >
+                  <f.icon size={26} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-xl font-bold text-foreground mb-1">{f.title}</h3>
-                  <p className="text-muted-foreground text-base font-medium leading-relaxed">{f.desc}</p>
+                  <h3 className="text-lg font-bold text-white mb-1" style={{ fontFamily: f.fontFamily }}>{f.title}</h3>
+                  <p className="text-white/80 text-sm font-medium leading-relaxed">{f.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -118,22 +204,29 @@ const WhyChooseUs = () => {
           </motion.div>
 
           {/* Right features */}
-          <div className="space-y-10">
+          <div className="space-y-8">
             {rightFeatures.map((f, i) => (
               <motion.div
                 key={f.title}
-                className="flex items-start gap-5"
+                className="flex items-start gap-5 rounded-2xl p-5 shadow-lg backdrop-blur-sm"
+                style={{
+                  background: `${f.bg}`,
+                  border: "1px solid hsla(0, 0%, 100%, 0.2)",
+                }}
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
               >
-                <div className="w-16 h-16 rounded-xl flex-shrink-0 flex items-center justify-center shadow-md" style={{ background: f.color }}>
-                  <f.icon size={28} className="text-white" />
+                <div
+                  className="w-14 h-14 rounded-xl flex-shrink-0 flex items-center justify-center shadow-md"
+                  style={{ background: "hsla(0, 0%, 100%, 0.25)", backdropFilter: "blur(8px)" }}
+                >
+                  <f.icon size={26} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-xl font-bold text-foreground mb-1">{f.title}</h3>
-                  <p className="text-muted-foreground text-base font-medium leading-relaxed">{f.desc}</p>
+                  <h3 className="text-lg font-bold text-white mb-1" style={{ fontFamily: f.fontFamily }}>{f.title}</h3>
+                  <p className="text-white/80 text-sm font-medium leading-relaxed">{f.desc}</p>
                 </div>
               </motion.div>
             ))}

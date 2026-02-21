@@ -159,7 +159,7 @@ const ServicesSection = () => {
                     {visiblePlans.map((plan, i) => (
                       <div key={i} className="pb-3 last:border-0" style={{ borderBottom: "1px solid hsl(220, 30%, 30%)" }}>
                         <div className="flex items-baseline gap-2 mb-1">
-                          <span className="font-serif text-xl font-bold" style={{ color: pkg.highlighted ? "white" : "hsl(var(--gold-accent))" }}>{plan.price}</span>
+                          <span className="text-xl font-bold" style={{ color: pkg.highlighted ? "white" : "hsl(var(--gold-accent))", fontFamily: "'Georgia', serif", letterSpacing: "0.02em", fontVariantNumeric: "oldstyle-nums" }}>{plan.price}</span>
                           <span className="text-xs" style={{ color: "hsl(220, 20%, 65%)" }}>/ {plan.duration}</span>
                         </div>
                         <ul className="mt-2 space-y-1">
