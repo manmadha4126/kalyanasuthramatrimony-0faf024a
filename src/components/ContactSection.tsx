@@ -33,207 +33,194 @@ const ContactSection = () => {
     }
   };
 
+  const darkBg = "hsl(220 15% 16%)";
+  const lightBg = "linear-gradient(180deg, hsl(230 30% 96%) 0%, hsl(230 25% 92%) 100%)";
+  const textDark = "hsl(220 15% 16%)";
+  const textMuted = "hsl(220 10% 40%)";
+  const iconColor = "hsl(220 15% 30%)";
+  const accentPurple = "hsl(250 60% 50%)";
+  const inputBg = "hsl(230 30% 96%)";
+  const fontSerif = "'DM Serif Display', serif";
+  const fontSans = "'Lato', sans-serif";
+
   return (
     <section id="contact" className="overflow-hidden">
       {/* Dark top section */}
-      <div style={{ background: "hsl(220 15% 16%)" }} className="relative">
+      <div style={{ background: darkBg }} className="relative pb-6">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-0 items-stretch">
-            {/* Left - heading area */}
-            <div className="py-16 lg:py-24 pr-8">
-              <motion.span
-                className="inline-block text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded mb-8"
-                style={{ background: "hsl(250 60% 50%)", color: "white", fontFamily: "'Lato', sans-serif" }}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-              >
-                Contact Us
-              </motion.span>
+          {/* CONTACT US badge + heading on the left */}
+          <div className="py-12 lg:py-16 max-w-lg">
+            <motion.span
+              className="inline-block text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded mb-6"
+              style={{ background: accentPurple, color: "white", fontFamily: fontSans }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Contact Us
+            </motion.span>
 
-              <motion.h2
-                className="text-3xl md:text-5xl font-bold text-white leading-tight"
-                style={{ fontFamily: "'DM Serif Display', serif" }}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-              >
-                Connect with Us for<br />the Best &amp; Perfect Matches
-              </motion.h2>
-            </div>
-
-            {/* Right - form card overlapping dark/light */}
-            <div className="relative flex justify-end items-start lg:-mb-32 z-20">
-              <motion.form
-                onSubmit={handleSubmit}
-                className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 lg:mt-12"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-              >
-                <h3 className="text-xl font-bold text-center mb-1" style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(220 15% 16%)" }}>
-                  Schedule a Free Consultation
-                </h3>
-                <div className="flex justify-center mb-6">
-                  <span className="text-2xl">✍</span>
-                </div>
-                <div className="w-full h-px bg-gray-200 mb-6" />
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: "hsl(220 15% 16%)", fontFamily: "'Lato', sans-serif" }}>Full Name</label>
-                    <input
-                      type="text"
-                      value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-lg text-sm border border-gray-200 outline-none focus:ring-2 focus:ring-purple-500/20 transition-all"
-                      style={{ background: "hsl(230 30% 96%)" }}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: "hsl(348 50% 35%)", fontFamily: "'Lato', sans-serif" }}>
-                      Email<span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      value={form.email}
-                      onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-lg text-sm border border-gray-200 outline-none focus:ring-2 focus:ring-purple-500/20 transition-all"
-                      style={{ background: "hsl(230 30% 96%)" }}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: "hsl(220 15% 16%)", fontFamily: "'Lato', sans-serif" }}>Phone Number</label>
-                    <input
-                      type="tel"
-                      value={form.phone}
-                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-lg text-sm border border-gray-200 outline-none focus:ring-2 focus:ring-purple-500/20 transition-all"
-                      style={{ background: "hsl(230 30% 96%)" }}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: "hsl(220 15% 16%)", fontFamily: "'Lato', sans-serif" }}>Message</label>
-                    <textarea
-                      value={form.message}
-                      onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      rows={3}
-                      className="w-full px-4 py-2.5 rounded-lg text-sm border border-gray-200 outline-none resize-none focus:ring-2 focus:ring-purple-500/20 transition-all"
-                      style={{ background: "hsl(230 30% 96%)" }}
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="px-8 py-2.5 rounded-lg text-sm font-bold text-white transition-all hover:opacity-90 disabled:opacity-60"
-                    style={{ background: "hsl(250 60% 50%)", fontFamily: "'Lato', sans-serif" }}
-                  >
-                    {loading ? "Submitting..." : "Submit"}
-                  </button>
-                </div>
-              </motion.form>
-            </div>
+            <motion.h2
+              className="text-2xl md:text-4xl font-bold text-white leading-tight"
+              style={{ fontFamily: fontSerif }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              Connect with Us for<br />the Best &amp; Perfect Matches
+            </motion.h2>
           </div>
         </div>
+
+        {/* Grey bottom border line to separate sections */}
+        <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: "hsl(220 10% 35%)" }} />
       </div>
 
       {/* Light bottom section */}
-      <div style={{ background: "linear-gradient(180deg, hsl(230 30% 96%) 0%, hsl(230 25% 92%) 100%)" }} className="relative pt-8 pb-16">
+      <div style={{ background: lightBg }} className="relative pt-10 pb-14">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Left - contact details */}
+          <div className="grid lg:grid-cols-2 gap-10 items-start">
+            {/* Left column - contact info + map */}
             <motion.div
-              className="space-y-6 pt-4"
+              className="space-y-5 pt-2"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
               {/* Call us */}
               <div className="flex items-start gap-3">
-                <Phone size={20} style={{ color: "hsl(220 15% 30%)", marginTop: 2 }} />
+                <Phone size={18} style={{ color: iconColor, marginTop: 3 }} />
                 <div>
-                  <h4 className="text-base font-bold" style={{ color: "hsl(220 15% 16%)", fontFamily: "'DM Serif Display', serif" }}>
-                    Call us at:
-                  </h4>
-                  <p className="text-sm mt-0.5" style={{ color: "hsl(220 10% 40%)", fontFamily: "'Lato', sans-serif" }}>
-                    9553306667 | 9866288767
-                  </p>
+                  <h4 className="text-sm font-bold" style={{ color: textDark, fontFamily: fontSerif }}>Call us at:</h4>
+                  <p className="text-sm mt-0.5" style={{ color: textMuted, fontFamily: fontSans }}>9553306667 | 9866288767</p>
                 </div>
               </div>
 
               {/* Email */}
               <div className="flex items-start gap-3">
-                <Mail size={20} style={{ color: "hsl(220 15% 30%)", marginTop: 2 }} />
+                <Mail size={18} style={{ color: iconColor, marginTop: 3 }} />
                 <div>
-                  <h4 className="text-base font-bold" style={{ color: "hsl(220 15% 16%)", fontFamily: "'DM Serif Display', serif" }}>
-                    Email:
-                  </h4>
-                  <p className="text-sm mt-0.5" style={{ color: "hsl(220 10% 40%)", fontFamily: "'Lato', sans-serif" }}>
-                    info@kalyanasuthra.com
-                  </p>
+                  <h4 className="text-sm font-bold" style={{ color: textDark, fontFamily: fontSerif }}>Email:</h4>
+                  <p className="text-sm mt-0.5" style={{ color: textMuted, fontFamily: fontSans }}>info@kalyanasuthra.com</p>
                 </div>
               </div>
 
               {/* Office Address */}
               <div className="flex items-start gap-3">
-                <MapPin size={20} style={{ color: "hsl(220 15% 30%)", marginTop: 2 }} />
+                <MapPin size={18} style={{ color: iconColor, marginTop: 3 }} />
                 <div>
-                  <h4 className="text-base font-bold" style={{ color: "hsl(220 15% 16%)", fontFamily: "'DM Serif Display', serif" }}>
-                    Office Address:
-                  </h4>
-                  <p className="text-sm mt-0.5" style={{ color: "hsl(220 10% 40%)", fontFamily: "'Lato', sans-serif" }}>
-                    4-23, Govinda Nagar, Karakambadi Road, Tirupati - 517501
-                  </p>
+                  <h4 className="text-sm font-bold" style={{ color: textDark, fontFamily: fontSerif }}>Office Address:</h4>
+                  <p className="text-sm mt-0.5" style={{ color: textMuted, fontFamily: fontSans }}>4-23, Govinda Nagar, Karakambadi Road, Tirupati - 517501</p>
                 </div>
               </div>
 
               {/* Working Hours */}
               <div className="flex items-start gap-3">
-                <Clock size={20} style={{ color: "hsl(220 15% 30%)", marginTop: 2 }} />
+                <Clock size={18} style={{ color: iconColor, marginTop: 3 }} />
                 <div>
-                  <h4 className="text-base font-bold" style={{ color: "hsl(220 15% 16%)", fontFamily: "'DM Serif Display', serif" }}>
-                    Working Hours:
-                  </h4>
-                  <p className="text-sm mt-0.5" style={{ color: "hsl(220 10% 40%)", fontFamily: "'Lato', sans-serif" }}>
-                    Mon – Sat: 10:30 AM – 6:30 PM | Sunday: Holiday
-                  </p>
+                  <h4 className="text-sm font-bold" style={{ color: textDark, fontFamily: fontSerif }}>Working Hours:</h4>
+                  <p className="text-sm mt-0.5" style={{ color: textMuted, fontFamily: fontSans }}>Mon – Sat: 10:30 AM – 6:30 PM | Sunday: Holiday</p>
                 </div>
+              </div>
+
+              {/* Find Us Here - Map */}
+              <div className="pt-2">
+                <h4 className="text-sm font-bold mb-2" style={{ color: textDark, fontFamily: fontSerif }}>Find Us Here</h4>
+                <a
+                  href="https://www.google.com/maps?q=13.64383,79.43141"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-xl overflow-hidden border border-gray-200 h-44 relative cursor-pointer shadow-sm"
+                >
+                  <iframe
+                    title="Office Location"
+                    src="https://maps.google.com/maps?q=13.64383,79.43141&z=17&output=embed"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0, pointerEvents: "none" }}
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0" />
+                </a>
               </div>
             </motion.div>
 
-            {/* Right - Map (below the form card) */}
-            <motion.div
-              className="lg:pt-40"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-            >
-              <h4 className="text-base font-bold mb-3" style={{ color: "hsl(220 15% 16%)", fontFamily: "'DM Serif Display', serif" }}>
-                Find Us Here
-              </h4>
-              <a
-                href="https://www.google.com/maps?q=13.64383,79.43141"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block rounded-xl overflow-hidden border border-gray-200 h-52 relative group cursor-pointer shadow-md"
+            {/* Right column - Consultation form card, centered */}
+            <div className="flex justify-center lg:justify-center">
+              <motion.form
+                onSubmit={handleSubmit}
+                className="w-full max-w-sm bg-white rounded-xl shadow-lg border border-white/80 p-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
               >
-                <iframe
-                  title="Office Location"
-                  src="https://maps.google.com/maps?q=13.64383,79.43141&z=17&output=embed"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0, pointerEvents: "none" }}
-                  loading="lazy"
-                />
-                <div className="absolute inset-0" />
-              </a>
-            </motion.div>
+                <h3 className="text-lg font-bold text-center mb-1" style={{ fontFamily: fontSerif, color: textDark }}>
+                  Schedule a Free Consultation
+                </h3>
+                <div className="flex justify-center mb-4">
+                  <span className="text-xl">✍</span>
+                </div>
+                <div className="w-full h-px mb-5" style={{ background: "hsl(220 10% 85%)" }} />
+
+                <div className="space-y-3.5">
+                  <div>
+                    <label className="block text-xs font-medium mb-1" style={{ color: textDark, fontFamily: fontSans }}>Full Name</label>
+                    <input
+                      type="text"
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      className="w-full px-3 py-2 rounded-md text-sm border border-gray-200 outline-none focus:ring-2 focus:ring-purple-500/20 transition-all"
+                      style={{ background: inputBg }}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium mb-1" style={{ color: "hsl(348 50% 35%)", fontFamily: fontSans }}>
+                      Email<span style={{ color: "hsl(0 70% 50%)" }}>*</span>
+                    </label>
+                    <input
+                      type="email"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      className="w-full px-3 py-2 rounded-md text-sm border border-gray-200 outline-none focus:ring-2 focus:ring-purple-500/20 transition-all"
+                      style={{ background: inputBg }}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium mb-1" style={{ color: textDark, fontFamily: fontSans }}>Phone Number</label>
+                    <input
+                      type="tel"
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      className="w-full px-3 py-2 rounded-md text-sm border border-gray-200 outline-none focus:ring-2 focus:ring-purple-500/20 transition-all"
+                      style={{ background: inputBg }}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium mb-1" style={{ color: textDark, fontFamily: fontSans }}>Message</label>
+                    <textarea
+                      value={form.message}
+                      onChange={(e) => setForm({ ...form, message: e.target.value })}
+                      rows={3}
+                      className="w-full px-3 py-2 rounded-md text-sm border border-gray-200 outline-none resize-none focus:ring-2 focus:ring-purple-500/20 transition-all"
+                      style={{ background: inputBg }}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="px-6 py-2 rounded-md text-sm font-bold text-white transition-all hover:opacity-90 disabled:opacity-60"
+                    style={{ background: accentPurple, fontFamily: fontSans }}
+                  >
+                    {loading ? "Submitting..." : "Submit"}
+                  </button>
+                </div>
+              </motion.form>
+            </div>
           </div>
         </div>
       </div>
