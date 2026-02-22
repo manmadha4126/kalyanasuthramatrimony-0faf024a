@@ -42,8 +42,8 @@ const ContactSection = () => {
   const formCard = (
     <motion.form
       onSubmit={handleSubmit}
-      className="w-full rounded-xl shadow-2xl p-5"
-      style={{ background: "white", border: "2px solid white", width: 460, maxWidth: "100%" }}
+      className="w-full rounded-xl shadow-2xl p-4"
+      style={{ background: "white", border: "2px solid white", width: 430, maxWidth: "100%" }}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
