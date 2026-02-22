@@ -58,15 +58,27 @@ const rightFeatures = [
   },
 ];
 
-// Generate floating rose petal / love symbols
-const floatingSymbols = Array.from({ length: 35 }, (_, i) => ({
+// Generate 55+ floating rose petal / love symbols with varied sizes & colors
+const symbolPool = ["❤", "🌹", "💕", "🩷", "💗", "🌸", "🪻", "💐", "🌺", "♥", "💖", "🥀", "🏵️", "💝", "🌷"];
+const colorFilters = [
+  "hue-rotate(0deg)",           // red
+  "hue-rotate(200deg)",         // navy blue
+  "hue-rotate(180deg)",         // sky blue
+  "hue-rotate(240deg)",         // deep blue
+  "hue-rotate(160deg)",         // teal
+  "hue-rotate(220deg)",         // royal blue
+  "hue-rotate(0deg) saturate(1.4)", // vivid red
+  "hue-rotate(190deg)",         // ocean blue
+];
+const floatingSymbols = Array.from({ length: 55 }, (_, i) => ({
   id: i,
-  symbol: ["❤", "🌹", "💕", "🩷", "💗", "🌸", "🪻", "💐", "🌺", "♥"][i % 10],
-  left: `${(i * 17 + 7) % 100}%`,
-  top: `${(i * 13 + 3) % 30}%`,
-  size: 14 + (i % 5) * 4,
-  delay: i * 0.3,
-  duration: 6 + (i % 4) * 2,
+  symbol: symbolPool[i % symbolPool.length],
+  left: `${((i * 23 + 5) % 96) + 2}%`,
+  top: `${((i * 11 + 7) % 28) + 1}%`,
+  size: 12 + (i % 8) * 4,
+  delay: (i % 12) * 0.4,
+  duration: 5 + (i % 6) * 1.5,
+  colorFilter: colorFilters[i % colorFilters.length],
 }));
 
 const WhyChooseUs = () => {
@@ -106,7 +118,7 @@ const WhyChooseUs = () => {
               top: s.top,
               fontSize: `${s.size}px`,
               opacity: 0.55,
-              filter: "drop-shadow(0 1px 2px hsl(0, 0%, 0% / 0.1))",
+              filter: `${s.colorFilter} drop-shadow(0 1px 2px hsl(0, 0%, 0% / 0.1))`,
             }}
             initial={{ y: 0, rotate: 0 }}
             animate={{
