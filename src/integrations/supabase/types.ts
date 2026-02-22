@@ -264,6 +264,45 @@ export type Database = {
         }
         Relationships: []
       }
+      success_stories: {
+        Row: {
+          approved_by: string | null
+          bride_name: string
+          city: string
+          created_at: string
+          created_by: string | null
+          groom_name: string
+          id: string
+          image_url: string | null
+          status: string
+          story: string
+        }
+        Insert: {
+          approved_by?: string | null
+          bride_name: string
+          city: string
+          created_at?: string
+          created_by?: string | null
+          groom_name: string
+          id?: string
+          image_url?: string | null
+          status?: string
+          story: string
+        }
+        Update: {
+          approved_by?: string | null
+          bride_name?: string
+          city?: string
+          created_at?: string
+          created_by?: string | null
+          groom_name?: string
+          id?: string
+          image_url?: string | null
+          status?: string
+          story?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, X } from "lucide-react";
+import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, X, BookHeart } from "lucide-react";
 import BackButton from "@/components/BackButton";
 
 type Profile = {
@@ -28,12 +28,17 @@ export default function CustomerDashboard() {
   const [activeNav, setActiveNav] = useState("Home");
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [shortlisted, setShortlisted] = useState<string[]>([]);
+  const [showStoryForm, setShowStoryForm] = useState(false);
+  const [storyForm, setStoryForm] = useState({ bride_name: "", groom_name: "", city: "", story: "" });
+  const [storyLoading, setStoryLoading] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => { checkAuth(); }, []);
 
   const checkAuth = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { navigate("/login"); return; }
+    setUserId(user.id);
     const { data: pData } = await supabase.from("profiles").select("full_name,email,gender").eq("user_id", user.id).single();
     if (pData) setUserProfile(pData);
     fetchMatches(pData?.gender || "Male");
@@ -49,6 +54,23 @@ export default function CustomerDashboard() {
   const logout = async () => { await supabase.auth.signOut(); navigate("/login"); };
   const toggleShortlist = (id: string) => { setShortlisted(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]); };
   const getAge = (dob: string) => Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+
+  const submitStory = async () => {
+    if (!userId || !storyForm.bride_name || !storyForm.groom_name || !storyForm.city || !storyForm.story) return;
+    setStoryLoading(true);
+    const { error } = await supabase.from("success_stories").insert({
+      bride_name: storyForm.bride_name,
+      groom_name: storyForm.groom_name,
+      city: storyForm.city,
+      story: storyForm.story,
+      created_by: userId,
+    });
+    setStoryLoading(false);
+    if (!error) {
+      setShowStoryForm(false);
+      setStoryForm({ bride_name: "", groom_name: "", city: "", story: "" });
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(220, 20%, 97%)" }}>
@@ -138,6 +160,18 @@ export default function CustomerDashboard() {
               <ChevronRight size={24} className="text-white/60 hidden sm:block" />
             </div>
           </motion.div>
+
+          {/* Submit Success Story Button */}
+          <motion.button
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            onClick={() => setShowStoryForm(true)}
+            className="mb-6 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-[1.02]"
+            style={{ background: "hsl(170, 45%, 92%)", color: "hsl(170, 50%, 30%)", border: "1px solid hsl(170, 40%, 80%)" }}
+          >
+            <BookHeart size={16} /> Share Your Success Story
+          </motion.button>
 
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -231,6 +265,40 @@ export default function CustomerDashboard() {
                   </a>
                 </div>
               ))}
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Success Story Submission Modal */}
+      {showStoryForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsl(0, 0%, 0% / 0.5)" }}>
+          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-2xl max-w-md w-full overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+              <h2 className="font-serif font-bold text-gray-800">Share Your Success Story</h2>
+              <button onClick={() => setShowStoryForm(false)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><X size={16} className="text-gray-500" /></button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">Bride Name</label>
+                <input value={storyForm.bride_name} onChange={e => setStoryForm(p => ({ ...p, bride_name: e.target.value }))} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" required />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">Groom Name</label>
+                <input value={storyForm.groom_name} onChange={e => setStoryForm(p => ({ ...p, groom_name: e.target.value }))} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" required />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">City</label>
+                <input value={storyForm.city} onChange={e => setStoryForm(p => ({ ...p, city: e.target.value }))} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" required />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">Your Story</label>
+                <textarea value={storyForm.story} onChange={e => setStoryForm(p => ({ ...p, story: e.target.value }))} rows={3} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none resize-none focus:ring-2 focus:ring-teal-300" required />
+              </div>
+              <button onClick={submitStory} disabled={storyLoading} className="w-full py-2.5 rounded-lg text-sm font-bold text-white transition-all disabled:opacity-60" style={{ background: "#3FA7A3" }}>
+                {storyLoading ? "Submitting..." : "Submit Story"}
+              </button>
+              <p className="text-[10px] text-gray-400 text-center">Your story will be reviewed before publishing.</p>
             </div>
           </motion.div>
         </div>
