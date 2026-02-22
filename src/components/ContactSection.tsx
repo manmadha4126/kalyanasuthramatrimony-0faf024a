@@ -99,9 +99,9 @@ const ContactSection = () => {
   );
 
   return (
-    <section id="contact" className="overflow-hidden" style={{ border: "2px solid white" }}>
-      {/* Wrapper with relative positioning for the overlapping form */}
-      <div className="relative">
+    <section id="contact" className="overflow-hidden" style={{ background: "white", padding: "20px 60px" }}>
+      {/* Inner frame with all content */}
+      <div className="relative" style={{ border: "none" }}>
         {/* Dark top section */}
         <div style={{ background: darkBg }} className="relative pb-6">
           <div className="container mx-auto px-4">
