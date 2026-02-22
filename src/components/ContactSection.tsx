@@ -178,7 +178,8 @@ const ContactSection = () => {
                     href="https://www.google.com/maps?q=13.64383,79.43141"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block rounded-xl overflow-hidden border border-gray-200 h-52 max-w-sm relative cursor-pointer shadow-sm"
+                    className="block rounded-xl overflow-hidden border border-gray-200 relative cursor-pointer shadow-sm"
+                    style={{ maxWidth: 400, height: 220 }}
                   >
                     <iframe
                       title="Office Location"
