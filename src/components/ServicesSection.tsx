@@ -114,8 +114,8 @@ const ServicesSection = () => {
 
       </div>
 
-      {/* CTA bridging into contact section */}
-      <div className="relative z-10" style={{ marginBottom: "-60px" }}>
+      {/* CTA bridging into contact section - half in services, half in contact */}
+      <div className="relative z-10" style={{ marginBottom: "-80px" }}>
         <motion.div className="max-w-2xl mx-auto text-center rounded-2xl py-10 px-6" style={{ background: "hsl(220, 40%, 18%)", border: "2px dashed hsl(var(--gold-accent) / 0.4)" }} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <h3 className="font-serif text-xl md:text-2xl font-bold mb-2" style={{ color: "white" }}>Want to know more about Assisted Service?</h3>
           {selected && (
