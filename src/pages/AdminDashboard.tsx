@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck } from "lucide-react";
+import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart } from "lucide-react";
 
 type Profile = {
   id: string; full_name: string; gender: string; religion: string; city: string | null;
@@ -16,13 +16,19 @@ type Consultation = {
   preferred_time: string; status: string; created_at: string; notes: string | null;
 };
 
-const TABS = ["Profile Requests", "Featured Profiles", "All Profiles", "Consultations"];
+type SuccessStory = {
+  id: string; bride_name: string; groom_name: string; city: string;
+  story: string; image_url: string | null; status: string; created_at: string;
+};
+
+const TABS = ["Profile Requests", "Featured Profiles", "All Profiles", "Consultations", "Success Stories"];
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [consultations, setConsultations] = useState<Consultation[]>([]);
+  const [successStories, setSuccessStories] = useState<SuccessStory[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState("Profile Requests");
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -35,6 +41,7 @@ export default function AdminDashboard() {
     setAdminEmail(email);
     fetchProfiles();
     fetchConsultations();
+    fetchSuccessStories();
   }, []);
 
   const fetchProfiles = async () => {
@@ -47,6 +54,19 @@ export default function AdminDashboard() {
   const fetchConsultations = async () => {
     const { data } = await supabase.from("consultations").select("*").order("created_at", { ascending: false });
     if (data) setConsultations(data as Consultation[]);
+  };
+
+  const fetchSuccessStories = async () => {
+    const { data } = await supabase.from("success_stories").select("*").order("created_at", { ascending: false });
+    if (data) setSuccessStories(data as SuccessStory[]);
+  };
+
+  const updateStoryStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("success_stories").update({ status }).eq("id", id);
+    if (!error) {
+      setSuccessStories(prev => prev.map(s => s.id === id ? { ...s, status } : s));
+      toast({ title: `Story ${status}!` });
+    }
   };
 
   const updateStatus = async (id: string, status: string) => {
@@ -87,6 +107,7 @@ export default function AdminDashboard() {
     { label: "Pending Review", value: pendingProfiles.length, icon: Clock, color: "hsl(38, 90%, 50%)", bg: "hsl(38, 90%, 96%)" },
     { label: "Active Profiles", value: profiles.filter(p => p.profile_status === "active").length, icon: CheckCircle, color: "hsl(145, 65%, 42%)", bg: "hsl(145, 65%, 95%)" },
     { label: "Consultations", value: consultations.length, icon: CalendarCheck, color: "hsl(280, 65%, 55%)", bg: "hsl(280, 65%, 96%)" },
+    { label: "Success Stories", value: successStories.length, icon: BookHeart, color: "hsl(340, 65%, 50%)", bg: "hsl(340, 65%, 96%)" },
   ];
 
   const StatusBadge = ({ status }: { status: string }) => {
@@ -196,7 +217,46 @@ export default function AdminDashboard() {
             </div>
 
             <div className="p-4">
-              {tab === "Consultations" ? (
+              {tab === "Success Stories" ? (
+                /* Success Stories Tab */
+                successStories.length === 0 ? (
+                  <div className="text-center py-10 text-gray-400 text-sm">No success stories yet</div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="text-xs text-gray-400 uppercase tracking-wider">
+                          <th className="text-left py-2 px-3 font-semibold">Couple</th>
+                          <th className="text-left py-2 px-3 font-semibold">City</th>
+                          <th className="text-left py-2 px-3 font-semibold">Story</th>
+                          <th className="text-left py-2 px-3 font-semibold">Status</th>
+                          <th className="text-left py-2 px-3 font-semibold">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-50">
+                        {successStories.map((s) => (
+                          <tr key={s.id} className="hover:bg-gray-50 transition-colors">
+                            <td className="py-3 px-3 font-semibold text-gray-800 text-sm">{s.bride_name} ♥ {s.groom_name}</td>
+                            <td className="py-3 px-3 text-gray-600 text-xs">{s.city}</td>
+                            <td className="py-3 px-3 text-gray-600 text-xs max-w-[200px] truncate">{s.story}</td>
+                            <td className="py-3 px-3"><StatusBadge status={s.status} /></td>
+                            <td className="py-3 px-3">
+                              <div className="flex items-center gap-1.5">
+                                {s.status !== "approved" && (
+                                  <button onClick={() => updateStoryStatus(s.id, "approved")} className="text-[10px] px-2 py-1 rounded-md font-semibold text-white" style={{ background: "hsl(145, 65%, 42%)" }}>Approve</button>
+                                )}
+                                {s.status !== "rejected" && (
+                                  <button onClick={() => updateStoryStatus(s.id, "rejected")} className="text-[10px] px-2 py-1 rounded-md font-semibold text-white" style={{ background: "hsl(0, 65%, 50%)" }}>Reject</button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )
+              ) : tab === "Consultations" ? (
                 /* Consultations Tab */
                 loading ? (
                   <div className="text-center py-10 text-gray-400 text-sm">Loading...</div>
