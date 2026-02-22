@@ -45,6 +45,36 @@ const PaymentSection = () => {
           </div>
         </div>
 
+        {/* Find Us Here - Map */}
+        <motion.div
+          className="mt-10 max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className="card-clean">
+            <h3 className="font-serif text-lg font-bold text-primary mb-4">Find Us Here</h3>
+            <a
+              href="https://www.google.com/maps?q=13.64383,79.43141"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-xl overflow-hidden border border-border relative cursor-pointer shadow-sm"
+              style={{ height: 220 }}
+            >
+              <iframe
+                title="Office Location"
+                src="https://maps.google.com/maps?q=13.64383,79.43141&z=17&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0, pointerEvents: "none" }}
+                loading="lazy"
+              />
+              <div className="absolute inset-0" />
+            </a>
+          </div>
+        </motion.div>
+
         {/* Need Help Contact Block */}
         <motion.div
           className="mt-10 max-w-3xl mx-auto"

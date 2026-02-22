@@ -171,27 +171,6 @@ const ContactSection = () => {
                     <p className="text-sm mt-0.5" style={{ color: textMuted, fontFamily: fontSans }}>Mon – Sat: 10:30 AM – 6:30 PM | Sunday: Holiday</p>
                   </div>
                 </div>
-                {/* Find Us Here - Map */}
-                <div className="pt-2">
-                  <h4 className="text-sm font-bold mb-2" style={{ color: textDark, fontFamily: fontSerif }}>Find Us Here</h4>
-                  <a
-                    href="https://www.google.com/maps?q=13.64383,79.43141"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block rounded-xl overflow-hidden border border-gray-200 relative cursor-pointer shadow-sm"
-                    style={{ maxWidth: 400, height: 220 }}
-                  >
-                    <iframe
-                      title="Office Location"
-                      src="https://maps.google.com/maps?q=13.64383,79.43141&z=17&output=embed"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0, pointerEvents: "none" }}
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0" />
-                  </a>
-                </div>
               </motion.div>
             </div>
           </div>
