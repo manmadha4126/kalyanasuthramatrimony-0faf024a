@@ -99,7 +99,7 @@ const ContactSection = () => {
   );
 
   return (
-    <section id="contact" className="overflow-hidden" style={{ background: "white", padding: "170px 240px" }}>
+    <section id="contact" className="overflow-hidden" style={{ background: "white", padding: "250px 240px" }}>
       {/* Inner frame with all content */}
       <div className="relative" style={{ border: "none" }}>
         {/* Dark top section */}
