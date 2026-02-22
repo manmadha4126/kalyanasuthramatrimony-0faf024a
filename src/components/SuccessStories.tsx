@@ -25,18 +25,12 @@ const fallbackStories: Story[] = [
   { id: "5", bride_name: "Lakshmi", groom_name: "Harsha", city: "Vijayawada", story: "Grateful for the guidance and genuine profiles.", image_url: wedding5 },
 ];
 
-// Card layout positions matching the reference image exactly
-const cardPositions = [
-  // Card 1: Center-left, slight left tilt
-  { top: "18%", left: "28%", rotate: -6 },
-  // Card 2: Top-right area, slight right tilt
-  { top: "3%", left: "52%", rotate: 4 },
-  // Card 3: Far right, slight left tilt
-  { top: "5%", left: "76%", rotate: -3 },
-  // Card 4: Bottom-left, slight right tilt
-  { top: "52%", left: "20%", rotate: 4 },
-  // Card 5: Bottom-center-right, slight left tilt
-  { top: "48%", left: "54%", rotate: -3 },
+const cardLayouts = [
+  { top: "14%", left: "10%", rotate: -6, z: 5 },
+  { top: "2%", left: "38%", rotate: 4, z: 4 },
+  { top: "4%", left: "68%", rotate: -3, z: 3 },
+  { top: "50%", left: "4%", rotate: 5, z: 2 },
+  { top: "46%", left: "42%", rotate: -4, z: 1 },
 ];
 
 const SuccessStories = () => {
@@ -66,146 +60,179 @@ const SuccessStories = () => {
 
   const getVisibleStories = () => {
     const visible: { story: Story; posIndex: number }[] = [];
-    for (let i = 0; i < 5; i++) {
-      const storyIndex = (activeIndex + i) % stories.length;
-      visible.push({ story: stories[storyIndex], posIndex: i });
+    for (let i = 0; i < Math.min(5, stories.length); i++) {
+      const idx = (activeIndex + i) % stories.length;
+      visible.push({ story: stories[idx], posIndex: i });
     }
     return visible;
   };
 
   return (
-    <section id="stories" className="relative overflow-hidden w-full" style={{ aspectRatio: "3.2 / 1", minHeight: 420 }}>
-      {/* ===== DUAL DIAGONAL BACKGROUND ===== */}
-      <div className="absolute inset-0" style={{ background: "linear-gradient(170deg, #4E5068 0%, #5C5F78 35%, #686B82 100%)" }} />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(150deg, #2D9D98 0%, #3FA7A3 45%, #52B5B1 100%)", clipPath: "polygon(100% 0%, 100% 100%, 0% 100%, 42% 0%)" }} />
+    <section
+      id="stories"
+      className="relative w-full overflow-hidden"
+      style={{ aspectRatio: "16 / 9", maxHeight: "100vh" }}
+    >
+      {/* ===== BACKGROUND LAYERS ===== */}
+      <div className="absolute inset-0" style={{ background: "linear-gradient(165deg, #4A4D65 0%, #5C5F78 40%, #696C83 100%)" }} />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(140deg, #2A9B96 0%, #3FA7A3 50%, #55BAB6 100%)", clipPath: "polygon(100% 0%, 100% 100%, 0% 100%, 44% 0%)" }} />
 
       {/* ===== DECORATIVE ELEMENTS ===== */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Pink clouds - top left */}
-        <svg className="absolute -top-1 left-[5%]" width="130" height="55" viewBox="0 0 130 55" fill="none">
-          <ellipse cx="35" cy="35" rx="30" ry="18" fill="#F2B8C6" opacity="0.3" />
-          <ellipse cx="62" cy="28" rx="28" ry="22" fill="#EDA8BB" opacity="0.28" />
-          <ellipse cx="90" cy="33" rx="25" ry="16" fill="#F5C4D0" opacity="0.25" />
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Pink clouds top-left */}
+        <svg className="absolute -top-[2%] left-[4%]" width="12%" viewBox="0 0 160 65" fill="none">
+          <ellipse cx="42" cy="40" rx="38" ry="22" fill="#F2B8C6" opacity="0.32"/>
+          <ellipse cx="75" cy="30" rx="34" ry="26" fill="#EDA8BB" opacity="0.28"/>
+          <ellipse cx="110" cy="38" rx="30" ry="20" fill="#F5C4D0" opacity="0.25"/>
         </svg>
-        {/* Pink clouds - top center */}
-        <svg className="absolute -top-2 left-[28%]" width="100" height="45" viewBox="0 0 100 45" fill="none">
-          <ellipse cx="30" cy="28" rx="24" ry="15" fill="#F0B0C2" opacity="0.22" />
-          <ellipse cx="55" cy="22" rx="20" ry="17" fill="#E8A0B5" opacity="0.2" />
-          <ellipse cx="75" cy="26" rx="18" ry="13" fill="#F5C0D0" opacity="0.18" />
+        {/* Pink clouds top-center */}
+        <svg className="absolute -top-[1%] left-[26%]" width="9%" viewBox="0 0 120 50" fill="none">
+          <ellipse cx="35" cy="30" rx="28" ry="18" fill="#F0B0C2" opacity="0.24"/>
+          <ellipse cx="62" cy="24" rx="24" ry="20" fill="#E8A0B5" opacity="0.22"/>
+          <ellipse cx="88" cy="28" rx="22" ry="15" fill="#F5C0D0" opacity="0.2"/>
         </svg>
-        {/* Pink clouds - top right */}
-        <svg className="absolute -top-1 right-[6%]" width="140" height="60" viewBox="0 0 140 60" fill="none">
-          <ellipse cx="40" cy="38" rx="34" ry="20" fill="#F0B8C8" opacity="0.28" />
-          <ellipse cx="72" cy="30" rx="30" ry="23" fill="#E8A5B8" opacity="0.25" />
-          <ellipse cx="105" cy="36" rx="27" ry="17" fill="#F5C5D2" opacity="0.22" />
+        {/* Pink clouds top-right */}
+        <svg className="absolute -top-[1%] right-[5%]" width="13%" viewBox="0 0 180 70" fill="none">
+          <ellipse cx="50" cy="44" rx="42" ry="24" fill="#F0B8C8" opacity="0.3"/>
+          <ellipse cx="90" cy="34" rx="36" ry="28" fill="#E8A5B8" opacity="0.26"/>
+          <ellipse cx="132" cy="40" rx="32" ry="20" fill="#F5C5D2" opacity="0.23"/>
         </svg>
-        {/* Small cloud mid-right */}
-        <svg className="absolute top-[18%] right-[2%]" width="70" height="35" viewBox="0 0 70 35" fill="none">
-          <ellipse cx="25" cy="20" rx="20" ry="12" fill="#F2BAC8" opacity="0.18" />
-          <ellipse cx="48" cy="18" rx="18" ry="11" fill="#EDB0C0" opacity="0.15" />
+        {/* Small cloud right side */}
+        <svg className="absolute top-[16%] right-[2%]" width="6%" viewBox="0 0 80 38" fill="none">
+          <ellipse cx="28" cy="22" rx="24" ry="14" fill="#F2BAC8" opacity="0.2"/>
+          <ellipse cx="54" cy="20" rx="20" ry="13" fill="#EDB0C0" opacity="0.16"/>
+        </svg>
+        {/* Small cloud bottom-left */}
+        <svg className="absolute bottom-[12%] left-[2%]" width="5%" viewBox="0 0 70 32" fill="none">
+          <ellipse cx="22" cy="18" rx="20" ry="12" fill="#F0B5C5" opacity="0.16"/>
+          <ellipse cx="48" cy="16" rx="18" ry="14" fill="#E8A8B8" opacity="0.13"/>
         </svg>
 
-        {/* Hearts scattered */}
-        <svg className="absolute top-[25%] left-[18%]" width="16" height="16" viewBox="0 0 24 24" fill="white" opacity="0.12"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        <svg className="absolute top-[60%] left-[10%]" width="12" height="12" viewBox="0 0 24 24" fill="white" opacity="0.08"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        <svg className="absolute top-[38%] left-[35%]" width="10" height="10" viewBox="0 0 24 24" fill="white" opacity="0.1"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        <svg className="absolute bottom-[22%] right-[12%]" width="10" height="10" viewBox="0 0 24 24" fill="white" opacity="0.08"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        {/* Hearts */}
+        {[
+          { t: "24%", l: "17%", s: 18, o: 0.12 },
+          { t: "62%", l: "9%", s: 13, o: 0.08 },
+          { t: "36%", l: "33%", s: 11, o: 0.1 },
+          { t: "72%", l: "30%", s: 10, o: 0.08 },
+          { t: "30%", l: "58%", s: 10, o: 0.08 },
+          { t: "78%", l: "85%", s: 9, o: 0.06 },
+        ].map((h, i) => (
+          <svg key={`h${i}`} className="absolute" style={{ top: h.t, left: h.l }} width={h.s} height={h.s} viewBox="0 0 24 24" fill="white" opacity={h.o}>
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        ))}
 
         {/* Sparkle stars */}
-        <svg className="absolute top-[14%] right-[38%]" width="10" height="10" viewBox="0 0 24 24" fill="white" opacity="0.18"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4 5.6 21.2 8 14 2 9.2h7.6L12 2z"/></svg>
-        <svg className="absolute top-[10%] left-[40%]" width="8" height="8" viewBox="0 0 24 24" fill="#FFD700" opacity="0.2"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4 5.6 21.2 8 14 2 9.2h7.6L12 2z"/></svg>
-        <svg className="absolute top-[20%] left-[14%]" width="7" height="7" viewBox="0 0 24 24" fill="#FFD700" opacity="0.15"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4 5.6 21.2 8 14 2 9.2h7.6L12 2z"/></svg>
-        <svg className="absolute bottom-[30%] right-[30%]" width="8" height="8" viewBox="0 0 24 24" fill="white" opacity="0.12"><path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4 5.6 21.2 8 14 2 9.2h7.6L12 2z"/></svg>
+        {[
+          { t: "12%", l: "36%", s: 10, o: 0.2, c: "white" },
+          { t: "8%", l: "42%", s: 8, o: 0.18, c: "#FFD700" },
+          { t: "19%", l: "13%", s: 7, o: 0.16, c: "#FFD700" },
+          { t: "55%", l: "36%", s: 8, o: 0.12, c: "white" },
+          { t: "40%", l: "90%", s: 8, o: 0.1, c: "white" },
+          { t: "15%", l: "62%", s: 6, o: 0.1, c: "#FFD700" },
+        ].map((s, i) => (
+          <svg key={`s${i}`} className="absolute" style={{ top: s.t, left: s.l }} width={s.s} height={s.s} viewBox="0 0 24 24" fill={s.c} opacity={s.o}>
+            <path d="M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.4 5.6 21.2 8 14 2 9.2h7.6L12 2z"/>
+          </svg>
+        ))}
 
-        {/* Teal diamond accent */}
-        <svg className="absolute bottom-[15%] left-[40%]" width="14" height="14" viewBox="0 0 20 20" fill="none" opacity="0.15">
-          <rect x="10" y="0" width="10" height="10" transform="rotate(45 10 0)" fill="#5EC4C0" />
+        {/* Circle accents */}
+        <div className="absolute top-[30%] left-[3%] w-[1.5%] aspect-square rounded-full" style={{ border: "1.5px solid rgba(255,255,255,0.12)" }} />
+        <div className="absolute bottom-[22%] right-[3%] w-[1%] aspect-square rounded-full" style={{ border: "1px solid rgba(255,255,255,0.1)" }} />
+        <div className="absolute top-[65%] left-[22%] w-[0.6%] aspect-square rounded-full" style={{ background: "rgba(255,255,255,0.08)" }} />
+
+        {/* Bottom wave */}
+        <svg className="absolute bottom-0 left-0 w-full opacity-[0.04]" viewBox="0 0 1440 50" preserveAspectRatio="none" style={{ height: "8%" }}>
+          <path d="M0,25 Q360,0 720,25 T1440,25 V50 H0 Z" fill="white"/>
         </svg>
-
-        {/* Circular accents */}
-        <div className="absolute top-[32%] left-[4%] w-7 h-7 rounded-full" style={{ border: "1.5px solid rgba(255,255,255,0.12)" }} />
-        <div className="absolute bottom-[25%] right-[4%] w-5 h-5 rounded-full" style={{ border: "1px solid rgba(255,255,255,0.1)" }} />
       </div>
 
       {/* ===== MAIN CONTENT ===== */}
-      <div className="absolute inset-0 flex items-center z-10">
-        <div className="w-full flex items-center px-[5%] lg:px-[7%]">
+      <div className="absolute inset-0 z-10 flex items-center">
+        <div className="w-full flex items-center" style={{ padding: "0 6%" }}>
 
-          {/* LEFT SIDE: Text content */}
+          {/* LEFT 50% - Typography */}
           <motion.div
-            className="w-[32%] flex-shrink-0"
-            initial={{ opacity: 0, x: -20 }}
+            className="w-1/2 flex-shrink-0 pr-[4%]"
+            initial={{ opacity: 0, x: -25 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
-            {/* Script heading exactly like reference */}
             <h2
-              className="text-white leading-[1.1] mb-1"
+              className="text-white mb-2"
               style={{
                 fontFamily: "'Playfair Display', serif",
                 fontStyle: "italic",
                 fontWeight: 700,
-                fontSize: "clamp(2rem, 4vw, 3.5rem)",
+                fontSize: "clamp(2.2rem, 4.5vw, 4rem)",
+                lineHeight: 1.1,
+                letterSpacing: "-0.01em",
               }}
             >
               Success Stories
             </h2>
 
-            {/* Decorative flourish under heading - matching reference style */}
-            <svg viewBox="0 0 220 20" className="w-[70%] mb-5" fill="none">
-              <path d="M8 10 Q55 0, 110 10 Q165 20, 212 10" stroke="white" strokeWidth="1" strokeLinecap="round" opacity="0.45" />
-              <circle cx="110" cy="10" r="2.5" fill="white" opacity="0.4" />
-              <circle cx="85" cy="8" r="1.2" fill="white" opacity="0.25" />
-              <circle cx="135" cy="12" r="1.2" fill="white" opacity="0.25" />
-              {/* Small decorative stars at ends */}
-              <text x="2" y="13" fill="white" fontSize="8" opacity="0.35">✦</text>
-              <text x="208" y="13" fill="white" fontSize="8" opacity="0.35">✦</text>
+            {/* Flourish underline */}
+            <svg viewBox="0 0 260 22" style={{ width: "min(65%, 280px)" }} fill="none" className="mb-[4%]">
+              <path d="M6 11 Q65 1, 130 11 Q195 21, 254 11" stroke="white" strokeWidth="1" strokeLinecap="round" opacity="0.4"/>
+              <path d="M45 11 Q88 20, 130 11 Q172 2, 215 11" stroke="white" strokeWidth="0.7" strokeLinecap="round" opacity="0.25"/>
+              <circle cx="130" cy="11" r="2.5" fill="white" opacity="0.4"/>
+              <circle cx="100" cy="9" r="1.2" fill="white" opacity="0.22"/>
+              <circle cx="160" cy="13" r="1.2" fill="white" opacity="0.22"/>
+              <text x="0" y="14" fill="white" fontSize="7" opacity="0.3">✦</text>
+              <text x="250" y="14" fill="white" fontSize="7" opacity="0.3">✦</text>
             </svg>
 
             <p
-              className="leading-relaxed"
               style={{
                 fontFamily: "'Lato', sans-serif",
-                color: "rgba(255,255,255,0.7)",
-                fontSize: "clamp(0.75rem, 1.1vw, 1rem)",
-                maxWidth: "340px",
+                color: "rgba(255,255,255,0.68)",
+                fontSize: "clamp(0.8rem, 1.2vw, 1.1rem)",
+                lineHeight: 1.65,
+                maxWidth: "380px",
               }}
             >
               Celebrating the beautiful unions made possible through Kalyanasuthra Matrimony.
             </p>
           </motion.div>
 
-          {/* RIGHT SIDE: Floating cards - desktop */}
+          {/* RIGHT 50% - Floating Cards (desktop) */}
           <div
-            className="flex-1 relative hidden lg:block"
-            style={{ minHeight: "100%", height: "420px" }}
+            className="w-1/2 relative hidden lg:block"
+            style={{ height: "clamp(350px, 45vw, 560px)" }}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
             {getVisibleStories().map(({ story, posIndex }) => {
-              const pos = cardPositions[posIndex];
+              const pos = cardLayouts[posIndex];
+              const cardW = "clamp(155px, 13.5vw, 205px)";
+              const imgH = "clamp(105px, 9.5vw, 145px)";
+
               return (
-                <div
+                <motion.div
                   key={`${story.id}-${posIndex}`}
                   className="absolute"
                   style={{
                     top: pos.top,
                     left: pos.left,
                     transform: `rotate(${pos.rotate}deg)`,
-                    zIndex: 5 - posIndex,
-                    transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+                    zIndex: pos.z,
+                    width: cardW,
                   }}
+                  initial={false}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.7, ease: "easeInOut" }}
                 >
                   <div
                     className="rounded-lg overflow-hidden"
                     style={{
-                      width: "clamp(150px, 14vw, 195px)",
                       background: "white",
-                      boxShadow: "0 8px 30px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.1)",
-                      border: "3px solid rgba(255,255,255,0.6)",
+                      boxShadow: `0 ${6 + pos.z}px ${18 + pos.z * 4}px rgba(0,0,0,${0.12 + pos.z * 0.02})`,
+                      border: "3px solid rgba(255,255,255,0.55)",
                     }}
                   >
-                    <div style={{ height: "clamp(100px, 10vw, 140px)" }} className="overflow-hidden">
+                    <div style={{ height: imgH }} className="overflow-hidden">
                       <img
                         src={story.image_url || wedding1}
                         alt={`${story.bride_name} & ${story.groom_name}`}
@@ -218,43 +245,55 @@ const SuccessStories = () => {
                         style={{
                           fontFamily: "'DM Serif Display', serif",
                           color: "#5C3D2E",
-                          fontSize: "clamp(11px, 1vw, 14px)",
+                          fontSize: "clamp(10px, 0.95vw, 14px)",
                         }}
                       >
                         {story.bride_name}{" "}
-                        <span style={{ color: "#E74C6F" }}>♥</span>{" "}
+                        <span style={{ color: "#D94F6B" }}>♥</span>{" "}
                         {story.groom_name}
                       </h4>
-                      <p style={{ fontFamily: "'Lato', sans-serif", color: "#999", fontSize: "clamp(9px, 0.8vw, 11px)", marginTop: 2 }}>
+                      <p style={{
+                        fontFamily: "'Lato', sans-serif",
+                        color: "#999",
+                        fontSize: "clamp(8px, 0.75vw, 11px)",
+                        marginTop: 2,
+                      }}>
                         {story.city}
                       </p>
-                      <p style={{ fontFamily: "'Lato', sans-serif", color: "#666", fontSize: "clamp(9px, 0.75vw, 11px)", marginTop: 4, lineHeight: 1.4, fontStyle: "italic" }}>
+                      <p style={{
+                        fontFamily: "'Lato', sans-serif",
+                        color: "#666",
+                        fontSize: "clamp(8px, 0.7vw, 10.5px)",
+                        marginTop: 4,
+                        lineHeight: 1.4,
+                        fontStyle: "italic",
+                      }}>
                         {story.story}
                       </p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
         </div>
       </div>
 
-      {/* Mobile horizontal scroll */}
-      <div className="lg:hidden absolute bottom-0 left-0 right-0 z-10 px-4 pb-6">
+      {/* Mobile scroll fallback */}
+      <div className="lg:hidden absolute bottom-0 left-0 right-0 z-10 px-4 pb-5">
         <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
           {stories.map((story) => (
             <div
               key={story.id}
               className="flex-shrink-0 rounded-lg overflow-hidden"
-              style={{ width: 170, background: "white", boxShadow: "0 6px 20px rgba(0,0,0,0.18)", border: "2px solid rgba(255,255,255,0.5)" }}
+              style={{ width: 165, background: "white", boxShadow: "0 6px 20px rgba(0,0,0,0.18)", border: "2px solid rgba(255,255,255,0.5)" }}
             >
-              <div className="h-[110px] overflow-hidden">
+              <div className="h-[105px] overflow-hidden">
                 <img src={story.image_url || wedding1} alt={`${story.bride_name} & ${story.groom_name}`} className="w-full h-full object-cover" />
               </div>
               <div className="px-2 py-2 text-center">
                 <h4 className="text-xs font-bold" style={{ fontFamily: "'DM Serif Display', serif", color: "#5C3D2E" }}>
-                  {story.bride_name} <span style={{ color: "#E74C6F" }}>♥</span> {story.groom_name}
+                  {story.bride_name} <span style={{ color: "#D94F6B" }}>♥</span> {story.groom_name}
                 </h4>
                 <p className="text-[10px] mt-0.5" style={{ color: "#999" }}>{story.city}</p>
                 <p className="text-[10px] mt-1 leading-snug italic" style={{ color: "#666" }}>{story.story}</p>
