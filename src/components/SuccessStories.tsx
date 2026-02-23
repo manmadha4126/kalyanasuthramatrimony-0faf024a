@@ -42,12 +42,12 @@ const SuccessStories = () => {
     fetchStories();
   }, []);
 
-  // Auto-slide every 2 seconds
+  // Auto-slide every 3 seconds
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % stories.length);
-    }, 2000);
+    }, 3000);
     return () => clearInterval(timer);
   }, [isPaused, stories.length]);
 
@@ -65,7 +65,7 @@ const SuccessStories = () => {
     <section
       id="stories"
       className="relative w-full overflow-hidden"
-      style={{ aspectRatio: "16 / 9", maxHeight: "100vh" }}
+      style={{ height: "clamp(480px, 55vw, 620px)" }}
     >
       <link
         href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap"
@@ -266,10 +266,10 @@ const SuccessStories = () => {
             </p>
           </motion.div>
 
-          {/* RIGHT - Horizontal Carousel with 5 cards */}
+          {/* RIGHT - Floating stacked overlapping cards */}
           <div
             className="w-[60%] relative hidden lg:flex items-center justify-center"
-            style={{ height: "clamp(340px, 42vw, 520px)" }}
+            style={{ height: "clamp(300px, 36vw, 440px)" }}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
@@ -277,15 +277,16 @@ const SuccessStories = () => {
               {getVisibleCards().map(({ story, offset }) => {
                 const isCenter = offset === 0;
                 const absOffset = Math.abs(offset);
-                const cardW = isCenter ? 210 : 180;
-                const imgH = isCenter ? 150 : 120;
+                const cardW = isCenter ? 200 : 170;
+                const imgH = isCenter ? 140 : 110;
 
-                // Horizontal positioning: center card at 50%, others spread out
-                const xPos = offset * 22; // percentage from center
+                // Stepped upward: center highest, edges lowest
+                const yStep = isCenter ? -30 : absOffset === 1 ? -10 : 15;
+                const xPos = offset * 24;
                 const rotation = offset * 2.5;
                 const zIndex = 10 - absOffset;
                 const opacity = isCenter ? 1 : absOffset === 1 ? 0.85 : 0.65;
-                const scale = isCenter ? 1.05 : absOffset === 1 ? 0.92 : 0.82;
+                const scale = isCenter ? 1.08 : absOffset === 1 ? 0.93 : 0.82;
 
                 return (
                   <motion.div
@@ -295,17 +296,17 @@ const SuccessStories = () => {
                       zIndex,
                       width: cardW,
                     }}
-                    initial={{ opacity: 0, x: 120, scale: 0.8, rotate: rotation }}
+                    initial={{ opacity: 0, x: 140, scale: 0.8, rotate: rotation }}
                     animate={{
                       opacity,
                       x: `${xPos}%`,
                       scale,
                       rotate: rotation,
-                      y: isCenter ? -8 : absOffset === 1 ? 0 : 8,
+                      y: yStep,
                     }}
-                    exit={{ opacity: 0, x: -120, scale: 0.8 }}
+                    exit={{ opacity: 0, x: -140, scale: 0.8 }}
                     transition={{
-                      duration: 0.7,
+                      duration: 0.8,
                       ease: [0.25, 0.1, 0.25, 1],
                     }}
                   >
@@ -314,10 +315,9 @@ const SuccessStories = () => {
                       style={{
                         background: "white",
                         boxShadow: isCenter
-                          ? "0 16px 45px rgba(0,0,0,0.28), 0 0 0 2px rgba(255,255,255,0.4)"
-                          : `0 ${4 + zIndex}px ${14 + zIndex * 2}px rgba(0,0,0,${0.10 + absOffset * 0.02})`,
+                          ? "0 18px 50px rgba(0,0,0,0.30), 0 0 0 2px rgba(255,255,255,0.45)"
+                          : `0 ${4 + zIndex}px ${12 + zIndex * 2}px rgba(0,0,0,${0.10 + absOffset * 0.02})`,
                         border: "2.5px solid rgba(255,255,255,0.45)",
-                        transition: "box-shadow 0.4s ease",
                       }}
                     >
                       <div style={{ height: imgH }} className="overflow-hidden">
@@ -329,13 +329,13 @@ const SuccessStories = () => {
                           transition={{ duration: 1, ease: "easeInOut" }}
                         />
                       </div>
-                      <div className="px-3 py-2.5 text-center">
+                      <div className="px-3 py-2 text-center">
                         <h4
                           className="font-bold leading-tight"
                           style={{
                             fontFamily: "'DM Serif Display', serif",
                             color: "hsl(var(--primary))",
-                            fontSize: isCenter ? 14 : 12,
+                            fontSize: isCenter ? 13 : 11.5,
                           }}
                         >
                           {story.bride_name}{" "}
@@ -345,7 +345,7 @@ const SuccessStories = () => {
                         <p style={{
                           fontFamily: "'Lato', sans-serif",
                           color: "hsl(var(--muted-foreground))",
-                          fontSize: isCenter ? 11 : 10,
+                          fontSize: isCenter ? 10.5 : 9.5,
                           marginTop: 2,
                         }}>
                           {story.city}
@@ -353,9 +353,9 @@ const SuccessStories = () => {
                         <p style={{
                           fontFamily: "'Lato', sans-serif",
                           color: "#666",
-                          fontSize: isCenter ? 10.5 : 9.5,
-                          marginTop: 4,
-                          lineHeight: 1.45,
+                          fontSize: isCenter ? 10 : 9,
+                          marginTop: 3,
+                          lineHeight: 1.4,
                           fontStyle: "italic",
                         }}>
                           "{story.story}"
