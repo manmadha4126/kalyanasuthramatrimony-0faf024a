@@ -166,9 +166,10 @@ export default function AdminDashboard() {
     return Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
   };
 
+  const activeProfiles = profiles.filter(p => p.profile_status === "active");
   const displayProfiles = tab === "Profile Requests" ? pendingProfiles
     : tab === "Featured Profiles" ? featuredProfiles
-    : profiles;
+    : activeProfiles;
 
   const stats = [
     { label: "Total Profiles", value: profiles.length, icon: Users, color: "hsl(210, 80%, 55%)", bg: "hsl(210, 80%, 96%)" },
@@ -204,7 +205,7 @@ export default function AdminDashboard() {
   if (selectedProfile) {
     const p = editMode ? (editForm as Profile) : selectedProfile;
     return (
-      <div className="min-h-screen" style={{ background: "hsl(210, 20%, 97%)" }}>
+      <div className="min-h-screen" style={{ background: "hsl(210, 20%, 97%)", fontFamily: "system-ui, -apple-system, sans-serif" }}>
         <header className="bg-white border-b border-gray-100 px-4 sm:px-6 py-4 flex items-center gap-3 sticky top-0 z-10">
           <button onClick={() => { setSelectedProfile(null); setEditMode(false); }} className="flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-gray-700 transition-colors">
             <ChevronLeft size={16} /> Back to Dashboard
@@ -242,18 +243,18 @@ export default function AdminDashboard() {
         <div className="max-w-4xl mx-auto p-4 sm:p-6">
           {/* Profile Header Card */}
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-5 flex flex-col sm:flex-row items-start gap-5">
-            <div className="w-24 h-24 rounded-xl flex-shrink-0 overflow-hidden" style={{ background: "hsl(348, 60%, 96%)" }}>
+            <div className="w-24 h-24 rounded-xl flex-shrink-0 overflow-hidden" style={{ background: "hsl(210, 20%, 93%)" }}>
               {p.profile_photo_url ? (
                 <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-3xl font-serif font-bold" style={{ color: "hsl(348, 50%, 40%)" }}>{p.full_name?.[0]}</span>
+                  <span className="text-3xl font-bold text-gray-500">{p.full_name?.[0]}</span>
                 </div>
               )}
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-1">
-                <h2 className="text-xl font-serif font-bold text-gray-800">{p.full_name}</h2>
+                <h2 className="text-xl font-bold text-gray-800">{p.full_name}</h2>
                 <StatusBadge status={selectedProfile.profile_status} />
               </div>
               <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {p.religion}{p.caste ? ` - ${p.caste}` : ""}</p>
@@ -263,49 +264,77 @@ export default function AdminDashboard() {
           </div>
 
           {editMode ? (
-            /* Edit Mode */
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-              <h3 className="font-serif font-bold text-gray-800 mb-4" style={{ color: "hsl(348, 50%, 35%)" }}>Edit Profile Details</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                <EditField label="Full Name" field="full_name" />
-                <EditField label="Gender" field="gender" />
-                <EditField label="Date of Birth" field="date_of_birth" type="date" />
-                <EditField label="Email" field="email" />
-                <EditField label="Phone" field="phone" />
-                <EditField label="WhatsApp" field="whatsapp" />
-                <EditField label="Mother Tongue" field="mother_tongue" />
-                <EditField label="Marital Status" field="marital_status" />
-                <EditField label="Religion" field="religion" />
-                <EditField label="Caste" field="caste" />
-                <EditField label="Sub Caste" field="sub_caste" />
-                <EditField label="Gothram" field="gothra" />
-                <EditField label="Country" field="country" />
-                <EditField label="State" field="state" />
-                <EditField label="City" field="city" />
-                <EditField label="Native Place" field="native_place" />
-                <EditField label="Education" field="education" />
-                <EditField label="Occupation" field="occupation" />
-                <EditField label="Company" field="company_name" />
-                <EditField label="Annual Income" field="annual_income" />
-                <EditField label="Family Status" field="family_status" />
-                <EditField label="Family Type" field="family_type" />
-                <EditField label="Father's Name" field="father_name" />
-                <EditField label="Father's Occupation" field="father_occupation" />
-                <EditField label="Mother's Name" field="mother_name" />
-                <EditField label="Mother's Occupation" field="mother_occupation" />
-                <EditField label="Siblings" field="siblings" />
-                <EditField label="Star" field="star" />
-                <EditField label="Raasi" field="raasi" />
-                <EditField label="Dosham" field="dosham" />
+            /* Edit Mode - Organized by sections */
+            <div className="space-y-6">
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+                <h3 className="text-base font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100">📋 Basic Details</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+                  <EditField label="Full Name" field="full_name" />
+                  <EditField label="Gender" field="gender" />
+                  <EditField label="Date of Birth" field="date_of_birth" type="date" />
+                  <EditField label="Email" field="email" />
+                  <EditField label="Phone" field="phone" />
+                  <EditField label="WhatsApp" field="whatsapp" />
+                  <EditField label="Profile Created By" field="profile_created_by" />
+                </div>
               </div>
-              <div className="mb-3 mt-2">
-                <label className="block text-xs font-semibold text-gray-500 mb-1">About Me</label>
-                <textarea
-                  value={editForm.about_me || ""}
-                  onChange={e => setEditField("about_me", e.target.value)}
-                  rows={3}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
-                />
+
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+                <h3 className="text-base font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100">👤 Personal Details</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+                  <EditField label="Mother Tongue" field="mother_tongue" />
+                  <EditField label="Marital Status" field="marital_status" />
+                  <EditField label="Religion" field="religion" />
+                  <EditField label="Caste" field="caste" />
+                  <EditField label="Sub Caste" field="sub_caste" />
+                  <EditField label="Country" field="country" />
+                  <EditField label="State" field="state" />
+                  <EditField label="City" field="city" />
+                  <EditField label="Native Place" field="native_place" />
+                </div>
+                <div className="mt-3">
+                  <label className="block text-xs font-semibold text-gray-500 mb-1">About Me</label>
+                  <textarea
+                    value={editForm.about_me || ""}
+                    onChange={e => setEditField("about_me", e.target.value)}
+                    rows={3}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+                <h3 className="text-base font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100">🎓 Education & Career</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+                  <EditField label="Education" field="education" />
+                  <EditField label="Education Detail" field="education_detail" />
+                  <EditField label="Occupation" field="occupation" />
+                  <EditField label="Company" field="company_name" />
+                  <EditField label="Annual Income" field="annual_income" />
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+                <h3 className="text-base font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100">👨‍👩‍👧‍👦 Family Details</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+                  <EditField label="Family Status" field="family_status" />
+                  <EditField label="Family Type" field="family_type" />
+                  <EditField label="Father's Name" field="father_name" />
+                  <EditField label="Father's Occupation" field="father_occupation" />
+                  <EditField label="Mother's Name" field="mother_name" />
+                  <EditField label="Mother's Occupation" field="mother_occupation" />
+                  <EditField label="Siblings" field="siblings" />
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+                <h3 className="text-base font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100">🔮 Horoscope Details</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+                  <EditField label="Gothram" field="gothra" />
+                  <EditField label="Raasi" field="raasi" />
+                  <EditField label="Star" field="star" />
+                  <EditField label="Dosham" field="dosham" />
+                </div>
               </div>
             </div>
           ) : (
@@ -403,9 +432,9 @@ export default function AdminDashboard() {
         <div className="w-[220px] h-full flex flex-col py-6 px-4">
           <div className="flex items-center gap-2 mb-8 px-1">
             <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "hsl(42, 42%, 57%)" }}>
-              <span className="text-white font-serif font-bold text-sm">K</span>
+              <span className="text-white font-bold text-sm">K</span>
             </div>
-            <span className="text-white font-serif font-semibold text-sm leading-tight">Kalyanasuthra<br /><span className="text-xs font-normal opacity-60">Admin Panel</span></span>
+            <span className="text-white font-semibold text-sm leading-tight">Kalyanasuthra<br /><span className="text-xs font-normal opacity-60">Admin Panel</span></span>
           </div>
 
           <nav className="space-y-1 flex-1">
@@ -449,7 +478,7 @@ export default function AdminDashboard() {
             </button>
           </div>
           <div className="hidden sm:block">
-            <h1 className="font-serif font-bold text-gray-800">Admin Dashboard</h1>
+            <h1 className="font-bold text-gray-800">Admin Dashboard</h1>
             <p className="text-xs text-gray-400">Kalyanasuthra Matrimony Management</p>
           </div>
           <div className="ml-auto flex items-center gap-3">
@@ -576,7 +605,51 @@ export default function AdminDashboard() {
                     {tab === "Profile Requests" ? "No pending profile requests" : "No profiles found"}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  tab === "All Profiles" ? (
+                    /* Horizontal row layout for All Profiles */
+                    <div className="space-y-3">
+                      {displayProfiles.map((p, i) => (
+                        <motion.div
+                          key={p.id}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.03 }}
+                          className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md flex items-center gap-4 px-4 py-3"
+                          style={{ borderLeft: "3px solid hsl(145, 65%, 45%)" }}
+                        >
+                          <div className="w-11 h-11 rounded-lg flex-shrink-0 overflow-hidden" style={{ background: "hsl(210, 20%, 93%)" }}>
+                            {p.profile_photo_url ? (
+                              <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <span className="text-base font-bold text-gray-500">{p.full_name[0]}</span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-gray-800 text-sm truncate">{p.full_name}</h3>
+                            <p className="text-xs text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {[p.city, p.state].filter(Boolean).join(", ") || "—"}</p>
+                          </div>
+                          <div className="flex-shrink-0 hidden sm:block">
+                            <p className="text-xs text-gray-400">{p.occupation || "—"}</p>
+                          </div>
+                          <div className="flex-shrink-0">
+                            <StatusBadge status={p.profile_status} />
+                          </div>
+                          <div className="flex items-center gap-1.5 flex-shrink-0">
+                            <button onClick={() => openProfile(p)} className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-semibold transition-all" style={{ background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>
+                              <Eye size={11} /> View
+                            </button>
+                            <button onClick={() => toggleFeatured(p.id, p.is_featured)} className="py-1.5 px-2 rounded-lg text-[10px] font-semibold transition-all" style={p.is_featured ? { background: "hsl(280, 65%, 93%)", color: "hsl(280, 65%, 40%)" } : { background: "hsl(38, 90%, 93%)", color: "hsl(38, 90%, 35%)" }}>
+                              {p.is_featured ? "★" : "☆"}
+                            </button>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  ) : (
+                    /* Card layout for Profile Requests & Featured */
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {displayProfiles.map((p, i) => (
                       <motion.div
                         key={p.id}
@@ -588,19 +661,19 @@ export default function AdminDashboard() {
                       >
                         <div className="p-4">
                           <div className="flex items-start gap-3 mb-3">
-                            <div className="w-12 h-12 rounded-lg flex-shrink-0 overflow-hidden" style={{ background: "hsl(348, 60%, 96%)" }}>
+                            <div className="w-12 h-12 rounded-lg flex-shrink-0 overflow-hidden" style={{ background: "hsl(210, 20%, 93%)" }}>
                               {p.profile_photo_url ? (
                                 <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                  <span className="text-lg font-serif font-bold" style={{ color: "hsl(348, 50%, 40%)" }}>{p.full_name[0]}</span>
+                                  <span className="text-lg font-bold text-gray-500">{p.full_name[0]}</span>
                                 </div>
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-gray-800 text-sm truncate font-mono">{p.full_name}</h3>
-                              <p className="text-xs text-gray-500 font-mono">{p.gender} • {getAge(p.date_of_birth)} yrs</p>
-                              <p className="text-xs text-gray-400 truncate font-mono">{[p.city, p.state].filter(Boolean).join(", ") || "—"}</p>
+                              <h3 className="font-semibold text-gray-800 text-sm truncate">{p.full_name}</h3>
+                              <p className="text-xs text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs</p>
+                              <p className="text-xs text-gray-400 truncate">{[p.city, p.state].filter(Boolean).join(", ") || "—"}</p>
                             </div>
                           </div>
                           
@@ -626,6 +699,7 @@ export default function AdminDashboard() {
                       </motion.div>
                     ))}
                   </div>
+                  )
                 )
               )}
             </div>
