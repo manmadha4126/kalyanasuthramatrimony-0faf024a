@@ -598,9 +598,9 @@ export default function AdminDashboard() {
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-gray-800 text-sm truncate">{p.full_name}</h3>
-                              <p className="text-xs text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs</p>
-                              <p className="text-xs text-gray-400 truncate">{[p.city, p.state].filter(Boolean).join(", ") || "—"}</p>
+                              <h3 className="font-semibold text-gray-800 text-sm truncate font-mono">{p.full_name}</h3>
+                              <p className="text-xs text-gray-500 font-mono">{p.gender} • {getAge(p.date_of_birth)} yrs</p>
+                              <p className="text-xs text-gray-400 truncate font-mono">{[p.city, p.state].filter(Boolean).join(", ") || "—"}</p>
                             </div>
                           </div>
                           

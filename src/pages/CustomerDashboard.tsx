@@ -73,24 +73,30 @@ export default function CustomerDashboard() {
     }
   };
 
+  // Teal/sage green theme colors
+  const themeAccent = "hsl(160, 35%, 38%)";
+  const themeDark = "hsl(160, 30%, 25%)";
+  const themeLight = "hsl(160, 40%, 94%)";
+  const themeMid = "hsl(160, 30%, 50%)";
+
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(220, 20%, 97%)" }}>
+    <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(160, 15%, 97%)" }}>
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-56 flex-shrink-0 py-6 px-4" style={{ background: "linear-gradient(180deg, hsl(300, 15%, 88%) 0%, hsl(310, 20%, 92%) 100%)", borderRight: "1px solid hsl(300, 15%, 82%)" }}>
+      <aside className="hidden lg:flex flex-col w-56 flex-shrink-0 py-6 px-4" style={{ background: "linear-gradient(180deg, hsl(160, 25%, 93%) 0%, hsl(155, 20%, 95%) 100%)", borderRight: "1px solid hsl(160, 20%, 88%)" }}>
         <div className="flex items-center gap-2 mb-10 px-2">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "hsl(var(--burgundy))" }}>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: themeAccent }}>
             <span className="text-white font-serif font-bold text-sm">K</span>
           </div>
-          <span className="font-serif text-sm font-bold leading-tight" style={{ color: "hsl(var(--burgundy))" }}>Kalyanasuthra</span>
+          <span className="font-serif text-sm font-bold leading-tight" style={{ color: themeDark }}>Kalyanasuthra</span>
         </div>
         <nav className="space-y-1 flex-1">
           {NAV.map(({ icon: Icon, label }) => (
-            <button key={label} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: "hsl(var(--burgundy))", color: "white", boxShadow: "0 4px 12px hsl(var(--burgundy) / 0.3)" } : { color: "hsl(var(--burgundy))", background: "transparent" }}>
+            <button key={label} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(160, 35%, 38% / 0.3)` } : { color: themeDark, background: "transparent" }}>
               <Icon size={16} /> {label}
             </button>
           ))}
         </nav>
-        <button onClick={() => setShowUpgrade(true)} className="mt-4 w-full rounded-xl p-3 text-left transition-all hover:scale-[1.02]" style={{ background: "linear-gradient(135deg, hsl(var(--burgundy)), hsl(var(--deep-rose, 348 50% 37%)))" }}>
+        <button onClick={() => setShowUpgrade(true)} className="mt-4 w-full rounded-xl p-3 text-left transition-all hover:scale-[1.02]" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
           <div className="flex items-center gap-2 mb-1">
             <Star size={13} className="text-yellow-300 fill-yellow-300" />
             <span className="text-white text-[11px] font-bold uppercase tracking-wide">Upgrade</span>
@@ -101,7 +107,7 @@ export default function CustomerDashboard() {
             <ChevronRight size={12} className="text-white/60" />
           </div>
         </button>
-        <button onClick={logout} className="flex items-center gap-2 px-3 py-2 text-xs font-medium mt-3 rounded-lg transition-colors" style={{ color: "hsl(var(--burgundy) / 0.7)" }}>
+        <button onClick={logout} className="flex items-center gap-2 px-3 py-2 text-xs font-medium mt-3 rounded-lg transition-colors" style={{ color: "hsl(160, 25%, 45%)" }}>
           <LogOut size={14} /> Sign Out
         </button>
       </aside>
@@ -114,13 +120,13 @@ export default function CustomerDashboard() {
               <BackButton to="/" label="Home" />
             </div>
             <div className="lg:hidden flex items-center gap-2 ml-1">
-              <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: "hsl(var(--burgundy))" }}>
+              <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: themeAccent }}>
                 <span className="text-white font-serif font-bold text-xs">K</span>
               </div>
             </div>
             <nav className="hidden lg:flex items-center gap-1 mx-auto">
               {["Home", "Matches", "Preferences"].map(item => (
-                <button key={item} onClick={() => setActiveNav(item)} className="px-4 py-2 rounded-lg text-sm font-semibold transition-all" style={activeNav === item ? { color: "hsl(var(--burgundy))", background: "hsl(var(--burgundy-light))" } : { color: "#888" }}>
+                <button key={item} onClick={() => setActiveNav(item)} className="px-4 py-2 rounded-lg text-sm font-semibold transition-all" style={activeNav === item ? { color: themeDark, background: themeLight } : { color: "#888" }}>
                   {item}
                 </button>
               ))}
@@ -128,10 +134,10 @@ export default function CustomerDashboard() {
             <div className="ml-auto flex items-center gap-3">
               <button className="relative w-9 h-9 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors">
                 <Bell size={16} className="text-gray-500" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-400"></span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ background: themeAccent }}></span>
               </button>
               <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 rounded-full pl-1 pr-3 py-1">
-                <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0" style={{ background: "hsl(var(--burgundy))" }}>
+                <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0" style={{ background: themeAccent }}>
                   {userProfile?.full_name?.[0] || "U"}
                 </div>
                 <span className="text-xs font-semibold text-gray-700 hidden sm:block">{userProfile?.full_name?.split(" ")[0] || "User"}</span>
@@ -169,12 +175,12 @@ export default function CustomerDashboard() {
 
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
             <h1 className="font-serif text-xl sm:text-2xl font-bold text-gray-800">
-              Welcome back, <span style={{ color: "hsl(var(--burgundy))" }}>{userProfile?.full_name?.split(" ")[0] || "Friend"}</span> 👋
+              Welcome back, <span style={{ color: themeDark }}>{userProfile?.full_name?.split(" ")[0] || "Friend"}</span> 👋
             </h1>
             <p className="text-sm text-gray-500 mt-1">Here are your recommended matches</p>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} onClick={() => setShowUpgrade(true)} className="mb-6 rounded-2xl p-4 sm:p-5 cursor-pointer hover:scale-[1.01] transition-transform" style={{ background: "linear-gradient(135deg, hsl(var(--burgundy)), hsl(340, 50%, 35%))" }}>
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} onClick={() => setShowUpgrade(true)} className="mb-6 rounded-2xl p-4 sm:p-5 cursor-pointer hover:scale-[1.01] transition-transform" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
@@ -218,8 +224,8 @@ export default function CustomerDashboard() {
                     {profile.profile_photo_url ? (
                       <img src={profile.profile_photo_url} alt={profile.full_name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center" style={{ background: "hsl(var(--burgundy-light))" }}>
-                        <span className="text-4xl font-serif font-bold" style={{ color: "hsl(var(--burgundy))" }}>{profile.full_name[0]}</span>
+                      <div className="w-full h-full flex items-center justify-center" style={{ background: themeLight }}>
+                        <span className="text-4xl font-serif font-bold" style={{ color: themeAccent }}>{profile.full_name[0]}</span>
                       </div>
                     )}
                     {profile.is_featured && (
@@ -228,7 +234,7 @@ export default function CustomerDashboard() {
                       </div>
                     )}
                     <button onClick={() => toggleShortlist(profile.id)} className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all" style={{ background: "hsl(0, 0%, 100% / 0.9)" }}>
-                      <Heart size={15} style={{ color: shortlisted.includes(profile.id) ? "hsl(var(--burgundy))" : "#ccc" }} className={shortlisted.includes(profile.id) ? "fill-current" : ""} />
+                      <Heart size={15} style={{ color: shortlisted.includes(profile.id) ? themeAccent : "#ccc" }} className={shortlisted.includes(profile.id) ? "fill-current" : ""} />
                     </button>
                   </div>
                   <div className="p-4">
@@ -239,7 +245,7 @@ export default function CustomerDashboard() {
                       {(profile.city || profile.state) && <p className="text-xs text-gray-500">📍 {[profile.city, profile.state].filter(Boolean).join(", ")}</p>}
                       {profile.annual_income && <p className="text-xs text-gray-500">💰 {profile.annual_income}</p>}
                     </div>
-                    <button onClick={() => navigate(`/profile/${profile.id}`)} className="mt-3 w-full py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: "hsl(var(--burgundy-light))", color: "hsl(var(--burgundy))" }}>
+                    <button onClick={() => navigate(`/profile/${profile.id}`)} className="mt-3 w-full py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: themeLight, color: themeDark }}>
                       View Profile
                     </button>
                   </div>
@@ -268,13 +274,13 @@ export default function CustomerDashboard() {
                 { title: "Affluent Matrimony", plans: [{ price: "₹38,000", period: "Premium" }], features: ["Unlimited profiles", "Dedicated Relationship Manager", "Daily feedback", "Personal enquiry", "Up to settlement", "Well-settled profiles"], highlight: true },
                 { title: "Online Services", plans: [{ price: "₹7,000", period: "3 Months" }, { price: "₹10,000", period: "6 Months" }, { price: "₹15,000", period: "1 Year" }], features: ["Full online access", "Profile browsing", "Direct connect"], highlight: false },
               ].map((pkg, i) => (
-                <div key={i} className="rounded-xl p-5 border-2 transition-all" style={pkg.highlight ? { borderColor: "hsl(var(--burgundy))", background: "hsl(var(--burgundy-light))" } : { borderColor: "hsl(var(--border))", background: "white" }}>
-                  {pkg.highlight && <div className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: "hsl(var(--burgundy))" }}>★ Most Popular</div>}
+                <div key={i} className="rounded-xl p-5 border-2 transition-all" style={pkg.highlight ? { borderColor: themeAccent, background: themeLight } : { borderColor: "hsl(var(--border))", background: "white" }}>
+                  {pkg.highlight && <div className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: themeAccent }}>★ Most Popular</div>}
                   <h3 className="font-serif font-bold text-gray-800 mb-3">{pkg.title}</h3>
                   <div className="space-y-1 mb-4">
                     {pkg.plans.map((p, j) => (
                       <div key={j} className="flex items-baseline gap-1">
-                        <span className="font-bold text-lg" style={{ color: "hsl(var(--burgundy))" }}>{p.price}</span>
+                        <span className="font-bold text-lg" style={{ color: themeDark }}>{p.price}</span>
                         <span className="text-xs text-gray-400">/ {p.period}</span>
                       </div>
                     ))}
@@ -282,12 +288,12 @@ export default function CustomerDashboard() {
                   <ul className="space-y-1.5 mb-5">
                     {pkg.features.map(f => (
                       <li key={f} className="flex items-start gap-2 text-xs text-gray-600">
-                        <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: "hsl(var(--burgundy))" }}></span>
+                        <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: themeAccent }}></span>
                         {f}
                       </li>
                     ))}
                   </ul>
-                  <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hello! I'm interested in the ${pkg.title} plan. Please provide more details.`)}`} target="_blank" rel="noopener noreferrer" className="block w-full py-2 rounded-lg text-center text-xs font-semibold transition-all" style={pkg.highlight ? { background: "hsl(var(--burgundy))", color: "white" } : { background: "hsl(var(--burgundy-light))", color: "hsl(var(--burgundy))" }}>
+                  <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hello! I'm interested in the ${pkg.title} plan. Please provide more details.`)}`} target="_blank" rel="noopener noreferrer" className="block w-full py-2 rounded-lg text-center text-xs font-semibold transition-all" style={pkg.highlight ? { background: themeAccent, color: "white" } : { background: themeLight, color: themeDark }}>
                     Get Consultation
                   </a>
                 </div>
@@ -322,7 +328,7 @@ export default function CustomerDashboard() {
                 <label className="block text-xs font-semibold text-gray-600 mb-1">Your Story</label>
                 <textarea value={storyForm.story} onChange={e => setStoryForm(p => ({ ...p, story: e.target.value }))} rows={3} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none resize-none focus:ring-2 focus:ring-teal-300" required />
               </div>
-              <button onClick={submitStory} disabled={storyLoading} className="w-full py-2.5 rounded-lg text-sm font-bold text-white transition-all disabled:opacity-60" style={{ background: "#3FA7A3" }}>
+              <button onClick={submitStory} disabled={storyLoading} className="w-full py-2.5 rounded-lg text-sm font-bold text-white transition-all disabled:opacity-60" style={{ background: themeAccent }}>
                 {storyLoading ? "Submitting..." : "Submit Story"}
               </button>
               <p className="text-[10px] text-gray-400 text-center">Your story will be reviewed before publishing.</p>
