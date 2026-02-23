@@ -48,7 +48,7 @@ const cardLayout = [
 
 const SuccessStories = () => {
   const [stories, setStories] = useState<Story[]>(fallbackStories);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [heroIndex, setHeroIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
@@ -63,24 +63,28 @@ const SuccessStories = () => {
     fetchStories();
   }, []);
 
-  // Auto-slide every 3 seconds
+  // Hero card rotates every 2 seconds
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % stories.length);
-    }, 3000);
+      setHeroIndex((prev) => (prev + 1) % stories.length);
+    }, 2000);
     return () => clearInterval(timer);
   }, [isPaused, stories.length]);
 
-  // Get 6 visible cards starting from activeIndex
+  // 5 static cards (slots 0-3, 5) + 1 rotating hero (slot 4)
   const getVisibleCards = useCallback(() => {
-    const cards: { story: Story; slot: number }[] = [];
-    for (let i = 0; i < 6; i++) {
-      const idx = (activeIndex + i) % stories.length;
-      cards.push({ story: stories[idx], slot: i });
+    const staticIndices = [0, 1, 2, 3, 5]; // fixed profiles for non-hero slots
+    const cards: { story: Story; slot: number; isRotating: boolean }[] = [];
+    // Static cards
+    for (let i = 0; i < staticIndices.length; i++) {
+      const slotIdx = i < 4 ? i : 5; // slots 0,1,2,3,5
+      cards.push({ story: stories[staticIndices[i] % stories.length], slot: slotIdx, isRotating: false });
     }
+    // Hero rotating card at slot 4
+    cards.push({ story: stories[heroIndex % stories.length], slot: 4, isRotating: true });
     return cards;
-  }, [activeIndex, stories]);
+  }, [heroIndex, stories]);
 
   return (
     <section
@@ -339,7 +343,7 @@ const SuccessStories = () => {
             onMouseLeave={() => setIsPaused(false)}
           >
             <AnimatePresence mode="popLayout">
-              {getVisibleCards().map(({ story, slot }) => {
+              {getVisibleCards().map(({ story, slot, isRotating }) => {
                 const layout = cardLayout[slot];
                 const isHero = slot === 4;
                 const cardW = isHero ? 210 : 175;
@@ -347,7 +351,7 @@ const SuccessStories = () => {
 
                 return (
                   <motion.div
-                    key={`${story.id}-${slot}`}
+                    key={isRotating ? `hero-${story.id}` : `static-${slot}`}
                     className="absolute"
                     style={{
                       zIndex: layout.z,
@@ -357,7 +361,7 @@ const SuccessStories = () => {
                       top: "50%",
                       marginTop: -120,
                     }}
-                    initial={{ opacity: 0, x: 250, y: 0, scale: 0.7, rotate: layout.rot }}
+                    initial={isRotating ? { opacity: 0, scale: 0.85 } : { opacity: 0, x: 250, scale: 0.7, rotate: layout.rot }}
                     animate={{
                       opacity: isHero ? 1 : 0.88,
                       x: layout.x,
@@ -365,9 +369,9 @@ const SuccessStories = () => {
                       scale: layout.scale,
                       rotate: layout.rot,
                     }}
-                    exit={{ opacity: 0, x: -250, scale: 0.7 }}
+                    exit={isRotating ? { opacity: 0, scale: 0.85 } : { opacity: 0, x: -250, scale: 0.7 }}
                     transition={{
-                      duration: 0.9,
+                      duration: isRotating ? 0.6 : 0.9,
                       ease: [0.25, 0.1, 0.25, 1],
                     }}
                   >
@@ -439,7 +443,7 @@ const SuccessStories = () => {
               key={story.id}
               className="flex-shrink-0 rounded-xl overflow-hidden"
               style={{ width: 160, background: "white", boxShadow: "0 6px 20px rgba(0,0,0,0.18)", border: "2px solid rgba(255,255,255,0.5)" }}
-              animate={{ scale: idx === activeIndex % 6 ? 1.06 : 1 }}
+              animate={{ scale: idx === heroIndex % 6 ? 1.06 : 1 }}
               transition={{ duration: 0.4 }}
             >
               <div className="h-[100px] overflow-hidden">
