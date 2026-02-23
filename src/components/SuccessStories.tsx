@@ -268,8 +268,8 @@ const SuccessStories = () => {
 
           {/* RIGHT - Floating stacked overlapping cards */}
           <div
-            className="w-[60%] relative hidden lg:flex items-center justify-center"
-            style={{ height: "clamp(300px, 36vw, 440px)" }}
+            className="w-[62%] relative hidden lg:flex items-center justify-center"
+            style={{ height: "clamp(320px, 38vw, 460px)" }}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
@@ -277,16 +277,16 @@ const SuccessStories = () => {
               {getVisibleCards().map(({ story, offset }) => {
                 const isCenter = offset === 0;
                 const absOffset = Math.abs(offset);
-                const cardW = isCenter ? 200 : 170;
-                const imgH = isCenter ? 140 : 110;
+                const cardW = isCenter ? 190 : 160;
+                const imgH = isCenter ? 130 : 105;
 
-                // Stepped upward: center highest, edges lowest
-                const yStep = isCenter ? -30 : absOffset === 1 ? -10 : 15;
-                const xPos = offset * 24;
+                // Spread cards with pixel offsets so all 5 are fully visible
+                const xPixel = offset * 175;
+                const yStep = isCenter ? -28 : absOffset === 1 ? -8 : 16;
                 const rotation = offset * 2.5;
                 const zIndex = 10 - absOffset;
-                const opacity = isCenter ? 1 : absOffset === 1 ? 0.85 : 0.65;
-                const scale = isCenter ? 1.08 : absOffset === 1 ? 0.93 : 0.82;
+                const opacity = isCenter ? 1 : absOffset === 1 ? 0.88 : 0.7;
+                const scale = isCenter ? 1.1 : absOffset === 1 ? 0.95 : 0.85;
 
                 return (
                   <motion.div
@@ -295,16 +295,18 @@ const SuccessStories = () => {
                     style={{
                       zIndex,
                       width: cardW,
+                      left: "50%",
+                      marginLeft: -(cardW / 2),
                     }}
-                    initial={{ opacity: 0, x: 140, scale: 0.8, rotate: rotation }}
+                    initial={{ opacity: 0, x: 200, scale: 0.8, rotate: rotation }}
                     animate={{
                       opacity,
-                      x: `${xPos}%`,
+                      x: xPixel,
                       scale,
                       rotate: rotation,
                       y: yStep,
                     }}
-                    exit={{ opacity: 0, x: -140, scale: 0.8 }}
+                    exit={{ opacity: 0, x: -200, scale: 0.8 }}
                     transition={{
                       duration: 0.8,
                       ease: [0.25, 0.1, 0.25, 1],
@@ -325,7 +327,7 @@ const SuccessStories = () => {
                           src={story.image_url || wedding1}
                           alt={`${story.bride_name} & ${story.groom_name}`}
                           className="w-full h-full object-cover"
-                          animate={{ scale: isCenter ? 1.06 : 1 }}
+                          animate={{ scale: isCenter ? 1.08 : 1 }}
                           transition={{ duration: 1, ease: "easeInOut" }}
                         />
                       </div>
@@ -335,7 +337,7 @@ const SuccessStories = () => {
                           style={{
                             fontFamily: "'DM Serif Display', serif",
                             color: "hsl(var(--primary))",
-                            fontSize: isCenter ? 13 : 11.5,
+                            fontSize: isCenter ? 13 : 11,
                           }}
                         >
                           {story.bride_name}{" "}
