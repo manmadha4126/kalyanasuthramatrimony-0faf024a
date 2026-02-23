@@ -67,9 +67,13 @@ export default function AdminDashboard() {
     if (!auth) { navigate("/admin"); return; }
     const { email } = JSON.parse(auth);
     setAdminEmail(email);
-    fetchProfiles();
-    fetchConsultations();
-    fetchSuccessStories();
+    // Ensure we have a valid Supabase session
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) { navigate("/admin"); return; }
+      fetchProfiles();
+      fetchConsultations();
+      fetchSuccessStories();
+    });
   }, []);
 
   const fetchProfiles = async () => {
@@ -153,7 +157,7 @@ export default function AdminDashboard() {
 
   const setEditField = (field: string, value: any) => setEditForm(prev => ({ ...prev, [field]: value }));
 
-  const logout = () => { sessionStorage.removeItem("admin_auth"); navigate("/admin"); };
+  const logout = async () => { sessionStorage.removeItem("admin_auth"); await supabase.auth.signOut(); navigate("/admin"); };
 
   const pendingProfiles = profiles.filter(p => p.profile_status === "pending");
   const featuredProfiles = profiles.filter(p => p.is_featured);
