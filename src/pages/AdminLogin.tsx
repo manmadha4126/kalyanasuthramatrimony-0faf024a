@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { Eye, EyeOff, Shield } from "lucide-react";
 import BackButton from "@/components/BackButton";
 
-const ADMIN_CREDENTIALS = [
-  { email: "menda.manmadha21@gmail.com", password: "0*MAha21" },
-  { email: "drakshayani@gmail.com", password: "admin@987" },
-  { email: "kalyanasuthra@gmail.com", password: "admin@123" },
+const ADMIN_EMAILS = [
+  "menda.manmadha21@gmail.com",
+  "drakshayani@gmail.com",
+  "kalyanasuthra@gmail.com",
 ];
 
 export default function AdminLogin() {
@@ -18,20 +19,45 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setTimeout(() => {
-      const valid = ADMIN_CREDENTIALS.find(c => c.email === email && c.password === password);
-      if (valid) {
-        sessionStorage.setItem("admin_auth", JSON.stringify({ email, loggedIn: true }));
-        navigate("/admin/dashboard");
-      } else {
-        setError("Invalid email or password. Access denied.");
+    try {
+      // Check if admin email
+      if (!ADMIN_EMAILS.includes(email.toLowerCase())) {
+        setError("Access denied. Not an authorized admin email.");
+        setLoading(false);
+        return;
       }
+
+      // Try to sign in with Supabase - if account doesn't exist, create it
+      let { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      
+      if (signInError) {
+        // If invalid credentials, try signing up (first-time admin)
+        if (signInError.message.includes("Invalid login credentials")) {
+          const { error: signUpError } = await supabase.auth.signUp({
+            email,
+            password,
+            options: { data: { full_name: "Admin", role: "admin" } }
+          });
+          if (signUpError) throw signUpError;
+          // After auto-confirm, sign in
+          const { error: retryError } = await supabase.auth.signInWithPassword({ email, password });
+          if (retryError) throw retryError;
+        } else {
+          throw signInError;
+        }
+      }
+
+      sessionStorage.setItem("admin_auth", JSON.stringify({ email, loggedIn: true }));
+      navigate("/admin/dashboard");
+    } catch (err: any) {
+      setError(err.message || "Invalid email or password. Access denied.");
+    } finally {
       setLoading(false);
-    }, 600);
+    }
   };
 
   return (
