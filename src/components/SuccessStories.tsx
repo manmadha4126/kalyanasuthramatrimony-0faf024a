@@ -126,134 +126,110 @@ const SuccessStories = () => {
         <line x1="5%" y1="0%" x2="70%" y2="100%" stroke="rgba(180,185,200,0.04)" strokeWidth="0.5" />
       </svg>
 
-      {/* ===== DECORATIVE ELEMENTS (enhanced) ===== */}
+      {/* ===== DECORATIVE ELEMENTS ===== */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Clouds - top left */}
-        <svg className="absolute -top-[2%] left-[1%]" width="20%" viewBox="0 0 260 90" fill="none">
-          <ellipse cx="50" cy="50" rx="50" ry="30" fill="#F4B8C8" opacity="0.32" />
-          <ellipse cx="105" cy="38" rx="55" ry="36" fill="#EFA8BC" opacity="0.28" />
-          <ellipse cx="165" cy="45" rx="48" ry="30" fill="#F8C4D4" opacity="0.24" />
-          <ellipse cx="215" cy="52" rx="38" ry="24" fill="#F0B0C0" opacity="0.20" />
-        </svg>
-
-        {/* Clouds - top right */}
-        <svg className="absolute -top-[1%] right-[2%]" width="22%" viewBox="0 0 300 95" fill="none">
-          <ellipse cx="65" cy="55" rx="55" ry="32" fill="#F2B0C4" opacity="0.28" />
-          <ellipse cx="130" cy="40" rx="58" ry="38" fill="#ECA5B8" opacity="0.24" />
-          <ellipse cx="200" cy="48" rx="50" ry="32" fill="#F6C0D0" opacity="0.22" />
-          <ellipse cx="260" cy="54" rx="40" ry="26" fill="#F0B5C5" opacity="0.18" />
-        </svg>
-
-        {/* Clouds - mid left */}
-        <svg className="absolute top-[40%] left-[0%]" width="12%" viewBox="0 0 160 55" fill="none">
-          <ellipse cx="35" cy="30" rx="32" ry="20" fill="#F5BCC8" opacity="0.18" />
-          <ellipse cx="75" cy="24" rx="38" ry="24" fill="#EEB0C0" opacity="0.14" />
-          <ellipse cx="120" cy="28" rx="30" ry="18" fill="#F8C8D6" opacity="0.12" />
-        </svg>
-
-        {/* Clouds - bottom left */}
-        <svg className="absolute bottom-[3%] left-[4%]" width="16%" viewBox="0 0 200 65" fill="none">
-          <ellipse cx="45" cy="38" rx="42" ry="25" fill="#F5BCC8" opacity="0.22" />
-          <ellipse cx="95" cy="30" rx="46" ry="30" fill="#EEB0C0" opacity="0.18" />
-          <ellipse cx="148" cy="36" rx="38" ry="22" fill="#F8C8D6" opacity="0.15" />
-        </svg>
-
-        {/* Clouds - bottom right */}
-        <svg className="absolute bottom-[1%] right-[3%]" width="18%" viewBox="0 0 240 70" fill="none">
-          <ellipse cx="50" cy="40" rx="45" ry="26" fill="#F2B0C4" opacity="0.20" />
-          <ellipse cx="110" cy="32" rx="50" ry="32" fill="#ECA5B8" opacity="0.16" />
-          <ellipse cx="170" cy="38" rx="42" ry="24" fill="#F6C0D0" opacity="0.14" />
-          <ellipse cx="215" cy="42" rx="32" ry="20" fill="#F0B5C5" opacity="0.12" />
-        </svg>
-
-        {/* Clouds - top center */}
-        <svg className="absolute top-[2%] left-[35%]" width="14%" viewBox="0 0 180 55" fill="none">
-          <ellipse cx="40" cy="30" rx="36" ry="22" fill="#F4B8C8" opacity="0.16" />
-          <ellipse cx="90" cy="24" rx="40" ry="26" fill="#EFA8BC" opacity="0.13" />
-          <ellipse cx="140" cy="28" rx="34" ry="20" fill="#F8C4D4" opacity="0.11" />
-        </svg>
-
-        {/* Hearts scattered - more hearts */}
+        {/* Hearts - scattered across both sides */}
         {[
-          { t: "8%", l: "8%", s: 16, o: 0.20, c: "#F5C0D0" },
-          { t: "15%", l: "15%", s: 13, o: 0.16, c: "white" },
-          { t: "25%", l: "6%", s: 11, o: 0.14, c: "#F5C0D0" },
-          { t: "45%", l: "3%", s: 10, o: 0.12, c: "white" },
-          { t: "30%", l: "28%", s: 9, o: 0.10, c: "#F5C0D0" },
-          { t: "60%", l: "10%", s: 8, o: 0.09, c: "white" },
-          { t: "18%", l: "45%", s: 8, o: 0.08, c: "#F5C0D0" },
-          { t: "75%", l: "8%", s: 7, o: 0.08, c: "white" },
-          { t: "85%", l: "65%", s: 9, o: 0.07, c: "#F5C0D0" },
-          { t: "5%", l: "60%", s: 7, o: 0.07, c: "white" },
-          { t: "90%", l: "35%", s: 6, o: 0.06, c: "#F5C0D0" },
-          { t: "50%", l: "92%", s: 8, o: 0.08, c: "white" },
-          { t: "70%", l: "88%", s: 7, o: 0.06, c: "#F5C0D0" },
-          { t: "35%", l: "90%", s: 6, o: 0.06, c: "white" },
+          { t: "6%", l: "5%", s: 18, o: 0.22, c: "#F5C0D0" },
+          { t: "14%", l: "18%", s: 14, o: 0.18, c: "white" },
+          { t: "28%", l: "8%", s: 12, o: 0.15, c: "#F5C0D0" },
+          { t: "50%", l: "4%", s: 10, o: 0.12, c: "white" },
+          { t: "68%", l: "12%", s: 9, o: 0.10, c: "#F5C0D0" },
+          { t: "82%", l: "6%", s: 8, o: 0.09, c: "white" },
+          { t: "10%", l: "42%", s: 10, o: 0.10, c: "#F5C0D0" },
+          { t: "88%", l: "30%", s: 7, o: 0.08, c: "white" },
+          { t: "5%", l: "62%", s: 11, o: 0.14, c: "#FFB6C1" },
+          { t: "20%", l: "78%", s: 9, o: 0.12, c: "white" },
+          { t: "45%", l: "88%", s: 13, o: 0.16, c: "#F5C0D0" },
+          { t: "65%", l: "92%", s: 8, o: 0.10, c: "white" },
+          { t: "78%", l: "82%", s: 10, o: 0.11, c: "#FFB6C1" },
+          { t: "92%", l: "70%", s: 7, o: 0.08, c: "#F5C0D0" },
+          { t: "35%", l: "25%", s: 8, o: 0.08, c: "white" },
+          { t: "55%", l: "95%", s: 6, o: 0.07, c: "#F5C0D0" },
         ].map((h, i) => (
           <svg key={`h${i}`} className="absolute" style={{ top: h.t, left: h.l }} width={h.s} height={h.s} viewBox="0 0 24 24" fill={h.c} opacity={h.o}>
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
           </svg>
         ))}
 
-        {/* 4-pointed sparkles/stars - more sparkles */}
+        {/* 4-pointed sparkles/stars */}
         {[
-          { t: "5%", l: "20%", s: 14, o: 0.35 },
-          { t: "3%", l: "12%", s: 9, o: 0.25 },
-          { t: "10%", l: "40%", s: 10, o: 0.28 },
-          { t: "6%", l: "55%", s: 8, o: 0.22 },
-          { t: "48%", l: "2%", s: 7, o: 0.15 },
-          { t: "35%", l: "85%", s: 8, o: 0.12 },
-          { t: "72%", l: "90%", s: 7, o: 0.10 },
-          { t: "88%", l: "50%", s: 6, o: 0.08 },
-          { t: "15%", l: "70%", s: 6, o: 0.10 },
-          { t: "60%", l: "95%", s: 5, o: 0.08 },
-          { t: "92%", l: "20%", s: 7, o: 0.10 },
-          { t: "28%", l: "95%", s: 5, o: 0.07 },
+          { t: "4%", l: "15%", s: 16, o: 0.40 },
+          { t: "8%", l: "35%", s: 10, o: 0.30 },
+          { t: "3%", l: "55%", s: 12, o: 0.35 },
+          { t: "15%", l: "70%", s: 8, o: 0.25 },
+          { t: "22%", l: "10%", s: 7, o: 0.20 },
+          { t: "40%", l: "2%", s: 9, o: 0.18 },
+          { t: "55%", l: "15%", s: 6, o: 0.14 },
+          { t: "70%", l: "7%", s: 8, o: 0.12 },
+          { t: "85%", l: "20%", s: 7, o: 0.10 },
+          { t: "30%", l: "88%", s: 10, o: 0.20 },
+          { t: "60%", l: "95%", s: 7, o: 0.12 },
+          { t: "75%", l: "90%", s: 9, o: 0.14 },
+          { t: "90%", l: "55%", s: 8, o: 0.10 },
+          { t: "12%", l: "48%", s: 6, o: 0.12 },
+          { t: "95%", l: "40%", s: 5, o: 0.08 },
         ].map((d, i) => (
           <svg key={`s${i}`} className="absolute" style={{ top: d.t, left: d.l }} width={d.s} height={d.s} viewBox="0 0 20 20" fill="white" opacity={d.o}>
             <path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" />
           </svg>
         ))}
 
-        {/* Abstract circular accents */}
+        {/* 5-pointed stars */}
         {[
-          { t: "20%", l: "2%", s: "3%", o: 0.10 },
-          { t: "55%", l: "1%", s: "2.5%", o: 0.07 },
-          { t: "65%", l: "92%", s: "2%", o: 0.06 },
-          { t: "8%", l: "18%", s: "1.8%", o: 0.08 },
-          { t: "80%", l: "15%", s: "2.2%", o: 0.06 },
-          { t: "12%", l: "75%", s: "1.5%", o: 0.07 },
-          { t: "42%", l: "96%", s: "2%", o: 0.05 },
+          { t: "10%", l: "25%", s: 14, o: 0.18 },
+          { t: "30%", l: "5%", s: 11, o: 0.14 },
+          { t: "60%", l: "20%", s: 9, o: 0.10 },
+          { t: "8%", l: "80%", s: 12, o: 0.16 },
+          { t: "50%", l: "85%", s: 10, o: 0.12 },
+          { t: "80%", l: "75%", s: 8, o: 0.09 },
+          { t: "42%", l: "30%", s: 7, o: 0.08 },
+          { t: "88%", l: "48%", s: 9, o: 0.10 },
+        ].map((st, i) => (
+          <svg key={`st${i}`} className="absolute" style={{ top: st.t, left: st.l }} width={st.s} height={st.s} viewBox="0 0 24 24" fill="white" opacity={st.o}>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+        ))}
+
+        {/* Ring/circle accents */}
+        {[
+          { t: "18%", l: "3%", s: "3.5%", o: 0.12 },
+          { t: "48%", l: "1%", s: "2.5%", o: 0.08 },
+          { t: "72%", l: "92%", s: "2.8%", o: 0.08 },
+          { t: "6%", l: "22%", s: "2%", o: 0.10 },
+          { t: "85%", l: "15%", s: "2.2%", o: 0.07 },
+          { t: "15%", l: "75%", s: "1.8%", o: 0.09 },
+          { t: "38%", l: "96%", s: "2.5%", o: 0.06 },
         ].map((c, i) => (
           <div key={`c${i}`} className="absolute rounded-full" style={{ top: c.t, left: c.l, width: c.s, aspectRatio: "1", border: `1.5px solid rgba(255,255,255,${c.o})` }} />
         ))}
 
-        {/* Abstract shapes */}
-        <svg className="absolute top-[35%] left-[14%]" width="32" height="32" viewBox="0 0 30 30" fill="white" opacity="0.04">
-          <polygon points="15,2 28,28 2,28" />
-        </svg>
-        <svg className="absolute bottom-[18%] right-[16%]" width="26" height="26" viewBox="0 0 24 24" fill="white" opacity="0.035">
-          <rect x="2" y="2" width="20" height="20" rx="4" />
-        </svg>
-        <svg className="absolute top-[70%] left-[25%]" width="20" height="20" viewBox="0 0 20 20" fill="white" opacity="0.03">
-          <circle cx="10" cy="10" r="8" />
-        </svg>
-        <svg className="absolute top-[15%] right-[30%]" width="22" height="22" viewBox="0 0 30 30" fill="white" opacity="0.03">
-          <polygon points="15,2 28,28 2,28" />
-        </svg>
+        {/* Diamond shapes */}
+        {[
+          { t: "25%", l: "38%", s: 10, o: 0.08 },
+          { t: "62%", l: "5%", s: 8, o: 0.06 },
+          { t: "45%", l: "92%", s: 9, o: 0.07 },
+          { t: "90%", l: "62%", s: 7, o: 0.06 },
+        ].map((dm, i) => (
+          <svg key={`dm${i}`} className="absolute" style={{ top: dm.t, left: dm.l }} width={dm.s} height={dm.s} viewBox="0 0 20 20" fill="white" opacity={dm.o}>
+            <path d="M10 0 L20 10 L10 20 L0 10 Z" />
+          </svg>
+        ))}
 
         {/* Dot stars */}
         {[
-          { t: "7%", l: "16%", s: 3.5, o: 0.38 },
-          { t: "4%", l: "30%", s: 3, o: 0.32 },
+          { t: "7%", l: "16%", s: 3.5, o: 0.40 },
+          { t: "4%", l: "30%", s: 3, o: 0.35 },
           { t: "16%", l: "34%", s: 2.5, o: 0.28 },
           { t: "38%", l: "10%", s: 3, o: 0.22 },
-          { t: "52%", l: "22%", s: 2.5, o: 0.18 },
-          { t: "78%", l: "5%", s: 2, o: 0.15 },
-          { t: "25%", l: "50%", s: 2, o: 0.12 },
-          { t: "65%", l: "95%", s: 2.5, o: 0.14 },
-          { t: "85%", l: "80%", s: 2, o: 0.10 },
-          { t: "95%", l: "45%", s: 2.5, o: 0.12 },
+          { t: "52%", l: "22%", s: 2.5, o: 0.20 },
+          { t: "78%", l: "5%", s: 2.5, o: 0.16 },
+          { t: "25%", l: "50%", s: 2, o: 0.14 },
+          { t: "65%", l: "95%", s: 3, o: 0.18 },
+          { t: "85%", l: "80%", s: 2.5, o: 0.12 },
+          { t: "95%", l: "45%", s: 2.5, o: 0.14 },
+          { t: "33%", l: "72%", s: 2, o: 0.10 },
+          { t: "58%", l: "48%", s: 2, o: 0.08 },
         ].map((dot, i) => (
           <div
             key={`dot${i}`}
@@ -338,8 +314,7 @@ const SuccessStories = () => {
           <div
             className="w-[65%] relative hidden lg:flex items-center justify-center"
             style={{ height: "clamp(320px, 38vw, 440px)" }}
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
+            onClick={() => setIsPaused((p) => !p)}
           >
             <AnimatePresence mode="popLayout">
               {getVisibleCards().map(({ story, slot }) => {
