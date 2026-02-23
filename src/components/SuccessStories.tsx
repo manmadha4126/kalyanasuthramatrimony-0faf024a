@@ -35,20 +35,20 @@ const fallbackStories: Story[] = [
   { id: "10", bride_name: "Rani", groom_name: "Deepak", city: "Warangal", story: "Blessed to have found my life partner here.", image_url: wedding10 },
 ];
 
-// 6-card scattered layout matching the reference image (2 rows, staggered)
-// Position 0=top-left, 1=top-center, 2=top-right, 3=bottom-left, 4=bottom-center(hero), 5=bottom-right
+// 6-card circular layout positions (elliptical arc)
+// Slot 0=far-left, 1=upper-left, 2=top-center, 3=upper-right, 4=far-right, 5=bottom-center(hero)
 const cardLayout = [
-  { x: -280, y: -110, rot: -5, z: 6, scale: 0.92 },   // top-left
-  { x: -20,  y: -130, rot: 1,  z: 7, scale: 0.95 },    // top-center
-  { x: 250,  y: -100, rot: 4,  z: 6, scale: 0.90 },    // top-right
-  { x: -240, y: 80,   rot: -3, z: 7, scale: 0.93 },    // bottom-left
-  { x: 30,   y: 50,   rot: 0,  z: 10, scale: 1.08 },   // bottom-center (HERO/zoomed)
-  { x: 280,  y: 70,   rot: 5,  z: 7, scale: 0.91 },    // bottom-right
+  { x: -300, y: 20,   rot: -8, z: 4, scale: 0.78, opacity: 0.65 },   // far-left
+  { x: -180, y: -80,  rot: -4, z: 5, scale: 0.85, opacity: 0.75 },   // upper-left
+  { x: -10,  y: -110, rot: 0,  z: 6, scale: 0.90, opacity: 0.85 },   // top-center
+  { x: 170,  y: -80,  rot: 4,  z: 5, scale: 0.85, opacity: 0.75 },   // upper-right
+  { x: 290,  y: 20,   rot: 8,  z: 4, scale: 0.78, opacity: 0.65 },   // far-right
+  { x: 0,    y: 60,   rot: 0,  z: 10, scale: 1.08, opacity: 1 },     // bottom-center (HERO/zoomed)
 ];
 
 const SuccessStories = () => {
   const [stories, setStories] = useState<Story[]>(fallbackStories);
-  const [heroIndex, setHeroIndex] = useState(0);
+  const [rotationOffset, setRotationOffset] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
@@ -58,39 +58,38 @@ const SuccessStories = () => {
         .select("id,bride_name,groom_name,city,story,image_url")
         .eq("status", "approved")
         .order("created_at", { ascending: false });
-      if (data && data.length > 0) setStories(data as Story[]);
+      if (data && data.length > 0) {
+        // Merge approved DB stories with fallbacks (DB stories take priority)
+        setStories(data as Story[]);
+      }
     };
     fetchStories();
   }, []);
 
-  // Hero card rotates every 2 seconds
+  // Rotate all cards every 2 seconds
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % stories.length);
+      setRotationOffset((prev) => prev + 1);
     }, 2000);
     return () => clearInterval(timer);
   }, [isPaused, stories.length]);
 
-  // 5 static cards (slots 0-3, 5) + 1 rotating hero (slot 4)
+  // Get 6 visible cards - all rotate circularly
   const getVisibleCards = useCallback(() => {
-    const staticIndices = [0, 1, 2, 3, 5]; // fixed profiles for non-hero slots
-    const cards: { story: Story; slot: number; isRotating: boolean }[] = [];
-    // Static cards
-    for (let i = 0; i < staticIndices.length; i++) {
-      const slotIdx = i < 4 ? i : 5; // slots 0,1,2,3,5
-      cards.push({ story: stories[staticIndices[i] % stories.length], slot: slotIdx, isRotating: false });
+    const cards: { story: Story; slot: number }[] = [];
+    for (let i = 0; i < 6; i++) {
+      const storyIdx = (rotationOffset + i) % stories.length;
+      cards.push({ story: stories[storyIdx], slot: i });
     }
-    // Hero rotating card at slot 4
-    cards.push({ story: stories[heroIndex % stories.length], slot: 4, isRotating: true });
     return cards;
-  }, [heroIndex, stories]);
+  }, [rotationOffset, stories]);
 
   return (
     <section
       id="stories"
       className="relative w-full overflow-hidden"
-      style={{ height: "clamp(520px, 60vw, 700px)" }}
+      style={{ height: "clamp(400px, 42vw, 520px)" }}
     >
       <link
         href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap"
@@ -338,20 +337,20 @@ const SuccessStories = () => {
           {/* RIGHT - 6 cards in scattered 2-row layout */}
           <div
             className="w-[65%] relative hidden lg:flex items-center justify-center"
-            style={{ height: "clamp(400px, 48vw, 560px)" }}
+            style={{ height: "clamp(320px, 38vw, 440px)" }}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
             <AnimatePresence mode="popLayout">
-              {getVisibleCards().map(({ story, slot, isRotating }) => {
+              {getVisibleCards().map(({ story, slot }) => {
                 const layout = cardLayout[slot];
-                const isHero = slot === 4;
-                const cardW = isHero ? 210 : 175;
-                const imgH = isHero ? 145 : 115;
+                const isHero = slot === 5;
+                const cardW = isHero ? 200 : 160;
+                const imgH = isHero ? 130 : 100;
 
                 return (
                   <motion.div
-                    key={isRotating ? `hero-${story.id}` : `static-${slot}`}
+                    key={`${story.id}-${slot}`}
                     className="absolute"
                     style={{
                       zIndex: layout.z,
@@ -359,19 +358,19 @@ const SuccessStories = () => {
                       left: "50%",
                       marginLeft: -(cardW / 2),
                       top: "50%",
-                      marginTop: -120,
+                      marginTop: -100,
                     }}
-                    initial={isRotating ? { opacity: 0, scale: 0.85 } : { opacity: 0, x: 250, scale: 0.7, rotate: layout.rot }}
+                    initial={{ opacity: 0, scale: 0.8 }}
                     animate={{
-                      opacity: isHero ? 1 : 0.88,
+                      opacity: layout.opacity,
                       x: layout.x,
                       y: layout.y,
                       scale: layout.scale,
                       rotate: layout.rot,
                     }}
-                    exit={isRotating ? { opacity: 0, scale: 0.85 } : { opacity: 0, x: -250, scale: 0.7 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
                     transition={{
-                      duration: isRotating ? 0.6 : 0.9,
+                      duration: 0.7,
                       ease: [0.25, 0.1, 0.25, 1],
                     }}
                   >
@@ -400,7 +399,7 @@ const SuccessStories = () => {
                           style={{
                             fontFamily: "'DM Serif Display', serif",
                             color: "hsl(var(--primary))",
-                            fontSize: isHero ? 14 : 11.5,
+                            fontSize: isHero ? 13 : 11,
                           }}
                         >
                           {story.bride_name}{" "}
@@ -410,21 +409,23 @@ const SuccessStories = () => {
                         <p style={{
                           fontFamily: "'Lato', sans-serif",
                           color: "hsl(var(--muted-foreground))",
-                          fontSize: isHero ? 11 : 9.5,
+                          fontSize: isHero ? 10 : 9,
                           marginTop: 2,
                         }}>
                           {story.city}
                         </p>
-                        <p style={{
-                          fontFamily: "'Lato', sans-serif",
-                          color: "#666",
-                          fontSize: isHero ? 10 : 9,
-                          marginTop: 3,
-                          lineHeight: 1.4,
-                          fontStyle: "italic",
-                        }}>
-                          "{story.story}"
-                        </p>
+                        {isHero && (
+                          <p style={{
+                            fontFamily: "'Lato', sans-serif",
+                            color: "#666",
+                            fontSize: 9,
+                            marginTop: 3,
+                            lineHeight: 1.4,
+                            fontStyle: "italic",
+                          }}>
+                            "{story.story}"
+                          </p>
+                        )}
                       </div>
                     </div>
                   </motion.div>
@@ -443,7 +444,7 @@ const SuccessStories = () => {
               key={story.id}
               className="flex-shrink-0 rounded-xl overflow-hidden"
               style={{ width: 160, background: "white", boxShadow: "0 6px 20px rgba(0,0,0,0.18)", border: "2px solid rgba(255,255,255,0.5)" }}
-              animate={{ scale: idx === heroIndex % 6 ? 1.06 : 1 }}
+              animate={{ scale: idx === rotationOffset % 6 ? 1.06 : 1 }}
               transition={{ duration: 0.4 }}
             >
               <div className="h-[100px] overflow-hidden">
