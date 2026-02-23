@@ -221,15 +221,54 @@ export default function Register() {
 
   if (done) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "hsl(var(--cream))" }}>
-        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-2xl shadow-xl p-8 sm:p-12 text-center max-w-md w-full">
-          <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-6">
-            <Check className="w-10 h-10 text-green-500" />
+      <div className="min-h-screen flex items-center justify-center px-4 py-8" style={{ background: "hsl(var(--cream))" }}>
+        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-lg w-full">
+          {/* Success Card */}
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            {/* Green header strip */}
+            <div className="h-2" style={{ background: "linear-gradient(90deg, hsl(145, 65%, 42%), hsl(160, 55%, 48%))" }} />
+            
+            <div className="p-8 sm:p-10 text-center">
+              <motion.div 
+                initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center"
+                style={{ background: "hsl(145, 55%, 94%)", border: "3px solid hsl(145, 55%, 80%)" }}
+              >
+                <Check className="w-10 h-10" style={{ color: "hsl(145, 65%, 38%)" }} />
+              </motion.div>
+
+              <h2 className="text-2xl font-serif font-bold text-gray-800 mb-4">Profile Created Successfully!</h2>
+
+              {/* Main message box */}
+              <div className="rounded-xl p-5 mb-5 text-left" style={{ background: "hsl(145, 50%, 96%)", border: "1px solid hsl(145, 40%, 88%)" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "hsl(145, 40%, 25%)" }}>
+                  Your profile has been created successfully. Our assistance team will verify your profile and approve it shortly. You will be notified once your profile is verified and activated.
+                </p>
+              </div>
+
+              {/* Secondary message */}
+              <div className="rounded-xl p-4 mb-6" style={{ background: "hsl(210, 30%, 97%)", border: "1px solid hsl(210, 25%, 90%)" }}>
+                <p className="text-xs leading-relaxed text-gray-500">
+                  Thank you for registering with <strong style={{ color: "hsl(var(--burgundy))" }}>Kalyanasuthra Matrimony</strong>. We are committed to ensuring authentic and trusted profiles for a safe matrimonial experience.
+                </p>
+              </div>
+
+              {/* Status badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style={{ background: "hsl(38, 90%, 95%)", border: "1px solid hsl(38, 80%, 85%)" }}>
+                <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: "hsl(38, 90%, 50%)" }} />
+                <span className="text-xs font-semibold" style={{ color: "hsl(38, 70%, 35%)" }}>Status: Pending Verification</span>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button onClick={() => navigate("/")} className="flex-1 py-2.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                  Back to Home
+                </button>
+                <button onClick={() => navigate("/login")} className="flex-1 btn-burgundy text-sm">
+                  Login to Dashboard
+                </button>
+              </div>
+            </div>
           </div>
-          <h2 className="text-2xl font-serif font-bold text-gray-800 mb-2">Registration Complete!</h2>
-          <p className="text-gray-500 mb-4 text-sm">Your profile has been submitted. Our team will review and activate it within 24 hours.</p>
-          <p className="text-xs text-gray-400 mb-6">Please check your email to verify your account.</p>
-          <button onClick={() => navigate("/")} className="btn-burgundy">Back to Home</button>
         </motion.div>
       </div>
     );

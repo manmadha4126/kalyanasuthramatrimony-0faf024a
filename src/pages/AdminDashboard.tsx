@@ -1,14 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart } from "lucide-react";
+import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX } from "lucide-react";
 
 type Profile = {
   id: string; full_name: string; gender: string; religion: string; city: string | null;
   state: string | null; profile_status: string; is_featured: boolean; created_at: string;
   email: string | null; phone: string | null; occupation: string | null;
+  date_of_birth: string; profile_photo_url: string | null;
+  caste: string | null; sub_caste: string | null; mother_tongue: string | null;
+  marital_status: string; country: string; height_cm: number | null;
+  education: string | null; education_detail: string | null; company_name: string | null;
+  annual_income: string | null; family_status: string | null; family_type: string | null;
+  father_name: string | null; father_occupation: string | null;
+  mother_name: string | null; mother_occupation: string | null; siblings: string | null;
+  gothra: string | null; raasi: string | null; star: string | null; dosham: string | null;
+  native_place: string | null; about_me: string | null; whatsapp: string | null;
+  profile_created_by: string | null; additional_photos: string[] | null;
 };
 
 type Consultation = {
@@ -23,6 +33,20 @@ type SuccessStory = {
 
 const TABS = ["Profile Requests", "Featured Profiles", "All Profiles", "Consultations", "Success Stories"];
 
+const DetailRow = ({ label, value }: { label: string; value: string | null | undefined }) => (
+  <div className="flex justify-between py-2 border-b border-gray-50 last:border-0">
+    <span className="text-xs font-semibold text-gray-500 w-2/5">{label}</span>
+    <span className="text-xs text-gray-800 text-right w-3/5">{value || "—"}</span>
+  </div>
+);
+
+const DetailSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div className="mb-5">
+    <h4 className="text-sm font-bold mb-2 px-3 py-2 rounded-lg" style={{ background: "hsl(348, 60%, 96%)", color: "hsl(348, 50%, 35%)" }}>{title}</h4>
+    <div className="px-2">{children}</div>
+  </div>
+);
+
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -33,6 +57,10 @@ export default function AdminDashboard() {
   const [tab, setTab] = useState("Profile Requests");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [adminEmail, setAdminEmail] = useState("");
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
+  const [editMode, setEditMode] = useState(false);
+  const [editForm, setEditForm] = useState<Partial<Profile>>({});
+  const [savingEdit, setSavingEdit] = useState(false);
 
   useEffect(() => {
     const auth = sessionStorage.getItem("admin_auth");
@@ -46,8 +74,8 @@ export default function AdminDashboard() {
 
   const fetchProfiles = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from("profiles").select("id,full_name,gender,religion,city,state,profile_status,is_featured,created_at,email,phone,occupation").order("created_at", { ascending: false });
-    if (!error && data) setProfiles(data);
+    const { data, error } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
+    if (!error && data) setProfiles(data as Profile[]);
     setLoading(false);
   };
 
@@ -73,7 +101,8 @@ export default function AdminDashboard() {
     const { error } = await supabase.from("profiles").update({ profile_status: status }).eq("id", id);
     if (!error) {
       setProfiles(prev => prev.map(p => p.id === id ? { ...p, profile_status: status } : p));
-      toast({ title: `Profile ${status}!` });
+      if (selectedProfile?.id === id) setSelectedProfile(prev => prev ? { ...prev, profile_status: status } : null);
+      toast({ title: `Profile ${status === "active" ? "verified" : status}!` });
     }
   };
 
@@ -93,10 +122,45 @@ export default function AdminDashboard() {
     }
   };
 
+  const openProfile = (p: Profile) => {
+    setSelectedProfile(p);
+    setEditMode(false);
+    setEditForm({});
+  };
+
+  const startEdit = () => {
+    if (!selectedProfile) return;
+    setEditForm({ ...selectedProfile });
+    setEditMode(true);
+  };
+
+  const saveEdit = async () => {
+    if (!selectedProfile) return;
+    setSavingEdit(true);
+    const { id, created_at, ...updateData } = editForm as any;
+    const { error } = await supabase.from("profiles").update(updateData).eq("id", selectedProfile.id);
+    if (!error) {
+      const updated = { ...selectedProfile, ...updateData };
+      setSelectedProfile(updated);
+      setProfiles(prev => prev.map(p => p.id === selectedProfile.id ? updated : p));
+      setEditMode(false);
+      toast({ title: "Profile updated successfully!" });
+    } else {
+      toast({ title: "Error updating profile", description: error.message, variant: "destructive" });
+    }
+    setSavingEdit(false);
+  };
+
+  const setEditField = (field: string, value: any) => setEditForm(prev => ({ ...prev, [field]: value }));
+
   const logout = () => { sessionStorage.removeItem("admin_auth"); navigate("/admin"); };
 
   const pendingProfiles = profiles.filter(p => p.profile_status === "pending");
   const featuredProfiles = profiles.filter(p => p.is_featured);
+  const getAge = (dob: string) => {
+    if (!dob) return "—";
+    return Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  };
 
   const displayProfiles = tab === "Profile Requests" ? pendingProfiles
     : tab === "Featured Profiles" ? featuredProfiles
@@ -111,13 +175,217 @@ export default function AdminDashboard() {
   ];
 
   const StatusBadge = ({ status }: { status: string }) => {
-    const cfg = status === "active" ? { bg: "hsl(145, 65%, 93%)", color: "hsl(145, 65%, 32%)", label: "Active" }
+    const cfg = status === "active" ? { bg: "hsl(145, 65%, 93%)", color: "hsl(145, 65%, 32%)", label: "Verified" }
       : status === "pending" ? { bg: "hsl(38, 90%, 93%)", color: "hsl(38, 90%, 35%)", label: "Pending" }
       : status === "contacted" ? { bg: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)", label: "Contacted" }
       : status === "completed" ? { bg: "hsl(145, 65%, 93%)", color: "hsl(145, 65%, 32%)", label: "Completed" }
+      : status === "approved" ? { bg: "hsl(145, 65%, 93%)", color: "hsl(145, 65%, 32%)", label: "Approved" }
       : { bg: "hsl(0, 65%, 93%)", color: "hsl(0, 65%, 40%)", label: status.charAt(0).toUpperCase() + status.slice(1) };
     return <span className="px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: cfg.bg, color: cfg.color }}>{cfg.label}</span>;
   };
+
+  const EditField = ({ label, field, type = "text" }: { label: string; field: string; type?: string }) => (
+    <div className="mb-3">
+      <label className="block text-xs font-semibold text-gray-500 mb-1">{label}</label>
+      <input
+        type={type}
+        value={(editForm as any)[field] || ""}
+        onChange={e => setEditField(field, e.target.value)}
+        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+      />
+    </div>
+  );
+
+  // Profile Detail View
+  if (selectedProfile) {
+    const p = editMode ? (editForm as Profile) : selectedProfile;
+    return (
+      <div className="min-h-screen" style={{ background: "hsl(210, 20%, 97%)" }}>
+        <header className="bg-white border-b border-gray-100 px-4 sm:px-6 py-4 flex items-center gap-3 sticky top-0 z-10">
+          <button onClick={() => { setSelectedProfile(null); setEditMode(false); }} className="flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-gray-700 transition-colors">
+            <ChevronLeft size={16} /> Back to Dashboard
+          </button>
+          <div className="ml-auto flex items-center gap-2">
+            {!editMode ? (
+              <>
+                <button onClick={startEdit} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                  <Edit3 size={13} /> Edit Profile
+                </button>
+                {selectedProfile.profile_status !== "active" && (
+                  <button onClick={() => updateStatus(selectedProfile.id, "active")} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-colors" style={{ background: "hsl(145, 65%, 42%)" }}>
+                    <UserCheck size={13} /> Verify Profile
+                  </button>
+                )}
+                {selectedProfile.profile_status !== "rejected" && (
+                  <button onClick={() => updateStatus(selectedProfile.id, "rejected")} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-colors" style={{ background: "hsl(0, 65%, 50%)" }}>
+                    <UserX size={13} /> Reject
+                  </button>
+                )}
+              </>
+            ) : (
+              <>
+                <button onClick={() => setEditMode(false)} className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                  Cancel
+                </button>
+                <button onClick={saveEdit} disabled={savingEdit} className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold text-white transition-colors disabled:opacity-60" style={{ background: "hsl(210, 80%, 50%)" }}>
+                  <Save size={13} /> {savingEdit ? "Saving..." : "Save Changes"}
+                </button>
+              </>
+            )}
+          </div>
+        </header>
+
+        <div className="max-w-4xl mx-auto p-4 sm:p-6">
+          {/* Profile Header Card */}
+          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-5 flex flex-col sm:flex-row items-start gap-5">
+            <div className="w-24 h-24 rounded-xl flex-shrink-0 overflow-hidden" style={{ background: "hsl(348, 60%, 96%)" }}>
+              {p.profile_photo_url ? (
+                <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-3xl font-serif font-bold" style={{ color: "hsl(348, 50%, 40%)" }}>{p.full_name?.[0]}</span>
+                </div>
+              )}
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-1">
+                <h2 className="text-xl font-serif font-bold text-gray-800">{p.full_name}</h2>
+                <StatusBadge status={selectedProfile.profile_status} />
+              </div>
+              <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {p.religion}{p.caste ? ` - ${p.caste}` : ""}</p>
+              <p className="text-xs text-gray-400 mt-1">{[p.city, p.state, p.country].filter(Boolean).join(", ")}</p>
+              <p className="text-xs text-gray-400">Registered: {new Date(selectedProfile.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</p>
+            </div>
+          </div>
+
+          {editMode ? (
+            /* Edit Mode */
+            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+              <h3 className="font-serif font-bold text-gray-800 mb-4" style={{ color: "hsl(348, 50%, 35%)" }}>Edit Profile Details</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+                <EditField label="Full Name" field="full_name" />
+                <EditField label="Gender" field="gender" />
+                <EditField label="Date of Birth" field="date_of_birth" type="date" />
+                <EditField label="Email" field="email" />
+                <EditField label="Phone" field="phone" />
+                <EditField label="WhatsApp" field="whatsapp" />
+                <EditField label="Mother Tongue" field="mother_tongue" />
+                <EditField label="Marital Status" field="marital_status" />
+                <EditField label="Religion" field="religion" />
+                <EditField label="Caste" field="caste" />
+                <EditField label="Sub Caste" field="sub_caste" />
+                <EditField label="Gothram" field="gothra" />
+                <EditField label="Country" field="country" />
+                <EditField label="State" field="state" />
+                <EditField label="City" field="city" />
+                <EditField label="Native Place" field="native_place" />
+                <EditField label="Education" field="education" />
+                <EditField label="Occupation" field="occupation" />
+                <EditField label="Company" field="company_name" />
+                <EditField label="Annual Income" field="annual_income" />
+                <EditField label="Family Status" field="family_status" />
+                <EditField label="Family Type" field="family_type" />
+                <EditField label="Father's Name" field="father_name" />
+                <EditField label="Father's Occupation" field="father_occupation" />
+                <EditField label="Mother's Name" field="mother_name" />
+                <EditField label="Mother's Occupation" field="mother_occupation" />
+                <EditField label="Siblings" field="siblings" />
+                <EditField label="Star" field="star" />
+                <EditField label="Raasi" field="raasi" />
+                <EditField label="Dosham" field="dosham" />
+              </div>
+              <div className="mb-3 mt-2">
+                <label className="block text-xs font-semibold text-gray-500 mb-1">About Me</label>
+                <textarea
+                  value={editForm.about_me || ""}
+                  onChange={e => setEditField("about_me", e.target.value)}
+                  rows={3}
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+                />
+              </div>
+            </div>
+          ) : (
+            /* View Mode */
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+                <DetailSection title="📋 Basic Details">
+                  <DetailRow label="Full Name" value={p.full_name} />
+                  <DetailRow label="Profile Created By" value={p.profile_created_by} />
+                  <DetailRow label="Gender" value={p.gender} />
+                  <DetailRow label="Email" value={p.email} />
+                  <DetailRow label="Phone" value={p.phone} />
+                  <DetailRow label="WhatsApp" value={p.whatsapp} />
+                </DetailSection>
+                <DetailSection title="👤 Personal Details">
+                  <DetailRow label="Date of Birth" value={p.date_of_birth} />
+                  <DetailRow label="Age" value={`${getAge(p.date_of_birth)} years`} />
+                  <DetailRow label="Mother Tongue" value={p.mother_tongue} />
+                  <DetailRow label="Height" value={p.height_cm ? `${p.height_cm} cm` : null} />
+                  <DetailRow label="Marital Status" value={p.marital_status} />
+                  <DetailRow label="Religion" value={p.religion} />
+                  <DetailRow label="Caste" value={p.caste} />
+                  <DetailRow label="Sub Caste" value={p.sub_caste} />
+                  <DetailRow label="Country" value={p.country} />
+                  <DetailRow label="State" value={p.state} />
+                  <DetailRow label="City" value={p.city} />
+                  <DetailRow label="Native Place" value={p.native_place} />
+                </DetailSection>
+              </div>
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+                <DetailSection title="🎓 Education & Career">
+                  <DetailRow label="Education" value={p.education} />
+                  <DetailRow label="Education Detail" value={p.education_detail} />
+                  <DetailRow label="Occupation" value={p.occupation} />
+                  <DetailRow label="Company" value={p.company_name} />
+                  <DetailRow label="Annual Income" value={p.annual_income} />
+                </DetailSection>
+                <DetailSection title="👨‍👩‍👧‍👦 Family Details">
+                  <DetailRow label="Family Status" value={p.family_status} />
+                  <DetailRow label="Family Type" value={p.family_type} />
+                  <DetailRow label="Father's Name" value={p.father_name} />
+                  <DetailRow label="Father's Occupation" value={p.father_occupation} />
+                  <DetailRow label="Mother's Name" value={p.mother_name} />
+                  <DetailRow label="Mother's Occupation" value={p.mother_occupation} />
+                  <DetailRow label="Siblings" value={p.siblings} />
+                </DetailSection>
+                <DetailSection title="🔮 Horoscope">
+                  <DetailRow label="Gothram" value={p.gothra} />
+                  <DetailRow label="Raasi" value={p.raasi} />
+                  <DetailRow label="Star" value={p.star} />
+                  <DetailRow label="Dosham" value={p.dosham} />
+                </DetailSection>
+              </div>
+              {/* Photos */}
+              {(p.profile_photo_url || (p.additional_photos && p.additional_photos.length > 0)) && (
+                <div className="lg:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+                  <DetailSection title="📷 Photos">
+                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                      {p.profile_photo_url && (
+                        <div className="relative">
+                          <img src={p.profile_photo_url} alt="Profile" className="w-full aspect-square object-cover rounded-lg" />
+                          <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-bold text-white" style={{ background: "hsl(var(--burgundy))" }}>Primary</span>
+                        </div>
+                      )}
+                      {p.additional_photos?.map((url, i) => (
+                        <img key={i} src={url} alt={`Photo ${i + 1}`} className="w-full aspect-square object-cover rounded-lg" />
+                      ))}
+                    </div>
+                  </DetailSection>
+                </div>
+              )}
+              {p.about_me && (
+                <div className="lg:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+                  <DetailSection title="💬 About Me">
+                    <p className="text-sm text-gray-700 leading-relaxed">{p.about_me}</p>
+                  </DetailSection>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(210, 20%, 97%)" }}>
@@ -144,7 +412,6 @@ export default function AdminDashboard() {
             ))}
           </nav>
 
-          {/* Navigation buttons */}
           <div className="space-y-1 border-t border-white/10 pt-4 mb-2">
             <button onClick={() => navigate("/admin")} className="flex items-center gap-2 text-white/60 hover:text-white text-xs px-3 py-2 w-full transition-colors rounded-lg hover:bg-white/5">
               <ArrowLeft size={14} /> Back to Staff Login
@@ -169,7 +436,6 @@ export default function AdminDashboard() {
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-400 hover:text-gray-600 hidden lg:block">
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          {/* Mobile nav buttons */}
           <div className="flex items-center gap-2 lg:hidden">
             <button onClick={() => navigate("/")} className="text-xs px-2 py-1.5 rounded-lg border border-gray-200 text-gray-500 flex items-center gap-1">
               <Home size={12} /> Home
@@ -192,7 +458,7 @@ export default function AdminDashboard() {
 
         <div className="p-4 sm:p-6">
           {/* Stats */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-8">
             {stats.map((s, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className="bg-white rounded-xl p-4 sm:p-5 border border-gray-100 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
@@ -218,7 +484,6 @@ export default function AdminDashboard() {
 
             <div className="p-4">
               {tab === "Success Stories" ? (
-                /* Success Stories Tab */
                 successStories.length === 0 ? (
                   <div className="text-center py-10 text-gray-400 text-sm">No success stories yet</div>
                 ) : (
@@ -257,7 +522,6 @@ export default function AdminDashboard() {
                   </div>
                 )
               ) : tab === "Consultations" ? (
-                /* Consultations Tab */
                 loading ? (
                   <div className="text-center py-10 text-gray-400 text-sm">Loading...</div>
                 ) : consultations.length === 0 ? (
@@ -300,57 +564,63 @@ export default function AdminDashboard() {
                   </div>
                 )
               ) : (
-                /* Profile Tabs */
+                /* Profile Tabs - Card Layout */
                 loading ? (
                   <div className="text-center py-10 text-gray-400 text-sm">Loading profiles...</div>
                 ) : displayProfiles.length === 0 ? (
-                  <div className="text-center py-10 text-gray-400 text-sm">No profiles found</div>
+                  <div className="text-center py-10 text-gray-400 text-sm">
+                    {tab === "Profile Requests" ? "No pending profile requests" : "No profiles found"}
+                  </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="text-xs text-gray-400 uppercase tracking-wider">
-                          <th className="text-left py-2 px-3 font-semibold">Name</th>
-                          <th className="text-left py-2 px-3 font-semibold">Gender</th>
-                          <th className="text-left py-2 px-3 font-semibold">Location</th>
-                          <th className="text-left py-2 px-3 font-semibold">Contact</th>
-                          <th className="text-left py-2 px-3 font-semibold">Status</th>
-                          <th className="text-left py-2 px-3 font-semibold">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-50">
-                        {displayProfiles.map((p) => (
-                          <tr key={p.id} className="hover:bg-gray-50 transition-colors">
-                            <td className="py-3 px-3">
-                              <div>
-                                <p className="font-semibold text-gray-800 text-sm">{p.full_name}</p>
-                                <p className="text-xs text-gray-400">{p.occupation || p.religion}</p>
-                              </div>
-                            </td>
-                            <td className="py-3 px-3 text-gray-600 text-xs">{p.gender}</td>
-                            <td className="py-3 px-3 text-gray-600 text-xs">{[p.city, p.state].filter(Boolean).join(", ") || "—"}</td>
-                            <td className="py-3 px-3 text-gray-600 text-xs">
-                              <div>{p.email || "—"}</div>
-                              <div>{p.phone || "—"}</div>
-                            </td>
-                            <td className="py-3 px-3"><StatusBadge status={p.profile_status} /></td>
-                            <td className="py-3 px-3">
-                              <div className="flex items-center gap-1.5 flex-wrap">
-                                {p.profile_status !== "active" && (
-                                  <button onClick={() => updateStatus(p.id, "active")} className="text-[10px] px-2 py-1 rounded-md font-semibold text-white" style={{ background: "hsl(145, 65%, 42%)" }}>Approve</button>
-                                )}
-                                {p.profile_status !== "rejected" && (
-                                  <button onClick={() => updateStatus(p.id, "rejected")} className="text-[10px] px-2 py-1 rounded-md font-semibold text-white" style={{ background: "hsl(0, 65%, 50%)" }}>Reject</button>
-                                )}
-                                <button onClick={() => toggleFeatured(p.id, p.is_featured)} className="text-[10px] px-2 py-1 rounded-md font-semibold" style={p.is_featured ? { background: "hsl(280, 65%, 93%)", color: "hsl(280, 65%, 40%)" } : { background: "hsl(38, 90%, 93%)", color: "hsl(38, 90%, 35%)" }}>
-                                  {p.is_featured ? "★ Featured" : "☆ Feature"}
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {displayProfiles.map((p, i) => (
+                      <motion.div
+                        key={p.id}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.04 }}
+                        className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md group"
+                        style={{ borderLeft: "3px solid " + (p.profile_status === "pending" ? "hsl(38, 90%, 55%)" : p.profile_status === "active" ? "hsl(145, 65%, 45%)" : "hsl(0, 65%, 55%)") }}
+                      >
+                        <div className="p-4">
+                          <div className="flex items-start gap-3 mb-3">
+                            <div className="w-12 h-12 rounded-lg flex-shrink-0 overflow-hidden" style={{ background: "hsl(348, 60%, 96%)" }}>
+                              {p.profile_photo_url ? (
+                                <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                  <span className="text-lg font-serif font-bold" style={{ color: "hsl(348, 50%, 40%)" }}>{p.full_name[0]}</span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-gray-800 text-sm truncate">{p.full_name}</h3>
+                              <p className="text-xs text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs</p>
+                              <p className="text-xs text-gray-400 truncate">{[p.city, p.state].filter(Boolean).join(", ") || "—"}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between mb-3">
+                            <StatusBadge status={p.profile_status} />
+                            <span className="text-[10px] text-gray-400">{new Date(p.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</span>
+                          </div>
+
+                          <div className="flex items-center gap-1.5">
+                            <button onClick={() => openProfile(p)} className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-semibold transition-all" style={{ background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>
+                              <Eye size={11} /> View
+                            </button>
+                            {p.profile_status === "pending" && (
+                              <button onClick={() => updateStatus(p.id, "active")} className="flex-1 py-1.5 rounded-lg text-[10px] font-semibold text-white transition-all" style={{ background: "hsl(145, 65%, 42%)" }}>
+                                Verify
+                              </button>
+                            )}
+                            <button onClick={() => toggleFeatured(p.id, p.is_featured)} className="py-1.5 px-2 rounded-lg text-[10px] font-semibold transition-all" style={p.is_featured ? { background: "hsl(280, 65%, 93%)", color: "hsl(280, 65%, 40%)" } : { background: "hsl(38, 90%, 93%)", color: "hsl(38, 90%, 35%)" }}>
+                              {p.is_featured ? "★" : "☆"}
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
                   </div>
                 )
               )}
