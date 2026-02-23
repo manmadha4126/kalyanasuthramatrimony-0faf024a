@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, X, BookHeart } from "lucide-react";
+import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, X, BookHeart, CheckCircle } from "lucide-react";
 import BackButton from "@/components/BackButton";
 
 type Profile = {
   id: string; full_name: string; gender: string; religion: string; caste: string | null;
   city: string | null; state: string | null; occupation: string | null; education: string | null;
   date_of_birth: string; profile_photo_url: string | null; annual_income: string | null; is_featured: boolean;
+  profile_status?: string;
 };
 
-type UserProfile = { full_name: string; email: string | null; gender: string };
+type UserProfile = { full_name: string; email: string | null; gender: string; profile_status?: string };
 
 const NAV = [
   { icon: Home, label: "Home" },
@@ -39,7 +40,7 @@ export default function CustomerDashboard() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { navigate("/login"); return; }
     setUserId(user.id);
-    const { data: pData } = await supabase.from("profiles").select("full_name,email,gender").eq("user_id", user.id).single();
+    const { data: pData } = await supabase.from("profiles").select("full_name,email,gender,profile_status").eq("user_id", user.id).maybeSingle();
     if (pData) setUserProfile(pData);
     fetchMatches(pData?.gender || "Male");
   };
@@ -140,6 +141,32 @@ export default function CustomerDashboard() {
         </header>
 
         <div className="p-4 sm:p-6">
+          {/* Profile Status Banner */}
+          {userProfile?.profile_status && userProfile.profile_status !== "active" && (
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-4 flex items-center gap-3" style={
+              userProfile.profile_status === "pending"
+                ? { background: "hsl(38, 90%, 95%)", border: "1px solid hsl(38, 80%, 85%)" }
+                : { background: "hsl(0, 65%, 96%)", border: "1px solid hsl(0, 55%, 88%)" }
+            }>
+              <div className="w-3 h-3 rounded-full animate-pulse flex-shrink-0" style={{ background: userProfile.profile_status === "pending" ? "hsl(38, 90%, 50%)" : "hsl(0, 65%, 50%)" }} />
+              <div>
+                <p className="text-sm font-semibold" style={{ color: userProfile.profile_status === "pending" ? "hsl(38, 70%, 30%)" : "hsl(0, 55%, 35%)" }}>
+                  {userProfile.profile_status === "pending" ? "Profile Status: Pending Verification" : `Profile Status: ${userProfile.profile_status.charAt(0).toUpperCase() + userProfile.profile_status.slice(1)}`}
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: userProfile.profile_status === "pending" ? "hsl(38, 50%, 40%)" : "hsl(0, 40%, 45%)" }}>
+                  {userProfile.profile_status === "pending" ? "Our team is reviewing your profile. You will be notified once verified." : "Please contact support for more information."}
+                </p>
+              </div>
+            </motion.div>
+          )}
+
+          {userProfile?.profile_status === "active" && (
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-3 flex items-center gap-2" style={{ background: "hsl(145, 55%, 95%)", border: "1px solid hsl(145, 45%, 85%)" }}>
+              <CheckCircle size={16} style={{ color: "hsl(145, 65%, 38%)" }} />
+              <span className="text-xs font-semibold" style={{ color: "hsl(145, 50%, 28%)" }}>Profile Verified ✓</span>
+            </motion.div>
+          )}
+
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
             <h1 className="font-serif text-xl sm:text-2xl font-bold text-gray-800">
               Welcome back, <span style={{ color: "hsl(var(--burgundy))" }}>{userProfile?.full_name?.split(" ")[0] || "Friend"}</span> 👋
