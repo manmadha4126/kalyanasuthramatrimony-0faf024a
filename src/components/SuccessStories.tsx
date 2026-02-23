@@ -266,10 +266,10 @@ const SuccessStories = () => {
             </p>
           </motion.div>
 
-          {/* RIGHT - Floating stacked overlapping cards */}
+          {/* RIGHT - Floating stacked cards like reference image */}
           <div
             className="w-[62%] relative hidden lg:flex items-center justify-center"
-            style={{ height: "clamp(320px, 38vw, 460px)" }}
+            style={{ height: "clamp(360px, 42vw, 520px)" }}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
@@ -277,16 +277,26 @@ const SuccessStories = () => {
               {getVisibleCards().map(({ story, offset }) => {
                 const isCenter = offset === 0;
                 const absOffset = Math.abs(offset);
-                const cardW = isCenter ? 190 : 160;
-                const imgH = isCenter ? 130 : 105;
 
-                // Spread cards with pixel offsets so all 5 are fully visible
-                const xPixel = offset * 175;
-                const yStep = isCenter ? -28 : absOffset === 1 ? -8 : 16;
-                const rotation = offset * 2.5;
-                const zIndex = 10 - absOffset;
-                const opacity = isCenter ? 1 : absOffset === 1 ? 0.88 : 0.7;
-                const scale = isCenter ? 1.1 : absOffset === 1 ? 0.95 : 0.85;
+                // Card sizes - bigger overall
+                const cardW = isCenter ? 220 : absOffset === 1 ? 195 : 175;
+                const imgH = isCenter ? 160 : absOffset === 1 ? 135 : 115;
+
+                // Fan/arc layout matching reference:
+                // positions: [-2, -1, 0, 1, 2]
+                // x spread, y staggered (back row higher, front center lower-center)
+                const positions: Record<number, { x: number; y: number; rot: number }> = {
+                  [-2]: { x: -310, y: -40, rot: -4 },
+                  [-1]: { x: -150, y: -65, rot: -2 },
+                  [0]:  { x: 0,    y: -20, rot: 0 },
+                  [1]:  { x: 150,  y: -65, rot: 2 },
+                  [2]:  { x: 310,  y: -40, rot: 4 },
+                };
+                const pos = positions[offset] || { x: 0, y: 0, rot: 0 };
+
+                const zIndex = isCenter ? 10 : absOffset === 1 ? 8 : 6;
+                const opacity = isCenter ? 1 : absOffset === 1 ? 0.9 : 0.75;
+                const scale = isCenter ? 1.12 : absOffset === 1 ? 0.97 : 0.88;
 
                 return (
                   <motion.div
@@ -297,16 +307,18 @@ const SuccessStories = () => {
                       width: cardW,
                       left: "50%",
                       marginLeft: -(cardW / 2),
+                      top: "50%",
+                      marginTop: -140,
                     }}
-                    initial={{ opacity: 0, x: 200, scale: 0.8, rotate: rotation }}
+                    initial={{ opacity: 0, x: 220, y: 0, scale: 0.8, rotate: pos.rot }}
                     animate={{
                       opacity,
-                      x: xPixel,
+                      x: pos.x,
+                      y: pos.y,
                       scale,
-                      rotate: rotation,
-                      y: yStep,
+                      rotate: pos.rot,
                     }}
-                    exit={{ opacity: 0, x: -200, scale: 0.8 }}
+                    exit={{ opacity: 0, x: -220, scale: 0.8 }}
                     transition={{
                       duration: 0.8,
                       ease: [0.25, 0.1, 0.25, 1],
@@ -317,8 +329,8 @@ const SuccessStories = () => {
                       style={{
                         background: "white",
                         boxShadow: isCenter
-                          ? "0 18px 50px rgba(0,0,0,0.30), 0 0 0 2px rgba(255,255,255,0.45)"
-                          : `0 ${4 + zIndex}px ${12 + zIndex * 2}px rgba(0,0,0,${0.10 + absOffset * 0.02})`,
+                          ? "0 20px 55px rgba(0,0,0,0.30), 0 0 0 2px rgba(255,255,255,0.5)"
+                          : `0 ${6 + zIndex}px ${16 + zIndex * 2}px rgba(0,0,0,${0.12 + absOffset * 0.02})`,
                         border: "2.5px solid rgba(255,255,255,0.45)",
                       }}
                     >
@@ -331,13 +343,13 @@ const SuccessStories = () => {
                           transition={{ duration: 1, ease: "easeInOut" }}
                         />
                       </div>
-                      <div className="px-3 py-2 text-center">
+                      <div className="px-3 py-2.5 text-center">
                         <h4
                           className="font-bold leading-tight"
                           style={{
                             fontFamily: "'DM Serif Display', serif",
                             color: "hsl(var(--primary))",
-                            fontSize: isCenter ? 13 : 11,
+                            fontSize: isCenter ? 14 : 12,
                           }}
                         >
                           {story.bride_name}{" "}
@@ -347,7 +359,7 @@ const SuccessStories = () => {
                         <p style={{
                           fontFamily: "'Lato', sans-serif",
                           color: "hsl(var(--muted-foreground))",
-                          fontSize: isCenter ? 10.5 : 9.5,
+                          fontSize: isCenter ? 11 : 10,
                           marginTop: 2,
                         }}>
                           {story.city}
@@ -355,9 +367,9 @@ const SuccessStories = () => {
                         <p style={{
                           fontFamily: "'Lato', sans-serif",
                           color: "#666",
-                          fontSize: isCenter ? 10 : 9,
-                          marginTop: 3,
-                          lineHeight: 1.4,
+                          fontSize: isCenter ? 10.5 : 9.5,
+                          marginTop: 4,
+                          lineHeight: 1.45,
                           fontStyle: "italic",
                         }}>
                           "{story.story}"
