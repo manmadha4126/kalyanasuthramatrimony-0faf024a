@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, X, BookHeart, CheckCircle } from "lucide-react";
+import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, ChevronDown, X, BookHeart, CheckCircle, Edit, Eye, HelpCircle, Phone, User } from "lucide-react";
 import BackButton from "@/components/BackButton";
 
 type Profile = {
@@ -12,7 +12,10 @@ type Profile = {
   profile_status?: string;
 };
 
-type UserProfile = { full_name: string; email: string | null; gender: string; profile_status?: string };
+type UserProfileFull = {
+  id: string; full_name: string; email: string | null; gender: string; profile_status?: string;
+  profile_photo_url: string | null;
+};
 
 const NAV = [
   { icon: Home, label: "Home" },
@@ -24,7 +27,7 @@ const NAV = [
 export default function CustomerDashboard() {
   const navigate = useNavigate();
   const [matches, setMatches] = useState<Profile[]>([]);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileFull | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeNav, setActiveNav] = useState("Home");
   const [showUpgrade, setShowUpgrade] = useState(false);
@@ -33,15 +36,29 @@ export default function CustomerDashboard() {
   const [storyForm, setStoryForm] = useState({ bride_name: "", groom_name: "", city: "", story: "" });
   const [storyLoading, setStoryLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
+  const [showHeaderDropdown, setShowHeaderDropdown] = useState(false);
+  const settingsRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { checkAuth(); }, []);
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (settingsRef.current && !settingsRef.current.contains(e.target as Node)) setShowSettingsDropdown(false);
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) setShowHeaderDropdown(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   const checkAuth = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { navigate("/login"); return; }
     setUserId(user.id);
-    const { data: pData } = await supabase.from("profiles").select("full_name,email,gender,profile_status").eq("user_id", user.id).maybeSingle();
-    if (pData) setUserProfile(pData);
+    const { data: pData } = await supabase.from("profiles").select("id,full_name,email,gender,profile_status,profile_photo_url").eq("user_id", user.id).maybeSingle();
+    if (pData) setUserProfile(pData as UserProfileFull);
     fetchMatches(pData?.gender || "Male");
   };
 
@@ -60,55 +77,95 @@ export default function CustomerDashboard() {
     if (!userId || !storyForm.bride_name || !storyForm.groom_name || !storyForm.city || !storyForm.story) return;
     setStoryLoading(true);
     const { error } = await supabase.from("success_stories").insert({
-      bride_name: storyForm.bride_name,
-      groom_name: storyForm.groom_name,
-      city: storyForm.city,
-      story: storyForm.story,
-      created_by: userId,
+      bride_name: storyForm.bride_name, groom_name: storyForm.groom_name,
+      city: storyForm.city, story: storyForm.story, created_by: userId,
     });
     setStoryLoading(false);
-    if (!error) {
-      setShowStoryForm(false);
-      setStoryForm({ bride_name: "", groom_name: "", city: "", story: "" });
-    }
+    if (!error) { setShowStoryForm(false); setStoryForm({ bride_name: "", groom_name: "", city: "", story: "" }); }
   };
 
-  // Teal/sage green theme colors
   const themeAccent = "hsl(160, 35%, 38%)";
   const themeDark = "hsl(160, 30%, 25%)";
   const themeLight = "hsl(160, 40%, 94%)";
   const themeMid = "hsl(160, 30%, 50%)";
 
+  const profileId = userProfile?.id?.slice(0, 8).toUpperCase() || "—";
+
+  const settingsItems = [
+    { icon: Edit, label: "Edit Profile", action: () => navigate(`/profile/${userProfile?.id}`) },
+    { icon: Eye, label: "View Profile", action: () => navigate(`/profile/${userProfile?.id}`) },
+    { icon: HelpCircle, label: "Help Us", action: () => {} },
+    { icon: Phone, label: "Contact Us", action: () => window.open("https://wa.me/919553306667", "_blank") },
+    { icon: BookHeart, label: "Add Success Story", action: () => setShowStoryForm(true) },
+    { icon: LogOut, label: "Logout", action: logout },
+  ];
+
+  const headerMenuItems = [
+    { icon: Edit, label: "Edit Profile", action: () => navigate(`/profile/${userProfile?.id}`) },
+    { icon: Eye, label: "View Profile", action: () => navigate(`/profile/${userProfile?.id}`) },
+    { icon: BookHeart, label: "Add Success Story", action: () => setShowStoryForm(true) },
+    { icon: Search, label: "Preferences", action: () => setActiveNav("Preferences") },
+    { icon: LogOut, label: "Logout", action: logout },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(160, 15%, 97%)" }}>
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-56 flex-shrink-0 py-6 px-4" style={{ background: "linear-gradient(180deg, hsl(160, 25%, 93%) 0%, hsl(155, 20%, 95%) 100%)", borderRight: "1px solid hsl(160, 20%, 88%)" }}>
-        <div className="flex items-center gap-2 mb-10 px-2">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: themeAccent }}>
-            <span className="text-white font-serif font-bold text-sm">K</span>
+      <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 py-5 px-4" style={{ background: "linear-gradient(180deg, hsl(160, 25%, 93%) 0%, hsl(155, 20%, 95%) 100%)", borderRight: "1px solid hsl(160, 20%, 88%)" }}>
+        {/* User Profile in Sidebar */}
+        <div className="flex items-center gap-3 mb-6 px-2 py-3 rounded-xl" style={{ background: "hsl(160, 20%, 90%)" }}>
+          <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 border-2" style={{ borderColor: themeAccent }}>
+            {userProfile?.profile_photo_url ? (
+              <img src={userProfile.profile_photo_url} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-white font-bold text-sm" style={{ background: themeAccent }}>
+                {userProfile?.full_name?.[0] || "U"}
+              </div>
+            )}
           </div>
-          <span className="font-serif text-sm font-bold leading-tight" style={{ color: themeDark }}>Kalyanasuthra</span>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold truncate" style={{ color: themeDark }}>{userProfile?.full_name || "User"}</p>
+            <p className="text-[10px] font-medium" style={{ color: themeMid }}>ID: {profileId}</p>
+          </div>
         </div>
+
         <nav className="space-y-1 flex-1">
-          {NAV.map(({ icon: Icon, label }) => (
-            <button key={label} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(160, 35%, 38% / 0.3)` } : { color: themeDark, background: "transparent" }}>
-              <Icon size={16} /> {label}
-            </button>
-          ))}
+          {NAV.map(({ icon: Icon, label }) => {
+            if (label === "Settings") {
+              return (
+                <div key={label} ref={settingsRef} className="relative">
+                  <button onClick={() => setShowSettingsDropdown(p => !p)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={showSettingsDropdown ? { background: themeAccent, color: "white" } : { color: themeDark, background: "transparent" }}>
+                    <Icon size={16} /> {label}
+                    <ChevronDown size={14} className={`ml-auto transition-transform ${showSettingsDropdown ? "rotate-180" : ""}`} />
+                  </button>
+                  <AnimatePresence>
+                    {showSettingsDropdown && (
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden ml-3 mt-1">
+                        {settingsItems.map(item => (
+                          <button key={item.label} onClick={() => { item.action(); setShowSettingsDropdown(false); }} className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg transition-colors hover:bg-white/60" style={{ color: item.label === "Logout" ? "hsl(0, 60%, 50%)" : themeDark }}>
+                            <item.icon size={13} /> {item.label}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            }
+            return (
+              <button key={label} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(160, 35%, 38% / 0.3)` } : { color: themeDark, background: "transparent" }}>
+                <Icon size={16} /> {label}
+              </button>
+            );
+          })}
         </nav>
+
         <button onClick={() => setShowUpgrade(true)} className="mt-4 w-full rounded-xl p-3 text-left transition-all hover:scale-[1.02]" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
           <div className="flex items-center gap-2 mb-1">
             <Star size={13} className="text-yellow-300 fill-yellow-300" />
             <span className="text-white text-[11px] font-bold uppercase tracking-wide">Upgrade</span>
           </div>
           <p className="text-white/80 text-[10px] leading-snug">Assisted Matrimony Services</p>
-          <div className="flex items-center gap-1 mt-2">
-            <span className="text-white text-[10px] font-semibold">Explore Plans</span>
-            <ChevronRight size={12} className="text-white/60" />
-          </div>
-        </button>
-        <button onClick={logout} className="flex items-center gap-2 px-3 py-2 text-xs font-medium mt-3 rounded-lg transition-colors" style={{ color: "hsl(160, 25%, 45%)" }}>
-          <LogOut size={14} /> Sign Out
         </button>
       </aside>
 
@@ -118,11 +175,6 @@ export default function CustomerDashboard() {
           <div className="flex items-center gap-3">
             <div className="lg:hidden">
               <BackButton to="/" label="Home" />
-            </div>
-            <div className="lg:hidden flex items-center gap-2 ml-1">
-              <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: themeAccent }}>
-                <span className="text-white font-serif font-bold text-xs">K</span>
-              </div>
             </div>
             <nav className="hidden lg:flex items-center gap-1 mx-auto">
               {["Home", "Matches", "Preferences"].map(item => (
@@ -136,11 +188,36 @@ export default function CustomerDashboard() {
                 <Bell size={16} className="text-gray-500" />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ background: themeAccent }}></span>
               </button>
-              <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 rounded-full pl-1 pr-3 py-1">
-                <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0" style={{ background: themeAccent }}>
-                  {userProfile?.full_name?.[0] || "U"}
-                </div>
-                <span className="text-xs font-semibold text-gray-700 hidden sm:block">{userProfile?.full_name?.split(" ")[0] || "User"}</span>
+              {/* Header User Badge with Dropdown */}
+              <div ref={headerRef} className="relative">
+                <button onClick={() => setShowHeaderDropdown(p => !p)} className="flex items-center gap-2 bg-gray-50 border border-gray-100 rounded-full pl-1 pr-3 py-1 hover:bg-gray-100 transition-colors">
+                  <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0">
+                    {userProfile?.profile_photo_url ? (
+                      <img src={userProfile.profile_photo_url} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-xs font-bold text-white" style={{ background: themeAccent }}>
+                        {userProfile?.full_name?.[0] || "U"}
+                      </div>
+                    )}
+                  </div>
+                  <span className="text-xs font-semibold text-gray-700 hidden sm:block">{userProfile?.full_name?.split(" ")[0] || "User"}</span>
+                  <ChevronDown size={12} className="text-gray-400" />
+                </button>
+                <AnimatePresence>
+                  {showHeaderDropdown && (
+                    <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+                      <div className="px-3 py-2 border-b border-gray-50 mb-1">
+                        <p className="text-xs font-semibold text-gray-800">{userProfile?.full_name}</p>
+                        <p className="text-[10px] text-gray-400">ID: {profileId}</p>
+                      </div>
+                      {headerMenuItems.map(item => (
+                        <button key={item.label} onClick={() => { item.action(); setShowHeaderDropdown(false); }} className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium transition-colors hover:bg-gray-50" style={{ color: item.label === "Logout" ? "hsl(0, 60%, 50%)" : "#444" }}>
+                          <item.icon size={13} /> {item.label}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>
@@ -174,12 +251,13 @@ export default function CustomerDashboard() {
           )}
 
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-            <h1 className="font-serif text-xl sm:text-2xl font-bold text-gray-800">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
               Welcome back, <span style={{ color: themeDark }}>{userProfile?.full_name?.split(" ")[0] || "Friend"}</span> 👋
             </h1>
             <p className="text-sm text-gray-500 mt-1">Here are your recommended matches</p>
           </motion.div>
 
+          {/* Premium Service */}
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} onClick={() => setShowUpgrade(true)} className="mb-6 rounded-2xl p-4 sm:p-5 cursor-pointer hover:scale-[1.01] transition-transform" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
             <div className="flex items-center justify-between">
               <div>
@@ -187,81 +265,100 @@ export default function CustomerDashboard() {
                   <Star size={16} className="text-yellow-300 fill-yellow-300" />
                   <span className="text-yellow-200 text-xs font-bold uppercase tracking-wider">Premium Service</span>
                 </div>
-                <h3 className="text-white font-serif font-bold text-base sm:text-lg">Upgrade Assisted Matrimony Services</h3>
+                <h3 className="text-white font-bold text-base sm:text-lg">Upgrade Assisted Matrimony Services</h3>
                 <p className="text-white/70 text-xs mt-1">Get a dedicated Relationship Manager, daily feedback & faster matches</p>
               </div>
               <ChevronRight size={24} className="text-white/60 hidden sm:block" />
             </div>
           </motion.div>
 
+          {/* Matches Section */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                  <Heart size={18} style={{ color: themeAccent }} className="fill-current" />
+                  Your Matches
+                </h2>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  {userProfile?.gender === "Male" ? "Showing female profiles for you" : "Showing male profiles for you"}
+                </p>
+              </div>
+              <button onClick={() => setActiveNav("Matches")} className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors" style={{ color: themeAccent, background: themeLight }}>
+                View All
+              </button>
+            </div>
+
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {[...Array(8)].map((_, i) => <div key={i} className="h-72 bg-gray-100 rounded-2xl animate-pulse" />)}
+              </div>
+            ) : matches.length === 0 ? (
+              <div className="text-center py-16 text-gray-400">
+                <Users size={40} className="mx-auto mb-3 opacity-30" />
+                <p className="font-medium">No matches found yet</p>
+                <p className="text-sm mt-1">Our team is curating profiles for you</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {matches.map((profile, i) => (
+                  <motion.div key={profile.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1 group">
+                    <div className="relative h-48 bg-gray-100">
+                      {profile.profile_photo_url ? (
+                        <img src={profile.profile_photo_url} alt={profile.full_name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center" style={{ background: themeLight }}>
+                          <span className="text-4xl font-bold" style={{ color: themeAccent }}>{profile.full_name[0]}</span>
+                        </div>
+                      )}
+                      {profile.is_featured && (
+                        <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: "hsl(42, 42%, 57%)", color: "white" }}>
+                          <Star size={9} className="fill-white" /> Featured
+                        </div>
+                      )}
+                      <button onClick={() => toggleShortlist(profile.id)} className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all" style={{ background: "hsl(0, 0%, 100% / 0.9)" }}>
+                        <Heart size={15} style={{ color: shortlisted.includes(profile.id) ? themeAccent : "#ccc" }} className={shortlisted.includes(profile.id) ? "fill-current" : ""} />
+                      </button>
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-bold text-gray-800 text-sm">{profile.full_name}</h3>
+                      <p className="text-xs text-gray-500 mt-0.5">{getAge(profile.date_of_birth)} yrs • {profile.religion}{profile.caste ? ` • ${profile.caste}` : ""}</p>
+                      <div className="mt-2 space-y-0.5">
+                        {profile.occupation && <p className="text-xs text-gray-600">💼 {profile.occupation}</p>}
+                        {(profile.city || profile.state) && <p className="text-xs text-gray-500">📍 {[profile.city, profile.state].filter(Boolean).join(", ")}</p>}
+                        {profile.annual_income && <p className="text-xs text-gray-500">💰 {profile.annual_income}</p>}
+                      </div>
+                      <button onClick={() => navigate(`/profile/${profile.id}`)} className="mt-3 w-full py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: themeLight, color: themeDark }}>
+                        View Profile
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+
           {/* Submit Success Story Button */}
           <motion.button
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
+            transition={{ delay: 0.2 }}
             onClick={() => setShowStoryForm(true)}
             className="mb-6 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-[1.02]"
             style={{ background: "hsl(170, 45%, 92%)", color: "hsl(170, 50%, 30%)", border: "1px solid hsl(170, 40%, 80%)" }}
           >
             <BookHeart size={16} /> Share Your Success Story
           </motion.button>
-
-          {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {[...Array(8)].map((_, i) => <div key={i} className="h-72 bg-gray-100 rounded-2xl animate-pulse" />)}
-            </div>
-          ) : matches.length === 0 ? (
-            <div className="text-center py-16 text-gray-400">
-              <Users size={40} className="mx-auto mb-3 opacity-30" />
-              <p className="font-medium">No matches found yet</p>
-              <p className="text-sm mt-1">Our team is curating profiles for you</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {matches.map((profile, i) => (
-                <motion.div key={profile.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1 group">
-                  <div className="relative h-48 bg-gray-100">
-                    {profile.profile_photo_url ? (
-                      <img src={profile.profile_photo_url} alt={profile.full_name} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center" style={{ background: themeLight }}>
-                        <span className="text-4xl font-serif font-bold" style={{ color: themeAccent }}>{profile.full_name[0]}</span>
-                      </div>
-                    )}
-                    {profile.is_featured && (
-                      <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: "hsl(42, 42%, 57%)", color: "white" }}>
-                        <Star size={9} className="fill-white" /> Featured
-                      </div>
-                    )}
-                    <button onClick={() => toggleShortlist(profile.id)} className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all" style={{ background: "hsl(0, 0%, 100% / 0.9)" }}>
-                      <Heart size={15} style={{ color: shortlisted.includes(profile.id) ? themeAccent : "#ccc" }} className={shortlisted.includes(profile.id) ? "fill-current" : ""} />
-                    </button>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-serif font-bold text-gray-800 text-sm">{profile.full_name}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">{getAge(profile.date_of_birth)} yrs • {profile.religion}{profile.caste ? ` • ${profile.caste}` : ""}</p>
-                    <div className="mt-2 space-y-0.5">
-                      {profile.occupation && <p className="text-xs text-gray-600">💼 {profile.occupation}</p>}
-                      {(profile.city || profile.state) && <p className="text-xs text-gray-500">📍 {[profile.city, profile.state].filter(Boolean).join(", ")}</p>}
-                      {profile.annual_income && <p className="text-xs text-gray-500">💰 {profile.annual_income}</p>}
-                    </div>
-                    <button onClick={() => navigate(`/profile/${profile.id}`)} className="mt-3 w-full py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: themeLight, color: themeDark }}>
-                      View Profile
-                    </button>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
 
+      {/* Upgrade Modal */}
       {showUpgrade && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsl(0, 0%, 0% / 0.5)" }}>
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl">
               <div>
-                <h2 className="font-serif font-bold text-gray-800">Assisted Matrimony Services</h2>
+                <h2 className="font-bold text-gray-800">Assisted Matrimony Services</h2>
                 <p className="text-xs text-gray-400">Choose the plan that suits you best</p>
               </div>
               <button onClick={() => setShowUpgrade(false)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
@@ -276,7 +373,7 @@ export default function CustomerDashboard() {
               ].map((pkg, i) => (
                 <div key={i} className="rounded-xl p-5 border-2 transition-all" style={pkg.highlight ? { borderColor: themeAccent, background: themeLight } : { borderColor: "hsl(var(--border))", background: "white" }}>
                   {pkg.highlight && <div className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: themeAccent }}>★ Most Popular</div>}
-                  <h3 className="font-serif font-bold text-gray-800 mb-3">{pkg.title}</h3>
+                  <h3 className="font-bold text-gray-800 mb-3">{pkg.title}</h3>
                   <div className="space-y-1 mb-4">
                     {pkg.plans.map((p, j) => (
                       <div key={j} className="flex items-baseline gap-1">
@@ -303,12 +400,12 @@ export default function CustomerDashboard() {
         </div>
       )}
 
-      {/* Success Story Submission Modal */}
+      {/* Success Story Modal */}
       {showStoryForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsl(0, 0%, 0% / 0.5)" }}>
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-2xl max-w-md w-full overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="font-serif font-bold text-gray-800">Share Your Success Story</h2>
+              <h2 className="font-bold text-gray-800">Share Your Success Story</h2>
               <button onClick={() => setShowStoryForm(false)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><X size={16} className="text-gray-500" /></button>
             </div>
             <div className="p-6 space-y-4">

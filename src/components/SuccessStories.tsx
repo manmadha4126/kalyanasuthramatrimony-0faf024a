@@ -35,15 +35,13 @@ const fallbackStories: Story[] = [
   { id: "10", bride_name: "Rani", groom_name: "Deepak", city: "Warangal", story: "Blessed to have found my life partner here.", image_url: wedding10 },
 ];
 
-// 6-card circular layout positions (elliptical arc)
-// Slot 0=far-left, 1=upper-left, 2=top-center, 3=upper-right, 4=far-right, 5=bottom-center(hero)
 const cardLayout = [
-  { x: -300, y: 20,   rot: -8, z: 4, scale: 0.78, opacity: 0.65 },   // far-left
-  { x: -180, y: -80,  rot: -4, z: 5, scale: 0.85, opacity: 0.75 },   // upper-left
-  { x: -10,  y: -110, rot: 0,  z: 6, scale: 0.90, opacity: 0.85 },   // top-center
-  { x: 170,  y: -80,  rot: 4,  z: 5, scale: 0.85, opacity: 0.75 },   // upper-right
-  { x: 290,  y: 20,   rot: 8,  z: 4, scale: 0.78, opacity: 0.65 },   // far-right
-  { x: 0,    y: 60,   rot: 0,  z: 10, scale: 1.08, opacity: 1 },     // bottom-center (HERO/zoomed)
+  { x: -300, y: 20, rot: -8, z: 4, scale: 0.78, opacity: 0.65 },
+  { x: -180, y: -80, rot: -4, z: 5, scale: 0.85, opacity: 0.75 },
+  { x: -10, y: -110, rot: 0, z: 6, scale: 0.90, opacity: 0.85 },
+  { x: 170, y: -80, rot: 4, z: 5, scale: 0.85, opacity: 0.75 },
+  { x: 290, y: 20, rot: 8, z: 4, scale: 0.78, opacity: 0.65 },
+  { x: 0, y: 60, rot: 0, z: 10, scale: 1.08, opacity: 1 },
 ];
 
 const SuccessStories = () => {
@@ -58,24 +56,17 @@ const SuccessStories = () => {
         .select("id,bride_name,groom_name,city,story,image_url")
         .eq("status", "approved")
         .order("created_at", { ascending: false });
-      if (data && data.length > 0) {
-        // Merge approved DB stories with fallbacks (DB stories take priority)
-        setStories(data as Story[]);
-      }
+      if (data && data.length > 0) setStories(data as Story[]);
     };
     fetchStories();
   }, []);
 
-  // Rotate all cards every 2 seconds
   useEffect(() => {
     if (isPaused) return;
-    const timer = setInterval(() => {
-      setRotationOffset((prev) => prev + 1);
-    }, 2000);
+    const timer = setInterval(() => setRotationOffset((prev) => prev + 1), 2000);
     return () => clearInterval(timer);
   }, [isPaused, stories.length]);
 
-  // Get 6 visible cards - all rotate circularly
   const getVisibleCards = useCallback(() => {
     const cards: { story: Story; slot: number }[] = [];
     for (let i = 0; i < 6; i++) {
@@ -86,49 +77,25 @@ const SuccessStories = () => {
   }, [rotationOffset, stories]);
 
   return (
-    <section
-      id="stories"
-      className="relative w-full overflow-hidden"
-      style={{ height: "clamp(400px, 42vw, 520px)" }}
-    >
-      <link
-        href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap"
-        rel="stylesheet"
-      />
+    <section id="stories" className="relative w-full overflow-hidden" style={{ height: "clamp(400px, 42vw, 520px)" }}>
+      <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
 
-      {/* ===== BACKGROUND LAYERS ===== */}
+      {/* Background */}
       <div className="absolute inset-0" style={{ background: "#5C5F78" }} />
-      <div
-        className="absolute inset-0"
-        style={{
-          background: "linear-gradient(145deg, rgba(76,90,120,0.7) 0%, rgba(60,80,110,0.5) 50%, rgba(55,85,115,0.3) 100%)",
-          clipPath: "polygon(60% 0%, 75% 0%, 25% 100%, 10% 100%)",
-        }}
-      />
-      <div
-        className="absolute inset-0"
-        style={{
-          background: "linear-gradient(155deg, #3A9E9A 0%, #3FA7A3 50%, #48ACA8 100%)",
-          clipPath: "polygon(75% 0%, 100% 0%, 100% 100%, 25% 100%)",
-        }}
-      />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(145deg, rgba(76,90,120,0.7) 0%, rgba(60,80,110,0.5) 50%, rgba(55,85,115,0.3) 100%)", clipPath: "polygon(60% 0%, 75% 0%, 25% 100%, 10% 100%)" }} />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(155deg, #3A9E9A 0%, #3FA7A3 50%, #48ACA8 100%)", clipPath: "polygon(75% 0%, 100% 0%, 100% 100%, 25% 100%)" }} />
 
-      {/* ===== DIAGONAL CROSS LINES ===== */}
+      {/* Diagonal Lines */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
         <line x1="58%" y1="0%" x2="8%" y2="100%" stroke="rgba(180,185,200,0.15)" strokeWidth="1.5" />
         <line x1="62%" y1="0%" x2="12%" y2="100%" stroke="rgba(180,185,200,0.10)" strokeWidth="1" />
-        <line x1="55%" y1="0%" x2="5%" y2="100%" stroke="rgba(160,165,180,0.08)" strokeWidth="1" />
         <line x1="73%" y1="0%" x2="23%" y2="100%" stroke="rgba(100,140,200,0.12)" strokeWidth="1.2" />
         <line x1="76%" y1="0%" x2="26%" y2="100%" stroke="rgba(100,140,200,0.07)" strokeWidth="0.8" />
-        <line x1="70%" y1="0%" x2="20%" y2="100%" stroke="rgba(80,120,180,0.06)" strokeWidth="0.8" />
-        <line x1="15%" y1="0%" x2="85%" y2="100%" stroke="rgba(180,185,200,0.05)" strokeWidth="0.6" />
-        <line x1="25%" y1="0%" x2="92%" y2="100%" stroke="rgba(100,140,200,0.04)" strokeWidth="0.6" />
-        <line x1="5%" y1="0%" x2="70%" y2="100%" stroke="rgba(180,185,200,0.04)" strokeWidth="0.5" />
       </svg>
 
-      {/* ===== DECORATIVE ELEMENTS ===== */}
+      {/* Decorative Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Hearts - scattered across both sides */}
+        {/* Hearts */}
         {[
           { t: "6%", l: "5%", s: 18, o: 0.22, c: "#F5C0D0" },
           { t: "14%", l: "18%", s: 14, o: 0.18, c: "white" },
@@ -138,268 +105,186 @@ const SuccessStories = () => {
           { t: "82%", l: "6%", s: 8, o: 0.09, c: "white" },
           { t: "10%", l: "42%", s: 10, o: 0.10, c: "#F5C0D0" },
           { t: "88%", l: "30%", s: 7, o: 0.08, c: "white" },
-          { t: "5%", l: "62%", s: 11, o: 0.14, c: "#FFB6C1" },
-          { t: "20%", l: "78%", s: 9, o: 0.12, c: "white" },
-          { t: "45%", l: "88%", s: 13, o: 0.16, c: "#F5C0D0" },
-          { t: "65%", l: "92%", s: 8, o: 0.10, c: "white" },
-          { t: "78%", l: "82%", s: 10, o: 0.11, c: "#FFB6C1" },
-          { t: "92%", l: "70%", s: 7, o: 0.08, c: "#F5C0D0" },
-          { t: "35%", l: "25%", s: 8, o: 0.08, c: "white" },
-          { t: "55%", l: "95%", s: 6, o: 0.07, c: "#F5C0D0" },
         ].map((h, i) => (
           <svg key={`h${i}`} className="absolute" style={{ top: h.t, left: h.l }} width={h.s} height={h.s} viewBox="0 0 24 24" fill={h.c} opacity={h.o}>
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
           </svg>
         ))}
 
-        {/* 4-pointed sparkles/stars */}
+        {/* ===== RIGHT SIDE - Stars and Love Symbols ===== */}
+        {/* Large hearts on right */}
+        {[
+          { t: "5%", l: "78%", s: 22, o: 0.28, c: "#FFB6C1" },
+          { t: "15%", l: "88%", s: 18, o: 0.25, c: "#F5C0D0" },
+          { t: "30%", l: "82%", s: 15, o: 0.22, c: "white" },
+          { t: "45%", l: "90%", s: 20, o: 0.20, c: "#FFB6C1" },
+          { t: "58%", l: "76%", s: 12, o: 0.18, c: "#F5C0D0" },
+          { t: "70%", l: "92%", s: 16, o: 0.22, c: "white" },
+          { t: "80%", l: "85%", s: 14, o: 0.20, c: "#FFB6C1" },
+          { t: "90%", l: "78%", s: 10, o: 0.15, c: "#F5C0D0" },
+          { t: "38%", l: "95%", s: 11, o: 0.16, c: "white" },
+          { t: "62%", l: "88%", s: 13, o: 0.18, c: "#FFB6C1" },
+        ].map((h, i) => (
+          <svg key={`rh${i}`} className="absolute" style={{ top: h.t, left: h.l }} width={h.s} height={h.s} viewBox="0 0 24 24" fill={h.c} opacity={h.o}>
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+        ))}
+
+        {/* Stars on right side */}
+        {[
+          { t: "3%", l: "75%", s: 18, o: 0.35 },
+          { t: "10%", l: "92%", s: 14, o: 0.30 },
+          { t: "22%", l: "80%", s: 12, o: 0.28 },
+          { t: "35%", l: "93%", s: 16, o: 0.32 },
+          { t: "48%", l: "78%", s: 10, o: 0.22 },
+          { t: "55%", l: "96%", s: 13, o: 0.25 },
+          { t: "68%", l: "82%", s: 11, o: 0.20 },
+          { t: "75%", l: "95%", s: 15, o: 0.28 },
+          { t: "85%", l: "80%", s: 9, o: 0.18 },
+          { t: "92%", l: "90%", s: 12, o: 0.22 },
+          { t: "42%", l: "86%", s: 8, o: 0.16 },
+          { t: "18%", l: "85%", s: 10, o: 0.20 },
+        ].map((st, i) => (
+          <svg key={`rs${i}`} className="absolute" style={{ top: st.t, left: st.l }} width={st.s} height={st.s} viewBox="0 0 24 24" fill="white" opacity={st.o}>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+        ))}
+
+        {/* Sparkles on right */}
+        {[
+          { t: "8%", l: "82%", s: 14, o: 0.38 },
+          { t: "25%", l: "90%", s: 10, o: 0.30 },
+          { t: "40%", l: "80%", s: 12, o: 0.25 },
+          { t: "52%", l: "94%", s: 9, o: 0.22 },
+          { t: "65%", l: "86%", s: 11, o: 0.20 },
+          { t: "78%", l: "92%", s: 8, o: 0.18 },
+          { t: "88%", l: "83%", s: 10, o: 0.15 },
+        ].map((d, i) => (
+          <svg key={`rsp${i}`} className="absolute" style={{ top: d.t, left: d.l }} width={d.s} height={d.s} viewBox="0 0 20 20" fill="white" opacity={d.o}>
+            <path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" />
+          </svg>
+        ))}
+
+        {/* Glowing dots on right */}
+        {[
+          { t: "12%", l: "79%", s: 4, o: 0.45 },
+          { t: "20%", l: "94%", s: 3.5, o: 0.40 },
+          { t: "33%", l: "84%", s: 3, o: 0.35 },
+          { t: "47%", l: "91%", s: 4, o: 0.38 },
+          { t: "60%", l: "80%", s: 3, o: 0.30 },
+          { t: "72%", l: "96%", s: 3.5, o: 0.32 },
+          { t: "83%", l: "88%", s: 3, o: 0.25 },
+          { t: "95%", l: "82%", s: 2.5, o: 0.20 },
+        ].map((dot, i) => (
+          <div key={`rd${i}`} className="absolute rounded-full bg-white" style={{ top: dot.t, left: dot.l, width: dot.s, height: dot.s, opacity: dot.o }} />
+        ))}
+
+        {/* Existing left-side sparkles */}
         {[
           { t: "4%", l: "15%", s: 16, o: 0.40 },
           { t: "8%", l: "35%", s: 10, o: 0.30 },
-          { t: "3%", l: "55%", s: 12, o: 0.35 },
-          { t: "15%", l: "70%", s: 8, o: 0.25 },
           { t: "22%", l: "10%", s: 7, o: 0.20 },
           { t: "40%", l: "2%", s: 9, o: 0.18 },
           { t: "55%", l: "15%", s: 6, o: 0.14 },
           { t: "70%", l: "7%", s: 8, o: 0.12 },
-          { t: "85%", l: "20%", s: 7, o: 0.10 },
-          { t: "30%", l: "88%", s: 10, o: 0.20 },
-          { t: "60%", l: "95%", s: 7, o: 0.12 },
-          { t: "75%", l: "90%", s: 9, o: 0.14 },
-          { t: "90%", l: "55%", s: 8, o: 0.10 },
-          { t: "12%", l: "48%", s: 6, o: 0.12 },
-          { t: "95%", l: "40%", s: 5, o: 0.08 },
         ].map((d, i) => (
           <svg key={`s${i}`} className="absolute" style={{ top: d.t, left: d.l }} width={d.s} height={d.s} viewBox="0 0 20 20" fill="white" opacity={d.o}>
             <path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" />
           </svg>
         ))}
 
-        {/* 5-pointed stars */}
+        {/* Left stars */}
         {[
           { t: "10%", l: "25%", s: 14, o: 0.18 },
           { t: "30%", l: "5%", s: 11, o: 0.14 },
           { t: "60%", l: "20%", s: 9, o: 0.10 },
-          { t: "8%", l: "80%", s: 12, o: 0.16 },
-          { t: "50%", l: "85%", s: 10, o: 0.12 },
-          { t: "80%", l: "75%", s: 8, o: 0.09 },
-          { t: "42%", l: "30%", s: 7, o: 0.08 },
-          { t: "88%", l: "48%", s: 9, o: 0.10 },
         ].map((st, i) => (
           <svg key={`st${i}`} className="absolute" style={{ top: st.t, left: st.l }} width={st.s} height={st.s} viewBox="0 0 24 24" fill="white" opacity={st.o}>
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
           </svg>
         ))}
 
-        {/* Ring/circle accents */}
+        {/* Ring accents */}
         {[
           { t: "18%", l: "3%", s: "3.5%", o: 0.12 },
           { t: "48%", l: "1%", s: "2.5%", o: 0.08 },
-          { t: "72%", l: "92%", s: "2.8%", o: 0.08 },
-          { t: "6%", l: "22%", s: "2%", o: 0.10 },
-          { t: "85%", l: "15%", s: "2.2%", o: 0.07 },
-          { t: "15%", l: "75%", s: "1.8%", o: 0.09 },
-          { t: "38%", l: "96%", s: "2.5%", o: 0.06 },
+          { t: "72%", l: "92%", s: "2.8%", o: 0.10 },
+          { t: "15%", l: "75%", s: "2.2%", o: 0.12 },
+          { t: "38%", l: "96%", s: "2.5%", o: 0.08 },
+          { t: "85%", l: "90%", s: "2%", o: 0.10 },
         ].map((c, i) => (
           <div key={`c${i}`} className="absolute rounded-full" style={{ top: c.t, left: c.l, width: c.s, aspectRatio: "1", border: `1.5px solid rgba(255,255,255,${c.o})` }} />
-        ))}
-
-        {/* Diamond shapes */}
-        {[
-          { t: "25%", l: "38%", s: 10, o: 0.08 },
-          { t: "62%", l: "5%", s: 8, o: 0.06 },
-          { t: "45%", l: "92%", s: 9, o: 0.07 },
-          { t: "90%", l: "62%", s: 7, o: 0.06 },
-        ].map((dm, i) => (
-          <svg key={`dm${i}`} className="absolute" style={{ top: dm.t, left: dm.l }} width={dm.s} height={dm.s} viewBox="0 0 20 20" fill="white" opacity={dm.o}>
-            <path d="M10 0 L20 10 L10 20 L0 10 Z" />
-          </svg>
         ))}
 
         {/* Dot stars */}
         {[
           { t: "7%", l: "16%", s: 3.5, o: 0.40 },
           { t: "4%", l: "30%", s: 3, o: 0.35 },
-          { t: "16%", l: "34%", s: 2.5, o: 0.28 },
           { t: "38%", l: "10%", s: 3, o: 0.22 },
-          { t: "52%", l: "22%", s: 2.5, o: 0.20 },
           { t: "78%", l: "5%", s: 2.5, o: 0.16 },
-          { t: "25%", l: "50%", s: 2, o: 0.14 },
-          { t: "65%", l: "95%", s: 3, o: 0.18 },
-          { t: "85%", l: "80%", s: 2.5, o: 0.12 },
-          { t: "95%", l: "45%", s: 2.5, o: 0.14 },
-          { t: "33%", l: "72%", s: 2, o: 0.10 },
-          { t: "58%", l: "48%", s: 2, o: 0.08 },
         ].map((dot, i) => (
-          <div
-            key={`dot${i}`}
-            className="absolute rounded-full bg-white"
-            style={{ top: dot.t, left: dot.l, width: dot.s, height: dot.s, opacity: dot.o }}
-          />
+          <div key={`dot${i}`} className="absolute rounded-full bg-white" style={{ top: dot.t, left: dot.l, width: dot.s, height: dot.s, opacity: dot.o }} />
         ))}
       </div>
 
-      {/* ===== MAIN CONTENT ===== */}
+      {/* Main Content */}
       <div className="absolute inset-0 z-10 flex items-center">
         <div className="w-full flex items-center" style={{ padding: "0 4%" }}>
-
           {/* LEFT - Heading */}
-          <motion.div
-            className="w-[35%] flex-shrink-0 pr-[2%]"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
+          <motion.div className="w-[35%] flex-shrink-0 pr-[2%]" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div className="relative mb-1">
               <svg width="16" height="16" viewBox="0 0 20 20" fill="white" opacity="0.35" className="inline-block mr-1 -mt-2">
                 <path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" />
               </svg>
             </div>
-
             <div className="relative inline-block">
               <svg className="absolute -top-4 -left-2" width="12" height="12" viewBox="0 0 24 24" fill="white" opacity="0.30">
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
               </svg>
-
-              <h2
-                className="text-white"
-                style={{
-                  fontFamily: "'Great Vibes', cursive",
-                  fontWeight: 400,
-                  fontSize: "clamp(2.6rem, 5vw, 4.5rem)",
-                  lineHeight: 1.1,
-                  letterSpacing: "0.01em",
-                  textShadow: "0 2px 12px rgba(0,0,0,0.15)",
-                }}
-              >
+              <h2 className="text-white" style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400, fontSize: "clamp(2.6rem, 5vw, 4.5rem)", lineHeight: 1.1, letterSpacing: "0.01em", textShadow: "0 2px 12px rgba(0,0,0,0.15)" }}>
                 Success Stories
               </h2>
-
               <svg className="absolute -top-3 -right-8" width="14" height="14" viewBox="0 0 20 20" fill="white" opacity="0.35">
                 <path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" />
               </svg>
-              <svg className="absolute top-0 -right-4" width="8" height="8" viewBox="0 0 20 20" fill="white" opacity="0.22">
-                <path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" />
-              </svg>
             </div>
-
-            {/* Flourish underline */}
             <svg viewBox="0 0 320 30" style={{ width: "min(75%, 340px)" }} fill="none" className="mt-1 mb-5">
               <path d="M10 15 Q80 3, 160 15 Q240 27, 310 15" stroke="white" strokeWidth="1.2" strokeLinecap="round" opacity="0.28" />
               <path d="M50 15 Q105 24, 160 15 Q215 6, 270 15" stroke="white" strokeWidth="0.8" strokeLinecap="round" opacity="0.18" />
               <circle cx="160" cy="15" r="2.8" fill="white" opacity="0.28" />
               <circle cx="120" cy="13" r="1.3" fill="white" opacity="0.15" />
               <circle cx="200" cy="17" r="1.3" fill="white" opacity="0.15" />
-              <path d="M6 15 L8 13 L10 15 L8 17 Z" fill="white" opacity="0.22" />
-              <path d="M310 15 L312 13 L314 15 L312 17 Z" fill="white" opacity="0.22" />
             </svg>
-
-            <p
-              style={{
-                fontFamily: "'Lato', sans-serif",
-                color: "rgba(255,255,255,0.70)",
-                fontSize: "clamp(0.82rem, 1.1vw, 1.05rem)",
-                lineHeight: 1.7,
-                maxWidth: "380px",
-              }}
-            >
-              Celebrating the beautiful unions made possible
-              <br />
-              through Kalyanasuthra Matrimony.
+            <p style={{ fontFamily: "'Lato', sans-serif", color: "rgba(255,255,255,0.70)", fontSize: "clamp(0.82rem, 1.1vw, 1.05rem)", lineHeight: 1.7, maxWidth: "380px" }}>
+              Celebrating the beautiful unions made possible<br />through Kalyanasuthra Matrimony.
             </p>
           </motion.div>
 
-          {/* RIGHT - 6 cards in scattered 2-row layout */}
-          <div
-            className="w-[65%] relative hidden lg:flex items-center justify-center"
-            style={{ height: "clamp(320px, 38vw, 440px)" }}
-            onClick={() => setIsPaused((p) => !p)}
-          >
+          {/* RIGHT - Cards */}
+          <div className="w-[65%] relative hidden lg:flex items-center justify-center" style={{ height: "clamp(320px, 38vw, 440px)" }} onClick={() => setIsPaused((p) => !p)}>
             <AnimatePresence mode="popLayout">
               {getVisibleCards().map(({ story, slot }) => {
                 const layout = cardLayout[slot];
                 const isHero = slot === 5;
                 const cardW = isHero ? 200 : 160;
                 const imgH = isHero ? 130 : 100;
-
                 return (
-                  <motion.div
-                    key={`${story.id}-${slot}`}
-                    className="absolute"
-                    style={{
-                      zIndex: layout.z,
-                      width: cardW,
-                      left: "50%",
-                      marginLeft: -(cardW / 2),
-                      top: "50%",
-                      marginTop: -100,
-                    }}
+                  <motion.div key={`${story.id}-${slot}`} className="absolute" style={{ zIndex: layout.z, width: cardW, left: "50%", marginLeft: -(cardW / 2), top: "50%", marginTop: -100 }}
                     initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{
-                      opacity: layout.opacity,
-                      x: layout.x,
-                      y: layout.y,
-                      scale: layout.scale,
-                      rotate: layout.rot,
-                    }}
+                    animate={{ opacity: layout.opacity, x: layout.x, y: layout.y, scale: layout.scale, rotate: layout.rot }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{
-                      duration: 0.7,
-                      ease: [0.25, 0.1, 0.25, 1],
-                    }}
-                  >
-                    <div
-                      className="rounded-xl overflow-hidden"
-                      style={{
-                        background: "white",
-                        boxShadow: isHero
-                          ? "0 22px 60px rgba(0,0,0,0.32), 0 0 0 2px rgba(255,255,255,0.5)"
-                          : "0 8px 28px rgba(0,0,0,0.15)",
-                        border: "2.5px solid rgba(255,255,255,0.45)",
-                      }}
-                    >
+                    transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}>
+                    <div className="rounded-xl overflow-hidden" style={{ background: "white", boxShadow: isHero ? "0 22px 60px rgba(0,0,0,0.32), 0 0 0 2px rgba(255,255,255,0.5)" : "0 8px 28px rgba(0,0,0,0.15)", border: "2.5px solid rgba(255,255,255,0.45)" }}>
                       <div style={{ height: imgH }} className="overflow-hidden">
-                        <motion.img
-                          src={story.image_url || wedding1}
-                          alt={`${story.bride_name} & ${story.groom_name}`}
-                          className="w-full h-full object-cover"
-                          animate={{ scale: isHero ? 1.08 : 1 }}
-                          transition={{ duration: 1, ease: "easeInOut" }}
-                        />
+                        <motion.img src={story.image_url || wedding1} alt={`${story.bride_name} & ${story.groom_name}`} className="w-full h-full object-cover" animate={{ scale: isHero ? 1.08 : 1 }} transition={{ duration: 1, ease: "easeInOut" }} />
                       </div>
                       <div className="px-3 py-2 text-center">
-                        <h4
-                          className="font-bold leading-tight"
-                          style={{
-                            fontFamily: "'DM Serif Display', serif",
-                            color: "hsl(var(--primary))",
-                            fontSize: isHero ? 13 : 11,
-                          }}
-                        >
-                          {story.bride_name}{" "}
-                          <span style={{ color: "#D94F6B" }}>♥</span>{" "}
-                          {story.groom_name}
+                        <h4 className="font-bold leading-tight" style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--primary))", fontSize: isHero ? 13 : 11 }}>
+                          {story.bride_name} <span style={{ color: "#D94F6B" }}>♥</span> {story.groom_name}
                         </h4>
-                        <p style={{
-                          fontFamily: "'Lato', sans-serif",
-                          color: "hsl(var(--muted-foreground))",
-                          fontSize: isHero ? 10 : 9,
-                          marginTop: 2,
-                        }}>
-                          {story.city}
-                        </p>
+                        <p style={{ fontFamily: "'Lato', sans-serif", color: "hsl(var(--muted-foreground))", fontSize: isHero ? 10 : 9, marginTop: 2 }}>{story.city}</p>
                         {isHero && (
-                          <p style={{
-                            fontFamily: "'Lato', sans-serif",
-                            color: "#666",
-                            fontSize: 9,
-                            marginTop: 3,
-                            lineHeight: 1.4,
-                            fontStyle: "italic",
-                          }}>
-                            "{story.story}"
-                          </p>
+                          <p style={{ fontFamily: "'Lato', sans-serif", color: "#666", fontSize: 9, marginTop: 3, lineHeight: 1.4, fontStyle: "italic" }}>"{story.story}"</p>
                         )}
                       </div>
                     </div>
@@ -411,17 +296,12 @@ const SuccessStories = () => {
         </div>
       </div>
 
-      {/* Mobile horizontal scroll */}
+      {/* Mobile scroll */}
       <div className="lg:hidden absolute bottom-0 left-0 right-0 z-10 px-4 pb-5">
         <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
           {stories.slice(0, 6).map((story, idx) => (
-            <motion.div
-              key={story.id}
-              className="flex-shrink-0 rounded-xl overflow-hidden"
-              style={{ width: 160, background: "white", boxShadow: "0 6px 20px rgba(0,0,0,0.18)", border: "2px solid rgba(255,255,255,0.5)" }}
-              animate={{ scale: idx === rotationOffset % 6 ? 1.06 : 1 }}
-              transition={{ duration: 0.4 }}
-            >
+            <motion.div key={story.id} className="flex-shrink-0 rounded-xl overflow-hidden" style={{ width: 160, background: "white", boxShadow: "0 6px 20px rgba(0,0,0,0.18)", border: "2px solid rgba(255,255,255,0.5)" }}
+              animate={{ scale: idx === rotationOffset % 6 ? 1.06 : 1 }} transition={{ duration: 0.4 }}>
               <div className="h-[100px] overflow-hidden">
                 <img src={story.image_url || wedding1} alt={`${story.bride_name} & ${story.groom_name}`} className="w-full h-full object-cover" />
               </div>
