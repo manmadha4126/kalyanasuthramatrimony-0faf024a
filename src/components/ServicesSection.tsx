@@ -114,10 +114,10 @@ const ServicesSection = () => {
 
       </div>
 
-      {/* CTA bridging into contact section - half in services, half in contact */}
-      <div className="relative z-10" style={{ marginBottom: "-80px" }}>
-        <motion.div className="max-w-2xl mx-auto text-center rounded-2xl py-10 px-6" style={{ background: "hsl(220, 40%, 18%)", border: "2px dashed hsl(var(--gold-accent) / 0.4)" }} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <h3 className="font-serif text-xl md:text-2xl font-bold mb-2" style={{ color: "white" }}>Want to know more about Assisted Service?</h3>
+      {/* CTA bridging into contact section - centered on the boundary */}
+      <div className="relative z-20" style={{ marginBottom: "-60px", marginTop: "40px" }}>
+        <motion.div className="max-w-3xl mx-auto text-center rounded-2xl py-8 px-8 shadow-2xl" style={{ background: "linear-gradient(135deg, hsl(220, 50%, 14%) 0%, hsl(230, 45%, 18%) 50%, hsl(220, 50%, 14%) 100%)", border: "1px solid hsl(var(--gold-accent) / 0.3)", boxShadow: "0 20px 60px -15px rgba(0,0,0,0.5)" }} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <h3 className="text-xl md:text-2xl font-bold mb-2" style={{ color: "white", fontFamily: "'DM Serif Display', serif" }}>Want to know more about Assisted Service?</h3>
           {selected && (
             <p className="text-sm mb-4" style={{ color: "hsl(220, 20%, 70%)" }}>
               Selected: <span className="font-semibold" style={{ color: "hsl(var(--gold-accent))" }}>{durationOptions.find(d => d.key === selected)?.label}</span> plan
