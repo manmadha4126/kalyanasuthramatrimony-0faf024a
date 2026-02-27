@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Instagram, Map } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -125,6 +125,34 @@ const ContactSection = () => {
               >
                 Connect with Us for<br />the Best &amp; Perfect Matches
               </motion.h2>
+              <motion.div
+                className="flex items-center gap-4 mt-5"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+              >
+                <a
+                  href="https://www.instagram.com/kalyanasuthra"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-11 h-11 rounded-full transition-transform hover:scale-110"
+                  style={{ background: "linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)", boxShadow: "0 4px 15px rgba(225, 48, 108, 0.4)" }}
+                  title="Follow us on Instagram"
+                >
+                  <Instagram size={20} color="white" />
+                </a>
+                <a
+                  href="https://www.google.com/maps?q=13.64383,79.43141"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-11 h-11 rounded-full transition-transform hover:scale-110"
+                  style={{ background: "hsl(210 80% 50%)", boxShadow: "0 4px 15px rgba(30, 120, 220, 0.4)" }}
+                  title="Find us on Google Maps"
+                >
+                  <Map size={20} color="white" />
+                </a>
+              </motion.div>
             </div>
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: "hsl(220 10% 35%)" }} />
