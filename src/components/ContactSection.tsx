@@ -102,12 +102,12 @@ const ContactSection = () => {
     <section id="contact" className="overflow-hidden" style={{ background: "white", paddingTop: "60px", paddingBottom: "170px", paddingLeft: "240px", paddingRight: "240px" }}>
       {/* Inner frame with all content */}
       <div className="relative" style={{ border: "none" }}>
-        {/* Dark top section */}
-        <div style={{ background: darkBg }} className="relative pb-6">
+        {/* Dark top section - compact */}
+        <div style={{ background: darkBg }} className="relative pb-2">
           <div className="container mx-auto px-4">
-            <div className="py-12 lg:py-16 max-w-lg">
+            <div className="py-8 lg:py-10 max-w-lg">
               <motion.span
-                className="inline-block text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded mb-6"
+                className="inline-block text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded mb-4"
                 style={{ background: accentPurple, color: "white", fontFamily: fontSans }}
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -125,37 +125,54 @@ const ContactSection = () => {
               >
                 Connect with Us for<br />the Best &amp; Perfect Matches
               </motion.h2>
-              <motion.div
-                className="flex items-center gap-4 mt-5"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-              >
-                <a
-                  href="https://www.instagram.com/kalyanasuthra"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-11 h-11 rounded-full transition-transform hover:scale-110"
-                  style={{ background: "linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)", boxShadow: "0 4px 15px rgba(225, 48, 108, 0.4)" }}
-                  title="Follow us on Instagram"
-                >
-                  <Instagram size={20} color="white" />
-                </a>
-                <a
-                  href="https://www.google.com/maps?q=13.64383,79.43141"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-11 h-11 rounded-full transition-transform hover:scale-110"
-                  style={{ background: "hsl(210 80% 50%)", boxShadow: "0 4px 15px rgba(30, 120, 220, 0.4)" }}
-                  title="Find us on Google Maps"
-                >
-                  <Map size={20} color="white" />
-                </a>
-              </motion.div>
             </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: "hsl(220 10% 35%)" }} />
+        </div>
+
+        {/* Social icons straddling the dark/light boundary */}
+        <div className="relative z-30" style={{ height: 0 }}>
+          <motion.div
+            className="container mx-auto px-4 flex items-center gap-5"
+            style={{ transform: "translateY(-50%)" }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+          >
+            <a
+              href="https://www.instagram.com/kalyanasuthra"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-12 h-12 rounded-2xl transition-all hover:scale-110 hover:shadow-xl"
+              style={{
+                background: "linear-gradient(135deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5)",
+                boxShadow: "0 6px 20px rgba(214, 41, 118, 0.5)",
+              }}
+              title="Follow us on Instagram"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect x="2" y="2" width="20" height="20" rx="6" stroke="white" strokeWidth="1.8" />
+                <circle cx="12" cy="12" r="5" stroke="white" strokeWidth="1.8" />
+                <circle cx="17.5" cy="6.5" r="1.5" fill="white" />
+              </svg>
+            </a>
+            <a
+              href="https://www.google.com/maps?q=13.64383,79.43141"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-12 h-12 rounded-2xl transition-all hover:scale-110 hover:shadow-xl"
+              style={{
+                background: "linear-gradient(135deg, #4285F4, #34A853)",
+                boxShadow: "0 6px 20px rgba(66, 133, 244, 0.5)",
+              }}
+              title="Find us on Google Maps"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="white" opacity="0.9"/>
+                <circle cx="12" cy="9" r="3" fill="#4285F4"/>
+              </svg>
+            </a>
+          </motion.div>
         </div>
 
         {/* Light bottom section */}
