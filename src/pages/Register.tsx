@@ -181,16 +181,16 @@ const TextField = ({ label, value, onChange, placeholder, required, type = "text
 );
 
 const SummaryRow = ({ label, value }: { label: string; value: string }) => (
-  <div className="flex justify-between py-2 border-b last:border-0" style={{ borderColor: `hsl(${THEME.primaryLight})` }}>
-    <span className="text-sm font-semibold" style={{ color: `hsl(${THEME.primaryDeep})` }}>{label}</span>
-    <span className="text-sm text-right max-w-[55%]" style={{ color: "#333" }}>{value || "—"}</span>
+  <div className="flex justify-between py-3 border-b last:border-0" style={{ borderColor: `hsl(${THEME.primaryLight})` }}>
+    <span className="text-base font-semibold" style={{ color: `hsl(${THEME.primaryDeep})` }}>{label}</span>
+    <span className="text-base text-right max-w-[55%]" style={{ color: "#333" }}>{value || "—"}</span>
   </div>
 );
 
 const SummarySection = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div className="mb-5">
-    <h4 className="text-base font-bold mb-2.5 px-4 py-2 rounded-lg" style={{ background: `hsl(${THEME.primaryLight})`, color: `hsl(${THEME.primaryDeep})` }}>{title}</h4>
-    <div className="px-2">{children}</div>
+  <div className="mb-6 bg-white rounded-2xl shadow-sm p-5" style={{ border: `1px solid hsl(${THEME.primaryLight})` }}>
+    <h4 className="text-lg font-bold mb-3 px-5 py-3 rounded-xl" style={{ background: `hsl(${THEME.primaryLight})`, color: `hsl(${THEME.primaryDeep})` }}>{title}</h4>
+    <div className="px-3">{children}</div>
   </div>
 );
 
@@ -573,27 +573,37 @@ export default function Register() {
                 )}
 
                 {step === 6 && (
-                  <div className="space-y-3 max-h-[65vh] overflow-y-auto pr-1">
+                  <motion.div 
+                    className="space-y-5 max-h-[70vh] overflow-y-auto pr-1"
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <div className="text-center mb-6">
+                      <h3 className="text-2xl font-bold mb-1" style={{ color: `hsl(${THEME.primaryDeep})`, fontFamily: "system-ui, sans-serif" }}>Review Your Profile Details</h3>
+                      <p className="text-base" style={{ color: "#888" }}>Please verify all information before submitting</p>
+                    </div>
+
                     {/* Photo preview at top */}
                     {form.photos.length > 0 && (
-                      <div className="mb-6">
-                        <h4 className="text-base font-bold mb-3 px-4 py-2 rounded-lg" style={{ background: `hsl(${THEME.primaryLight})`, color: `hsl(${THEME.primaryDeep})` }}>📷 Your Photo</h4>
+                      <motion.div className="mb-6" initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ delay: 0.1 }}>
+                        <h4 className="text-lg font-bold mb-4 px-5 py-3 rounded-xl" style={{ background: `hsl(${THEME.primaryLight})`, color: `hsl(${THEME.primaryDeep})` }}>📷 Your Photo</h4>
                         <div className="flex justify-center">
-                          <div className="w-48 sm:w-56 rounded-xl overflow-hidden shadow-lg" style={{ border: `3px solid hsl(${THEME.primary})` }}>
+                          <div className="w-52 sm:w-60 rounded-2xl overflow-hidden shadow-xl" style={{ border: `3px solid hsl(${THEME.primary})` }}>
                             <img src={URL.createObjectURL(form.photos[form.primaryPhotoIndex])} alt="Profile" className="w-full aspect-[3/4] object-cover" />
                           </div>
                         </div>
                         {form.photos.length > 1 && (
-                          <div className="flex justify-center gap-2 mt-3">
+                          <div className="flex justify-center gap-3 mt-4">
                             {form.photos.map((photo, i) => (
-                              <img key={i} src={URL.createObjectURL(photo)} alt="" className="w-12 h-12 rounded-lg object-cover" style={{ border: i === form.primaryPhotoIndex ? `2px solid hsl(${THEME.primary})` : "1px solid #ddd", opacity: i === form.primaryPhotoIndex ? 1 : 0.6 }} />
+                              <img key={i} src={URL.createObjectURL(photo)} alt="" className="w-14 h-14 rounded-xl object-cover" style={{ border: i === form.primaryPhotoIndex ? `2px solid hsl(${THEME.primary})` : "1px solid #ddd", opacity: i === form.primaryPhotoIndex ? 1 : 0.6 }} />
                             ))}
                           </div>
                         )}
-                      </div>
+                      </motion.div>
                     )}
 
-                    <SummarySection title="📋 Basic Details">
+                    <SummarySection title="📋 Basic Information">
                       <SummaryRow label="Full Name" value={form.name} />
                       <SummaryRow label="Profile Created For" value={form.profileFor} />
                       <SummaryRow label="Gender" value={form.gender} />
@@ -649,7 +659,7 @@ export default function Register() {
                       <SummaryRow label="Chart Style" value={form.chartStyle} />
                       <SummaryRow label="Horoscope File" value={form.horoscopeFile?.name || "Not uploaded"} />
                     </SummarySection>
-                  </div>
+                  </motion.div>
                 )}
               </motion.div>
             </AnimatePresence>
