@@ -47,6 +47,39 @@ export type Database = {
         }
         Relationships: []
       }
+      featured_profiles: {
+        Row: {
+          age: number
+          city: string
+          created_at: string
+          gender: string
+          id: string
+          name: string
+          profession: string
+          profile_photo_url: string | null
+        }
+        Insert: {
+          age: number
+          city: string
+          created_at?: string
+          gender: string
+          id?: string
+          name: string
+          profession: string
+          profile_photo_url?: string | null
+        }
+        Update: {
+          age?: number
+          city?: string
+          created_at?: string
+          gender?: string
+          id?: string
+          name?: string
+          profession?: string
+          profile_photo_url?: string | null
+        }
+        Relationships: []
+      }
       profile_interests: {
         Row: {
           created_at: string

@@ -1,13 +1,105 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+type FeaturedProfile = {
+  id: string;
+  name: string;
+  age: number;
+  profession: string;
+  city: string;
+  gender: string;
+  profile_photo_url: string | null;
+};
 
 const FeaturedProfiles = () => {
-  const placeholders = Array.from({ length: 6 });
+  const [profiles, setProfiles] = useState<FeaturedProfile[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const { data } = await supabase.from("featured_profiles" as any).select("*").order("created_at", { ascending: false });
+      if (data) setProfiles(data as any);
+      setLoading(false);
+    };
+    fetch();
+  }, []);
+
+  const grooms = profiles.filter(p => p.gender === "Groom");
+  const brides = profiles.filter(p => p.gender === "Bride");
+
+  const ProfileCard = ({ profile, index }: { profile: FeaturedProfile; index: number }) => (
+    <motion.div
+      className="relative cursor-pointer"
+      style={{ perspective: "1000px" }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.06 }}
+    >
+      <motion.div
+        className="relative w-full aspect-[3/4] rounded-2xl"
+        style={{ transformStyle: "preserve-3d" }}
+        whileHover={{ rotateY: 180 }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
+      >
+        {/* Front - Photo only */}
+        <div
+          className="absolute inset-0 rounded-2xl overflow-hidden shadow-lg"
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          {profile.profile_photo_url ? (
+            <img src={profile.profile_photo_url} alt={profile.name} className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center" style={{ background: "hsl(275, 25%, 25%)" }}>
+              <span className="text-4xl font-bold" style={{ color: "hsl(42, 55%, 75%)" }}>{profile.name[0]}</span>
+            </div>
+          )}
+          {/* Subtle gradient overlay at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-1/4" style={{ background: "linear-gradient(transparent, rgba(0,0,0,0.3))" }} />
+        </div>
+
+        {/* Back - Info */}
+        <div
+          className="absolute inset-0 rounded-2xl overflow-hidden shadow-lg flex flex-col items-center justify-center p-4"
+          style={{
+            backfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+            background: "linear-gradient(135deg, hsl(275, 35%, 20%), hsl(310, 30%, 25%))",
+          }}
+        >
+          <div className="text-center">
+            <h4 className="text-lg font-bold mb-2" style={{ color: "hsl(42, 55%, 85%)", fontFamily: "system-ui, sans-serif" }}>{profile.name}</h4>
+            <p className="text-base mb-1" style={{ color: "hsl(310, 30%, 78%)" }}>{profile.age} years</p>
+            <p className="text-base mb-1" style={{ color: "hsl(42, 40%, 70%)" }}>{profile.profession}</p>
+            <p className="text-sm" style={{ color: "hsl(0, 0%, 70%)" }}>{profile.city}</p>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+
+  const PlaceholderCard = ({ index }: { index: number }) => (
+    <motion.div
+      className="aspect-[3/4] rounded-2xl overflow-hidden shadow-md"
+      style={{ background: "hsl(275, 30%, 20%)", border: "1px solid hsl(42, 40%, 40%)" }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.05 }}
+    >
+      <div className="w-full h-full flex flex-col items-center justify-center">
+        <div className="w-14 h-14 rounded-full mb-3" style={{ background: "hsl(275, 25%, 30%)" }} />
+        <p className="text-sm font-semibold" style={{ color: "hsl(42, 55%, 75%)" }}>Coming Soon</p>
+      </div>
+    </motion.div>
+  );
 
   return (
     <section className="py-20 relative overflow-hidden" style={{
       background: "linear-gradient(135deg, hsl(275, 40%, 15%) 0%, hsl(310, 35%, 22%) 25%, hsl(340, 30%, 18%) 50%, hsl(280, 45%, 20%) 75%, hsl(260, 50%, 12%) 100%)"
     }}>
-      {/* Animated mandala-inspired geometric pattern */}
+      {/* Mandala-inspired geometric pattern */}
       <div className="absolute inset-0 opacity-[0.08] pointer-events-none"
         style={{
           backgroundImage: `
@@ -44,49 +136,25 @@ const FeaturedProfiles = () => {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12">
-          {/* Male */}
+          {/* Groom */}
           <div>
             <h3 className="font-serif text-xl font-semibold mb-6 text-center" style={{ color: "hsl(310, 30%, 78%)" }}>Groom Profiles</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
-              {placeholders.map((_, i) =>
-              <motion.div
-                key={`m${i}`}
-                className="aspect-square rounded-xl overflow-hidden group cursor-pointer border"
-                style={{ background: "hsl(275, 30%, 20%)", borderColor: "hsl(42, 40%, 40%)" }}
-                whileHover={{ scale: 1.03, boxShadow: "0 0 20px hsl(310, 40%, 35%)" }}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}>
-                  <div className="w-full h-full flex flex-col items-center justify-center">
-                    <div className="w-12 h-12 rounded-full mb-2" style={{ background: "hsl(275, 25%, 30%)" }} />
-                    <p className="text-xs font-semibold" style={{ color: "hsl(42, 55%, 75%)" }}>Profile {i + 1}</p>
-                  </div>
-                </motion.div>
-              )}
+              {grooms.length > 0
+                ? grooms.map((p, i) => <ProfileCard key={p.id} profile={p} index={i} />)
+                : Array.from({ length: 3 }).map((_, i) => <PlaceholderCard key={`gp${i}`} index={i} />)
+              }
             </div>
           </div>
 
-          {/* Female */}
+          {/* Bride */}
           <div>
             <h3 className="font-serif text-xl font-semibold mb-6 text-center" style={{ color: "hsl(310, 30%, 78%)" }}>Bride Profiles</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
-              {placeholders.map((_, i) =>
-              <motion.div
-                key={`f${i}`}
-                className="aspect-square rounded-xl overflow-hidden group cursor-pointer border"
-                style={{ background: "hsl(275, 30%, 20%)", borderColor: "hsl(42, 40%, 40%)" }}
-                whileHover={{ scale: 1.03, boxShadow: "0 0 20px hsl(310, 40%, 35%)" }}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}>
-                  <div className="w-full h-full flex flex-col items-center justify-center">
-                    <div className="w-12 h-12 rounded-full mb-2" style={{ background: "hsl(275, 25%, 30%)" }} />
-                    <p className="text-xs font-semibold" style={{ color: "hsl(42, 55%, 75%)" }}>Profile {i + 1}</p>
-                  </div>
-                </motion.div>
-              )}
+              {brides.length > 0
+                ? brides.map((p, i) => <ProfileCard key={p.id} profile={p} index={i} />)
+                : Array.from({ length: 3 }).map((_, i) => <PlaceholderCard key={`bp${i}`} index={i} />)
+              }
             </div>
           </div>
         </div>
