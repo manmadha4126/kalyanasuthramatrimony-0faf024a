@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Phone, Mail } from "lucide-react";
 import paymentBg from "@/assets/payment-bg.jpg";
+import scannerImg from "@/assets/kalyanasuthra-scanner.jpeg";
 
 const PaymentSection = () => {
   return (
@@ -17,12 +18,10 @@ const PaymentSection = () => {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-          {/* QR */}
+          {/* QR Scanner */}
           <div className="card-clean flex flex-col items-center justify-center min-h-[250px]">
-            <div className="w-48 h-48 rounded-xl bg-muted border border-border flex items-center justify-center mb-4">
-              <p className="text-sm text-muted-foreground text-center">PhonePe QR<br />Placeholder</p>
-            </div>
-            <p className="text-sm text-muted-foreground">Scan to Pay via PhonePe</p>
+            <img src={scannerImg} alt="Kalyanasuthra Payment QR" className="w-64 h-auto rounded-xl border border-border shadow-sm mb-3" />
+            <p className="text-sm text-muted-foreground">Scan & Pay with Cards and UPI</p>
           </div>
 
           {/* Bank Details */}
@@ -31,10 +30,11 @@ const PaymentSection = () => {
             <div className="space-y-3 text-sm">
               {[
                 ["Account Name", "Kalyanasuthra Matrimony"],
-                ["Bank", "To be updated"],
-                ["Account No.", "To be updated"],
-                ["IFSC", "To be updated"],
-                ["UPI ID", "kalyanasuthra@ybl"],
+                ["Bank", "HDFC Bank"],
+                ["Account No.", "50200115701238"],
+                ["Branch", "MANGALAM Branch, Tirupati"],
+                ["IFSC", "HDFC0007817"],
+                ["Account Type", "Current Account"],
               ].map(([label, value]) => (
                 <div key={label} className="flex justify-between py-2 border-b border-border last:border-0">
                   <span className="text-muted-foreground">{label}</span>

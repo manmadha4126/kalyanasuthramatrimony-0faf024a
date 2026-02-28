@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX } from "lucide-react";
+import adminLogo from "@/assets/kalyanasuthra-logo.png";
 
 type Profile = {
   id: string; full_name: string; gender: string; religion: string; city: string | null;
@@ -431,10 +432,7 @@ export default function AdminDashboard() {
       >
         <div className="w-[220px] h-full flex flex-col py-6 px-4">
           <div className="flex items-center gap-2 mb-8 px-1">
-            <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "hsl(42, 42%, 57%)" }}>
-              <span className="text-white font-bold text-sm">K</span>
-            </div>
-            <span className="text-white font-semibold text-sm leading-tight">Kalyanasuthra<br /><span className="text-xs font-normal opacity-60">Admin Panel</span></span>
+            <img src={adminLogo} alt="Kalyanasuthra" className="h-12 w-auto object-contain" />
           </div>
 
           <nav className="space-y-1 flex-1">
@@ -477,7 +475,8 @@ export default function AdminDashboard() {
               <ArrowLeft size={12} /> Login
             </button>
           </div>
-          <div className="hidden sm:block">
+          <img src={adminLogo} alt="Kalyanasuthra" className="h-10 w-auto object-contain hidden sm:block lg:hidden" />
+          <div className="hidden lg:block">
             <h1 className="font-bold text-gray-800">Admin Dashboard</h1>
             <p className="text-xs text-gray-400">Kalyanasuthra Matrimony Management</p>
           </div>

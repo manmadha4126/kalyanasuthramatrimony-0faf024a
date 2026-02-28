@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Eye, EyeOff, Shield, Heart, Users, Star, Gem } from "lucide-react";
 import BackButton from "@/components/BackButton";
+import logo from "@/assets/kalyanasuthra-logo.png";
 
 const ADMIN_CREDENTIALS = [
   { email: "menda.manmadha21@gmail.com", password: "0*MAha21" },
@@ -83,13 +84,7 @@ export default function AdminLogin() {
         <div className="relative z-10 w-full">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-10">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(42, 50%, 55%), hsl(42, 60%, 45%))" }}>
-              <span style={{ fontFamily: "'Playfair Display', serif" }} className="text-2xl font-bold text-white">K</span>
-            </div>
-            <div>
-              <span style={{ fontFamily: "'Playfair Display', serif" }} className="text-2xl text-white font-bold block leading-tight tracking-wide">Kalyanasuthra</span>
-              <span className="text-xs tracking-[0.3em] uppercase" style={{ color: "hsl(42, 50%, 65%)", fontFamily: "'Lato', sans-serif" }}>MATRIMONY</span>
-            </div>
+            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 w-auto object-contain" />
           </div>
 
           {/* Main heading - cursive style */}
