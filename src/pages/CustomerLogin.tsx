@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Eye, EyeOff, Heart, Sparkles, MapPin, Users, Star, Shield } from "lucide-react";
 import BackButton from "@/components/BackButton";
+import logo from "@/assets/kalyanasuthra-logo.png";
 
 export default function CustomerLogin() {
   const [identifier, setIdentifier] = useState("");
@@ -71,21 +72,15 @@ export default function CustomerLogin() {
         <div className="relative z-10 px-12 py-16">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-12">
-            <div className="w-11 h-11 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(42, 50%, 55%), hsl(42, 60%, 45%))" }}>
-              <span className="font-serif text-xl font-bold text-white">K</span>
-            </div>
-            <div>
-              <span className="font-serif text-xl text-white font-bold block leading-tight">Kalyanasuthra</span>
-              <span className="text-[10px] tracking-[0.3em] uppercase" style={{ color: "hsl(42, 50%, 70%)" }}>MATRIMONY</span>
-            </div>
+            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 w-auto object-contain" />
           </div>
 
           {/* Welcome message */}
-          <h1 className="text-4xl font-serif font-bold text-white mb-4 leading-snug">
+          <h1 className="text-5xl font-serif font-bold text-white mb-4 leading-snug">
             The Wedding Chapter<br />
             <span style={{ color: "hsl(42, 50%, 75%)", fontStyle: "italic" }}>Starts Here…</span>
           </h1>
-          <p className="text-white/55 text-sm leading-relaxed mb-10 max-w-md">
+          <p className="text-white/55 text-base leading-relaxed mb-10 max-w-md">
             South India's most trusted matrimonial service. We've been uniting hearts and families since 2018, with thousands of successful matches across Telugu, Tamil, and Kannada communities.
           </p>
 
@@ -104,8 +99,8 @@ export default function CustomerLogin() {
                   <item.icon size={16} className="text-white/80" />
                 </div>
                 <div>
-                  <p className="text-white font-semibold text-sm">{item.label}</p>
-                  <p className="text-white/40 text-xs mt-0.5">{item.desc}</p>
+                  <p className="text-white font-semibold text-base">{item.label}</p>
+                  <p className="text-white/40 text-sm mt-0.5">{item.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -132,11 +127,8 @@ export default function CustomerLogin() {
             <BackButton to="/" label="Back to Home" />
           </div>
           {/* Mobile logo */}
-          <div className="flex items-center justify-center gap-2 mb-8 lg:hidden">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsl(160, 30%, 35%)" }}>
-              <span className="font-serif text-base font-bold text-white">K</span>
-            </div>
-            <span className="font-serif text-lg font-semibold" style={{ color: "hsl(160, 30%, 30%)" }}>Kalyanasuthra</span>
+          <div className="flex items-center justify-center mb-8 lg:hidden">
+            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-16 w-auto object-contain" />
           </div>
 
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
@@ -146,8 +138,8 @@ export default function CustomerLogin() {
                   <Sparkles size={16} style={{ color: "hsl(42, 42%, 57%)" }} />
                   <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">Member Login</span>
                 </div>
-                <h2 className="font-serif text-2xl font-bold mb-1" style={{ color: "hsl(160, 30%, 25%)" }}>Welcome Back</h2>
-                <p className="text-xs text-gray-400 mb-6">Sign in to explore your perfect match</p>
+                <h2 className="font-serif text-3xl font-bold mb-1" style={{ color: "hsl(160, 30%, 25%)" }}>Welcome Back</h2>
+                <p className="text-sm text-gray-400 mb-6">Sign in to explore your perfect match</p>
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Email or Phone Number</label>

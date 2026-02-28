@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import logo from "@/assets/kalyanasuthra-logo.png";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -27,11 +28,9 @@ const Header = () => {
     >
       <div className="container mx-auto h-full flex items-center px-4 relative">
         {/* Logo */}
-        <a href="#home" className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: "hsl(var(--burgundy))" }}>
-            <span className="font-serif text-lg font-bold text-primary-foreground">K</span>
-          </div>
-          <span className="font-serif text-lg font-semibold text-primary">
+        <a href="#home" className="flex items-center gap-2">
+          <img src={logo} alt="Kalyanasuthra Matrimony" className="h-14 w-auto object-contain" />
+          <span className="font-serif text-lg font-semibold text-primary hidden sm:inline">
             Kalyanasuthra Matrimony
           </span>
         </a>
@@ -39,17 +38,21 @@ const Header = () => {
         {/* Desktop Nav - Centered */}
         <nav className="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
           {navLinks.map((link) => (
-            <a key={link.label} href={link.href} className="nav-link-premium font-bold text-base">
+            <a
+              key={link.label}
+              href={link.href}
+              className="nav-link-premium font-bold text-base px-4 py-2 rounded-lg transition-all duration-300 hover:bg-primary/10 hover:text-primary hover:shadow-md"
+            >
               {link.label}
             </a>
           ))}
         </nav>
 
         {/* Right side buttons */}
-        <div className="hidden lg:flex items-center gap-2 ml-auto">
-          <a href="/register" className="btn-burgundy text-sm px-4 py-2">Register</a>
-          <a href="/login" className="text-sm px-4 py-2 rounded-lg font-semibold text-primary" style={{ background: "hsl(var(--burgundy-light))" }}>Login</a>
-          <a href="/admin" className="text-sm px-4 py-2 rounded-lg font-semibold text-primary" style={{ background: "hsl(var(--burgundy-light))" }}>Admin</a>
+        <div className="hidden lg:flex items-center gap-3 ml-auto">
+          <a href="/register" className="text-sm px-5 py-2.5 rounded-lg font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg" style={{ background: "linear-gradient(135deg, hsl(348, 60%, 38%), hsl(348, 50%, 28%))" }}>Register</a>
+          <a href="/login" className="text-sm px-5 py-2.5 rounded-lg font-bold transition-all duration-300 hover:scale-105 hover:shadow-md" style={{ background: "hsl(42, 50%, 90%)", color: "hsl(42, 50%, 30%)" }}>Login</a>
+          <a href="/admin" className="text-sm px-5 py-2.5 rounded-lg font-bold transition-all duration-300 hover:scale-105 hover:shadow-md" style={{ background: "hsl(220, 45%, 92%)", color: "hsl(220, 45%, 30%)" }}>Admin</a>
         </div>
 
         {/* Mobile */}

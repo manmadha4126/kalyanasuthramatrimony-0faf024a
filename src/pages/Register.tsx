@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, ChevronLeft, ChevronRight, Check, Upload, Star, Heart } from "lucide-react";
 import BackButton from "@/components/BackButton";
+import logo from "@/assets/kalyanasuthra-logo.png";
 
 const TOTAL_STEPS = 6;
 const THEME = {
@@ -401,10 +402,7 @@ export default function Register() {
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <BackButton to="/" label="Home" />
           <a href="/" className="inline-flex items-center gap-2">
-            <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: `hsl(${THEME.primary})` }}>
-              <span className="text-base font-bold text-white" style={{ fontFamily: "system-ui" }}>K</span>
-            </div>
-            <span className="text-base sm:text-lg font-bold" style={{ color: `hsl(${THEME.primaryDeep})`, fontFamily: "system-ui, sans-serif" }}>Kalyanasuthra</span>
+            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-14 w-auto object-contain" />
           </a>
         </div>
 
