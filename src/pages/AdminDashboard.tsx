@@ -20,6 +20,7 @@ type Profile = {
   gothra: string | null; raasi: string | null; star: string | null; dosham: string | null;
   native_place: string | null; about_me: string | null; whatsapp: string | null;
   profile_created_by: string | null; additional_photos: string[] | null;
+  subscription_type?: string;
 };
 
 type Consultation = {
@@ -37,7 +38,7 @@ type FeaturedProfileEntry = {
   gender: string; profile_photo_url: string | null; created_at: string;
 };
 
-const TABS = ["Dashboard", "Profile Requests", "All Profiles", "Consultations", "Featured Profiles", "Success Stories"];
+const TABS = ["Dashboard", "Profile Requests", "All Profiles", "Subscription Access", "Consultations", "Featured Profiles", "Success Stories"];
 
 const DetailRow = ({ label, value }: { label: string; value: string | null | undefined }) => (
   <div className="flex justify-between py-3 border-b border-gray-100 last:border-0">
@@ -844,6 +845,85 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                     ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Subscription Access */}
+          {tab === "Subscription Access" && (
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4">
+                <div>
+                  <h3 className="text-lg font-bold text-gray-800">Subscription Access</h3>
+                  <p className="text-sm text-gray-500 mt-0.5">Grant or revoke assisted service access for profiles</p>
+                </div>
+                <div className="sm:ml-auto relative">
+                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search by name, phone, email..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  />
+                </div>
+              </div>
+              <div className="p-4">
+                {loading ? (
+                  <div className="text-center py-10 text-gray-400">Loading...</div>
+                ) : (
+                  <div className="space-y-3">
+                    {profiles.filter(p => {
+                      if (!searchQuery) return p.profile_status === "active";
+                      const q = searchQuery.toLowerCase();
+                      return (
+                        p.full_name.toLowerCase().includes(q) ||
+                        (p.phone?.includes(q)) ||
+                        (p.email?.toLowerCase().includes(q)) ||
+                        (p.city?.toLowerCase().includes(q))
+                      );
+                    }).map((p, i) => (
+                      <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
+                        className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md flex items-center gap-4 px-5 py-4"
+                        style={{ borderLeft: `4px solid ${(p as any).subscription_type === "assisted" ? "hsl(280, 65%, 55%)" : "hsl(210, 20%, 80%)"}` }}
+                      >
+                        <div className="w-12 h-12 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
+                          {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><span className="text-lg font-bold text-gray-400">{p.full_name[0]}</span></div>}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-bold text-gray-800 text-base truncate">{p.full_name}</h3>
+                          <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {p.phone || "—"}</p>
+                        </div>
+                        <div className="flex-shrink-0">
+                          <span className="px-3 py-1 rounded-full text-xs font-bold" style={
+                            (p as any).subscription_type === "assisted"
+                              ? { background: "hsl(280, 65%, 93%)", color: "hsl(280, 65%, 40%)" }
+                              : { background: "hsl(0, 0%, 95%)", color: "hsl(0, 0%, 50%)" }
+                          }>
+                            {(p as any).subscription_type === "assisted" ? "✦ Assisted" : "Free"}
+                          </span>
+                        </div>
+                        <button
+                          onClick={async () => {
+                            const newType = (p as any).subscription_type === "assisted" ? "free" : "assisted";
+                            const { error } = await supabase.from("profiles").update({ subscription_type: newType } as any).eq("id", p.id);
+                            if (!error) {
+                              setProfiles(prev => prev.map(pr => pr.id === p.id ? { ...pr, subscription_type: newType } as any : pr));
+                              toast({ title: newType === "assisted" ? "Assisted access granted!" : "Reverted to free account" });
+                            }
+                          }}
+                          className="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all"
+                          style={{ background: (p as any).subscription_type === "assisted" ? "hsl(0, 55%, 50%)" : "hsl(280, 65%, 55%)" }}
+                        >
+                          {(p as any).subscription_type === "assisted" ? "Revoke Access" : "Grant Assisted"}
+                        </button>
+                      </motion.div>
+                    ))}
+                    {profiles.filter(p => p.profile_status === "active").length === 0 && !searchQuery && (
+                      <div className="text-center py-10 text-gray-400">No active profiles to manage</div>
+                    )}
                   </div>
                 )}
               </div>

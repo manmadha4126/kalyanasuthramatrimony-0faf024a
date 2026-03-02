@@ -187,6 +187,7 @@ export type Database = {
           star: string | null
           state: string | null
           sub_caste: string | null
+          subscription_type: string
           updated_at: string
           user_id: string | null
           weight_kg: number | null
@@ -238,6 +239,7 @@ export type Database = {
           star?: string | null
           state?: string | null
           sub_caste?: string | null
+          subscription_type?: string
           updated_at?: string
           user_id?: string | null
           weight_kg?: number | null
@@ -289,6 +291,7 @@ export type Database = {
           star?: string | null
           state?: string | null
           sub_caste?: string | null
+          subscription_type?: string
           updated_at?: string
           user_id?: string | null
           weight_kg?: number | null
