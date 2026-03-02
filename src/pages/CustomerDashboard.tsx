@@ -9,12 +9,12 @@ type Profile = {
   id: string; full_name: string; gender: string; religion: string; caste: string | null;
   city: string | null; state: string | null; occupation: string | null; education: string | null;
   date_of_birth: string; profile_photo_url: string | null; annual_income: string | null; is_featured: boolean;
-  profile_status?: string;
+  profile_status?: string; phone?: string | null; email?: string | null; whatsapp?: string | null;
 };
 
 type UserProfileFull = {
   id: string; full_name: string; email: string | null; gender: string; profile_status?: string;
-  profile_photo_url: string | null;
+  profile_photo_url: string | null; subscription_type?: string;
 };
 
 const NAV = [
@@ -57,14 +57,14 @@ export default function CustomerDashboard() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { navigate("/login"); return; }
     setUserId(user.id);
-    const { data: pData } = await supabase.from("profiles").select("id,full_name,email,gender,profile_status,profile_photo_url").eq("user_id", user.id).maybeSingle();
+    const { data: pData } = await supabase.from("profiles").select("id,full_name,email,gender,profile_status,profile_photo_url,subscription_type").eq("user_id", user.id).maybeSingle();
     if (pData) setUserProfile(pData as UserProfileFull);
     fetchMatches(pData?.gender || "Male");
   };
 
   const fetchMatches = async (userGender: string) => {
     const targetGender = userGender === "Male" ? "Female" : "Male";
-    const { data } = await supabase.from("profiles").select("id,full_name,gender,religion,caste,city,state,occupation,education,date_of_birth,profile_photo_url,annual_income,is_featured").eq("profile_status", "active").eq("gender", targetGender).limit(20);
+    const { data } = await supabase.from("profiles").select("id,full_name,gender,religion,caste,city,state,occupation,education,date_of_birth,profile_photo_url,annual_income,is_featured,phone,email,whatsapp").eq("profile_status", "active").eq("gender", targetGender).limit(20);
     if (data) setMatches(data);
     setLoading(false);
   };
@@ -327,6 +327,15 @@ export default function CustomerDashboard() {
                         {profile.occupation && <p className="text-xs text-gray-600">💼 {profile.occupation}</p>}
                         {(profile.city || profile.state) && <p className="text-xs text-gray-500">📍 {[profile.city, profile.state].filter(Boolean).join(", ")}</p>}
                         {profile.annual_income && <p className="text-xs text-gray-500">💰 {profile.annual_income}</p>}
+                        {userProfile?.subscription_type === "assisted" && profile.phone && (
+                          <p className="text-xs text-gray-600">📞 {profile.phone}</p>
+                        )}
+                        {userProfile?.subscription_type === "assisted" && profile.email && (
+                          <p className="text-xs text-gray-600">✉️ {profile.email}</p>
+                        )}
+                        {userProfile?.subscription_type !== "assisted" && (
+                          <p className="text-[10px] mt-1 px-2 py-1 rounded-md" style={{ background: "hsl(38, 90%, 95%)", color: "hsl(38, 70%, 35%)" }}>🔒 Upgrade to see contact details</p>
+                        )}
                       </div>
                       <button onClick={() => navigate(`/profile/${profile.id}`)} className="mt-3 w-full py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: themeLight, color: themeDark }}>
                         View Profile

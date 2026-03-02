@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Heart, MapPin, Briefcase, GraduationCap, Phone, Star, Calendar, Users } from "lucide-react";
+import { Heart, MapPin, Briefcase, GraduationCap, Phone, Star, Calendar, Users, Lock } from "lucide-react";
 import BackButton from "@/components/BackButton";
 
 type Profile = {
@@ -39,12 +39,19 @@ export default function ProfileDetail() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [activePhoto, setActivePhoto] = useState(0);
+  const [userSubscription, setUserSubscription] = useState<string>("free");
 
   useEffect(() => { if (id) fetchProfile(); }, [id]);
 
   const fetchProfile = async () => {
     const { data } = await supabase.from("profiles").select("*").eq("id", id!).maybeSingle();
     if (data) setProfile(data as Profile);
+    // Check current user's subscription
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data: myProfile } = await supabase.from("profiles").select("subscription_type").eq("user_id", user.id).maybeSingle();
+      if (myProfile) setUserSubscription((myProfile as any).subscription_type || "free");
+    }
     setLoading(false);
   };
 
@@ -139,6 +146,26 @@ export default function ProfileDetail() {
                 <InfoRow label="Native Place" value={profile.native_place} />
                 <InfoRow label="Marital Status" value={profile.marital_status} />
               </div>
+            </div>
+            {/* Contact Details - gated */}
+            <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
+              <h3 className="font-serif font-bold text-gray-800 mb-3 flex items-center gap-2"><Phone size={16} className="text-gray-400" /> Contact Details</h3>
+              {userSubscription === "assisted" ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+                  <InfoRow icon={Phone} label="Phone" value={(profile as any).phone} />
+                  <InfoRow label="Email" value={(profile as any).email} />
+                  <InfoRow label="WhatsApp" value={(profile as any).whatsapp} />
+                </div>
+              ) : (
+                <div className="text-center py-6 rounded-xl" style={{ background: "hsl(38, 90%, 96%)" }}>
+                  <Lock size={24} className="mx-auto mb-2" style={{ color: "hsl(38, 70%, 45%)" }} />
+                  <p className="text-sm font-semibold" style={{ color: "hsl(38, 70%, 35%)" }}>Contact details are hidden</p>
+                  <p className="text-xs mt-1" style={{ color: "hsl(38, 50%, 45%)" }}>Upgrade to Assisted Matrimony to view phone, email & WhatsApp</p>
+                  <a href="https://wa.me/919553306667?text=Hi%2C%20I%20want%20to%20upgrade%20to%20Assisted%20Matrimony%20services" target="_blank" rel="noopener noreferrer" className="inline-block mt-3 px-5 py-2 rounded-xl text-sm font-semibold text-white" style={{ background: "hsl(280, 65%, 55%)" }}>
+                    Contact Us to Upgrade
+                  </a>
+                </div>
+              )}
             </div>
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <h3 className="font-serif font-bold text-gray-800 mb-3 flex items-center gap-2"><Briefcase size={16} className="text-gray-400" /> Professional Details</h3>
