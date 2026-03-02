@@ -1,33 +1,48 @@
-import { motion } from "framer-motion";
-import { Phone, Mail } from "lucide-react";
-import paymentBg from "@/assets/payment-bg.jpg";
-import scannerImg from "@/assets/kalyanasuthra-scanner.jpeg";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Phone, Mail, ChevronDown, ChevronUp, User } from "lucide-react";
+import paymentBg from "@/assets/payment-bg-new.jpg";
+import scannerImg from "@/assets/phonepe-scanner.jpeg";
+
+const owners = [
+  { name: "Sai", phone: "9553306667", email: "info@kalyanasuthramatrimony.com" },
+  { name: "Drakshayani", phone: "9866288767", email: "info@kalyanasuthramatrimony.com" },
+];
 
 const PaymentSection = () => {
+  const [showContacts, setShowContacts] = useState(false);
+
   return (
     <section className="py-20 relative overflow-hidden">
-      {/* Background image at 50% opacity */}
       <div className="absolute inset-0 pointer-events-none">
-        <img src={paymentBg} alt="" className="w-full h-full object-cover opacity-70" />
+        <img src={paymentBg} alt="" className="w-full h-full object-cover" />
       </div>
-      <div className="absolute inset-0 bg-background/40 pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(135deg, hsla(348, 56%, 27%, 0.75), hsla(220, 50%, 15%, 0.7))" }} />
       <div className="container mx-auto px-4 relative z-10">
         <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary mb-3">Payment Details</h2>
-          <div className="gold-divider" />
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-3" style={{ fontFamily: "'DM Serif Display', serif" }}>Payment Details</h2>
+          <div className="h-[2px] w-20 mx-auto" style={{ background: "hsl(var(--gold-accent))" }} />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {/* QR Scanner */}
-          <div className="card-clean flex flex-col items-center justify-center min-h-[250px]">
-            <img src={scannerImg} alt="Kalyanasuthra Payment QR" className="w-64 h-auto rounded-xl border border-border shadow-sm mb-3" />
-            <p className="text-sm text-muted-foreground">Scan & Pay with Cards and UPI</p>
-          </div>
+          <motion.div
+            className="flex flex-col items-center justify-center rounded-2xl p-6"
+            style={{ background: "hsla(0,0%,100%,0.95)", border: "1px solid hsl(var(--gold-accent) / 0.4)" }}
+            initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+          >
+            <img src={scannerImg} alt="Kalyanasuthra PhonePe QR" className="w-72 h-auto rounded-xl shadow-md mb-4" />
+            <p className="text-base font-semibold text-muted-foreground">Scan & Pay with PhonePe / UPI / Cards</p>
+          </motion.div>
 
           {/* Bank Details */}
-          <div className="card-clean">
-            <h3 className="font-serif text-lg font-bold text-primary mb-4">Bank Details</h3>
-            <div className="space-y-3 text-sm">
+          <motion.div
+            className="rounded-2xl p-7"
+            style={{ background: "hsla(0,0%,100%,0.95)", border: "1px solid hsl(var(--gold-accent) / 0.4)" }}
+            initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+          >
+            <h3 className="text-xl font-extrabold mb-5" style={{ color: "hsl(var(--burgundy))", fontFamily: "'DM Serif Display', serif" }}>Bank Details</h3>
+            <div className="space-y-3">
               {[
                 ["Account Name", "Kalyanasuthra Matrimony"],
                 ["Bank", "HDFC Bank"],
@@ -36,37 +51,67 @@ const PaymentSection = () => {
                 ["IFSC", "HDFC0007817"],
                 ["Account Type", "Current Account"],
               ].map(([label, value]) => (
-                <div key={label} className="flex justify-between py-2 border-b border-border last:border-0">
-                  <span className="text-muted-foreground">{label}</span>
-                  <span className="font-medium text-foreground">{value}</span>
+                <div key={label} className="flex justify-between py-2.5 border-b border-border last:border-0">
+                  <span className="text-base font-extrabold text-foreground">{label}</span>
+                  <span className="text-base font-medium text-muted-foreground text-right">{value}</span>
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
 
-        {/* Need Help Contact Block */}
+        {/* Contact Us Button */}
         <motion.div
-          className="mt-10 max-w-3xl mx-auto"
+          className="mt-10 max-w-4xl mx-auto text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ delay: 0.2 }}
         >
-          <div className="card-clean text-center py-6 px-8">
-            <h3 className="font-serif text-xl font-bold text-primary mb-3">Need Help? Contact Us</h3>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm">
-              <a href="tel:9553306667" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Phone size={16} className="text-primary" />
-                <span>9553306667 | 9866288767</span>
-              </a>
-              <span className="hidden sm:inline text-border">|</span>
-              <a href="mailto:info@kalyanasuthra.com" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Mail size={16} className="text-primary" />
-                <span>info@kalyanasuthra.com</span>
-              </a>
-            </div>
-          </div>
+          <button
+            onClick={() => setShowContacts(!showContacts)}
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-lg font-bold transition-all duration-300 hover:scale-105 shadow-lg"
+            style={{ background: "hsl(var(--gold-accent))", color: "hsl(220, 60%, 10%)" }}
+          >
+            <Phone size={20} />
+            Need Help? Contact Us
+            {showContacts ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          </button>
+
+          <AnimatePresence>
+            {showContacts && (
+              <motion.div
+                className="mt-6 grid sm:grid-cols-2 gap-5 max-w-2xl mx-auto"
+                initial={{ opacity: 0, y: -10, height: 0 }}
+                animate={{ opacity: 1, y: 0, height: "auto" }}
+                exit={{ opacity: 0, y: -10, height: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {owners.map((owner, i) => (
+                  <div
+                    key={i}
+                    className="rounded-xl p-5 text-left shadow-md"
+                    style={{ background: "hsla(0,0%,100%,0.95)", border: "1px solid hsl(var(--gold-accent) / 0.4)" }}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "hsl(var(--burgundy))" }}>
+                        <User size={18} className="text-white" />
+                      </div>
+                      <span className="text-lg font-extrabold" style={{ color: "hsl(var(--burgundy))" }}>{owner.name}</span>
+                    </div>
+                    <a href={`tel:${owner.phone}`} className="flex items-center gap-2 text-base font-semibold text-foreground mb-2 hover:text-primary transition-colors">
+                      <Phone size={16} style={{ color: "hsl(var(--burgundy))" }} />
+                      {owner.phone}
+                    </a>
+                    <a href={`mailto:${owner.email}`} className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+                      <Mail size={16} style={{ color: "hsl(var(--burgundy))" }} />
+                      {owner.email}
+                    </a>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       </div>
     </section>
