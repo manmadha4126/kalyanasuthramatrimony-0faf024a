@@ -677,13 +677,18 @@ export default function Register() {
                       <SummaryRow label="Village / Native" value={form.village} />
                     </SummarySection>
                     <SummarySection title="🎓 Education & Career">
-                      <SummaryRow label="10th Education" value={form.edu10} />
-                      <SummaryRow label="12th Education" value={form.edu12} />
+                      <SummaryRow label="10th Board" value={form.edu10Board} />
+                      <SummaryRow label="10th Percentage" value={form.edu10Percentage ? `${form.edu10Percentage}%` : ""} />
+                      <SummaryRow label="10th School" value={form.edu10School} />
+                      <SummaryRow label="12th Board" value={form.edu12Board} />
+                      <SummaryRow label="12th Percentage" value={form.edu12Percentage ? `${form.edu12Percentage}%` : ""} />
+                      <SummaryRow label="12th College" value={form.edu12College} />
                       <SummaryRow label="Education" value={form.education} />
                       <SummaryRow label="Graduation Details" value={form.graduationDetail} />
                       <SummaryRow label="Employment Type" value={form.employmentType} />
                       <SummaryRow label="Occupation" value={form.occupation} />
                       <SummaryRow label="Company Name" value={form.companyName} />
+                      <SummaryRow label="Currency Type" value={form.currencyType} />
                       <SummaryRow label="Annual Income" value={form.annualIncome} />
                       <SummaryRow label="Citizenship" value={form.citizenship} />
                       <SummaryRow label="Residence Type" value={form.residenceType} />
