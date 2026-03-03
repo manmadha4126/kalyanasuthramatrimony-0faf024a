@@ -162,8 +162,11 @@ const stepTitles = ["Basic Details", "Personal Details", "Family Details", "Horo
 type FormData = {
   name: string; profileFor: string; gender: string; email: string; phone: string; password: string; confirmPassword: string;
   dob: string; motherTongue: string; height: string; maritalStatus: string; religion: string; caste: string; subCaste: string;
-  country: string; state: string; city: string; village: string; edu10: string; edu12: string; education: string; graduationDetail: string;
-  employmentType: string; occupation: string; companyName: string; annualIncome: string; citizenship: string; residenceType: string; visaType: string;
+  country: string; state: string; city: string; village: string;
+  edu10Board: string; edu10Percentage: string; edu10School: string;
+  edu12Board: string; edu12Percentage: string; edu12College: string;
+  education: string; graduationDetail: string;
+  employmentType: string; occupation: string; companyName: string; currencyType: string; annualIncome: string; citizenship: string; residenceType: string; visaType: string;
   familyStatus: string; familyType: string; fatherName: string; fatherOccupation: string; motherName: string; motherOccupation: string; siblings: string; siblingDetails: string;
   gothram: string; raashi: string; star: string; dosham: string; timeOfBirth: string; countryOfBirth: string; stateOfBirth: string; birthPlace: string; language: string; chartStyle: string; horoscopeFile: File | null;
   photos: File[]; primaryPhotoIndex: number;
@@ -172,8 +175,11 @@ type FormData = {
 const defaultForm: FormData = {
   name: "", profileFor: "", gender: "", email: "", phone: "", password: "", confirmPassword: "",
   dob: "", motherTongue: "", height: "", maritalStatus: "", religion: "", caste: "", subCaste: "",
-  country: "India", state: "", city: "", village: "", edu10: "", edu12: "", education: "", graduationDetail: "",
-  employmentType: "", occupation: "", companyName: "", annualIncome: "", citizenship: "Indian Citizen", residenceType: "", visaType: "Not Applicable",
+  country: "India", state: "", city: "", village: "",
+  edu10Board: "", edu10Percentage: "", edu10School: "",
+  edu12Board: "", edu12Percentage: "", edu12College: "",
+  education: "", graduationDetail: "",
+  employmentType: "", occupation: "", companyName: "", currencyType: "INR (₹)", annualIncome: "", citizenship: "Indian Citizen", residenceType: "", visaType: "Not Applicable",
   familyStatus: "", familyType: "", fatherName: "", fatherOccupation: "", motherName: "", motherOccupation: "", siblings: "", siblingDetails: "",
   gothram: "", raashi: "", star: "", dosham: "", timeOfBirth: "", countryOfBirth: "India", stateOfBirth: "", birthPlace: "", language: "", chartStyle: "South Indian", horoscopeFile: null,
   photos: [], primaryPhotoIndex: 0,
