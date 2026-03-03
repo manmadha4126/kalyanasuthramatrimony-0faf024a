@@ -424,14 +424,15 @@ export default function Register() {
         <Heart className="absolute top-1/2 right-10 opacity-[0.04]" size={25} style={{ color: `hsl(${THEME.primary})` }} />
       </div>
 
-      <div className="max-w-2xl mx-auto relative z-10">
-        {/* Back + Logo */}
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <BackButton to="/" label="Home" />
-          <a href="/" className="inline-flex items-center gap-2">
-            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-14 w-auto object-contain" />
-          </a>
-        </div>
+      {/* Logo - outside the form card, left-aligned and bigger */}
+      <div className="mb-5 sm:mb-7 flex items-center justify-between relative z-10 max-w-4xl mx-auto">
+        <a href="/" className="inline-flex items-center gap-2">
+          <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 sm:h-24 w-auto object-contain" />
+        </a>
+        <BackButton to="/" label="Home" />
+      </div>
+
+      <div className="max-w-4xl mx-auto relative z-10">
 
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden" style={{ boxShadow: `0 20px 60px hsl(${THEME.primary} / 0.1)` }}>
           <div className="h-1.5 bg-gray-100 relative">
