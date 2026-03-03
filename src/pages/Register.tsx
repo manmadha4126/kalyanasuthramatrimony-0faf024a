@@ -418,18 +418,35 @@ export default function Register() {
         <div className="absolute top-10 left-10 w-72 h-72 rounded-full opacity-[0.06]" style={{ background: `hsl(${THEME.primary})` }} />
         <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-[0.05]" style={{ background: `hsl(${THEME.accent})` }} />
         <div className="absolute top-1/3 right-1/4 w-48 h-48 rounded-full opacity-[0.04]" style={{ background: `hsl(${THEME.primary})` }} />
+        <div className="absolute top-[60%] left-[5%] w-64 h-64 rounded-full opacity-[0.04]" style={{ background: `hsl(${THEME.accent})` }} />
+        <div className="absolute top-[15%] left-[50%] w-40 h-40 rounded-full opacity-[0.05]" style={{ background: `hsl(${THEME.primary})` }} />
+        <div className="absolute bottom-[10%] left-[40%] w-80 h-80 rounded-full opacity-[0.03]" style={{ background: `hsl(${THEME.accent})` }} />
         {/* Floating hearts */}
         <Heart className="absolute top-20 right-20 opacity-[0.06]" size={40} style={{ color: `hsl(${THEME.primary})` }} />
         <Heart className="absolute bottom-40 left-20 opacity-[0.05]" size={30} style={{ color: `hsl(${THEME.accent})` }} />
         <Heart className="absolute top-1/2 right-10 opacity-[0.04]" size={25} style={{ color: `hsl(${THEME.primary})` }} />
+        <Heart className="absolute top-[70%] left-[15%] opacity-[0.05]" size={35} style={{ color: `hsl(${THEME.primary})` }} />
+        <Heart className="absolute top-[25%] left-[8%] opacity-[0.04]" size={20} style={{ color: `hsl(${THEME.accent})` }} />
+        <Star className="absolute top-[10%] right-[30%] opacity-[0.04]" size={28} style={{ color: `hsl(${THEME.accent})` }} />
+        <Star className="absolute bottom-[25%] right-[15%] opacity-[0.05]" size={22} style={{ color: `hsl(${THEME.primary})` }} />
+        <Star className="absolute top-[45%] left-[3%] opacity-[0.04]" size={18} style={{ color: `hsl(${THEME.accent})` }} />
+        {/* Decorative rings */}
+        <div className="absolute top-[5%] right-[8%] w-32 h-32 rounded-full border-2 opacity-[0.06]" style={{ borderColor: `hsl(${THEME.primary})` }} />
+        <div className="absolute bottom-[15%] left-[10%] w-24 h-24 rounded-full border-2 opacity-[0.05]" style={{ borderColor: `hsl(${THEME.accent})` }} />
+        <div className="absolute top-[50%] right-[5%] w-20 h-20 rounded-full border opacity-[0.04]" style={{ borderColor: `hsl(${THEME.primary})` }} />
+        {/* Diagonal lines */}
+        <div className="absolute top-0 left-[20%] w-[1px] h-full opacity-[0.03] rotate-12" style={{ background: `hsl(${THEME.primary})` }} />
+        <div className="absolute top-0 right-[25%] w-[1px] h-full opacity-[0.03] -rotate-12" style={{ background: `hsl(${THEME.accent})` }} />
       </div>
 
-      {/* Logo - outside the form card, left-aligned and bigger */}
-      <div className="mb-5 sm:mb-7 flex items-center justify-between relative z-10 max-w-4xl mx-auto">
+      {/* Logo + Back button - left-aligned, stacked */}
+      <div className="mb-5 sm:mb-7 flex flex-col items-start relative z-10 max-w-4xl mx-auto">
         <a href="/" className="inline-flex items-center gap-2">
           <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 sm:h-24 w-auto object-contain" />
         </a>
-        <BackButton to="/" label="Home" />
+        <div className="mt-2">
+          <BackButton to="/" label="Home" />
+        </div>
       </div>
 
       <div className="max-w-4xl mx-auto relative z-10">
