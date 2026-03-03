@@ -575,11 +575,20 @@ export default function Register() {
                     <SelectField label="Chart Style" value={form.chartStyle} onChange={v => set("chartStyle", v)} options={chartStyleOptions} />
                     <div className="sm:col-span-2">
                       <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Upload Horoscope (PDF/Image)</label>
-                      <label className="flex items-center gap-3 border-2 border-dashed rounded-lg p-5 cursor-pointer transition-colors" style={{ borderColor: `hsl(${THEME.primaryLight})` }}>
+                      <label className="flex items-center gap-3 border-2 border-dashed rounded-lg p-5 cursor-pointer transition-colors hover:bg-gray-50" style={{ borderColor: `hsl(${THEME.primaryLight})` }}>
                         <Upload size={20} style={{ color: `hsl(${THEME.primary})` }} />
-                        <span className="text-sm" style={{ color: "#666" }}>{form.horoscopeFile ? form.horoscopeFile.name : "Click to upload horoscope file"}</span>
+                        <span className="text-sm" style={{ color: "#666" }}>{form.horoscopeFile ? "Upload a different file" : "Click to upload horoscope file"}</span>
                         <input type="file" className="hidden" accept="*/*" onChange={e => set("horoscopeFile", e.target.files?.[0] || null)} />
                       </label>
+                      {form.horoscopeFile && (
+                        <div className="mt-3 flex items-center gap-3 rounded-lg p-3" style={{ background: `hsl(${THEME.accentLight})`, border: `1px solid hsl(${THEME.accent} / 0.3)` }}>
+                          <FileText size={20} style={{ color: `hsl(${THEME.accent})` }} />
+                          <span className="text-sm font-medium flex-1 truncate" style={{ color: `hsl(${THEME.primaryDeep})` }}>{form.horoscopeFile.name}</span>
+                          <button type="button" onClick={() => set("horoscopeFile", null)} className="flex items-center gap-1 px-3 py-1 rounded-md text-xs font-semibold text-white transition-colors hover:opacity-80" style={{ background: "hsl(0, 60%, 55%)" }}>
+                            <X size={12} /> Remove
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
