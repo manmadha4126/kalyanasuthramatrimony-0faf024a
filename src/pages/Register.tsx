@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, ChevronLeft, ChevronRight, Check, Upload, Star, Heart } from "lucide-react";
+import { Eye, EyeOff, ChevronLeft, ChevronRight, Check, Upload, Star, Heart, X, FileText } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import logo from "@/assets/kalyanasuthra-logo.png";
 
