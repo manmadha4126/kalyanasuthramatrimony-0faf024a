@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, ChevronLeft, ChevronRight, Check, Upload, Star, Heart } from "lucide-react";
+import { Eye, EyeOff, ChevronLeft, ChevronRight, Check, Upload, Star, Heart, X, FileText } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import logo from "@/assets/kalyanasuthra-logo.png";
 
@@ -102,7 +102,23 @@ const graduationDetailsOptions = [
 ];
 
 const employmentOptions = ["Private Sector", "Government", "Self Employed / Business", "Public Sector", "Defence", "Civil Services (IAS/IPS/IFS)", "Not Working", "Student", "Freelancer", "Other"];
-const incomeOptions = ["Below 1 Lakh", "1–3 Lakhs", "3–5 Lakhs", "5–7 Lakhs", "7–10 Lakhs", "10–15 Lakhs", "15–20 Lakhs", "20–30 Lakhs", "30–50 Lakhs", "50–75 Lakhs", "75 Lakhs–1 Crore", "1 Crore+", "$30,000–$50,000", "$50,000–$75,000", "$75,000–$100,000", "$100,000–$150,000", "$150,000+"];
+
+const board10Options = ["CBSE", "ICSE", "State Board - Andhra Pradesh", "State Board - Telangana", "State Board - Tamil Nadu", "State Board - Karnataka", "State Board - Kerala", "State Board - Maharashtra", "State Board - West Bengal", "State Board - Uttar Pradesh", "State Board - Bihar", "State Board - Rajasthan", "State Board - Gujarat", "State Board - Madhya Pradesh", "State Board - Odisha", "State Board - Punjab", "State Board - Haryana", "State Board - Jharkhand", "State Board - Chhattisgarh", "State Board - Assam", "State Board - Goa", "NIOS", "International Baccalaureate (IB)", "Cambridge (IGCSE)", "Other"];
+
+const board12Options = ["CBSE", "ICSE / ISC", "State Board - Andhra Pradesh (BIE)", "State Board - Telangana (BIE)", "State Board - Tamil Nadu (HSC)", "State Board - Karnataka (PUC)", "State Board - Kerala (DHSE)", "State Board - Maharashtra (HSC)", "State Board - West Bengal (WBCHSE)", "State Board - Uttar Pradesh (UP Board)", "State Board - Bihar (BSEB)", "State Board - Rajasthan (RBSE)", "State Board - Gujarat (GSEB)", "State Board - Madhya Pradesh (MPBSE)", "State Board - Odisha (CHSE)", "State Board - Punjab (PSEB)", "State Board - Haryana (BSEH)", "State Board - Jharkhand (JAC)", "State Board - Chhattisgarh (CGBSE)", "State Board - Assam (AHSEC)", "State Board - Goa (GBSHSE)", "NIOS", "International Baccalaureate (IB)", "Cambridge (A-Levels)", "Other"];
+
+const currencyOptions = ["INR (₹)", "USD ($)", "GBP (£)", "EUR (€)", "CAD (C$)", "AUD (A$)", "AED (د.إ)", "SGD (S$)", "MYR (RM)", "SAR (﷼)", "QAR (﷼)", "KWD (د.ك)", "BHD (BD)", "OMR (﷼)", "NZD (NZ$)", "JPY (¥)", "KRW (₩)", "CHF (CHF)", "ZAR (R)", "Other"];
+
+const incomeByCountry: Record<string, string[]> = {
+  "INR (₹)": ["Below ₹1 Lakh", "₹1-2 Lakhs", "₹2-3 Lakhs", "₹3-5 Lakhs", "₹5-7 Lakhs", "₹7-10 Lakhs", "₹10-15 Lakhs", "₹15-20 Lakhs", "₹20-30 Lakhs", "₹30-50 Lakhs", "₹50-75 Lakhs", "₹75 Lakhs-1 Crore", "₹1 Crore+"],
+  "USD ($)": ["Below $10,000", "$10,000-$20,000", "$20,000-$30,000", "$30,000-$40,000", "$40,000-$50,000", "$50,000-$60,000", "$60,000-$70,000", "$70,000-$80,000", "$80,000-$90,000", "$90,000-$100,000", "$100,000-$150,000", "$150,000-$200,000", "$200,000+"],
+  "GBP (£)": ["Below £10,000", "£10,000-£20,000", "£20,000-£30,000", "£30,000-£40,000", "£40,000-£50,000", "£50,000-£60,000", "£60,000-£70,000", "£70,000-£80,000", "£80,000-£100,000", "£100,000+"],
+  "EUR (€)": ["Below €10,000", "€10,000-€20,000", "€20,000-€30,000", "€30,000-€40,000", "€40,000-€50,000", "€50,000-€60,000", "€60,000-€70,000", "€70,000-€80,000", "€80,000-€100,000", "€100,000+"],
+  "CAD (C$)": ["Below C$15,000", "C$15,000-C$30,000", "C$30,000-C$45,000", "C$45,000-C$60,000", "C$60,000-C$75,000", "C$75,000-C$90,000", "C$90,000-C$120,000", "C$120,000-C$150,000", "C$150,000+"],
+  "AUD (A$)": ["Below A$15,000", "A$15,000-A$30,000", "A$30,000-A$45,000", "A$45,000-A$60,000", "A$60,000-A$75,000", "A$75,000-A$90,000", "A$90,000-A$120,000", "A$120,000-A$150,000", "A$150,000+"],
+  "AED (د.إ)": ["Below 50,000 AED", "50,000-100,000 AED", "100,000-150,000 AED", "150,000-200,000 AED", "200,000-300,000 AED", "300,000-500,000 AED", "500,000+ AED"],
+  "SGD (S$)": ["Below S$20,000", "S$20,000-S$40,000", "S$40,000-S$60,000", "S$60,000-S$80,000", "S$80,000-S$100,000", "S$100,000-S$150,000", "S$150,000+"],
+};
 
 const citizenshipOptions = [
   "Indian Citizen", "NRI (Non-Resident Indian)", "PIO (Person of Indian Origin)",
@@ -146,8 +162,11 @@ const stepTitles = ["Basic Details", "Personal Details", "Family Details", "Horo
 type FormData = {
   name: string; profileFor: string; gender: string; email: string; phone: string; password: string; confirmPassword: string;
   dob: string; motherTongue: string; height: string; maritalStatus: string; religion: string; caste: string; subCaste: string;
-  country: string; state: string; city: string; village: string; edu10: string; edu12: string; education: string; graduationDetail: string;
-  employmentType: string; occupation: string; companyName: string; annualIncome: string; citizenship: string; residenceType: string; visaType: string;
+  country: string; state: string; city: string; village: string;
+  edu10Board: string; edu10Percentage: string; edu10School: string;
+  edu12Board: string; edu12Percentage: string; edu12College: string;
+  education: string; graduationDetail: string;
+  employmentType: string; occupation: string; companyName: string; currencyType: string; annualIncome: string; citizenship: string; residenceType: string; visaType: string;
   familyStatus: string; familyType: string; fatherName: string; fatherOccupation: string; motherName: string; motherOccupation: string; siblings: string; siblingDetails: string;
   gothram: string; raashi: string; star: string; dosham: string; timeOfBirth: string; countryOfBirth: string; stateOfBirth: string; birthPlace: string; language: string; chartStyle: string; horoscopeFile: File | null;
   photos: File[]; primaryPhotoIndex: number;
@@ -156,8 +175,11 @@ type FormData = {
 const defaultForm: FormData = {
   name: "", profileFor: "", gender: "", email: "", phone: "", password: "", confirmPassword: "",
   dob: "", motherTongue: "", height: "", maritalStatus: "", religion: "", caste: "", subCaste: "",
-  country: "India", state: "", city: "", village: "", edu10: "", edu12: "", education: "", graduationDetail: "",
-  employmentType: "", occupation: "", companyName: "", annualIncome: "", citizenship: "Indian Citizen", residenceType: "", visaType: "Not Applicable",
+  country: "India", state: "", city: "", village: "",
+  edu10Board: "", edu10Percentage: "", edu10School: "",
+  edu12Board: "", edu12Percentage: "", edu12College: "",
+  education: "", graduationDetail: "",
+  employmentType: "", occupation: "", companyName: "", currencyType: "INR (₹)", annualIncome: "", citizenship: "Indian Citizen", residenceType: "", visaType: "Not Applicable",
   familyStatus: "", familyType: "", fatherName: "", fatherOccupation: "", motherName: "", motherOccupation: "", siblings: "", siblingDetails: "",
   gothram: "", raashi: "", star: "", dosham: "", timeOfBirth: "", countryOfBirth: "India", stateOfBirth: "", birthPlace: "", language: "", chartStyle: "South Indian", horoscopeFile: null,
   photos: [], primaryPhotoIndex: 0,
@@ -189,7 +211,12 @@ const SummaryRow = ({ label, value }: { label: string; value: string }) => (
 
 const SummarySection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div className="mb-6 bg-white rounded-2xl shadow-sm p-5" style={{ border: `1px solid hsl(${THEME.primaryLight})` }}>
-    <h4 className="text-lg font-bold mb-3 px-5 py-3 rounded-xl" style={{ background: `hsl(${THEME.primaryLight})`, color: `hsl(${THEME.primaryDeep})` }}>{title}</h4>
+    <h4 className="text-lg font-extrabold mb-3 px-5 py-3 rounded-xl tracking-wide" style={{ 
+      background: 'linear-gradient(135deg, hsl(348, 56%, 27%), hsl(348, 50%, 37%))', 
+      color: '#fff',
+      fontFamily: "'Noto Sans', sans-serif",
+      letterSpacing: '0.5px',
+    }}>{title}</h4>
     <div className="px-3">{children}</div>
   </div>
 );
@@ -318,7 +345,7 @@ export default function Register() {
         p_dosham: form.dosham || null,
         p_whatsapp: form.phone || null,
         p_profile_photo_url: profilePhotoUrl,
-        p_education_detail: [form.edu10 && `10th: ${form.edu10}`, form.edu12 && `12th: ${form.edu12}`, form.graduationDetail && `Degree: ${form.graduationDetail}`].filter(Boolean).join(", ") || null,
+        p_education_detail: [form.edu10Board && `10th: ${form.edu10Board} - ${form.edu10Percentage}% - ${form.edu10School}`, form.edu12Board && `12th: ${form.edu12Board} - ${form.edu12Percentage}% - ${form.edu12College}`, form.graduationDetail && `Degree: ${form.graduationDetail}`].filter(Boolean).join(", ") || null,
       });
 
       if (profileErr) throw profileErr;
@@ -488,8 +515,23 @@ export default function Register() {
                     <SelectField label="State" value={form.state} onChange={v => set("state", v)} options={indianStates} />
                     <TextField label="City" value={form.city} onChange={v => set("city", v)} />
                     <TextField label="Village / Native Place" value={form.village} onChange={v => set("village", v)} />
-                    <TextField label="10th Education Details" value={form.edu10} onChange={v => set("edu10", v)} />
-                    <TextField label="12th Education Details" value={form.edu12} onChange={v => set("edu12", v)} />
+                    
+                    {/* 10th Education */}
+                    <div className="sm:col-span-2"><p className="text-sm font-bold mt-2" style={{ color: `hsl(${THEME.primary})` }}>10th Standard Details</p></div>
+                    <SelectField label="10th Board" value={form.edu10Board} onChange={v => set("edu10Board", v)} options={board10Options} />
+                    <TextField label="10th Percentage (%)" value={form.edu10Percentage} onChange={v => set("edu10Percentage", v)} placeholder="e.g. 85" />
+                    <div className="sm:col-span-2">
+                      <TextField label="10th School Name" value={form.edu10School} onChange={v => set("edu10School", v)} placeholder="Enter school name" />
+                    </div>
+
+                    {/* 12th Education */}
+                    <div className="sm:col-span-2"><p className="text-sm font-bold mt-2" style={{ color: `hsl(${THEME.primary})` }}>12th / Intermediate Details</p></div>
+                    <SelectField label="12th Board" value={form.edu12Board} onChange={v => set("edu12Board", v)} options={board12Options} />
+                    <TextField label="12th Percentage (%)" value={form.edu12Percentage} onChange={v => set("edu12Percentage", v)} placeholder="e.g. 90" />
+                    <div className="sm:col-span-2">
+                      <TextField label="12th College Name" value={form.edu12College} onChange={v => set("edu12College", v)} placeholder="Enter college name" />
+                    </div>
+
                     <SelectField label="Education / Graduation" value={form.education} onChange={v => set("education", v)} options={educationOptions} />
                     {(form.education === "Bachelor's Degree" || form.education === "Master's Degree" || form.education === "PhD" || form.education === "Professional Degree (CA/CS/ICWA)") && (
                       <SelectField label="Graduation Details" value={form.graduationDetail} onChange={v => set("graduationDetail", v)} options={graduationDetailsOptions} />
@@ -497,9 +539,11 @@ export default function Register() {
                     <SelectField label="Employment Type" value={form.employmentType} onChange={v => set("employmentType", v)} options={employmentOptions} />
                     <TextField label="Occupation" value={form.occupation} onChange={v => set("occupation", v)} />
                     <TextField label="Company Name" value={form.companyName} onChange={v => set("companyName", v)} />
-                    <SelectField label="Annual Income" value={form.annualIncome} onChange={v => set("annualIncome", v)} options={incomeOptions} />
+                    <SelectField label="Currency Type" value={form.currencyType} onChange={v => { set("currencyType", v); set("annualIncome", ""); }} options={currencyOptions} />
+                    <SelectField label="Annual Income" value={form.annualIncome} onChange={v => set("annualIncome", v)} options={incomeByCountry[form.currencyType] || ["Enter manually"]} />
                     <SelectField label="Citizenship" value={form.citizenship} onChange={v => set("citizenship", v)} options={citizenshipOptions} />
                     <SelectField label="Residence Type" value={form.residenceType} onChange={v => set("residenceType", v)} options={residenceOptions} />
+                    <SelectField label="Visa Type" value={form.visaType} onChange={v => set("visaType", v)} options={visaOptions} />
                     <SelectField label="Visa Type" value={form.visaType} onChange={v => set("visaType", v)} options={visaOptions} />
                   </div>
                 )}
@@ -531,11 +575,20 @@ export default function Register() {
                     <SelectField label="Chart Style" value={form.chartStyle} onChange={v => set("chartStyle", v)} options={chartStyleOptions} />
                     <div className="sm:col-span-2">
                       <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Upload Horoscope (PDF/Image)</label>
-                      <label className="flex items-center gap-3 border-2 border-dashed rounded-lg p-5 cursor-pointer transition-colors" style={{ borderColor: `hsl(${THEME.primaryLight})` }}>
+                      <label className="flex items-center gap-3 border-2 border-dashed rounded-lg p-5 cursor-pointer transition-colors hover:bg-gray-50" style={{ borderColor: `hsl(${THEME.primaryLight})` }}>
                         <Upload size={20} style={{ color: `hsl(${THEME.primary})` }} />
-                        <span className="text-sm" style={{ color: "#666" }}>{form.horoscopeFile ? form.horoscopeFile.name : "Click to upload horoscope file"}</span>
+                        <span className="text-sm" style={{ color: "#666" }}>{form.horoscopeFile ? "Upload a different file" : "Click to upload horoscope file"}</span>
                         <input type="file" className="hidden" accept="*/*" onChange={e => set("horoscopeFile", e.target.files?.[0] || null)} />
                       </label>
+                      {form.horoscopeFile && (
+                        <div className="mt-3 flex items-center gap-3 rounded-lg p-3" style={{ background: `hsl(${THEME.accentLight})`, border: `1px solid hsl(${THEME.accent} / 0.3)` }}>
+                          <FileText size={20} style={{ color: `hsl(${THEME.accent})` }} />
+                          <span className="text-sm font-medium flex-1 truncate" style={{ color: `hsl(${THEME.primaryDeep})` }}>{form.horoscopeFile.name}</span>
+                          <button type="button" onClick={() => set("horoscopeFile", null)} className="flex items-center gap-1 px-3 py-1 rounded-md text-xs font-semibold text-white transition-colors hover:opacity-80" style={{ background: "hsl(0, 60%, 55%)" }}>
+                            <X size={12} /> Remove
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -624,13 +677,18 @@ export default function Register() {
                       <SummaryRow label="Village / Native" value={form.village} />
                     </SummarySection>
                     <SummarySection title="🎓 Education & Career">
-                      <SummaryRow label="10th Education" value={form.edu10} />
-                      <SummaryRow label="12th Education" value={form.edu12} />
+                      <SummaryRow label="10th Board" value={form.edu10Board} />
+                      <SummaryRow label="10th Percentage" value={form.edu10Percentage ? `${form.edu10Percentage}%` : ""} />
+                      <SummaryRow label="10th School" value={form.edu10School} />
+                      <SummaryRow label="12th Board" value={form.edu12Board} />
+                      <SummaryRow label="12th Percentage" value={form.edu12Percentage ? `${form.edu12Percentage}%` : ""} />
+                      <SummaryRow label="12th College" value={form.edu12College} />
                       <SummaryRow label="Education" value={form.education} />
                       <SummaryRow label="Graduation Details" value={form.graduationDetail} />
                       <SummaryRow label="Employment Type" value={form.employmentType} />
                       <SummaryRow label="Occupation" value={form.occupation} />
                       <SummaryRow label="Company Name" value={form.companyName} />
+                      <SummaryRow label="Currency Type" value={form.currencyType} />
                       <SummaryRow label="Annual Income" value={form.annualIncome} />
                       <SummaryRow label="Citizenship" value={form.citizenship} />
                       <SummaryRow label="Residence Type" value={form.residenceType} />
