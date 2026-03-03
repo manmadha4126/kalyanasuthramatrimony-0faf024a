@@ -515,8 +515,23 @@ export default function Register() {
                     <SelectField label="State" value={form.state} onChange={v => set("state", v)} options={indianStates} />
                     <TextField label="City" value={form.city} onChange={v => set("city", v)} />
                     <TextField label="Village / Native Place" value={form.village} onChange={v => set("village", v)} />
-                    <TextField label="10th Education Details" value={form.edu10} onChange={v => set("edu10", v)} />
-                    <TextField label="12th Education Details" value={form.edu12} onChange={v => set("edu12", v)} />
+                    
+                    {/* 10th Education */}
+                    <div className="sm:col-span-2"><p className="text-sm font-bold mt-2" style={{ color: `hsl(${THEME.primary})` }}>10th Standard Details</p></div>
+                    <SelectField label="10th Board" value={form.edu10Board} onChange={v => set("edu10Board", v)} options={board10Options} />
+                    <TextField label="10th Percentage (%)" value={form.edu10Percentage} onChange={v => set("edu10Percentage", v)} placeholder="e.g. 85" />
+                    <div className="sm:col-span-2">
+                      <TextField label="10th School Name" value={form.edu10School} onChange={v => set("edu10School", v)} placeholder="Enter school name" />
+                    </div>
+
+                    {/* 12th Education */}
+                    <div className="sm:col-span-2"><p className="text-sm font-bold mt-2" style={{ color: `hsl(${THEME.primary})` }}>12th / Intermediate Details</p></div>
+                    <SelectField label="12th Board" value={form.edu12Board} onChange={v => set("edu12Board", v)} options={board12Options} />
+                    <TextField label="12th Percentage (%)" value={form.edu12Percentage} onChange={v => set("edu12Percentage", v)} placeholder="e.g. 90" />
+                    <div className="sm:col-span-2">
+                      <TextField label="12th College Name" value={form.edu12College} onChange={v => set("edu12College", v)} placeholder="Enter college name" />
+                    </div>
+
                     <SelectField label="Education / Graduation" value={form.education} onChange={v => set("education", v)} options={educationOptions} />
                     {(form.education === "Bachelor's Degree" || form.education === "Master's Degree" || form.education === "PhD" || form.education === "Professional Degree (CA/CS/ICWA)") && (
                       <SelectField label="Graduation Details" value={form.graduationDetail} onChange={v => set("graduationDetail", v)} options={graduationDetailsOptions} />
@@ -524,9 +539,11 @@ export default function Register() {
                     <SelectField label="Employment Type" value={form.employmentType} onChange={v => set("employmentType", v)} options={employmentOptions} />
                     <TextField label="Occupation" value={form.occupation} onChange={v => set("occupation", v)} />
                     <TextField label="Company Name" value={form.companyName} onChange={v => set("companyName", v)} />
-                    <SelectField label="Annual Income" value={form.annualIncome} onChange={v => set("annualIncome", v)} options={incomeOptions} />
+                    <SelectField label="Currency Type" value={form.currencyType} onChange={v => { set("currencyType", v); set("annualIncome", ""); }} options={currencyOptions} />
+                    <SelectField label="Annual Income" value={form.annualIncome} onChange={v => set("annualIncome", v)} options={incomeByCountry[form.currencyType] || ["Enter manually"]} />
                     <SelectField label="Citizenship" value={form.citizenship} onChange={v => set("citizenship", v)} options={citizenshipOptions} />
                     <SelectField label="Residence Type" value={form.residenceType} onChange={v => set("residenceType", v)} options={residenceOptions} />
+                    <SelectField label="Visa Type" value={form.visaType} onChange={v => set("visaType", v)} options={visaOptions} />
                     <SelectField label="Visa Type" value={form.visaType} onChange={v => set("visaType", v)} options={visaOptions} />
                   </div>
                 )}
