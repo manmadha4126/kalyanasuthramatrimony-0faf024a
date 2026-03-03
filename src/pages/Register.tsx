@@ -102,7 +102,23 @@ const graduationDetailsOptions = [
 ];
 
 const employmentOptions = ["Private Sector", "Government", "Self Employed / Business", "Public Sector", "Defence", "Civil Services (IAS/IPS/IFS)", "Not Working", "Student", "Freelancer", "Other"];
-const incomeOptions = ["Below 1 Lakh", "1–3 Lakhs", "3–5 Lakhs", "5–7 Lakhs", "7–10 Lakhs", "10–15 Lakhs", "15–20 Lakhs", "20–30 Lakhs", "30–50 Lakhs", "50–75 Lakhs", "75 Lakhs–1 Crore", "1 Crore+", "$30,000–$50,000", "$50,000–$75,000", "$75,000–$100,000", "$100,000–$150,000", "$150,000+"];
+
+const board10Options = ["CBSE", "ICSE", "State Board - Andhra Pradesh", "State Board - Telangana", "State Board - Tamil Nadu", "State Board - Karnataka", "State Board - Kerala", "State Board - Maharashtra", "State Board - West Bengal", "State Board - Uttar Pradesh", "State Board - Bihar", "State Board - Rajasthan", "State Board - Gujarat", "State Board - Madhya Pradesh", "State Board - Odisha", "State Board - Punjab", "State Board - Haryana", "State Board - Jharkhand", "State Board - Chhattisgarh", "State Board - Assam", "State Board - Goa", "NIOS", "International Baccalaureate (IB)", "Cambridge (IGCSE)", "Other"];
+
+const board12Options = ["CBSE", "ICSE / ISC", "State Board - Andhra Pradesh (BIE)", "State Board - Telangana (BIE)", "State Board - Tamil Nadu (HSC)", "State Board - Karnataka (PUC)", "State Board - Kerala (DHSE)", "State Board - Maharashtra (HSC)", "State Board - West Bengal (WBCHSE)", "State Board - Uttar Pradesh (UP Board)", "State Board - Bihar (BSEB)", "State Board - Rajasthan (RBSE)", "State Board - Gujarat (GSEB)", "State Board - Madhya Pradesh (MPBSE)", "State Board - Odisha (CHSE)", "State Board - Punjab (PSEB)", "State Board - Haryana (BSEH)", "State Board - Jharkhand (JAC)", "State Board - Chhattisgarh (CGBSE)", "State Board - Assam (AHSEC)", "State Board - Goa (GBSHSE)", "NIOS", "International Baccalaureate (IB)", "Cambridge (A-Levels)", "Other"];
+
+const currencyOptions = ["INR (₹)", "USD ($)", "GBP (£)", "EUR (€)", "CAD (C$)", "AUD (A$)", "AED (د.إ)", "SGD (S$)", "MYR (RM)", "SAR (﷼)", "QAR (﷼)", "KWD (د.ك)", "BHD (BD)", "OMR (﷼)", "NZD (NZ$)", "JPY (¥)", "KRW (₩)", "CHF (CHF)", "ZAR (R)", "Other"];
+
+const incomeByCountry: Record<string, string[]> = {
+  "INR (₹)": ["Below ₹1 Lakh", "₹1-2 Lakhs", "₹2-3 Lakhs", "₹3-5 Lakhs", "₹5-7 Lakhs", "₹7-10 Lakhs", "₹10-15 Lakhs", "₹15-20 Lakhs", "₹20-30 Lakhs", "₹30-50 Lakhs", "₹50-75 Lakhs", "₹75 Lakhs-1 Crore", "₹1 Crore+"],
+  "USD ($)": ["Below $10,000", "$10,000-$20,000", "$20,000-$30,000", "$30,000-$40,000", "$40,000-$50,000", "$50,000-$60,000", "$60,000-$70,000", "$70,000-$80,000", "$80,000-$90,000", "$90,000-$100,000", "$100,000-$150,000", "$150,000-$200,000", "$200,000+"],
+  "GBP (£)": ["Below £10,000", "£10,000-£20,000", "£20,000-£30,000", "£30,000-£40,000", "£40,000-£50,000", "£50,000-£60,000", "£60,000-£70,000", "£70,000-£80,000", "£80,000-£100,000", "£100,000+"],
+  "EUR (€)": ["Below €10,000", "€10,000-€20,000", "€20,000-€30,000", "€30,000-€40,000", "€40,000-€50,000", "€50,000-€60,000", "€60,000-€70,000", "€70,000-€80,000", "€80,000-€100,000", "€100,000+"],
+  "CAD (C$)": ["Below C$15,000", "C$15,000-C$30,000", "C$30,000-C$45,000", "C$45,000-C$60,000", "C$60,000-C$75,000", "C$75,000-C$90,000", "C$90,000-C$120,000", "C$120,000-C$150,000", "C$150,000+"],
+  "AUD (A$)": ["Below A$15,000", "A$15,000-A$30,000", "A$30,000-A$45,000", "A$45,000-A$60,000", "A$60,000-A$75,000", "A$75,000-A$90,000", "A$90,000-A$120,000", "A$120,000-A$150,000", "A$150,000+"],
+  "AED (د.إ)": ["Below 50,000 AED", "50,000-100,000 AED", "100,000-150,000 AED", "150,000-200,000 AED", "200,000-300,000 AED", "300,000-500,000 AED", "500,000+ AED"],
+  "SGD (S$)": ["Below S$20,000", "S$20,000-S$40,000", "S$40,000-S$60,000", "S$60,000-S$80,000", "S$80,000-S$100,000", "S$100,000-S$150,000", "S$150,000+"],
+};
 
 const citizenshipOptions = [
   "Indian Citizen", "NRI (Non-Resident Indian)", "PIO (Person of Indian Origin)",
