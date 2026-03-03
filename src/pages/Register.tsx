@@ -345,7 +345,7 @@ export default function Register() {
         p_dosham: form.dosham || null,
         p_whatsapp: form.phone || null,
         p_profile_photo_url: profilePhotoUrl,
-        p_education_detail: [form.edu10 && `10th: ${form.edu10}`, form.edu12 && `12th: ${form.edu12}`, form.graduationDetail && `Degree: ${form.graduationDetail}`].filter(Boolean).join(", ") || null,
+        p_education_detail: [form.edu10Board && `10th: ${form.edu10Board} - ${form.edu10Percentage}% - ${form.edu10School}`, form.edu12Board && `12th: ${form.edu12Board} - ${form.edu12Percentage}% - ${form.edu12College}`, form.graduationDetail && `Degree: ${form.graduationDetail}`].filter(Boolean).join(", ") || null,
       });
 
       if (profileErr) throw profileErr;
