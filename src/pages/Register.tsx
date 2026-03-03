@@ -211,7 +211,12 @@ const SummaryRow = ({ label, value }: { label: string; value: string }) => (
 
 const SummarySection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div className="mb-6 bg-white rounded-2xl shadow-sm p-5" style={{ border: `1px solid hsl(${THEME.primaryLight})` }}>
-    <h4 className="text-lg font-bold mb-3 px-5 py-3 rounded-xl" style={{ background: `hsl(${THEME.primaryLight})`, color: `hsl(${THEME.primaryDeep})` }}>{title}</h4>
+    <h4 className="text-lg font-extrabold mb-3 px-5 py-3 rounded-xl tracking-wide" style={{ 
+      background: 'linear-gradient(135deg, hsl(348, 56%, 27%), hsl(348, 50%, 37%))', 
+      color: '#fff',
+      fontFamily: "'Noto Sans', sans-serif",
+      letterSpacing: '0.5px',
+    }}>{title}</h4>
     <div className="px-3">{children}</div>
   </div>
 );
