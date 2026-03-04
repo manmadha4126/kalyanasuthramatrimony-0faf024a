@@ -2,8 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Eye, EyeOff, Heart, Sparkles, MapPin, Users, Star, Shield } from "lucide-react";
-import BackButton from "@/components/BackButton";
+import { Eye, EyeOff, Heart, Sparkles, MapPin, Users, Star, Shield, Phone, Mail, MessageCircle, Headphones, HelpCircle } from "lucide-react";
 import logo from "@/assets/kalyanasuthra-logo.png";
 
 export default function CustomerLogin() {
@@ -13,8 +12,6 @@ export default function CustomerLogin() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [forgotMode, setForgotMode] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
-  const [resetSent, setResetSent] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -22,7 +19,25 @@ export default function CustomerLogin() {
     setLoading(true);
     setError("");
     try {
-      const emailToUse = identifier.includes("@") ? identifier : `${identifier}@kalyanasuthra.in`;
+      // Support both email and phone login
+      let emailToUse = identifier.trim();
+      if (!emailToUse.includes("@")) {
+        // Phone number: look up email from profiles table
+        const cleaned = emailToUse.replace(/\D/g, "");
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("email")
+          .or(`phone.eq.${cleaned},phone.eq.+91${cleaned},whatsapp.eq.${cleaned}`)
+          .limit(1)
+          .single();
+        if (profileData?.email) {
+          emailToUse = profileData.email;
+        } else {
+          setError("No account found with this phone number.");
+          setLoading(false);
+          return;
+        }
+      }
       const { error: authError } = await supabase.auth.signInWithPassword({ email: emailToUse, password });
       if (authError) throw authError;
       navigate("/dashboard");
@@ -33,126 +48,73 @@ export default function CustomerLogin() {
     }
   };
 
-  const handleForgotPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, { redirectTo: `${window.location.origin}/reset-password` });
-      if (error) throw error;
-      setResetSent(true);
-    } catch (err: any) {
-      setError(err.message || "Failed to send reset email.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const features = [
-    { icon: Heart, label: "15,000+ Verified Profiles", desc: "Genuine matches from Telugu, Tamil & Kannada families" },
-    { icon: Shield, label: "100% Safe & Secure", desc: "Privacy protected with verified profiles only" },
-    { icon: Users, label: "Family-First Values", desc: "Traditional matchmaking with modern convenience" },
-    { icon: Star, label: "Dedicated Support", desc: "Personal relationship managers for premium members" },
-  ];
-
   return (
-    <div className="min-h-screen flex overflow-hidden" style={{ background: "hsl(30, 33%, 97%)" }}>
-      {/* Left Panel - Redesigned with teal/sage green theme */}
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.7 }}
-        className="hidden lg:flex flex-col justify-center w-1/2 relative overflow-hidden"
-        style={{ background: "linear-gradient(155deg, hsl(160, 30%, 28%) 0%, hsl(155, 35%, 38%) 40%, hsl(165, 28%, 32%) 100%)" }}
-      >
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-10" style={{ background: "radial-gradient(circle, hsl(45,50%,70%), transparent 70%)", transform: "translate(30%, -30%)" }} />
-        <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full opacity-8" style={{ background: "radial-gradient(circle, hsl(160,40%,60%), transparent 70%)", transform: "translate(-30%, 30%)" }} />
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, white 1px, transparent 0)", backgroundSize: "36px 36px" }} />
+    <div className="h-screen flex flex-col overflow-hidden relative" style={{ background: "linear-gradient(155deg, hsl(160, 25%, 95%) 0%, hsl(150, 20%, 92%) 40%, hsl(40, 30%, 95%) 100%)" }}>
+      {/* Background decorations */}
+      <div className="absolute top-10 left-10 w-72 h-72 rounded-full opacity-[0.07]" style={{ background: "radial-gradient(circle, hsl(160,40%,50%), transparent 70%)" }} />
+      <div className="absolute bottom-10 right-10 w-96 h-96 rounded-full opacity-[0.05]" style={{ background: "radial-gradient(circle, hsl(42,50%,60%), transparent 70%)" }} />
+      <div className="absolute top-1/3 right-1/4 w-48 h-48 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(160,35%,45%), transparent 70%)" }} />
+      {/* Dot pattern */}
+      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, hsl(160,30%,40%) 1px, transparent 0)", backgroundSize: "40px 40px" }} />
+      {/* Diagonal lines */}
+      <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: "repeating-linear-gradient(135deg, transparent, transparent 100px, hsl(160,30%,40%) 100px, hsl(160,30%,40%) 101px)" }} />
+      {/* Floating decorative elements */}
+      <div className="absolute top-16 right-20 animate-pulse" style={{ opacity: 0.15 }}>
+        <Heart size={28} style={{ color: "hsl(160,35%,40%)" }} />
+      </div>
+      <div className="absolute bottom-20 left-20 animate-pulse" style={{ opacity: 0.12, animationDelay: "1s" }}>
+        <Sparkles size={24} style={{ color: "hsl(42,50%,55%)" }} />
+      </div>
+      <div className="absolute top-1/2 left-12 animate-pulse" style={{ opacity: 0.1, animationDelay: "2s" }}>
+        <Star size={20} style={{ color: "hsl(160,30%,45%)" }} />
+      </div>
+      <div className="absolute top-24 left-1/3 animate-pulse" style={{ opacity: 0.1, animationDelay: "1.5s" }}>
+        <Heart size={16} style={{ color: "hsl(42,45%,55%)" }} className="fill-current" />
+      </div>
+      <div className="absolute bottom-32 right-1/3 animate-pulse" style={{ opacity: 0.08, animationDelay: "0.5s" }}>
+        <Users size={22} style={{ color: "hsl(160,35%,42%)" }} />
+      </div>
+      {/* Decorative rings */}
+      <div className="absolute top-32 right-40 w-20 h-20 rounded-full border-2 opacity-[0.06]" style={{ borderColor: "hsl(160,35%,40%)" }} />
+      <div className="absolute bottom-40 left-40 w-16 h-16 rounded-full border-2 opacity-[0.05]" style={{ borderColor: "hsl(42,50%,55%)" }} />
 
-        <div className="relative z-10 px-12 py-16">
-          {/* Logo */}
-          <div className="flex items-center gap-3 mb-12">
-            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 w-auto object-contain" />
-          </div>
+      {/* Main content - centered vertically */}
+      <div className="flex-1 flex flex-col items-center justify-center px-4 relative z-10">
+        {/* Logo above sign-in card */}
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-6">
+          <img src={logo} alt="Kalyanasuthra Matrimony" className="h-24 md:h-28 w-auto object-contain" />
+        </motion.div>
 
-          {/* Welcome message */}
-          <h1 className="text-5xl font-serif font-bold text-white mb-4 leading-snug">
-            The Wedding Chapter<br />
-            <span style={{ color: "hsl(42, 50%, 75%)", fontStyle: "italic" }}>Starts Here…</span>
-          </h1>
-          <p className="text-white/55 text-base leading-relaxed mb-10 max-w-md">
-            South India's most trusted matrimonial service. We've been uniting hearts and families since 2018, with thousands of successful matches across Telugu, Tamil, and Kannada communities.
-          </p>
-
-          {/* Feature cards */}
-          <div className="space-y-3">
-            {features.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + i * 0.12 }}
-                className="flex items-center gap-4 p-4 rounded-xl"
-                style={{ background: "hsl(0, 0%, 100% / 0.08)", border: "1px solid hsl(0, 0%, 100% / 0.1)" }}
-              >
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "hsl(0, 0%, 100% / 0.12)" }}>
-                  <item.icon size={16} className="text-white/80" />
-                </div>
-                <div>
-                  <p className="text-white font-semibold text-base">{item.label}</p>
-                  <p className="text-white/40 text-sm mt-0.5">{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Stats bar */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="mt-10 flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <Heart size={13} style={{ color: "hsl(42, 50%, 65%)" }} className="fill-current" />
-              <span className="text-white/50 text-xs">3,500+ Happy Weddings</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin size={13} style={{ color: "hsl(42, 50%, 65%)" }} />
-              <span className="text-white/50 text-xs">Pan South India</span>
-            </div>
-          </motion.div>
-        </div>
-      </motion.div>
-
-      {/* Right Panel */}
-      <div className="flex flex-col items-center justify-center w-full lg:w-1/2 px-6 py-12">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="w-full max-w-sm">
-          <div className="mb-4">
-            <BackButton to="/" label="Back to Home" />
-          </div>
-          {/* Mobile logo */}
-          <div className="flex items-center justify-center mb-8 lg:hidden">
-            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-16 w-auto object-contain" />
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        {/* Sign-in card */}
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="w-full max-w-md">
+          <div className="bg-white rounded-2xl shadow-xl p-8" style={{ border: "1px solid hsl(160, 20%, 88%)", boxShadow: "0 15px 50px hsl(160, 20%, 30% / 0.1)" }}>
             {!forgotMode ? (
               <>
-                <div className="flex items-center gap-2 mb-1">
-                  <Sparkles size={16} style={{ color: "hsl(42, 42%, 57%)" }} />
-                  <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">Member Login</span>
+                {/* Member Login heading - highlighted */}
+                <div className="text-center mb-6">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Sparkles size={18} style={{ color: "hsl(42, 42%, 57%)" }} />
+                    <span className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "hsl(42, 42%, 50%)", fontFamily: "'Noto Sans', sans-serif" }}>✦ Member Login ✦</span>
+                    <Sparkles size={18} style={{ color: "hsl(42, 42%, 57%)" }} />
+                  </div>
+                  <div className="w-24 h-[2px] mx-auto mb-4" style={{ background: "linear-gradient(90deg, transparent, hsl(42, 42%, 57%), transparent)" }} />
+                  <h2 className="font-serif text-3xl font-bold" style={{ color: "hsl(160, 30%, 25%)" }}>Welcome Back</h2>
+                  <p className="text-sm mt-1" style={{ color: "hsl(160, 15%, 55%)", fontFamily: "'Noto Sans', sans-serif" }}>Sign in with your email or phone number</p>
                 </div>
-                <h2 className="font-serif text-3xl font-bold mb-1" style={{ color: "hsl(160, 30%, 25%)" }}>Welcome Back</h2>
-                <p className="text-sm text-gray-400 mb-6">Sign in to explore your perfect match</p>
+
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Email or Phone Number</label>
-                    <input type="text" value={identifier} onChange={e => setIdentifier(e.target.value)} placeholder="your@email.com or 9876543210" required className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-200 transition-all" />
+                    <label className="block text-xs font-semibold mb-1" style={{ color: "hsl(160, 15%, 35%)", fontFamily: "'Noto Sans', sans-serif" }}>Email or Phone Number</label>
+                    <input type="text" value={identifier} onChange={e => setIdentifier(e.target.value)} placeholder="your@email.com or 9876543210" required className="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 transition-all" style={{ borderColor: "hsl(160, 15%, 85%)", fontFamily: "'Noto Sans', sans-serif" }} />
                   </div>
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="block text-xs font-semibold text-gray-600">Password</label>
+                      <label className="block text-xs font-semibold" style={{ color: "hsl(160, 15%, 35%)", fontFamily: "'Noto Sans', sans-serif" }}>Password</label>
                       <button type="button" onClick={() => setForgotMode(true)} className="text-xs font-medium hover:underline" style={{ color: "hsl(160, 35%, 35%)" }}>Forgot password?</button>
                     </div>
                     <div className="relative">
-                      <input type={showPass ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter password" required className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-200 pr-10 transition-all" />
-                      <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                      <input type={showPass ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter password" required className="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 pr-10 transition-all" style={{ borderColor: "hsl(160, 15%, 85%)" }} />
+                      <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: "hsl(160, 10%, 55%)" }}>
                         {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
                       </button>
                     </div>
@@ -160,37 +122,85 @@ export default function CustomerLogin() {
                   {error && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">{error}</motion.div>
                   )}
-                  <button type="submit" disabled={loading} className="w-full py-3 rounded-xl font-semibold text-sm text-white transition-all disabled:opacity-60 hover:scale-[1.01]" style={{ background: "linear-gradient(135deg, hsl(160, 30%, 30%), hsl(155, 35%, 38%))" }}>
+                  <button type="submit" disabled={loading} className="w-full py-3 rounded-xl font-bold text-sm text-white transition-all disabled:opacity-60 hover:scale-[1.01]" style={{ background: "linear-gradient(135deg, hsl(160, 30%, 30%), hsl(155, 35%, 38%))", fontFamily: "'Noto Sans', sans-serif" }}>
                     {loading ? "Signing In..." : "Sign In"}
                   </button>
                 </form>
-                <div className="mt-5 pt-4 border-t border-gray-100 text-center space-y-2">
-                  <p className="text-xs text-gray-500">Don't have an account? <a href="/register" className="font-semibold hover:underline" style={{ color: "hsl(160, 35%, 35%)" }}>Register Free</a></p>
+
+                <div className="mt-5 pt-4 border-t text-center space-y-2" style={{ borderColor: "hsl(160, 15%, 92%)" }}>
+                  <p className="text-xs" style={{ color: "hsl(160, 10%, 50%)", fontFamily: "'Noto Sans', sans-serif" }}>
+                    Don't have an account?{" "}
+                    <a href="/register" className="font-bold hover:underline" style={{ color: "hsl(160, 35%, 35%)" }}>Register Free</a>
+                  </p>
+                  <button onClick={() => navigate("/")} className="text-xs font-medium hover:underline" style={{ color: "hsl(160, 10%, 55%)" }}>
+                    ← Back to Home
+                  </button>
                 </div>
               </>
             ) : (
               <>
-                <button onClick={() => { setForgotMode(false); setError(""); setResetSent(false); }} className="flex items-center gap-1 text-xs text-gray-400 mb-5 hover:text-gray-600">← Back to login</button>
-                <h2 className="font-serif text-xl font-bold mb-1" style={{ color: "hsl(160, 30%, 25%)" }}>Reset Password</h2>
-                <p className="text-xs text-gray-400 mb-5">Enter your email and we'll send a reset link</p>
-                {resetSent ? (
-                  <div className="text-center py-6">
-                    <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-3"><span className="text-2xl">📧</span></div>
-                    <p className="text-sm font-semibold text-gray-700">Check your email!</p>
-                    <p className="text-xs text-gray-400 mt-1">Reset link sent to {resetEmail}</p>
+                {/* Forgot Password - Contact Support */}
+                <button onClick={() => { setForgotMode(false); setError(""); }} className="flex items-center gap-1 text-xs mb-5 hover:underline" style={{ color: "hsl(160, 10%, 50%)" }}>← Back to login</button>
+
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3" style={{ background: "hsl(160, 25%, 93%)" }}>
+                    <Headphones size={28} style={{ color: "hsl(160, 35%, 35%)" }} />
                   </div>
-                ) : (
-                  <form onSubmit={handleForgotPassword} className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-600 mb-1">Email Address</label>
-                      <input type="email" value={resetEmail} onChange={e => setResetEmail(e.target.value)} placeholder="your@email.com" required className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-200" />
+                  <h2 className="font-serif text-xl font-bold mb-1" style={{ color: "hsl(160, 30%, 25%)" }}>Forgot Password?</h2>
+                  <p className="text-xs" style={{ color: "hsl(160, 10%, 55%)", fontFamily: "'Noto Sans', sans-serif" }}>
+                    Don't worry! Our customer support team will help you reset your password.
+                  </p>
+                </div>
+
+                {/* Customer Support Option */}
+                <div className="space-y-3 mb-5">
+                  <div className="p-4 rounded-xl" style={{ background: "hsl(160, 25%, 96%)", border: "1px solid hsl(160, 20%, 90%)" }}>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "hsl(160, 30%, 88%)" }}>
+                        <Headphones size={16} style={{ color: "hsl(160, 35%, 35%)" }} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold" style={{ color: "hsl(160, 30%, 25%)", fontFamily: "'Noto Sans', sans-serif" }}>Customer Support</p>
+                        <p className="text-xs" style={{ color: "hsl(160, 10%, 55%)" }}>Available Mon-Sat, 9AM - 7PM</p>
+                      </div>
                     </div>
-                    {error && <p className="text-xs text-red-600">{error}</p>}
-                    <button type="submit" disabled={loading} className="w-full py-3 rounded-xl font-semibold text-sm text-white transition-all disabled:opacity-60" style={{ background: "hsl(160, 30%, 35%)" }}>
-                      {loading ? "Sending..." : "Send Reset Link"}
-                    </button>
-                  </form>
-                )}
+                    <div className="space-y-2 mt-3">
+                      <a href="tel:+919553306667" className="flex items-center gap-2 text-sm font-medium hover:underline" style={{ color: "hsl(160, 35%, 32%)" }}>
+                        <Phone size={14} /> +91 95533 06667
+                      </a>
+                      <a href="https://wa.me/919553306667" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium hover:underline" style={{ color: "hsl(160, 35%, 32%)" }}>
+                        <MessageCircle size={14} /> WhatsApp Us
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Contact Us Option */}
+                  <div className="p-4 rounded-xl" style={{ background: "hsl(42, 30%, 96%)", border: "1px solid hsl(42, 25%, 90%)" }}>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "hsl(42, 30%, 88%)" }}>
+                        <Mail size={16} style={{ color: "hsl(42, 42%, 45%)" }} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold" style={{ color: "hsl(42, 30%, 30%)", fontFamily: "'Noto Sans', sans-serif" }}>Contact Us</p>
+                        <p className="text-xs" style={{ color: "hsl(42, 15%, 50%)" }}>Email us for assistance</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2 mt-3">
+                      <a href="mailto:kalyanasuthra@gmail.com" className="flex items-center gap-2 text-sm font-medium hover:underline" style={{ color: "hsl(42, 40%, 35%)" }}>
+                        <Mail size={14} /> kalyanasuthra@gmail.com
+                      </a>
+                      <div className="flex items-center gap-2 text-sm" style={{ color: "hsl(42, 15%, 45%)" }}>
+                        <MapPin size={14} /> Tirupati, Andhra Pradesh
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <p className="text-[11px]" style={{ color: "hsl(160, 10%, 60%)", fontFamily: "'Noto Sans', sans-serif" }}>
+                    Our team will verify your identity and help you reset your password securely.
+                  </p>
+                </div>
               </>
             )}
           </div>
