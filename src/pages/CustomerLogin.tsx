@@ -2,19 +2,18 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Eye, EyeOff, Heart, Sparkles, MapPin, Users, Star, Shield } from "lucide-react";
+import { Eye, EyeOff, Heart, Sparkles, MapPin, Users, Star, Shield, Phone, Headphones } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import logo from "@/assets/kalyanasuthra-logo.png";
 
 export default function CustomerLogin() {
+  const [loginMethod, setLoginMethod] = useState<"email" | "phone">("phone");
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [forgotMode, setForgotMode] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
-  const [resetSent, setResetSent] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -33,20 +32,6 @@ export default function CustomerLogin() {
     }
   };
 
-  const handleForgotPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, { redirectTo: `${window.location.origin}/reset-password` });
-      if (error) throw error;
-      setResetSent(true);
-    } catch (err: any) {
-      setError(err.message || "Failed to send reset email.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const features = [
     { icon: Heart, label: "15,000+ Verified Profiles", desc: "Genuine matches from Telugu, Tamil & Kannada families" },
     { icon: Shield, label: "100% Safe & Secure", desc: "Privacy protected with verified profiles only" },
@@ -55,8 +40,8 @@ export default function CustomerLogin() {
   ];
 
   return (
-    <div className="min-h-screen flex overflow-hidden" style={{ background: "hsl(30, 33%, 97%)" }}>
-      {/* Left Panel - Redesigned with teal/sage green theme */}
+    <div className="h-screen flex overflow-hidden" style={{ background: "hsl(30, 33%, 97%)" }}>
+      {/* Left Panel - No logo, same theme */}
       <motion.div
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
@@ -70,11 +55,6 @@ export default function CustomerLogin() {
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, white 1px, transparent 0)", backgroundSize: "36px 36px" }} />
 
         <div className="relative z-10 px-12 py-16">
-          {/* Logo */}
-          <div className="flex items-center gap-3 mb-12">
-            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 w-auto object-contain" />
-          </div>
-
           {/* Welcome message */}
           <h1 className="text-5xl font-serif font-bold text-white mb-4 leading-snug">
             The Wedding Chapter<br />
@@ -121,29 +101,62 @@ export default function CustomerLogin() {
       </motion.div>
 
       {/* Right Panel */}
-      <div className="flex flex-col items-center justify-center w-full lg:w-1/2 px-6 py-12">
+      <div className="flex flex-col items-center justify-center w-full lg:w-1/2 px-6">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="w-full max-w-sm">
           <div className="mb-4">
             <BackButton to="/" label="Back to Home" />
           </div>
-          {/* Mobile logo */}
-          <div className="flex items-center justify-center mb-8 lg:hidden">
-            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-16 w-auto object-contain" />
+          {/* Logo on right side */}
+          <div className="flex items-center justify-center mb-6">
+            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 w-auto object-contain" />
           </div>
 
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             {!forgotMode ? (
               <>
-                <div className="flex items-center gap-2 mb-1">
-                  <Sparkles size={16} style={{ color: "hsl(42, 42%, 57%)" }} />
-                  <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">Member Login</span>
+                {/* Highlighted Member Login badge */}
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: "linear-gradient(135deg, hsl(160, 30%, 28%), hsl(155, 35%, 38%))" }}>
+                    <Sparkles size={14} className="text-white" />
+                    <span className="text-xs font-bold uppercase tracking-widest text-white">Member Login</span>
+                  </div>
                 </div>
                 <h2 className="font-serif text-3xl font-bold mb-1" style={{ color: "hsl(160, 30%, 25%)" }}>Welcome Back</h2>
-                <p className="text-sm text-gray-400 mb-6">Sign in to explore your perfect match</p>
+                <p className="text-sm text-gray-400 mb-5">Sign in to explore your perfect match</p>
+
+                {/* Login method toggle */}
+                <div className="flex rounded-xl overflow-hidden border border-gray-200 mb-5">
+                  <button
+                    type="button"
+                    onClick={() => { setLoginMethod("phone"); setIdentifier(""); setError(""); }}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-semibold transition-all ${loginMethod === "phone" ? "text-white" : "text-gray-500 bg-gray-50"}`}
+                    style={loginMethod === "phone" ? { background: "linear-gradient(135deg, hsl(160, 30%, 30%), hsl(155, 35%, 38%))" } : {}}
+                  >
+                    <Phone size={14} /> Phone Number
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setLoginMethod("email"); setIdentifier(""); setError(""); }}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-semibold transition-all ${loginMethod === "email" ? "text-white" : "text-gray-500 bg-gray-50"}`}
+                    style={loginMethod === "email" ? { background: "linear-gradient(135deg, hsl(160, 30%, 30%), hsl(155, 35%, 38%))" } : {}}
+                  >
+                    <Sparkles size={14} /> Email
+                  </button>
+                </div>
+
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Email or Phone Number</label>
-                    <input type="text" value={identifier} onChange={e => setIdentifier(e.target.value)} placeholder="your@email.com or 9876543210" required className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-200 transition-all" />
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">
+                      {loginMethod === "phone" ? "Phone Number" : "Email Address"}
+                    </label>
+                    <input
+                      type={loginMethod === "phone" ? "tel" : "email"}
+                      value={identifier}
+                      onChange={e => setIdentifier(e.target.value)}
+                      placeholder={loginMethod === "phone" ? "Enter your phone number" : "your@email.com"}
+                      required
+                      className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-200 transition-all"
+                    />
                   </div>
                   <div>
                     <div className="flex items-center justify-between mb-1">
@@ -170,27 +183,22 @@ export default function CustomerLogin() {
               </>
             ) : (
               <>
-                <button onClick={() => { setForgotMode(false); setError(""); setResetSent(false); }} className="flex items-center gap-1 text-xs text-gray-400 mb-5 hover:text-gray-600">← Back to login</button>
-                <h2 className="font-serif text-xl font-bold mb-1" style={{ color: "hsl(160, 30%, 25%)" }}>Reset Password</h2>
-                <p className="text-xs text-gray-400 mb-5">Enter your email and we'll send a reset link</p>
-                {resetSent ? (
-                  <div className="text-center py-6">
-                    <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-3"><span className="text-2xl">📧</span></div>
-                    <p className="text-sm font-semibold text-gray-700">Check your email!</p>
-                    <p className="text-xs text-gray-400 mt-1">Reset link sent to {resetEmail}</p>
+                <button onClick={() => { setForgotMode(false); setError(""); }} className="flex items-center gap-1 text-xs text-gray-400 mb-5 hover:text-gray-600">← Back to login</button>
+                <div className="text-center py-6">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "hsl(160, 30%, 92%)" }}>
+                    <Headphones size={28} style={{ color: "hsl(160, 30%, 30%)" }} />
                   </div>
-                ) : (
-                  <form onSubmit={handleForgotPassword} className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-600 mb-1">Email Address</label>
-                      <input type="email" value={resetEmail} onChange={e => setResetEmail(e.target.value)} placeholder="your@email.com" required className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-200" />
-                    </div>
-                    {error && <p className="text-xs text-red-600">{error}</p>}
-                    <button type="submit" disabled={loading} className="w-full py-3 rounded-xl font-semibold text-sm text-white transition-all disabled:opacity-60" style={{ background: "hsl(160, 30%, 35%)" }}>
-                      {loading ? "Sending..." : "Send Reset Link"}
-                    </button>
-                  </form>
-                )}
+                  <h2 className="font-serif text-xl font-bold mb-2" style={{ color: "hsl(160, 30%, 25%)" }}>Forgot Password?</h2>
+                  <p className="text-sm text-gray-500 mb-4 leading-relaxed">
+                    Please contact our <strong>Customer Support</strong> team. They will help you reset your password.
+                  </p>
+                  <div className="rounded-xl p-4 mb-4" style={{ background: "hsl(160, 30%, 95%)", border: "1px solid hsl(160, 30%, 85%)" }}>
+                    <p className="text-xs font-semibold mb-1" style={{ color: "hsl(160, 30%, 30%)" }}>📞 Call / WhatsApp</p>
+                    <a href="tel:+919876543210" className="text-lg font-bold" style={{ color: "hsl(160, 30%, 25%)" }}>+91 98765 43210</a>
+                    <p className="text-xs text-gray-400 mt-2">Available Mon–Sat, 9 AM – 7 PM</p>
+                  </div>
+                  <p className="text-xs text-gray-400">Our team will verify your identity and help you reset your password securely.</p>
+                </div>
               </>
             )}
           </div>
