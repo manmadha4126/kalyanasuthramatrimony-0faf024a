@@ -229,6 +229,7 @@ export default function Register() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
+  const [createdProfileId, setCreatedProfileId] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 

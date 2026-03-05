@@ -803,6 +803,7 @@ export default function AdminDashboard() {
                           <th className="text-left py-3 px-4 font-semibold">Phone</th>
                           <th className="text-left py-3 px-4 font-semibold">Date</th>
                           <th className="text-left py-3 px-4 font-semibold">Time</th>
+                          <th className="text-left py-3 px-4 font-semibold">Message / Notes</th>
                           <th className="text-left py-3 px-4 font-semibold">Status</th>
                           <th className="text-left py-3 px-4 font-semibold">Actions</th>
                         </tr>
@@ -814,6 +815,13 @@ export default function AdminDashboard() {
                             <td className="py-4 px-4 text-gray-600 text-sm">{c.phone}</td>
                             <td className="py-4 px-4 text-gray-600 text-sm">{c.preferred_date}</td>
                             <td className="py-4 px-4 text-gray-600 text-sm">{c.preferred_time}</td>
+                            <td className="py-4 px-4 text-gray-600 text-sm max-w-[200px]">
+                              {c.notes ? (
+                                <div className="whitespace-pre-line text-xs leading-relaxed">{c.notes}</div>
+                              ) : (
+                                <span className="text-gray-300">—</span>
+                              )}
+                            </td>
                             <td className="py-4 px-4"><StatusBadge status={c.status} /></td>
                             <td className="py-4 px-4">
                               <div className="flex items-center gap-2">
