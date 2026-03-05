@@ -1066,80 +1066,187 @@ export default function AdminDashboard() {
 
           {/* Subscription Access */}
           {tab === "Subscription Access" && (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-800">Subscription Access</h3>
-                  <p className="text-sm text-gray-500 mt-0.5">Grant or revoke assisted service access for profiles</p>
-                </div>
-                <div className="sm:ml-auto relative">
-                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search by name, phone, email..."
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                  />
-                </div>
-              </div>
-              <div className="p-4">
-                {loading ? (
-                  <div className="text-center py-10 text-gray-400">Loading...</div>
-                ) : (
-                  <div className="space-y-3">
-                    {profiles.filter(p => {
-                      if (!searchQuery) return p.profile_status === "active";
-                      const q = searchQuery.toLowerCase();
-                      return (
-                        p.full_name.toLowerCase().includes(q) ||
-                        (p.phone?.includes(q)) ||
-                        (p.email?.toLowerCase().includes(q)) ||
-                        (p.city?.toLowerCase().includes(q))
-                      );
-                    }).map((p, i) => (
-                      <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
-                        className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md flex items-center gap-4 px-5 py-4"
-                        style={{ borderLeft: `4px solid ${(p as any).subscription_type === "assisted" ? "hsl(280, 65%, 55%)" : "hsl(210, 20%, 80%)"}` }}
-                      >
-                        <div className="w-12 h-12 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
-                          {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><span className="text-lg font-bold text-gray-400">{p.full_name[0]}</span></div>}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-gray-800 text-base truncate">{p.full_name}</h3>
-                          <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {p.phone || "—"}</p>
-                        </div>
-                        <div className="flex-shrink-0">
-                          <span className="px-3 py-1 rounded-full text-xs font-bold" style={
-                            (p as any).subscription_type === "assisted"
-                              ? { background: "hsl(280, 65%, 93%)", color: "hsl(280, 65%, 40%)" }
-                              : { background: "hsl(0, 0%, 95%)", color: "hsl(0, 0%, 50%)" }
-                          }>
-                            {(p as any).subscription_type === "assisted" ? "✦ Assisted" : "Free"}
-                          </span>
-                        </div>
-                        <button
-                          onClick={async () => {
-                            const newType = (p as any).subscription_type === "assisted" ? "free" : "assisted";
-                            const { error } = await supabase.from("profiles").update({ subscription_type: newType } as any).eq("id", p.id);
-                            if (!error) {
-                              setProfiles(prev => prev.map(pr => pr.id === p.id ? { ...pr, subscription_type: newType } as any : pr));
-                              toast({ title: newType === "assisted" ? "Assisted access granted!" : "Reverted to free account" });
-                            }
-                          }}
-                          className="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all"
-                          style={{ background: (p as any).subscription_type === "assisted" ? "hsl(0, 55%, 50%)" : "hsl(280, 65%, 55%)" }}
-                        >
-                          {(p as any).subscription_type === "assisted" ? "Revoke Access" : "Grant Assisted"}
-                        </button>
-                      </motion.div>
-                    ))}
-                    {profiles.filter(p => p.profile_status === "active").length === 0 && !searchQuery && (
-                      <div className="text-center py-10 text-gray-400">No active profiles to manage</div>
-                    )}
+            <div className="space-y-6">
+              {/* Profile list */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4">
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-800">Subscription Access</h3>
+                    <p className="text-sm text-gray-500 mt-0.5">Select a profile to manage subscription</p>
                   </div>
-                )}
+                  <div className="sm:ml-auto relative">
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input type="text" placeholder="Search by name, phone, email..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                      className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                  </div>
+                </div>
+                <div className="p-4">
+                  {loading ? (
+                    <div className="text-center py-10 text-gray-400">Loading...</div>
+                  ) : (
+                    <div className="space-y-3">
+                      {profiles.filter(p => {
+                        if (!searchQuery) return p.profile_status === "active";
+                        const q = searchQuery.toLowerCase();
+                        return p.full_name.toLowerCase().includes(q) || (p.phone?.includes(q)) || (p.email?.toLowerCase().includes(q)) || (p.city?.toLowerCase().includes(q));
+                      }).map((p, i) => (
+                        <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
+                          className={`bg-white rounded-xl border overflow-hidden transition-all hover:shadow-md flex items-center gap-4 px-5 py-4 cursor-pointer ${subSelectedProfile?.id === p.id ? "ring-2 ring-purple-400 border-purple-200" : "border-gray-100"}`}
+                          style={{ borderLeft: `4px solid ${(p as any).subscription_type === "assisted" ? "hsl(280, 65%, 55%)" : "hsl(210, 20%, 80%)"}` }}
+                          onClick={() => { setSubSelectedProfile(p); setSubPackage(""); setSubAmount(""); setSubNotes(""); setSubShowSummary(false); }}
+                        >
+                          <div className="w-12 h-12 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
+                            {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><span className="text-lg font-bold text-gray-400">{p.full_name[0]}</span></div>}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-bold text-gray-800 text-base truncate">{p.full_name}</h3>
+                            <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {p.phone || "—"}</p>
+                          </div>
+                          {(p as any).profile_id && (
+                            <span className="px-2 py-1 rounded-lg text-xs font-bold flex-shrink-0" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>{(p as any).profile_id}</span>
+                          )}
+                          <div className="flex-shrink-0">
+                            <span className="px-3 py-1 rounded-full text-xs font-bold" style={
+                              (p as any).subscription_type === "assisted"
+                                ? { background: "hsl(280, 65%, 93%)", color: "hsl(280, 65%, 40%)" }
+                                : { background: "hsl(0, 0%, 95%)", color: "hsl(0, 0%, 50%)" }
+                            }>
+                              {(p as any).subscription_type === "assisted" ? "✦ Assisted" : "Free"}
+                            </span>
+                          </div>
+                        </motion.div>
+                      ))}
+                      {profiles.filter(p => p.profile_status === "active").length === 0 && !searchQuery && (
+                        <div className="text-center py-10 text-gray-400">No active profiles to manage</div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
+
+              {/* Selected profile subscription panel */}
+              {subSelectedProfile && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                  <div className="p-6 border-b border-gray-100 flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
+                      {subSelectedProfile.profile_photo_url ? <img src={subSelectedProfile.profile_photo_url} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xl font-bold text-gray-400">{subSelectedProfile.full_name[0]}</div>}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-800">{subSelectedProfile.full_name}</h3>
+                      <p className="text-sm text-gray-500">{(subSelectedProfile as any).profile_id || "—"} • {subSelectedProfile.phone || "—"} • Current: <span className="font-semibold" style={{ color: (subSelectedProfile as any).subscription_type === "assisted" ? "hsl(280, 65%, 50%)" : "hsl(0, 0%, 50%)" }}>{(subSelectedProfile as any).subscription_type === "assisted" ? "Assisted" : "Free"}</span></p>
+                    </div>
+                    <button onClick={() => setSubSelectedProfile(null)} className="ml-auto text-gray-400 hover:text-gray-600"><X size={20} /></button>
+                  </div>
+
+                  {(subSelectedProfile as any).subscription_type === "assisted" ? (
+                    <div className="p-6">
+                      <p className="text-sm text-gray-600 mb-4">This profile currently has <span className="font-bold" style={{ color: "hsl(280, 65%, 50%)" }}>Assisted Access</span>.</p>
+                      <button
+                        onClick={async () => {
+                          const { error } = await supabase.from("profiles").update({ subscription_type: "free" } as any).eq("id", subSelectedProfile.id);
+                          if (!error) {
+                            setProfiles(prev => prev.map(pr => pr.id === subSelectedProfile.id ? { ...pr, subscription_type: "free" } as any : pr));
+                            setSubSelectedProfile(null);
+                            toast({ title: "Reverted to free account" });
+                          }
+                        }}
+                        className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all" style={{ background: "hsl(0, 55%, 50%)" }}
+                      >
+                        Revoke Assisted Access
+                      </button>
+                    </div>
+                  ) : !subShowSummary ? (
+                    <div className="p-6 space-y-5">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-600 mb-2">📦 Select Package</label>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                          {packageOptions.map(pkg => (
+                            <button key={pkg.value} onClick={() => setSubPackage(pkg.value)}
+                              className={`px-4 py-3 rounded-xl text-sm font-semibold border-2 transition-all ${subPackage === pkg.value ? "border-purple-500 bg-purple-50 text-purple-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}>
+                              {pkg.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-600 mb-1.5">💰 Amount Paid (₹)</label>
+                          <input type="number" value={subAmount} onChange={e => setSubAmount(e.target.value)} placeholder="Enter amount"
+                            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-200" />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-600 mb-1.5">📝 Admin Notes</label>
+                          <textarea value={subNotes} onChange={e => setSubNotes(e.target.value)} placeholder="Payment reference, notes..." rows={2}
+                            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-200" />
+                        </div>
+                      </div>
+                      <div className="flex gap-3 pt-2">
+                        <button
+                          onClick={() => {
+                            if (!subPackage) { toast({ title: "Please select a package", variant: "destructive" }); return; }
+                            if (!subAmount) { toast({ title: "Please enter amount paid", variant: "destructive" }); return; }
+                            setSubShowSummary(true);
+                          }}
+                          className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all" style={{ background: "hsl(280, 65%, 55%)" }}
+                        >
+                          Review & Confirm
+                        </button>
+                        <button onClick={() => setSubSelectedProfile(null)} className="px-4 py-2.5 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50">Cancel</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-6 space-y-5">
+                      <h4 className="text-base font-bold text-gray-800 flex items-center gap-2"><CreditCard size={18} /> Subscription Summary</h4>
+                      <div className="rounded-xl p-5 space-y-3" style={{ background: "hsl(280, 65%, 97%)", border: "1px solid hsl(280, 65%, 90%)" }}>
+                        <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
+                          <span className="text-sm text-gray-600 font-medium">Profile</span>
+                          <span className="text-sm font-bold text-gray-800">{subSelectedProfile.full_name} ({(subSelectedProfile as any).profile_id || "—"})</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
+                          <span className="text-sm text-gray-600 font-medium">Package</span>
+                          <span className="text-sm font-bold text-gray-800">{packageOptions.find(p => p.value === subPackage)?.label}</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
+                          <span className="text-sm text-gray-600 font-medium">Amount Paid</span>
+                          <span className="text-sm font-bold text-gray-800">₹{subAmount}</span>
+                        </div>
+                        {subNotes && (
+                          <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
+                            <span className="text-sm text-gray-600 font-medium">Admin Notes</span>
+                            <span className="text-sm text-gray-800 text-right max-w-[60%]">{subNotes}</span>
+                          </div>
+                        )}
+                        <div className="flex justify-between py-2">
+                          <span className="text-sm text-gray-600 font-medium">Access Type</span>
+                          <span className="text-sm font-bold" style={{ color: "hsl(280, 65%, 50%)" }}>✦ Assisted Access</span>
+                        </div>
+                      </div>
+                      <div className="flex gap-3 pt-2">
+                        <button
+                          disabled={subSaving}
+                          onClick={async () => {
+                            setSubSaving(true);
+                            const { error } = await supabase.from("profiles").update({ subscription_type: "assisted" } as any).eq("id", subSelectedProfile.id);
+                            if (!error) {
+                              setProfiles(prev => prev.map(pr => pr.id === subSelectedProfile.id ? { ...pr, subscription_type: "assisted" } as any : pr));
+                              toast({ title: "Assisted access granted successfully!" });
+                              setSubSelectedProfile(null);
+                              setSubShowSummary(false);
+                            } else {
+                              toast({ title: "Error", description: error.message, variant: "destructive" });
+                            }
+                            setSubSaving(false);
+                          }}
+                          className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-60" style={{ background: "hsl(145, 65%, 42%)" }}
+                        >
+                          {subSaving ? "Granting..." : "✓ Grant Assisted Access"}
+                        </button>
+                        <button onClick={() => setSubShowSummary(false)} className="px-4 py-2.5 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50">Back</button>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              )}
             </div>
           )}
 
