@@ -449,30 +449,40 @@ export default function AdminDashboard() {
           ) : (
             /* View Mode - Spacious cards */
             <div className="space-y-6">
-              {p.about_me && (
-                <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
-                  <DetailSection title="About Me">
-                    <p className="text-base text-gray-700 leading-relaxed">{p.about_me}</p>
-                  </DetailSection>
-                </div>
-              )}
+              <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
+                <DetailSection title="About Me">
+                  <p className="text-base text-gray-700 leading-relaxed">{p.about_me || "—"}</p>
+                </DetailSection>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
+                <DetailSection title="Contact Details">
+                  <DetailRow label="Email" value={p.email} />
+                  <DetailRow label="Phone" value={p.phone} />
+                  <DetailRow label="WhatsApp" value={p.whatsapp} />
+                </DetailSection>
+              </div>
 
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <DetailSection title="Personal Details">
                   <DetailRow label="Date of Birth" value={p.date_of_birth} />
+                  <DetailRow label="Gender" value={p.gender} />
                   <DetailRow label="Mother Tongue" value={p.mother_tongue} />
                   <DetailRow label="Height" value={p.height_cm ? `${p.height_cm} cm` : null} />
+                  <DetailRow label="Weight" value={p.weight_kg ? `${p.weight_kg} kg` : null} />
+                  <DetailRow label="Complexion" value={p.complexion} />
+                  <DetailRow label="Blood Group" value={p.blood_group} />
                   <DetailRow label="Marital Status" value={p.marital_status} />
                   <DetailRow label="Religion" value={p.religion} />
                   <DetailRow label="Caste" value={p.caste} />
                   <DetailRow label="Sub Caste" value={p.sub_caste} />
                   <DetailRow label="Country" value={p.country} />
                   <DetailRow label="State" value={p.state} />
+                  <DetailRow label="District" value={p.district} />
                   <DetailRow label="City" value={p.city} />
                   <DetailRow label="Native Place" value={p.native_place} />
-                  <DetailRow label="Email" value={p.email} />
-                  <DetailRow label="Phone" value={p.phone} />
-                  <DetailRow label="WhatsApp" value={p.whatsapp} />
+                  <DetailRow label="Working City" value={p.working_city} />
+                  <DetailRow label="Profile Created By" value={p.profile_created_by} />
                 </DetailSection>
               </div>
 
@@ -504,6 +514,25 @@ export default function AdminDashboard() {
                   <DetailRow label="Raasi" value={p.raasi} />
                   <DetailRow label="Star" value={p.star} />
                   <DetailRow label="Dosham" value={p.dosham} />
+                  {p.horoscope_url ? (
+                    <div className="mt-4">
+                      <span className="text-sm font-semibold text-gray-500 mb-2 block">Horoscope File</span>
+                      <a href={p.horoscope_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:shadow-md" style={{ background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>
+                        <FileText size={16} /> View Horoscope
+                      </a>
+                      {(p.horoscope_url.endsWith('.jpg') || p.horoscope_url.endsWith('.jpeg') || p.horoscope_url.endsWith('.png') || p.horoscope_url.endsWith('.webp')) && (
+                        <img src={p.horoscope_url} alt="Horoscope" className="mt-3 max-w-sm rounded-xl border border-gray-200" />
+                      )}
+                    </div>
+                  ) : (
+                    <DetailRow label="Horoscope File" value={null} />
+                  )}
+                </DetailSection>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
+                <DetailSection title="Partner Expectations">
+                  <p className="text-base text-gray-700 leading-relaxed">{p.partner_expectations || "—"}</p>
                 </DetailSection>
               </div>
 
