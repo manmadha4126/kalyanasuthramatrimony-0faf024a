@@ -170,6 +170,7 @@ type FormData = {
   familyStatus: string; familyType: string; fatherName: string; fatherOccupation: string; motherName: string; motherOccupation: string; siblings: string; siblingDetails: string;
   gothram: string; raashi: string; star: string; dosham: string; timeOfBirth: string; countryOfBirth: string; stateOfBirth: string; birthPlace: string; language: string; chartStyle: string; horoscopeFile: File | null;
   photos: File[]; primaryPhotoIndex: number;
+  aboutMe: string; partnerExpectations: string;
 };
 
 const defaultForm: FormData = {
