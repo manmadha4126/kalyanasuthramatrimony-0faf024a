@@ -179,6 +179,7 @@ export type Database = {
           partner_expectations: string | null
           phone: string | null
           profile_created_by: string | null
+          profile_id: string | null
           profile_photo_url: string | null
           profile_status: string
           raasi: string | null
@@ -231,6 +232,7 @@ export type Database = {
           partner_expectations?: string | null
           phone?: string | null
           profile_created_by?: string | null
+          profile_id?: string | null
           profile_photo_url?: string | null
           profile_status?: string
           raasi?: string | null
@@ -283,6 +285,7 @@ export type Database = {
           partner_expectations?: string | null
           phone?: string | null
           profile_created_by?: string | null
+          profile_id?: string | null
           profile_photo_url?: string | null
           profile_status?: string
           raasi?: string | null

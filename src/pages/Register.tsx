@@ -229,6 +229,7 @@ export default function Register() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
+  const [createdProfileId, setCreatedProfileId] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -350,6 +351,12 @@ export default function Register() {
 
       if (profileErr) throw profileErr;
 
+      // Fetch the generated profile_id
+      const { data: profileData } = await supabase.from("profiles").select("profile_id").eq("user_id", userId).single();
+      if (profileData && (profileData as any).profile_id) {
+        setCreatedProfileId((profileData as any).profile_id);
+      }
+
       setDone(true);
       toast({ title: "Registration successful!", description: "Your profile has been submitted for review." });
     } catch (err: any) {
@@ -378,6 +385,13 @@ export default function Register() {
               </motion.div>
 
               <h2 className="text-2xl font-bold mb-4" style={{ color: `hsl(${THEME.primaryDeep})`, fontFamily: "system-ui, sans-serif" }}>Profile Created Successfully!</h2>
+
+              {createdProfileId && (
+                <div className="rounded-xl p-4 mb-5 flex items-center justify-center gap-3" style={{ background: "hsl(210, 80%, 96%)", border: "1px solid hsl(210, 80%, 85%)" }}>
+                  <span className="text-sm font-semibold" style={{ color: "hsl(210, 60%, 35%)" }}>Your Profile ID:</span>
+                  <span className="text-xl font-extrabold tracking-wider" style={{ color: "hsl(210, 80%, 40%)" }}>{createdProfileId}</span>
+                </div>
+              )}
 
               <div className="rounded-xl p-5 mb-5 text-left" style={{ background: `hsl(${THEME.accentLight})`, border: `1px solid hsl(${THEME.accent} / 0.3)` }}>
                 <p className="text-sm leading-relaxed" style={{ color: `hsl(${THEME.primaryDeep})` }}>

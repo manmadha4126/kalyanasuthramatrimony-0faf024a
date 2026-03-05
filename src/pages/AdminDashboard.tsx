@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload } from "lucide-react";
+import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload, FileText } from "lucide-react";
 import adminLogo from "@/assets/kalyanasuthra-logo.png";
 
 type Profile = {
@@ -21,6 +21,14 @@ type Profile = {
   native_place: string | null; about_me: string | null; whatsapp: string | null;
   profile_created_by: string | null; additional_photos: string[] | null;
   subscription_type?: string;
+  horoscope_url: string | null;
+  profile_id: string | null;
+  district: string | null;
+  complexion: string | null;
+  blood_group: string | null;
+  weight_kg: number | null;
+  working_city: string | null;
+  partner_expectations: string | null;
 };
 
 type Consultation = {
@@ -229,6 +237,18 @@ export default function AdminDashboard() {
     }
   };
 
+  const deleteProfile = async (id: string) => {
+    if (!window.confirm("Are you sure you want to permanently delete this profile? This action cannot be undone.")) return;
+    const { error } = await supabase.from("profiles").delete().eq("id", id);
+    if (!error) {
+      setProfiles(prev => prev.filter(p => p.id !== id));
+      if (selectedProfile?.id === id) setSelectedProfile(null);
+      toast({ title: "Profile permanently deleted" });
+    } else {
+      toast({ title: "Error deleting profile", description: error.message, variant: "destructive" });
+    }
+  };
+
   const logout = async () => { sessionStorage.removeItem("admin_auth"); await supabase.auth.signOut(); navigate("/admin"); };
 
   const pendingProfiles = profiles.filter(p => p.profile_status === "pending");
@@ -339,14 +359,24 @@ export default function AdminDashboard() {
               <div className="flex items-center gap-4 mb-2">
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{p.full_name}</h2>
                 <StatusBadge status={selectedProfile.profile_status} />
+                {(selectedProfile as any).profile_id && (
+                  <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>
+                    ID: {(selectedProfile as any).profile_id}
+                  </span>
+                )}
               </div>
               <div className="space-y-1 mt-3">
                 <p className="text-base text-gray-600"><strong>Age:</strong> {getAge(p.date_of_birth)} years</p>
+                <p className="text-base text-gray-600"><strong>Gender:</strong> {p.gender || "—"}</p>
                 <p className="text-base text-gray-600"><strong>Height:</strong> {p.height_cm ? `${p.height_cm} cm` : "—"}</p>
+                <p className="text-base text-gray-600"><strong>Weight:</strong> {p.weight_kg ? `${p.weight_kg} kg` : "—"}</p>
+                <p className="text-base text-gray-600"><strong>Complexion:</strong> {p.complexion || "—"}</p>
+                <p className="text-base text-gray-600"><strong>Blood Group:</strong> {p.blood_group || "—"}</p>
                 <p className="text-base text-gray-600"><strong>Profession:</strong> {p.occupation || "—"}</p>
-                <p className="text-base text-gray-600"><strong>Location:</strong> {[p.city, p.state, p.country].filter(Boolean).join(", ")}</p>
-                <p className="text-base text-gray-600"><strong>Marital Status:</strong> {p.marital_status}</p>
+                <p className="text-base text-gray-600"><strong>Location:</strong> {[p.city, p.state, p.country].filter(Boolean).join(", ") || "—"}</p>
+                <p className="text-base text-gray-600"><strong>Marital Status:</strong> {p.marital_status || "—"}</p>
                 <p className="text-base text-gray-600"><strong>Religion:</strong> {p.religion}{p.caste ? ` - ${p.caste}` : ""}</p>
+                <p className="text-base text-gray-600"><strong>Profile Created By:</strong> {p.profile_created_by || "—"}</p>
               </div>
               <p className="text-sm text-gray-400 mt-3">Registered: {new Date(selectedProfile.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}</p>
             </div>
@@ -419,30 +449,40 @@ export default function AdminDashboard() {
           ) : (
             /* View Mode - Spacious cards */
             <div className="space-y-6">
-              {p.about_me && (
-                <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
-                  <DetailSection title="About Me">
-                    <p className="text-base text-gray-700 leading-relaxed">{p.about_me}</p>
-                  </DetailSection>
-                </div>
-              )}
+              <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
+                <DetailSection title="About Me">
+                  <p className="text-base text-gray-700 leading-relaxed">{p.about_me || "—"}</p>
+                </DetailSection>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
+                <DetailSection title="Contact Details">
+                  <DetailRow label="Email" value={p.email} />
+                  <DetailRow label="Phone" value={p.phone} />
+                  <DetailRow label="WhatsApp" value={p.whatsapp} />
+                </DetailSection>
+              </div>
 
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <DetailSection title="Personal Details">
                   <DetailRow label="Date of Birth" value={p.date_of_birth} />
+                  <DetailRow label="Gender" value={p.gender} />
                   <DetailRow label="Mother Tongue" value={p.mother_tongue} />
                   <DetailRow label="Height" value={p.height_cm ? `${p.height_cm} cm` : null} />
+                  <DetailRow label="Weight" value={p.weight_kg ? `${p.weight_kg} kg` : null} />
+                  <DetailRow label="Complexion" value={p.complexion} />
+                  <DetailRow label="Blood Group" value={p.blood_group} />
                   <DetailRow label="Marital Status" value={p.marital_status} />
                   <DetailRow label="Religion" value={p.religion} />
                   <DetailRow label="Caste" value={p.caste} />
                   <DetailRow label="Sub Caste" value={p.sub_caste} />
                   <DetailRow label="Country" value={p.country} />
                   <DetailRow label="State" value={p.state} />
+                  <DetailRow label="District" value={p.district} />
                   <DetailRow label="City" value={p.city} />
                   <DetailRow label="Native Place" value={p.native_place} />
-                  <DetailRow label="Email" value={p.email} />
-                  <DetailRow label="Phone" value={p.phone} />
-                  <DetailRow label="WhatsApp" value={p.whatsapp} />
+                  <DetailRow label="Working City" value={p.working_city} />
+                  <DetailRow label="Profile Created By" value={p.profile_created_by} />
                 </DetailSection>
               </div>
 
@@ -474,6 +514,25 @@ export default function AdminDashboard() {
                   <DetailRow label="Raasi" value={p.raasi} />
                   <DetailRow label="Star" value={p.star} />
                   <DetailRow label="Dosham" value={p.dosham} />
+                  {p.horoscope_url ? (
+                    <div className="mt-4">
+                      <span className="text-sm font-semibold text-gray-500 mb-2 block">Horoscope File</span>
+                      <a href={p.horoscope_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:shadow-md" style={{ background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>
+                        <FileText size={16} /> View Horoscope
+                      </a>
+                      {(p.horoscope_url.endsWith('.jpg') || p.horoscope_url.endsWith('.jpeg') || p.horoscope_url.endsWith('.png') || p.horoscope_url.endsWith('.webp')) && (
+                        <img src={p.horoscope_url} alt="Horoscope" className="mt-3 max-w-sm rounded-xl border border-gray-200" />
+                      )}
+                    </div>
+                  ) : (
+                    <DetailRow label="Horoscope File" value={null} />
+                  )}
+                </DetailSection>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
+                <DetailSection title="Partner Expectations">
+                  <p className="text-base text-gray-700 leading-relaxed">{p.partner_expectations || "—"}</p>
                 </DetailSection>
               </div>
 
@@ -639,19 +698,25 @@ export default function AdminDashboard() {
                         <div className="w-12 h-12 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
                           {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><span className="text-lg font-bold text-gray-400">{p.full_name[0]}</span></div>}
                         </div>
-                        <div className="flex-1 min-w-0">
+                         <div className="flex-1 min-w-0">
                           <h3 className="font-bold text-gray-800 text-base truncate">{p.full_name}</h3>
                           <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {[p.city, p.state].filter(Boolean).join(", ") || "—"}</p>
                         </div>
                         <div className="flex-shrink-0 hidden sm:block">
                           <p className="text-sm text-gray-500">{p.occupation || "—"}</p>
                         </div>
+                        {(p as any).profile_id && (
+                          <span className="px-2 py-1 rounded-lg text-xs font-bold flex-shrink-0" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>{(p as any).profile_id}</span>
+                        )}
                         <StatusBadge status={p.profile_status} />
                         <div className="flex items-center gap-2 flex-shrink-0">
                           <button onClick={(e) => { e.stopPropagation(); updateStatus(p.id, "active"); }} className="px-3 py-1.5 rounded-xl text-xs font-semibold text-white transition-all" style={{ background: "hsl(145, 65%, 42%)" }}>Verify</button>
                           <span className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold" style={{ background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>
                             <Eye size={12} /> View
                           </span>
+                          <button onClick={(e) => { e.stopPropagation(); deleteProfile(p.id); }} className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}>
+                            <Trash2 size={12} /> Delete
+                          </button>
                         </div>
                       </motion.div>
                     ))}
@@ -700,11 +765,17 @@ export default function AdminDashboard() {
                         <div className="flex-shrink-0 hidden sm:block">
                           <p className="text-sm text-gray-500">{p.occupation || "—"}</p>
                         </div>
+                        {(p as any).profile_id && (
+                          <span className="px-2 py-1 rounded-lg text-xs font-bold flex-shrink-0" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>{(p as any).profile_id}</span>
+                        )}
                         <StatusBadge status={p.profile_status} />
                         <div className="flex items-center gap-2 flex-shrink-0">
                           <span className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold" style={{ background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>
                             <Eye size={12} /> View
                           </span>
+                          <button onClick={(e) => { e.stopPropagation(); deleteProfile(p.id); }} className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}>
+                            <Trash2 size={12} /> Delete
+                          </button>
                         </div>
                       </motion.div>
                     ))}
@@ -732,6 +803,7 @@ export default function AdminDashboard() {
                           <th className="text-left py-3 px-4 font-semibold">Phone</th>
                           <th className="text-left py-3 px-4 font-semibold">Date</th>
                           <th className="text-left py-3 px-4 font-semibold">Time</th>
+                          <th className="text-left py-3 px-4 font-semibold">Message / Notes</th>
                           <th className="text-left py-3 px-4 font-semibold">Status</th>
                           <th className="text-left py-3 px-4 font-semibold">Actions</th>
                         </tr>
@@ -743,6 +815,13 @@ export default function AdminDashboard() {
                             <td className="py-4 px-4 text-gray-600 text-sm">{c.phone}</td>
                             <td className="py-4 px-4 text-gray-600 text-sm">{c.preferred_date}</td>
                             <td className="py-4 px-4 text-gray-600 text-sm">{c.preferred_time}</td>
+                            <td className="py-4 px-4 text-gray-600 text-sm max-w-[200px]">
+                              {c.notes ? (
+                                <div className="whitespace-pre-line text-xs leading-relaxed">{c.notes}</div>
+                              ) : (
+                                <span className="text-gray-300">—</span>
+                              )}
+                            </td>
                             <td className="py-4 px-4"><StatusBadge status={c.status} /></td>
                             <td className="py-4 px-4">
                               <div className="flex items-center gap-2">
