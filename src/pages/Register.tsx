@@ -7,7 +7,7 @@ import { Eye, EyeOff, ChevronLeft, ChevronRight, Check, Upload, Star, Heart, X, 
 import BackButton from "@/components/BackButton";
 import logo from "@/assets/kalyanasuthra-logo.png";
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 7;
 const THEME = {
   primary: "210, 55%, 45%",
   primaryDeep: "210, 60%, 35%",
@@ -157,7 +157,7 @@ const doshamOptions = ["No Dosham", "Chevvai Dosham", "Rahu Dosham", "Kethu Dosh
 const languageOptions = ["Tamil", "Telugu", "Kannada", "Malayalam", "Hindi", "Sanskrit", "English", "Other"];
 const chartStyleOptions = ["South Indian", "North Indian", "East Indian", "Sri Lankan"];
 
-const stepTitles = ["Basic Details", "Personal Details", "Family Details", "Horoscope", "Photo Upload", "Review & Submit"];
+const stepTitles = ["Basic Details", "Personal Details", "Family Details", "Horoscope", "Photo Upload", "About Me", "Review & Submit"];
 
 type FormData = {
   name: string; profileFor: string; gender: string; email: string; phone: string; password: string; confirmPassword: string;
@@ -170,6 +170,7 @@ type FormData = {
   familyStatus: string; familyType: string; fatherName: string; fatherOccupation: string; motherName: string; motherOccupation: string; siblings: string; siblingDetails: string;
   gothram: string; raashi: string; star: string; dosham: string; timeOfBirth: string; countryOfBirth: string; stateOfBirth: string; birthPlace: string; language: string; chartStyle: string; horoscopeFile: File | null;
   photos: File[]; primaryPhotoIndex: number;
+  aboutMe: string; partnerExpectations: string;
 };
 
 const defaultForm: FormData = {
@@ -183,6 +184,7 @@ const defaultForm: FormData = {
   familyStatus: "", familyType: "", fatherName: "", fatherOccupation: "", motherName: "", motherOccupation: "", siblings: "", siblingDetails: "",
   gothram: "", raashi: "", star: "", dosham: "", timeOfBirth: "", countryOfBirth: "India", stateOfBirth: "", birthPlace: "", language: "", chartStyle: "South Indian", horoscopeFile: null,
   photos: [], primaryPhotoIndex: 0,
+  aboutMe: "", partnerExpectations: "",
 };
 
 const SelectField = ({ label, value, onChange, options, required }: { label: string; value: string; onChange: (v: string) => void; options: string[]; required?: boolean }) => (
@@ -353,6 +355,14 @@ export default function Register() {
       });
 
       if (profileErr) throw profileErr;
+
+      // Update about_me and partner_expectations separately
+      if (form.aboutMe || form.partnerExpectations) {
+        await supabase.from("profiles").update({
+          about_me: form.aboutMe || null,
+          partner_expectations: form.partnerExpectations || null,
+        }).eq("user_id", userId);
+      }
 
       // Fetch the generated profile_id
       const { data: profileData } = await supabase.from("profiles").select("profile_id").eq("user_id", userId).single();
@@ -661,6 +671,37 @@ export default function Register() {
                 )}
 
                 {step === 6 && (
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>About Me</label>
+                      <textarea
+                        value={form.aboutMe}
+                        onChange={e => set("aboutMe", e.target.value)}
+                        placeholder="Write about yourself – your personality, hobbies, interests, lifestyle, values, etc."
+                        rows={5}
+                        maxLength={1000}
+                        className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 bg-white resize-none"
+                        style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, color: "#333", fontSize: "0.9rem" }}
+                      />
+                      <p className="text-xs mt-1 text-right" style={{ color: "#aaa" }}>{form.aboutMe.length}/1000 characters</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Partner Expectations</label>
+                      <textarea
+                        value={form.partnerExpectations}
+                        onChange={e => set("partnerExpectations", e.target.value)}
+                        placeholder="Describe your ideal partner – preferred age, education, profession, family values, lifestyle expectations, etc."
+                        rows={5}
+                        maxLength={1000}
+                        className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 bg-white resize-none"
+                        style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, color: "#333", fontSize: "0.9rem" }}
+                      />
+                      <p className="text-xs mt-1 text-right" style={{ color: "#aaa" }}>{form.partnerExpectations.length}/1000 characters</p>
+                    </div>
+                  </div>
+                )}
+
+                {step === 7 && (
                   <motion.div 
                     className="space-y-5 max-h-[70vh] overflow-y-auto pr-1"
                     initial={{ scale: 0.95, opacity: 0 }}
@@ -751,6 +792,10 @@ export default function Register() {
                       <SummaryRow label="Language" value={form.language} />
                       <SummaryRow label="Chart Style" value={form.chartStyle} />
                       <SummaryRow label="Horoscope File" value={form.horoscopeFile?.name || "Not uploaded"} />
+                    </SummarySection>
+                    <SummarySection title="💬 About Me & Partner Expectations">
+                      <SummaryRow label="About Me" value={form.aboutMe} />
+                      <SummaryRow label="Partner Expectations" value={form.partnerExpectations} />
                     </SummarySection>
                   </motion.div>
                 )}
