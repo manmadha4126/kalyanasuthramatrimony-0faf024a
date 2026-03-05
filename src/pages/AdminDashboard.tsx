@@ -29,6 +29,9 @@ type Profile = {
   weight_kg: number | null;
   working_city: string | null;
   partner_expectations: string | null;
+  citizenship: string | null;
+  visa_type: string | null;
+  residence_type: string | null;
 };
 
 type Consultation = {
