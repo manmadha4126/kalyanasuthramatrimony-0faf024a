@@ -2,8 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Eye, EyeOff, Shield, Heart, Users, Star, Gem } from "lucide-react";
-import BackButton from "@/components/BackButton";
+import { Eye, EyeOff, Shield, Heart, Users, Star, Gem, ArrowLeft } from "lucide-react";
 import logo from "@/assets/kalyanasuthra-logo.png";
 
 const ADMIN_CREDENTIALS = [
@@ -34,19 +33,16 @@ export default function AdminLogin() {
         return;
       }
 
-      // Try sign in first
       let { error: signInError } = await supabase.auth.signInWithPassword({ email: adminCred.email, password: adminCred.password });
 
       if (signInError) {
         if (signInError.message.includes("Invalid login credentials")) {
-          // Auto-create admin account silently
           const { error: signUpError } = await supabase.auth.signUp({
             email: adminCred.email,
             password: adminCred.password,
             options: { data: { full_name: "Admin", role: "admin" } }
           });
           if (signUpError && !signUpError.message.includes("already registered")) throw signUpError;
-          // Sign in after creation
           const { error: retryError } = await supabase.auth.signInWithPassword({ email: adminCred.email, password: adminCred.password });
           if (retryError) throw retryError;
         } else {
@@ -74,7 +70,7 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex" style={{ background: "linear-gradient(145deg, hsl(220, 45%, 15%) 0%, hsl(230, 40%, 22%) 50%, hsl(215, 50%, 18%) 100%)" }}>
-      {/* Left Panel - Redesigned */}
+      {/* Left Panel */}
       <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="hidden lg:flex flex-col items-start justify-center w-1/2 px-14 py-10 relative overflow-hidden">
         {/* Decorative circles */}
         <div className="absolute top-10 right-10 w-72 h-72 rounded-full opacity-8" style={{ background: "radial-gradient(circle, hsl(42,50%,60% / 0.12), transparent 70%)" }} />
@@ -87,30 +83,30 @@ export default function AdminLogin() {
             <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 w-auto object-contain" />
           </div>
 
-          {/* Main heading - cursive style */}
+          {/* Main heading */}
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "3rem", lineHeight: "1.15" }} className="font-bold text-white mb-3">
             Welcome to the<br />
             <span style={{ color: "hsl(42, 50%, 70%)", fontStyle: "italic", fontSize: "3.2rem" }}>Admin Portal</span>
           </h1>
-          <p className="text-white/50 text-base leading-relaxed max-w-md mb-10" style={{ fontFamily: "'Lato', sans-serif" }}>
+          <p className="text-white/50 text-base leading-relaxed max-w-md mb-10" style={{ fontFamily: "'Open Sans', sans-serif" }}>
             Managing South India's most trusted matrimonial platform. Every match we make writes a new chapter of love.
           </p>
 
-          {/* Highlights Grid */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Highlights Grid - bigger */}
+          <div className="grid grid-cols-2 gap-4">
             {highlights.map((item, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + i * 0.08 }}
-                className="flex items-start gap-3 p-3 rounded-xl"
+                className="flex items-start gap-3.5 p-4 rounded-xl"
                 style={{ background: "hsl(0, 0%, 100% / 0.06)", border: "1px solid hsl(0, 0%, 100% / 0.08)" }}
               >
-                <span className="text-xl flex-shrink-0">{item.icon}</span>
+                <span className="text-2xl flex-shrink-0">{item.icon}</span>
                 <div>
-                  <p className="text-white font-semibold text-xs" style={{ fontFamily: "'Playfair Display', serif" }}>{item.label}</p>
-                  <p className="text-white/40 text-[10px] mt-0.5 leading-snug">{item.desc}</p>
+                  <p className="text-white font-semibold text-sm" style={{ fontFamily: "'Open Sans', sans-serif" }}>{item.label}</p>
+                  <p className="text-white/45 text-xs mt-1 leading-snug" style={{ fontFamily: "'Open Sans', sans-serif" }}>{item.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -129,16 +125,23 @@ export default function AdminLogin() {
       {/* Right Panel */}
       <div className="flex flex-col items-center justify-center w-full lg:w-1/2 px-6 py-12">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="w-full max-w-sm">
-          <div className="mb-4">
-            <BackButton to="/" label="Back to Home" className="text-white/60 hover:text-white" />
+          {/* Highlighted Back to Home button */}
+          <div className="mb-5">
+            <button
+              onClick={() => navigate("/")}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:opacity-90 shadow-lg"
+              style={{ background: "hsl(0, 0%, 8%)", color: "hsl(0, 0%, 100%)", fontFamily: "'Open Sans', sans-serif" }}
+            >
+              <ArrowLeft size={16} /> Back to Home
+            </button>
           </div>
-          <div className="bg-white rounded-2xl shadow-2xl p-8">
+          <div className="bg-white rounded-2xl shadow-2xl p-8" style={{ fontFamily: "'Open Sans', sans-serif" }}>
             <div className="flex items-center gap-2 mb-6">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "hsl(220, 45%, 92%)" }}>
                 <Shield size={16} style={{ color: "hsl(220, 45%, 35%)" }} />
               </div>
               <div>
-                <h2 className="font-serif text-lg font-bold" style={{ color: "hsl(220, 45%, 25%)" }}>Admin Access</h2>
+                <h2 className="text-lg font-bold" style={{ color: "hsl(220, 45%, 25%)", fontFamily: "'Open Sans', sans-serif" }}>Admin Access</h2>
                 <p className="text-xs text-gray-400">Authorized personnel only</p>
               </div>
             </div>
