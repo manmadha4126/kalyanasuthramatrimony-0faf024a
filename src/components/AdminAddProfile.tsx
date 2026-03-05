@@ -103,7 +103,8 @@ const SectionHeading = ({ title }: { title: string }) => (
 
 export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: () => void }) {
   const [form, setForm] = useState<AdminForm>(defaultForm);
-  const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [primaryPhotoIndex, setPrimaryPhotoIndex] = useState(0);
   const [horoscopeFile, setHoroscopeFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
@@ -111,6 +112,19 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
   const { toast } = useToast();
 
   const set = (field: keyof AdminForm, value: string) => setForm(prev => ({ ...prev, [field]: value }));
+
+  const handlePhotoUpload = (files: FileList | null) => {
+    if (!files) return;
+    const valid = Array.from(files).filter(f => f.size <= 25 * 1024 * 1024);
+    const combined = [...photos, ...valid].slice(0, 5);
+    setPhotos(combined);
+  };
+
+  const removePhoto = (index: number) => {
+    const updated = photos.filter((_, i) => i !== index);
+    setPhotos(updated);
+    if (primaryPhotoIndex >= updated.length) setPrimaryPhotoIndex(0);
+  };
 
   const casteOptions = useMemo(() => {
     if (!form.religion) return ["Other", "No Caste Preference"];
