@@ -359,14 +359,24 @@ export default function AdminDashboard() {
               <div className="flex items-center gap-4 mb-2">
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{p.full_name}</h2>
                 <StatusBadge status={selectedProfile.profile_status} />
+                {(selectedProfile as any).profile_id && (
+                  <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>
+                    ID: {(selectedProfile as any).profile_id}
+                  </span>
+                )}
               </div>
               <div className="space-y-1 mt-3">
                 <p className="text-base text-gray-600"><strong>Age:</strong> {getAge(p.date_of_birth)} years</p>
+                <p className="text-base text-gray-600"><strong>Gender:</strong> {p.gender || "—"}</p>
                 <p className="text-base text-gray-600"><strong>Height:</strong> {p.height_cm ? `${p.height_cm} cm` : "—"}</p>
+                <p className="text-base text-gray-600"><strong>Weight:</strong> {p.weight_kg ? `${p.weight_kg} kg` : "—"}</p>
+                <p className="text-base text-gray-600"><strong>Complexion:</strong> {p.complexion || "—"}</p>
+                <p className="text-base text-gray-600"><strong>Blood Group:</strong> {p.blood_group || "—"}</p>
                 <p className="text-base text-gray-600"><strong>Profession:</strong> {p.occupation || "—"}</p>
-                <p className="text-base text-gray-600"><strong>Location:</strong> {[p.city, p.state, p.country].filter(Boolean).join(", ")}</p>
-                <p className="text-base text-gray-600"><strong>Marital Status:</strong> {p.marital_status}</p>
+                <p className="text-base text-gray-600"><strong>Location:</strong> {[p.city, p.state, p.country].filter(Boolean).join(", ") || "—"}</p>
+                <p className="text-base text-gray-600"><strong>Marital Status:</strong> {p.marital_status || "—"}</p>
                 <p className="text-base text-gray-600"><strong>Religion:</strong> {p.religion}{p.caste ? ` - ${p.caste}` : ""}</p>
+                <p className="text-base text-gray-600"><strong>Profile Created By:</strong> {p.profile_created_by || "—"}</p>
               </div>
               <p className="text-sm text-gray-400 mt-3">Registered: {new Date(selectedProfile.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}</p>
             </div>
