@@ -29,6 +29,9 @@ type Profile = {
   weight_kg: number | null;
   working_city: string | null;
   partner_expectations: string | null;
+  citizenship: string | null;
+  visa_type: string | null;
+  residence_type: string | null;
 };
 
 type Consultation = {
@@ -57,7 +60,7 @@ const DetailRow = ({ label, value }: { label: string; value: string | null | und
 
 const DetailSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div className="mb-6">
-    <h4 className="text-base font-bold mb-3 px-4 py-3 rounded-xl" style={{ background: "#F0F4F8", color: "#2D3748" }}>{title}</h4>
+    <h4 className="text-base font-bold mb-3 px-4 py-3 rounded-xl" style={{ background: "hsl(130, 50%, 92%)", color: "hsl(130, 45%, 28%)", fontFamily: "'Roboto', system-ui, sans-serif" }}>{title}</h4>
     <div className="px-3">{children}</div>
   </div>
 );
@@ -478,11 +481,27 @@ export default function AdminDashboard() {
 
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <DetailSection title="Education & Career">
-                  <DetailRow label="Education" value={p.education} />
-                  <DetailRow label="Education Detail" value={p.education_detail} />
+                  {(() => {
+                    const parts = (p.education_detail || "").split(", ").reduce((acc: any, part: string) => {
+                      if (part.startsWith("10th:")) acc.tenth = part.replace("10th: ", "");
+                      else if (part.startsWith("12th:")) acc.twelfth = part.replace("12th: ", "");
+                      else if (part.startsWith("Degree:")) acc.degree = part.replace("Degree: ", "");
+                      return acc;
+                    }, { tenth: null, twelfth: null, degree: null });
+                    return (
+                      <>
+                        <DetailRow label="10th Standard" value={parts.tenth} />
+                        <DetailRow label="12th / Intermediate" value={parts.twelfth} />
+                        <DetailRow label="Graduation / Degree" value={parts.degree || p.education} />
+                      </>
+                    );
+                  })()}
                   <DetailRow label="Occupation" value={p.occupation} />
                   <DetailRow label="Company" value={p.company_name} />
                   <DetailRow label="Annual Income" value={p.annual_income} />
+                  <DetailRow label="Citizenship" value={p.citizenship} />
+                  <DetailRow label="Visa Type" value={p.visa_type} />
+                  <DetailRow label="Residence Type" value={p.residence_type} />
                 </DetailSection>
               </div>
 
@@ -520,11 +539,6 @@ export default function AdminDashboard() {
                 </DetailSection>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
-                <DetailSection title="Partner Expectations">
-                  <p className="text-base text-gray-700 leading-relaxed">{p.partner_expectations || "—"}</p>
-                </DetailSection>
-              </div>
 
               {(p.profile_photo_url || (p.additional_photos && p.additional_photos.length > 0)) && (
                 <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">

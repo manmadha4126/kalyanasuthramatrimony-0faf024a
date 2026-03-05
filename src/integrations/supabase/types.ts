@@ -148,6 +148,7 @@ export type Database = {
           annual_income: string | null
           blood_group: string | null
           caste: string | null
+          citizenship: string | null
           city: string | null
           company_name: string | null
           complexion: string | null
@@ -184,6 +185,7 @@ export type Database = {
           profile_status: string
           raasi: string | null
           religion: string
+          residence_type: string | null
           siblings: string | null
           star: string | null
           state: string | null
@@ -191,6 +193,7 @@ export type Database = {
           subscription_type: string
           updated_at: string
           user_id: string | null
+          visa_type: string | null
           weight_kg: number | null
           whatsapp: string | null
           working_city: string | null
@@ -201,6 +204,7 @@ export type Database = {
           annual_income?: string | null
           blood_group?: string | null
           caste?: string | null
+          citizenship?: string | null
           city?: string | null
           company_name?: string | null
           complexion?: string | null
@@ -237,6 +241,7 @@ export type Database = {
           profile_status?: string
           raasi?: string | null
           religion?: string
+          residence_type?: string | null
           siblings?: string | null
           star?: string | null
           state?: string | null
@@ -244,6 +249,7 @@ export type Database = {
           subscription_type?: string
           updated_at?: string
           user_id?: string | null
+          visa_type?: string | null
           weight_kg?: number | null
           whatsapp?: string | null
           working_city?: string | null
@@ -254,6 +260,7 @@ export type Database = {
           annual_income?: string | null
           blood_group?: string | null
           caste?: string | null
+          citizenship?: string | null
           city?: string | null
           company_name?: string | null
           complexion?: string | null
@@ -290,6 +297,7 @@ export type Database = {
           profile_status?: string
           raasi?: string | null
           religion?: string
+          residence_type?: string | null
           siblings?: string | null
           star?: string | null
           state?: string | null
@@ -297,6 +305,7 @@ export type Database = {
           subscription_type?: string
           updated_at?: string
           user_id?: string | null
+          visa_type?: string | null
           weight_kg?: number | null
           whatsapp?: string | null
           working_city?: string | null
@@ -347,46 +356,90 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      create_profile_on_register: {
-        Args: {
-          p_annual_income?: string
-          p_caste?: string
-          p_city?: string
-          p_company_name?: string
-          p_country?: string
-          p_date_of_birth?: string
-          p_dosham?: string
-          p_education?: string
-          p_education_detail?: string
-          p_email: string
-          p_family_status?: string
-          p_family_type?: string
-          p_father_name?: string
-          p_father_occupation?: string
-          p_full_name: string
-          p_gender: string
-          p_gothra?: string
-          p_height_cm?: number
-          p_marital_status?: string
-          p_mother_name?: string
-          p_mother_occupation?: string
-          p_mother_tongue?: string
-          p_native_place?: string
-          p_occupation?: string
-          p_phone: string
-          p_profile_created_by?: string
-          p_profile_photo_url?: string
-          p_raasi?: string
-          p_religion?: string
-          p_siblings?: string
-          p_star?: string
-          p_state?: string
-          p_sub_caste?: string
-          p_user_id: string
-          p_whatsapp?: string
-        }
-        Returns: string
-      }
+      create_profile_on_register:
+        | {
+            Args: {
+              p_annual_income?: string
+              p_caste?: string
+              p_city?: string
+              p_company_name?: string
+              p_country?: string
+              p_date_of_birth?: string
+              p_dosham?: string
+              p_education?: string
+              p_education_detail?: string
+              p_email: string
+              p_family_status?: string
+              p_family_type?: string
+              p_father_name?: string
+              p_father_occupation?: string
+              p_full_name: string
+              p_gender: string
+              p_gothra?: string
+              p_height_cm?: number
+              p_marital_status?: string
+              p_mother_name?: string
+              p_mother_occupation?: string
+              p_mother_tongue?: string
+              p_native_place?: string
+              p_occupation?: string
+              p_phone: string
+              p_profile_created_by?: string
+              p_profile_photo_url?: string
+              p_raasi?: string
+              p_religion?: string
+              p_siblings?: string
+              p_star?: string
+              p_state?: string
+              p_sub_caste?: string
+              p_user_id: string
+              p_whatsapp?: string
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              p_annual_income?: string
+              p_caste?: string
+              p_citizenship?: string
+              p_city?: string
+              p_company_name?: string
+              p_country?: string
+              p_date_of_birth?: string
+              p_dosham?: string
+              p_education?: string
+              p_education_detail?: string
+              p_email: string
+              p_family_status?: string
+              p_family_type?: string
+              p_father_name?: string
+              p_father_occupation?: string
+              p_full_name: string
+              p_gender: string
+              p_gothra?: string
+              p_height_cm?: number
+              p_marital_status?: string
+              p_mother_name?: string
+              p_mother_occupation?: string
+              p_mother_tongue?: string
+              p_native_place?: string
+              p_occupation?: string
+              p_phone: string
+              p_profile_created_by?: string
+              p_profile_photo_url?: string
+              p_raasi?: string
+              p_religion?: string
+              p_residence_type?: string
+              p_siblings?: string
+              p_star?: string
+              p_state?: string
+              p_sub_caste?: string
+              p_user_id: string
+              p_visa_type?: string
+              p_whatsapp?: string
+            }
+            Returns: string
+          }
     }
     Enums: {
       [_ in never]: never

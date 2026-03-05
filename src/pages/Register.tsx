@@ -347,6 +347,9 @@ export default function Register() {
         p_whatsapp: form.phone || null,
         p_profile_photo_url: profilePhotoUrl,
         p_education_detail: [form.edu10Board && `10th: ${form.edu10Board} - ${form.edu10Percentage}% - ${form.edu10School}`, form.edu12Board && `12th: ${form.edu12Board} - ${form.edu12Percentage}% - ${form.edu12College}`, form.graduationDetail && `Degree: ${form.graduationDetail}`].filter(Boolean).join(", ") || null,
+        p_citizenship: form.citizenship || null,
+        p_visa_type: form.visaType || null,
+        p_residence_type: form.residenceType || null,
       });
 
       if (profileErr) throw profileErr;
