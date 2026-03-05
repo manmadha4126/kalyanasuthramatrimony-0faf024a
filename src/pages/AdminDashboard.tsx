@@ -21,6 +21,14 @@ type Profile = {
   native_place: string | null; about_me: string | null; whatsapp: string | null;
   profile_created_by: string | null; additional_photos: string[] | null;
   subscription_type?: string;
+  horoscope_url: string | null;
+  profile_id: string | null;
+  district: string | null;
+  complexion: string | null;
+  blood_group: string | null;
+  weight_kg: number | null;
+  working_city: string | null;
+  partner_expectations: string | null;
 };
 
 type Consultation = {
