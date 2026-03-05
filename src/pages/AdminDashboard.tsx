@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload, FileText } from "lucide-react";
+import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload, FileText, Heart, UserPlus } from "lucide-react";
 import adminLogo from "@/assets/kalyanasuthra-logo.png";
+import AdminAddProfile from "@/components/AdminAddProfile";
 
 type Profile = {
   id: string; full_name: string; gender: string; religion: string; city: string | null;
@@ -49,7 +50,7 @@ type FeaturedProfileEntry = {
   gender: string; profile_photo_url: string | null; created_at: string;
 };
 
-const TABS = ["Dashboard", "Profile Requests", "All Profiles", "Subscription Access", "Consultations", "Featured Profiles", "Success Stories"];
+const TABS = ["Dashboard", "Profile Requests", "All Profiles", "Subscription Access", "Consultations", "Featured Profiles", "Success Stories", "Add Profiles", "Interests"];
 
 const DetailRow = ({ label, value }: { label: string; value: string | null | undefined }) => (
   <div className="flex justify-between py-3 border-b border-gray-100 last:border-0">
@@ -88,6 +89,14 @@ export default function AdminDashboard() {
   const [featuredPhoto, setFeaturedPhoto] = useState<File | null>(null);
   const [savingFeatured, setSavingFeatured] = useState(false);
 
+  // Success story form
+  const [showStoryForm, setShowStoryForm] = useState(false);
+  const [storyForm, setStoryForm] = useState({ bride_name: "", groom_name: "", city: "", story: "" });
+  const [storyPhoto, setStoryPhoto] = useState<File | null>(null);
+  const [savingStory, setSavingStory] = useState(false);
+
+  // Interests
+  const [interests, setInterests] = useState<any[]>([]);
   useEffect(() => {
     const auth = sessionStorage.getItem("admin_auth");
     if (!auth) { navigate("/admin"); return; }
@@ -104,6 +113,7 @@ export default function AdminDashboard() {
     fetchConsultations();
     fetchSuccessStories();
     fetchFeaturedProfiles();
+    fetchInterests();
   };
 
   const fetchProfiles = async () => {
@@ -126,6 +136,49 @@ export default function AdminDashboard() {
   const fetchFeaturedProfiles = async () => {
     const { data } = await supabase.from("featured_profiles" as any).select("*").order("created_at", { ascending: false });
     if (data) setFeaturedEntries(data as any);
+  };
+
+  const fetchInterests = async () => {
+    const { data } = await supabase.from("profile_interests").select("*, profiles!profile_interests_to_profile_id_fkey(full_name, profile_photo_url, city, gender)").order("created_at", { ascending: false });
+    if (data) setInterests(data as any);
+  };
+
+  const addSuccessStory = async () => {
+    if (!storyForm.bride_name || !storyForm.groom_name || !storyForm.city || !storyForm.story) {
+      toast({ title: "Please fill all fields", variant: "destructive" });
+      return;
+    }
+    setSavingStory(true);
+    let imageUrl: string | null = null;
+    if (storyPhoto) {
+      const ext = storyPhoto.name.split(".").pop();
+      const path = `stories/${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("profile-photos").upload(path, storyPhoto, { upsert: true });
+      if (!upErr) {
+        const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
+        imageUrl = urlData.publicUrl;
+      }
+    }
+    const { data: { user } } = await supabase.auth.getUser();
+    const { error } = await supabase.from("success_stories").insert({
+      bride_name: storyForm.bride_name,
+      groom_name: storyForm.groom_name,
+      city: storyForm.city,
+      story: storyForm.story,
+      image_url: imageUrl,
+      status: "approved",
+      created_by: user?.id || null,
+    });
+    if (!error) {
+      toast({ title: "Success story added!" });
+      setStoryForm({ bride_name: "", groom_name: "", city: "", story: "" });
+      setStoryPhoto(null);
+      setShowStoryForm(false);
+      fetchSuccessStories();
+    } else {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    }
+    setSavingStory(false);
   };
 
   const updateStoryStatus = async (id: string, status: string) => {
@@ -1012,9 +1065,51 @@ export default function AdminDashboard() {
           {/* Success Stories */}
           {tab === "Success Stories" && (
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-gray-100">
+              <div className="p-6 border-b border-gray-100 flex items-center justify-between">
                 <h3 className="text-lg font-bold text-gray-800">Success Stories ({successStories.length})</h3>
+                <button onClick={() => setShowStoryForm(!showStoryForm)} className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all" style={{ background: "hsl(210, 80%, 50%)" }}>
+                  <Plus size={16} /> Add Story
+                </button>
               </div>
+
+              {showStoryForm && (
+                <div className="p-6 border-b border-gray-100" style={{ background: "#F8FAFC" }}>
+                  <h4 className="text-base font-bold text-gray-800 mb-4">Add Success Story</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-600 mb-1">Bride Name *</label>
+                      <input type="text" value={storyForm.bride_name} onChange={e => setStoryForm(p => ({ ...p, bride_name: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-600 mb-1">Groom Name *</label>
+                      <input type="text" value={storyForm.groom_name} onChange={e => setStoryForm(p => ({ ...p, groom_name: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-600 mb-1">City *</label>
+                      <input type="text" value={storyForm.city} onChange={e => setStoryForm(p => ({ ...p, city: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                    </div>
+                    <div className="sm:col-span-2 lg:col-span-3">
+                      <label className="block text-sm font-semibold text-gray-600 mb-1">Story *</label>
+                      <textarea value={storyForm.story} onChange={e => setStoryForm(p => ({ ...p, story: e.target.value }))} rows={3} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-600 mb-1">Photo</label>
+                      <label className="flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 text-sm cursor-pointer hover:bg-gray-50">
+                        <Upload size={16} className="text-gray-400" />
+                        <span className="text-gray-500 truncate">{storyPhoto ? storyPhoto.name : "Choose photo"}</span>
+                        <input type="file" className="hidden" accept="image/*" onChange={e => setStoryPhoto(e.target.files?.[0] || null)} />
+                      </label>
+                    </div>
+                  </div>
+                  <div className="flex gap-3 mt-4">
+                    <button onClick={addSuccessStory} disabled={savingStory} className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-60" style={{ background: "hsl(145, 65%, 42%)" }}>
+                      {savingStory ? "Saving..." : "Add Story"}
+                    </button>
+                    <button onClick={() => setShowStoryForm(false)} className="px-4 py-2.5 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50">Cancel</button>
+                  </div>
+                </div>
+              )}
+
               <div className="p-4">
                 {successStories.length === 0 ? (
                   <div className="text-center py-10 text-gray-400">No success stories yet</div>
@@ -1043,6 +1138,66 @@ export default function AdminDashboard() {
                                 {s.status !== "rejected" && <button onClick={() => updateStoryStatus(s.id, "rejected")} className="text-xs px-3 py-1.5 rounded-lg font-semibold text-white" style={{ background: "hsl(0, 65%, 50%)" }}>Reject</button>}
                               </div>
                             </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Add Profiles */}
+          {tab === "Add Profiles" && (
+            <AdminAddProfile onProfileAdded={fetchProfiles} />
+          )}
+
+          {/* Interests */}
+          {tab === "Interests" && (
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              <div className="p-6 border-b border-gray-100">
+                <h3 className="text-lg font-bold text-gray-800">Profile Interests ({interests.length})</h3>
+              </div>
+              <div className="p-4">
+                {interests.length === 0 ? (
+                  <div className="text-center py-10 text-gray-400">No interests recorded yet</div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="text-sm text-gray-400 uppercase tracking-wider">
+                          <th className="text-left py-3 px-4 font-semibold">From User</th>
+                          <th className="text-left py-3 px-4 font-semibold">Interested In</th>
+                          <th className="text-left py-3 px-4 font-semibold">Type</th>
+                          <th className="text-left py-3 px-4 font-semibold">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-50">
+                        {interests.map((interest: any) => (
+                          <tr key={interest.id} className="hover:bg-gray-50 transition-colors">
+                            <td className="py-4 px-4 text-sm text-gray-800 font-medium">{interest.from_user_id?.slice(0, 8)}...</td>
+                            <td className="py-4 px-4">
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                                  {interest.profiles?.profile_photo_url ? (
+                                    <img src={interest.profiles.profile_photo_url} alt="" className="w-full h-full object-cover" />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-xs font-bold text-gray-400">{interest.profiles?.full_name?.[0] || "?"}</div>
+                                  )}
+                                </div>
+                                <div>
+                                  <p className="text-sm font-semibold text-gray-800">{interest.profiles?.full_name || "Unknown"}</p>
+                                  <p className="text-xs text-gray-500">{interest.profiles?.city || "—"} • {interest.profiles?.gender || "—"}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-4 px-4">
+                              <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: interest.interest_type === "shortlist" ? "hsl(38, 90%, 93%)" : "hsl(340, 65%, 93%)", color: interest.interest_type === "shortlist" ? "hsl(38, 90%, 35%)" : "hsl(340, 65%, 40%)" }}>
+                                {interest.interest_type === "shortlist" ? "⭐ Shortlisted" : "❤️ Interested"}
+                              </span>
+                            </td>
+                            <td className="py-4 px-4 text-sm text-gray-500">{new Date(interest.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</td>
                           </tr>
                         ))}
                       </tbody>
