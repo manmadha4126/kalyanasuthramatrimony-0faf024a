@@ -385,7 +385,7 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
           <button onClick={handleSubmit} disabled={saving} className="px-8 py-3 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-60" style={{ background: "hsl(145, 65%, 42%)" }}>
             {saving ? "Creating Profile..." : "Create Profile"}
           </button>
-          <button onClick={() => { setForm(defaultForm); setProfilePhoto(null); setHoroscopeFile(null); }} className="px-6 py-3 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50">
+          <button onClick={() => { setForm(defaultForm); setPhotos([]); setPrimaryPhotoIndex(0); setHoroscopeFile(null); }} className="px-6 py-3 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50">
             Reset
           </button>
         </div>

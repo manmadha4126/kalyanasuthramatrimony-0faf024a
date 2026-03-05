@@ -715,9 +715,20 @@ export default function AdminDashboard() {
 
           <nav className="space-y-1 flex-1">
             {TABS.map(t => (
-              <button key={t} onClick={() => setTab(t)} className="w-full text-left px-4 py-3 rounded-xl text-sm transition-all" style={tab === t ? { background: "hsl(210, 80%, 55% / 0.25)", color: "hsl(210, 80%, 80%)", fontWeight: 600 } : { color: "hsl(0, 0%, 70%)" }}>
+              <motion.button
+                key={t}
+                onClick={() => setTab(t)}
+                whileHover={{ scale: 1.05, x: 4 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                className="w-full text-left px-4 py-3 rounded-xl text-sm transition-all"
+                style={tab === t
+                  ? { background: "hsl(210, 80%, 55% / 0.25)", color: "hsl(210, 80%, 80%)", fontWeight: 600 }
+                  : { color: "hsl(0, 0%, 70%)" }
+                }
+              >
                 {t}
-              </button>
+              </motion.button>
             ))}
           </nav>
 
