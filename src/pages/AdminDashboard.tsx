@@ -237,6 +237,18 @@ export default function AdminDashboard() {
     }
   };
 
+  const deleteProfile = async (id: string) => {
+    if (!window.confirm("Are you sure you want to permanently delete this profile? This action cannot be undone.")) return;
+    const { error } = await supabase.from("profiles").delete().eq("id", id);
+    if (!error) {
+      setProfiles(prev => prev.filter(p => p.id !== id));
+      if (selectedProfile?.id === id) setSelectedProfile(null);
+      toast({ title: "Profile permanently deleted" });
+    } else {
+      toast({ title: "Error deleting profile", description: error.message, variant: "destructive" });
+    }
+  };
+
   const logout = async () => { sessionStorage.removeItem("admin_auth"); await supabase.auth.signOut(); navigate("/admin"); };
 
   const pendingProfiles = profiles.filter(p => p.profile_status === "pending");
