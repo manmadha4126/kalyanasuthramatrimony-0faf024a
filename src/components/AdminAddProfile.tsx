@@ -151,15 +151,21 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
       // Create a temporary auth user for admin-added profiles is not needed
       // Insert directly into profiles table
       let profilePhotoUrl: string | null = null;
+      let additionalPhotoUrls: string[] = [];
       let horoscopeUrl: string | null = null;
 
-      if (profilePhoto) {
-        const ext = profilePhoto.name.split(".").pop();
-        const path = `admin/${Date.now()}-photo.${ext}`;
-        const { error: upErr } = await supabase.storage.from("profile-photos").upload(path, profilePhoto, { upsert: true });
+      // Upload all photos
+      for (let i = 0; i < photos.length; i++) {
+        const photo = photos[i];
+        const ext = photo.name.split(".").pop();
+        const path = `admin/${Date.now()}-photo-${i}.${ext}`;
+        const { error: upErr } = await supabase.storage.from("profile-photos").upload(path, photo, { upsert: true });
         if (!upErr) {
           const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
-          profilePhotoUrl = urlData.publicUrl;
+          if (i === primaryPhotoIndex) {
+            profilePhotoUrl = urlData.publicUrl;
+          }
+          additionalPhotoUrls.push(urlData.publicUrl);
         }
       }
 
