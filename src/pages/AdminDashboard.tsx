@@ -89,6 +89,14 @@ export default function AdminDashboard() {
   const [featuredPhoto, setFeaturedPhoto] = useState<File | null>(null);
   const [savingFeatured, setSavingFeatured] = useState(false);
 
+  // Success story form
+  const [showStoryForm, setShowStoryForm] = useState(false);
+  const [storyForm, setStoryForm] = useState({ bride_name: "", groom_name: "", city: "", story: "" });
+  const [storyPhoto, setStoryPhoto] = useState<File | null>(null);
+  const [savingStory, setSavingStory] = useState(false);
+
+  // Interests
+  const [interests, setInterests] = useState<any[]>([]);
   useEffect(() => {
     const auth = sessionStorage.getItem("admin_auth");
     if (!auth) { navigate("/admin"); return; }
