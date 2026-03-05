@@ -113,6 +113,7 @@ export default function AdminDashboard() {
     fetchConsultations();
     fetchSuccessStories();
     fetchFeaturedProfiles();
+    fetchInterests();
   };
 
   const fetchProfiles = async () => {
