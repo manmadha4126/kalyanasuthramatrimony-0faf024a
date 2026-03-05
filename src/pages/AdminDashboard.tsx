@@ -60,7 +60,7 @@ const DetailRow = ({ label, value }: { label: string; value: string | null | und
 
 const DetailSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div className="mb-6">
-    <h4 className="text-base font-bold mb-3 px-4 py-3 rounded-xl" style={{ background: "#F0F4F8", color: "#2D3748" }}>{title}</h4>
+    <h4 className="text-base font-bold mb-3 px-4 py-3 rounded-xl" style={{ background: "hsl(130, 50%, 92%)", color: "hsl(130, 45%, 28%)", fontFamily: "'Roboto', system-ui, sans-serif" }}>{title}</h4>
     <div className="px-3">{children}</div>
   </div>
 );
