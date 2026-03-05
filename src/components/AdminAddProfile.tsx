@@ -331,15 +331,47 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
             <label className="block text-sm font-semibold mb-1.5 text-gray-600">About Me</label>
             <textarea value={form.aboutMe} onChange={e => set("aboutMe", e.target.value)} rows={3} className="w-full rounded-xl border border-gray-200 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white" placeholder="Write a brief description..." />
           </div>
-          <div>
-            <label className="block text-sm font-semibold mb-1.5 text-gray-600">Profile Photo</label>
-            <label className="flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 text-sm cursor-pointer hover:bg-gray-50">
-              <Upload size={16} className="text-gray-400" />
-              <span className="text-gray-500 truncate">{profilePhoto ? profilePhoto.name : "Choose photo"}</span>
-              <input type="file" className="hidden" accept="image/*" onChange={e => setProfilePhoto(e.target.files?.[0] || null)} />
+
+          {/* Multi-photo upload like register page */}
+          <div className="col-span-full">
+            <label className="block text-sm font-semibold mb-2 text-gray-600">Profile Photos (Max 5, each below 25MB)</label>
+            <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-8 cursor-pointer transition-colors hover:bg-gray-50 hover:border-blue-300">
+              <Upload size={28} className="text-gray-400 mb-2" />
+              <span className="text-sm font-medium text-gray-600">Click to upload photos</span>
+              <span className="text-xs mt-1 text-gray-400">{photos.length}/5 uploaded</span>
+              <input type="file" className="hidden" accept="image/*" multiple onChange={e => handlePhotoUpload(e.target.files)} />
             </label>
           </div>
-          <div>
+
+          {photos.length > 0 && (
+            <div className="col-span-full">
+              <p className="text-sm font-semibold mb-3 text-gray-600">Select Primary Photo ⭐</p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                {photos.map((photo, i) => (
+                  <div
+                    key={i}
+                    className="relative cursor-pointer rounded-xl overflow-hidden transition-all"
+                    style={{ border: i === primaryPhotoIndex ? "3px solid hsl(210, 80%, 55%)" : "2px solid #eee" }}
+                    onClick={() => setPrimaryPhotoIndex(i)}
+                  >
+                    <img src={URL.createObjectURL(photo)} alt="" className="w-full aspect-[3/4] object-cover" />
+                    {i === primaryPhotoIndex && (
+                      <div className="absolute inset-0 flex items-center justify-center" style={{ background: "hsl(210, 80%, 55% / 0.3)" }}>
+                        <Star size={24} className="text-white fill-white" />
+                      </div>
+                    )}
+                    <button
+                      onClick={e => { e.stopPropagation(); removePhoto(i); }}
+                      className="absolute -top-1 -right-1 w-6 h-6 text-white rounded-full text-xs flex items-center justify-center"
+                      style={{ background: "hsl(0, 60%, 55%)" }}
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="col-span-full">
             <label className="block text-sm font-semibold mb-1.5 text-gray-600">Horoscope File</label>
             <label className="flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 text-sm cursor-pointer hover:bg-gray-50">
               <Upload size={16} className="text-gray-400" />
