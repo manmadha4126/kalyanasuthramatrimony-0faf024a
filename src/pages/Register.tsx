@@ -351,6 +351,12 @@ export default function Register() {
 
       if (profileErr) throw profileErr;
 
+      // Fetch the generated profile_id
+      const { data: profileData } = await supabase.from("profiles").select("profile_id").eq("user_id", userId).single();
+      if (profileData && (profileData as any).profile_id) {
+        setCreatedProfileId((profileData as any).profile_id);
+      }
+
       setDone(true);
       toast({ title: "Registration successful!", description: "Your profile has been submitted for review." });
     } catch (err: any) {
