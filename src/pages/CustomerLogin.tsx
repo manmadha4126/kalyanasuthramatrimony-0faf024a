@@ -21,12 +21,26 @@ export default function CustomerLogin() {
     setLoading(true);
     setError("");
     try {
-      const emailToUse = identifier.includes("@") ? identifier : `${identifier}@kalyanasuthra.in`;
+      let emailToUse = identifier;
+      if (loginMethod === "phone") {
+        // Look up the email from profiles table using the phone number
+        const cleanPhone = identifier.replace(/\s+/g, "");
+        const { data: profileData, error: profileError } = await supabase
+          .from("profiles")
+          .select("email")
+          .or(`phone.eq.${cleanPhone},whatsapp.eq.${cleanPhone}`)
+          .limit(1)
+          .maybeSingle();
+        if (profileError || !profileData?.email) {
+          throw new Error("No account found with this phone number. Please check and try again.");
+        }
+        emailToUse = profileData.email;
+      }
       const { error: authError } = await supabase.auth.signInWithPassword({ email: emailToUse, password });
       if (authError) throw authError;
       navigate("/dashboard");
     } catch (err: any) {
-      setError("Invalid credentials. Please check your email/phone and password.");
+      setError(err.message || "Invalid credentials. Please check your email/phone and password.");
     } finally {
       setLoading(false);
     }
