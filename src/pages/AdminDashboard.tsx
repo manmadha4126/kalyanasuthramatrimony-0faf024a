@@ -1,11 +1,61 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload, FileText, Heart, UserPlus } from "lucide-react";
+import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload, FileText, Heart, UserPlus, CreditCard } from "lucide-react";
 import adminLogo from "@/assets/kalyanasuthra-logo.png";
 import AdminAddProfile from "@/components/AdminAddProfile";
+
+// ---- Dropdown options (mirrored from Register page) ----
+const genderOptions = ["Male", "Female"];
+const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative"];
+const motherTongueOptions = ["Tamil", "Telugu", "Kannada", "Malayalam", "Hindi", "English", "Marathi", "Bengali", "Gujarati", "Punjabi", "Urdu", "Odia", "Assamese", "Konkani", "Sindhi", "Sanskrit", "Other"];
+const maritalStatusOptions = ["Never Married", "Divorced", "Widowed", "Separated"];
+const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Jain", "Buddhist", "Parsi / Zoroastrian", "Jewish", "Bahai", "No Religion", "Spiritual", "Other"];
+const casteMappings: Record<string, string[]> = {
+  "Hindu": ["Brahmin","Kshatriya","Vaishya","Shudra","Agarwal","Arora","Bania","Chettiar","Devanga","Ezhava","Goud","Gounder","Iyer","Iyengar","Jat","Kamma","Kapu","Kayastha","Khandayat","Khatri","Kongu Vellalar","Kurmi","Lingayat","Maratha","Meena","Mudaliar","Nadar","Naidu","Nair","Padmashali","Patel","Pillai","Rajput","Reddy","Saini","Sengunthar","Thevar","Vanniyar","Velama","Vishwakarma","Vokkaliga","Yadav","SC / ST","OBC","Other","No Caste Preference"],
+  "Muslim": ["Ansari","Hanafi","Jat Muslim","Khoja","Lebbai","Malik","Mappila","Memon","Mughal","Pathan","Qureshi","Rajput Muslim","Rowther","Sayyid","Shafi","Sheikh","Siddiqui","Sunni","Shia","Other","No Caste Preference"],
+  "Christian": ["Anglo-Indian","Born Again","Catholic","CNI","CSI","Jacobite","Knanaya","Latin Catholic","Marthoma","Nadar Christian","Orthodox","Pentecostal","Protestant","Roman Catholic","Syrian Catholic","Syrian Orthodox","Other","No Caste Preference"],
+  "Sikh": ["Arora","Bhatia","Ghumar","Jat Sikh","Kamboj","Khatri","Labana","Mazhabi","Ramgarhia","Ravidasia","Saini","Other","No Caste Preference"],
+  "Jain": ["Agarwal","Digamber","Jaiswal","KVO","Oswal","Porwal","Shwetamber","Visa Oswal","Other","No Caste Preference"],
+  "Buddhist": ["Mahar","Neo-Buddhist","Theravada","Mahayana","Vajrayana","Other","No Caste Preference"],
+  "Parsi / Zoroastrian": ["Irani","Parsi","Other","No Caste Preference"],
+  "Jewish": ["Bene Israel","Cochin Jews","Baghdadi","Other","No Caste Preference"],
+  "Bahai": ["Bahai","Other"],
+  "No Religion": ["Not Applicable"],
+  "Spiritual": ["Not Applicable"],
+  "Other": ["Other","No Caste Preference"]
+};
+const countryOptions = ["India","USA","UK","Canada","Australia","UAE","Singapore","Germany","New Zealand","Malaysia","South Africa","Saudi Arabia","Qatar","Kuwait","Bahrain","Oman","Japan","South Korea","France","Italy","Netherlands","Sweden","Switzerland","Ireland","Other"];
+const indianStates = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"];
+const educationOptions = ["High School","Diploma","Bachelor's Degree","Master's Degree","PhD","Professional Degree (CA/CS/ICWA)","Other"];
+const graduationDetailsOptions = ["B.Tech / B.E.","B.Sc","B.Com","B.A.","B.B.A","B.C.A","B.Arch","B.Des","B.Ed","B.Pharm","B.L / LLB","MBBS","BDS","BAMS","BHMS","M.Tech / M.E.","M.Sc","M.Com","M.A.","MBA","MCA","M.Ed","M.Pharm","MD","MS","CA","CS","ICWA / CMA","Ph.D","Post Doctoral","Diploma / ITI","Other Degree"];
+const employmentOptions = ["Private Sector","Government","Self Employed / Business","Public Sector","Defence","Civil Services","Not Working","Student","Freelancer","Other"];
+const familyStatusOptions = ["Middle Class","Upper Middle Class","Rich","Affluent"];
+const familyTypeOptions = ["Joint Family","Nuclear Family","Extended Family"];
+const siblingsOptions = ["No Siblings","1 Brother","2 Brothers","3+ Brothers","1 Sister","2 Sisters","3+ Sisters","1 Brother 1 Sister","Multiple Siblings"];
+const gothramOptions = ["Kashyapa","Bharadwaja","Vasistha","Atri","Viswamitra","Agastya","Garga","Jamadagni","Shandilya","Koundinya","Dhananjaya","Haritasa","Other","Not Applicable"];
+const raashiOptions = ["Mesha (Aries)","Vrishabha (Taurus)","Mithuna (Gemini)","Karka (Cancer)","Simha (Leo)","Kanya (Virgo)","Tula (Libra)","Vrishchika (Scorpio)","Dhanu (Sagittarius)","Makara (Capricorn)","Kumbha (Aquarius)","Meena (Pisces)"];
+const starOptions = ["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishtha","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"];
+const doshamOptions = ["No Dosham","Chevvai Dosham","Rahu Dosham","Kethu Dosham","Shani Dosham","Not Known"];
+const citizenshipOptions = ["Indian Citizen","NRI","PIO","OCI","US Citizen","UK Citizen","Canadian Citizen","Australian Citizen","UAE Resident","Singapore Citizen / PR","German Citizen","Dual Citizenship","Foreign National","Other"];
+const residenceOptions = ["Own House","Rented House","Rented Apartment","Own Apartment / Flat","With Family / Parents","Company Provided","PG / Hostel","Co-Living","Independent Villa","Other"];
+const visaOptions = ["Not Applicable","H1-B","H4","L1","L2","F1","OPT / CPT","Green Card / PR (US)","US Citizen","Tier 2 (UK)","ILR (UK PR)","PR (Canada)","Work Permit (Canada)","PR (Australia)","Employment Pass (Singapore)","Work Visa (UAE)","Golden Visa (UAE)","Blue Card (EU)","Other"];
+const heightOptions = Array.from({ length: 26 }, (_, i) => { const t = 54 + i; return `${Math.floor(t/12)}'${t%12}"`; });
+const currencyOptions = ["INR (₹)","USD ($)","GBP (£)","EUR (€)","CAD (C$)","AUD (A$)","AED (د.إ)","SGD (S$)","Other"];
+const incomeByCountry: Record<string, string[]> = {
+  "INR (₹)": ["Below ₹1 Lakh","₹1-2 Lakhs","₹2-3 Lakhs","₹3-5 Lakhs","₹5-7 Lakhs","₹7-10 Lakhs","₹10-15 Lakhs","₹15-20 Lakhs","₹20-30 Lakhs","₹30-50 Lakhs","₹50-75 Lakhs","₹75 Lakhs-1 Crore","₹1 Crore+"],
+  "USD ($)": ["Below $10,000","$10,000-$20,000","$20,000-$30,000","$30,000-$50,000","$50,000-$70,000","$70,000-$100,000","$100,000-$150,000","$150,000-$200,000","$200,000+"],
+  "GBP (£)": ["Below £10,000","£10,000-£20,000","£20,000-£30,000","£30,000-£50,000","£50,000-£80,000","£80,000-£100,000","£100,000+"],
+  "EUR (€)": ["Below €10,000","€10,000-€20,000","€20,000-€30,000","€30,000-€50,000","€50,000-€80,000","€80,000-€100,000","€100,000+"],
+};
+const packageOptions = [
+  { label: "1 Month", value: "1_month", months: 1 },
+  { label: "3 Months", value: "3_months", months: 3 },
+  { label: "6 Months", value: "6_months", months: 6 },
+  { label: "12 Months", value: "12_months", months: 12 },
+];
 
 type Profile = {
   id: string; full_name: string; gender: string; religion: string; city: string | null;
@@ -360,6 +410,33 @@ export default function AdminDashboard() {
     </div>
   );
 
+  const EditSelect = ({ label, field, options }: { label: string; field: string; options: string[] }) => (
+    <div className="mb-3">
+      <label className="block text-sm font-semibold text-gray-500 mb-1">{label}</label>
+      <select
+        value={(editForm as any)[field] || ""}
+        onChange={e => setEditField(field, e.target.value)}
+        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white"
+      >
+        <option value="">Select {label}</option>
+        {options.map(o => <option key={o} value={o}>{o}</option>)}
+      </select>
+    </div>
+  );
+
+  const editCasteOptions = useMemo(() => {
+    const rel = (editForm as any).religion || "";
+    return casteMappings[rel] || ["Other", "No Caste Preference"];
+  }, [(editForm as any).religion]);
+
+  // Subscription access state
+  const [subSelectedProfile, setSubSelectedProfile] = useState<Profile | null>(null);
+  const [subPackage, setSubPackage] = useState("");
+  const [subAmount, setSubAmount] = useState("");
+  const [subNotes, setSubNotes] = useState("");
+  const [subShowSummary, setSubShowSummary] = useState(false);
+  const [subSaving, setSubSaving] = useState(false);
+
   // ========================
   // FULL-SCREEN PROFILE VIEW
   // ========================
@@ -432,24 +509,25 @@ export default function AdminDashboard() {
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">📋 Basic Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
                   <EditField label="Full Name" field="full_name" />
-                  <EditField label="Gender" field="gender" />
+                  <EditSelect label="Gender" field="gender" options={genderOptions} />
                   <EditField label="Date of Birth" field="date_of_birth" type="date" />
                   <EditField label="Email" field="email" />
                   <EditField label="Phone" field="phone" />
                   <EditField label="WhatsApp" field="whatsapp" />
-                  <EditField label="Profile Created By" field="profile_created_by" />
+                  <EditSelect label="Profile Created By" field="profile_created_by" options={profileForOptions} />
                 </div>
               </div>
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">👤 Personal Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <EditField label="Mother Tongue" field="mother_tongue" />
-                  <EditField label="Marital Status" field="marital_status" />
-                  <EditField label="Religion" field="religion" />
-                  <EditField label="Caste" field="caste" />
+                  <EditSelect label="Mother Tongue" field="mother_tongue" options={motherTongueOptions} />
+                  <EditSelect label="Height" field="height_cm" options={heightOptions} />
+                  <EditSelect label="Marital Status" field="marital_status" options={maritalStatusOptions} />
+                  <EditSelect label="Religion" field="religion" options={religionOptions} />
+                  <EditSelect label="Caste" field="caste" options={editCasteOptions} />
                   <EditField label="Sub Caste" field="sub_caste" />
-                  <EditField label="Country" field="country" />
-                  <EditField label="State" field="state" />
+                  <EditSelect label="Country" field="country" options={countryOptions} />
+                  <EditSelect label="State" field="state" options={(editForm as any).country === "India" ? indianStates : []} />
                   <EditField label="City" field="city" />
                   <EditField label="Native Place" field="native_place" />
                 </div>
@@ -461,32 +539,35 @@ export default function AdminDashboard() {
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">🎓 Education & Career</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <EditField label="Education" field="education" />
-                  <EditField label="Education Detail" field="education_detail" />
-                  <EditField label="Occupation" field="occupation" />
-                  <EditField label="Company" field="company_name" />
-                  <EditField label="Annual Income" field="annual_income" />
+                  <EditSelect label="Education" field="education" options={educationOptions} />
+                  <EditSelect label="Graduation Detail" field="education_detail" options={graduationDetailsOptions} />
+                  <EditSelect label="Employment Type" field="occupation" options={employmentOptions} />
+                  <EditField label="Company Name" field="company_name" />
+                  <EditSelect label="Annual Income" field="annual_income" options={incomeByCountry["INR (₹)"] || []} />
+                  <EditSelect label="Citizenship" field="citizenship" options={citizenshipOptions} />
+                  <EditSelect label="Visa Type" field="visa_type" options={visaOptions} />
+                  <EditSelect label="Residence Type" field="residence_type" options={residenceOptions} />
                 </div>
               </div>
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">👨‍👩‍👧‍👦 Family Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <EditField label="Family Status" field="family_status" />
-                  <EditField label="Family Type" field="family_type" />
+                  <EditSelect label="Family Status" field="family_status" options={familyStatusOptions} />
+                  <EditSelect label="Family Type" field="family_type" options={familyTypeOptions} />
                   <EditField label="Father's Name" field="father_name" />
                   <EditField label="Father's Occupation" field="father_occupation" />
                   <EditField label="Mother's Name" field="mother_name" />
                   <EditField label="Mother's Occupation" field="mother_occupation" />
-                  <EditField label="Siblings" field="siblings" />
+                  <EditSelect label="Siblings" field="siblings" options={siblingsOptions} />
                 </div>
               </div>
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">🔮 Horoscope Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <EditField label="Gothram" field="gothra" />
-                  <EditField label="Raasi" field="raasi" />
-                  <EditField label="Star" field="star" />
-                  <EditField label="Dosham" field="dosham" />
+                  <EditSelect label="Gothram" field="gothra" options={gothramOptions} />
+                  <EditSelect label="Raasi" field="raasi" options={raashiOptions} />
+                  <EditSelect label="Star" field="star" options={starOptions} />
+                  <EditSelect label="Dosham" field="dosham" options={doshamOptions} />
                 </div>
               </div>
             </div>
@@ -985,80 +1066,187 @@ export default function AdminDashboard() {
 
           {/* Subscription Access */}
           {tab === "Subscription Access" && (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-800">Subscription Access</h3>
-                  <p className="text-sm text-gray-500 mt-0.5">Grant or revoke assisted service access for profiles</p>
-                </div>
-                <div className="sm:ml-auto relative">
-                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search by name, phone, email..."
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                  />
-                </div>
-              </div>
-              <div className="p-4">
-                {loading ? (
-                  <div className="text-center py-10 text-gray-400">Loading...</div>
-                ) : (
-                  <div className="space-y-3">
-                    {profiles.filter(p => {
-                      if (!searchQuery) return p.profile_status === "active";
-                      const q = searchQuery.toLowerCase();
-                      return (
-                        p.full_name.toLowerCase().includes(q) ||
-                        (p.phone?.includes(q)) ||
-                        (p.email?.toLowerCase().includes(q)) ||
-                        (p.city?.toLowerCase().includes(q))
-                      );
-                    }).map((p, i) => (
-                      <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
-                        className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md flex items-center gap-4 px-5 py-4"
-                        style={{ borderLeft: `4px solid ${(p as any).subscription_type === "assisted" ? "hsl(280, 65%, 55%)" : "hsl(210, 20%, 80%)"}` }}
-                      >
-                        <div className="w-12 h-12 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
-                          {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><span className="text-lg font-bold text-gray-400">{p.full_name[0]}</span></div>}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-gray-800 text-base truncate">{p.full_name}</h3>
-                          <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {p.phone || "—"}</p>
-                        </div>
-                        <div className="flex-shrink-0">
-                          <span className="px-3 py-1 rounded-full text-xs font-bold" style={
-                            (p as any).subscription_type === "assisted"
-                              ? { background: "hsl(280, 65%, 93%)", color: "hsl(280, 65%, 40%)" }
-                              : { background: "hsl(0, 0%, 95%)", color: "hsl(0, 0%, 50%)" }
-                          }>
-                            {(p as any).subscription_type === "assisted" ? "✦ Assisted" : "Free"}
-                          </span>
-                        </div>
-                        <button
-                          onClick={async () => {
-                            const newType = (p as any).subscription_type === "assisted" ? "free" : "assisted";
-                            const { error } = await supabase.from("profiles").update({ subscription_type: newType } as any).eq("id", p.id);
-                            if (!error) {
-                              setProfiles(prev => prev.map(pr => pr.id === p.id ? { ...pr, subscription_type: newType } as any : pr));
-                              toast({ title: newType === "assisted" ? "Assisted access granted!" : "Reverted to free account" });
-                            }
-                          }}
-                          className="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all"
-                          style={{ background: (p as any).subscription_type === "assisted" ? "hsl(0, 55%, 50%)" : "hsl(280, 65%, 55%)" }}
-                        >
-                          {(p as any).subscription_type === "assisted" ? "Revoke Access" : "Grant Assisted"}
-                        </button>
-                      </motion.div>
-                    ))}
-                    {profiles.filter(p => p.profile_status === "active").length === 0 && !searchQuery && (
-                      <div className="text-center py-10 text-gray-400">No active profiles to manage</div>
-                    )}
+            <div className="space-y-6">
+              {/* Profile list */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4">
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-800">Subscription Access</h3>
+                    <p className="text-sm text-gray-500 mt-0.5">Select a profile to manage subscription</p>
                   </div>
-                )}
+                  <div className="sm:ml-auto relative">
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input type="text" placeholder="Search by name, phone, email..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                      className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                  </div>
+                </div>
+                <div className="p-4">
+                  {loading ? (
+                    <div className="text-center py-10 text-gray-400">Loading...</div>
+                  ) : (
+                    <div className="space-y-3">
+                      {profiles.filter(p => {
+                        if (!searchQuery) return p.profile_status === "active";
+                        const q = searchQuery.toLowerCase();
+                        return p.full_name.toLowerCase().includes(q) || (p.phone?.includes(q)) || (p.email?.toLowerCase().includes(q)) || (p.city?.toLowerCase().includes(q));
+                      }).map((p, i) => (
+                        <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
+                          className={`bg-white rounded-xl border overflow-hidden transition-all hover:shadow-md flex items-center gap-4 px-5 py-4 cursor-pointer ${subSelectedProfile?.id === p.id ? "ring-2 ring-purple-400 border-purple-200" : "border-gray-100"}`}
+                          style={{ borderLeft: `4px solid ${(p as any).subscription_type === "assisted" ? "hsl(280, 65%, 55%)" : "hsl(210, 20%, 80%)"}` }}
+                          onClick={() => { setSubSelectedProfile(p); setSubPackage(""); setSubAmount(""); setSubNotes(""); setSubShowSummary(false); }}
+                        >
+                          <div className="w-12 h-12 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
+                            {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><span className="text-lg font-bold text-gray-400">{p.full_name[0]}</span></div>}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-bold text-gray-800 text-base truncate">{p.full_name}</h3>
+                            <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {p.phone || "—"}</p>
+                          </div>
+                          {(p as any).profile_id && (
+                            <span className="px-2 py-1 rounded-lg text-xs font-bold flex-shrink-0" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>{(p as any).profile_id}</span>
+                          )}
+                          <div className="flex-shrink-0">
+                            <span className="px-3 py-1 rounded-full text-xs font-bold" style={
+                              (p as any).subscription_type === "assisted"
+                                ? { background: "hsl(280, 65%, 93%)", color: "hsl(280, 65%, 40%)" }
+                                : { background: "hsl(0, 0%, 95%)", color: "hsl(0, 0%, 50%)" }
+                            }>
+                              {(p as any).subscription_type === "assisted" ? "✦ Assisted" : "Free"}
+                            </span>
+                          </div>
+                        </motion.div>
+                      ))}
+                      {profiles.filter(p => p.profile_status === "active").length === 0 && !searchQuery && (
+                        <div className="text-center py-10 text-gray-400">No active profiles to manage</div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
+
+              {/* Selected profile subscription panel */}
+              {subSelectedProfile && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                  <div className="p-6 border-b border-gray-100 flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
+                      {subSelectedProfile.profile_photo_url ? <img src={subSelectedProfile.profile_photo_url} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xl font-bold text-gray-400">{subSelectedProfile.full_name[0]}</div>}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-800">{subSelectedProfile.full_name}</h3>
+                      <p className="text-sm text-gray-500">{(subSelectedProfile as any).profile_id || "—"} • {subSelectedProfile.phone || "—"} • Current: <span className="font-semibold" style={{ color: (subSelectedProfile as any).subscription_type === "assisted" ? "hsl(280, 65%, 50%)" : "hsl(0, 0%, 50%)" }}>{(subSelectedProfile as any).subscription_type === "assisted" ? "Assisted" : "Free"}</span></p>
+                    </div>
+                    <button onClick={() => setSubSelectedProfile(null)} className="ml-auto text-gray-400 hover:text-gray-600"><X size={20} /></button>
+                  </div>
+
+                  {(subSelectedProfile as any).subscription_type === "assisted" ? (
+                    <div className="p-6">
+                      <p className="text-sm text-gray-600 mb-4">This profile currently has <span className="font-bold" style={{ color: "hsl(280, 65%, 50%)" }}>Assisted Access</span>.</p>
+                      <button
+                        onClick={async () => {
+                          const { error } = await supabase.from("profiles").update({ subscription_type: "free" } as any).eq("id", subSelectedProfile.id);
+                          if (!error) {
+                            setProfiles(prev => prev.map(pr => pr.id === subSelectedProfile.id ? { ...pr, subscription_type: "free" } as any : pr));
+                            setSubSelectedProfile(null);
+                            toast({ title: "Reverted to free account" });
+                          }
+                        }}
+                        className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all" style={{ background: "hsl(0, 55%, 50%)" }}
+                      >
+                        Revoke Assisted Access
+                      </button>
+                    </div>
+                  ) : !subShowSummary ? (
+                    <div className="p-6 space-y-5">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-600 mb-2">📦 Select Package</label>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                          {packageOptions.map(pkg => (
+                            <button key={pkg.value} onClick={() => setSubPackage(pkg.value)}
+                              className={`px-4 py-3 rounded-xl text-sm font-semibold border-2 transition-all ${subPackage === pkg.value ? "border-purple-500 bg-purple-50 text-purple-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}>
+                              {pkg.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-600 mb-1.5">💰 Amount Paid (₹)</label>
+                          <input type="number" value={subAmount} onChange={e => setSubAmount(e.target.value)} placeholder="Enter amount"
+                            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-200" />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-600 mb-1.5">📝 Admin Notes</label>
+                          <textarea value={subNotes} onChange={e => setSubNotes(e.target.value)} placeholder="Payment reference, notes..." rows={2}
+                            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-200" />
+                        </div>
+                      </div>
+                      <div className="flex gap-3 pt-2">
+                        <button
+                          onClick={() => {
+                            if (!subPackage) { toast({ title: "Please select a package", variant: "destructive" }); return; }
+                            if (!subAmount) { toast({ title: "Please enter amount paid", variant: "destructive" }); return; }
+                            setSubShowSummary(true);
+                          }}
+                          className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all" style={{ background: "hsl(280, 65%, 55%)" }}
+                        >
+                          Review & Confirm
+                        </button>
+                        <button onClick={() => setSubSelectedProfile(null)} className="px-4 py-2.5 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50">Cancel</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-6 space-y-5">
+                      <h4 className="text-base font-bold text-gray-800 flex items-center gap-2"><CreditCard size={18} /> Subscription Summary</h4>
+                      <div className="rounded-xl p-5 space-y-3" style={{ background: "hsl(280, 65%, 97%)", border: "1px solid hsl(280, 65%, 90%)" }}>
+                        <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
+                          <span className="text-sm text-gray-600 font-medium">Profile</span>
+                          <span className="text-sm font-bold text-gray-800">{subSelectedProfile.full_name} ({(subSelectedProfile as any).profile_id || "—"})</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
+                          <span className="text-sm text-gray-600 font-medium">Package</span>
+                          <span className="text-sm font-bold text-gray-800">{packageOptions.find(p => p.value === subPackage)?.label}</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
+                          <span className="text-sm text-gray-600 font-medium">Amount Paid</span>
+                          <span className="text-sm font-bold text-gray-800">₹{subAmount}</span>
+                        </div>
+                        {subNotes && (
+                          <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
+                            <span className="text-sm text-gray-600 font-medium">Admin Notes</span>
+                            <span className="text-sm text-gray-800 text-right max-w-[60%]">{subNotes}</span>
+                          </div>
+                        )}
+                        <div className="flex justify-between py-2">
+                          <span className="text-sm text-gray-600 font-medium">Access Type</span>
+                          <span className="text-sm font-bold" style={{ color: "hsl(280, 65%, 50%)" }}>✦ Assisted Access</span>
+                        </div>
+                      </div>
+                      <div className="flex gap-3 pt-2">
+                        <button
+                          disabled={subSaving}
+                          onClick={async () => {
+                            setSubSaving(true);
+                            const { error } = await supabase.from("profiles").update({ subscription_type: "assisted" } as any).eq("id", subSelectedProfile.id);
+                            if (!error) {
+                              setProfiles(prev => prev.map(pr => pr.id === subSelectedProfile.id ? { ...pr, subscription_type: "assisted" } as any : pr));
+                              toast({ title: "Assisted access granted successfully!" });
+                              setSubSelectedProfile(null);
+                              setSubShowSummary(false);
+                            } else {
+                              toast({ title: "Error", description: error.message, variant: "destructive" });
+                            }
+                            setSubSaving(false);
+                          }}
+                          className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-60" style={{ background: "hsl(145, 65%, 42%)" }}
+                        >
+                          {subSaving ? "Granting..." : "✓ Grant Assisted Access"}
+                        </button>
+                        <button onClick={() => setSubShowSummary(false)} className="px-4 py-2.5 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50">Back</button>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              )}
             </div>
           )}
 
