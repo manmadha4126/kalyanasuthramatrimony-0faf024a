@@ -663,6 +663,37 @@ export default function Register() {
                 )}
 
                 {step === 6 && (
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>About Me</label>
+                      <textarea
+                        value={form.aboutMe}
+                        onChange={e => set("aboutMe", e.target.value)}
+                        placeholder="Write about yourself – your personality, hobbies, interests, lifestyle, values, etc."
+                        rows={5}
+                        maxLength={1000}
+                        className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 bg-white resize-none"
+                        style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, color: "#333", fontSize: "0.9rem" }}
+                      />
+                      <p className="text-xs mt-1 text-right" style={{ color: "#aaa" }}>{form.aboutMe.length}/1000 characters</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Partner Expectations</label>
+                      <textarea
+                        value={form.partnerExpectations}
+                        onChange={e => set("partnerExpectations", e.target.value)}
+                        placeholder="Describe your ideal partner – preferred age, education, profession, family values, lifestyle expectations, etc."
+                        rows={5}
+                        maxLength={1000}
+                        className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 bg-white resize-none"
+                        style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, color: "#333", fontSize: "0.9rem" }}
+                      />
+                      <p className="text-xs mt-1 text-right" style={{ color: "#aaa" }}>{form.partnerExpectations.length}/1000 characters</p>
+                    </div>
+                  </div>
+                )}
+
+                {step === 7 && (
                   <motion.div 
                     className="space-y-5 max-h-[70vh] overflow-y-auto pr-1"
                     initial={{ scale: 0.95, opacity: 0 }}
