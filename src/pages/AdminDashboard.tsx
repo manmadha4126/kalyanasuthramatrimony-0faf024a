@@ -50,7 +50,7 @@ type FeaturedProfileEntry = {
   gender: string; profile_photo_url: string | null; created_at: string;
 };
 
-const TABS = ["Dashboard", "Profile Requests", "All Profiles", "Subscription Access", "Consultations", "Featured Profiles", "Success Stories"];
+const TABS = ["Dashboard", "Profile Requests", "All Profiles", "Subscription Access", "Consultations", "Featured Profiles", "Success Stories", "Add Profiles", "Interests"];
 
 const DetailRow = ({ label, value }: { label: string; value: string | null | undefined }) => (
   <div className="flex justify-between py-3 border-b border-gray-100 last:border-0">
