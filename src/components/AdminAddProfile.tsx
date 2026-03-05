@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, Check } from "lucide-react";
+import { Upload, Check, Star } from "lucide-react";
 
 const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative"];
 const genderOptions = ["Male", "Female"];
@@ -103,7 +103,8 @@ const SectionHeading = ({ title }: { title: string }) => (
 
 export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: () => void }) {
   const [form, setForm] = useState<AdminForm>(defaultForm);
-  const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [primaryPhotoIndex, setPrimaryPhotoIndex] = useState(0);
   const [horoscopeFile, setHoroscopeFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
@@ -111,6 +112,19 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
   const { toast } = useToast();
 
   const set = (field: keyof AdminForm, value: string) => setForm(prev => ({ ...prev, [field]: value }));
+
+  const handlePhotoUpload = (files: FileList | null) => {
+    if (!files) return;
+    const valid = Array.from(files).filter(f => f.size <= 25 * 1024 * 1024);
+    const combined = [...photos, ...valid].slice(0, 5);
+    setPhotos(combined);
+  };
+
+  const removePhoto = (index: number) => {
+    const updated = photos.filter((_, i) => i !== index);
+    setPhotos(updated);
+    if (primaryPhotoIndex >= updated.length) setPrimaryPhotoIndex(0);
+  };
 
   const casteOptions = useMemo(() => {
     if (!form.religion) return ["Other", "No Caste Preference"];
@@ -137,15 +151,21 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
       // Create a temporary auth user for admin-added profiles is not needed
       // Insert directly into profiles table
       let profilePhotoUrl: string | null = null;
+      let additionalPhotoUrls: string[] = [];
       let horoscopeUrl: string | null = null;
 
-      if (profilePhoto) {
-        const ext = profilePhoto.name.split(".").pop();
-        const path = `admin/${Date.now()}-photo.${ext}`;
-        const { error: upErr } = await supabase.storage.from("profile-photos").upload(path, profilePhoto, { upsert: true });
+      // Upload all photos
+      for (let i = 0; i < photos.length; i++) {
+        const photo = photos[i];
+        const ext = photo.name.split(".").pop();
+        const path = `admin/${Date.now()}-photo-${i}.${ext}`;
+        const { error: upErr } = await supabase.storage.from("profile-photos").upload(path, photo, { upsert: true });
         if (!upErr) {
           const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
-          profilePhotoUrl = urlData.publicUrl;
+          if (i === primaryPhotoIndex) {
+            profilePhotoUrl = urlData.publicUrl;
+          }
+          additionalPhotoUrls.push(urlData.publicUrl);
         }
       }
 
@@ -201,6 +221,7 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
         dosham: form.dosham || null,
         whatsapp: form.phone || null,
         profile_photo_url: profilePhotoUrl,
+        additional_photos: additionalPhotoUrls.length > 0 ? additionalPhotoUrls : null,
         horoscope_url: horoscopeUrl,
         about_me: form.aboutMe || null,
         citizenship: form.citizenship || null,
@@ -232,7 +253,7 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
         {createdProfileId && (
           <p className="text-lg font-bold mb-4" style={{ color: "hsl(210, 80%, 45%)" }}>Profile ID: {createdProfileId}</p>
         )}
-        <button onClick={() => { setDone(false); setForm(defaultForm); setProfilePhoto(null); setHoroscopeFile(null); setCreatedProfileId(null); }} className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white" style={{ background: "hsl(210, 80%, 50%)" }}>
+        <button onClick={() => { setDone(false); setForm(defaultForm); setPhotos([]); setPrimaryPhotoIndex(0); setHoroscopeFile(null); setCreatedProfileId(null); }} className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white" style={{ background: "hsl(210, 80%, 50%)" }}>
           Add Another Profile
         </button>
       </div>
@@ -310,15 +331,47 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
             <label className="block text-sm font-semibold mb-1.5 text-gray-600">About Me</label>
             <textarea value={form.aboutMe} onChange={e => set("aboutMe", e.target.value)} rows={3} className="w-full rounded-xl border border-gray-200 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white" placeholder="Write a brief description..." />
           </div>
-          <div>
-            <label className="block text-sm font-semibold mb-1.5 text-gray-600">Profile Photo</label>
-            <label className="flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 text-sm cursor-pointer hover:bg-gray-50">
-              <Upload size={16} className="text-gray-400" />
-              <span className="text-gray-500 truncate">{profilePhoto ? profilePhoto.name : "Choose photo"}</span>
-              <input type="file" className="hidden" accept="image/*" onChange={e => setProfilePhoto(e.target.files?.[0] || null)} />
+
+          {/* Multi-photo upload like register page */}
+          <div className="col-span-full">
+            <label className="block text-sm font-semibold mb-2 text-gray-600">Profile Photos (Max 5, each below 25MB)</label>
+            <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-8 cursor-pointer transition-colors hover:bg-gray-50 hover:border-blue-300">
+              <Upload size={28} className="text-gray-400 mb-2" />
+              <span className="text-sm font-medium text-gray-600">Click to upload photos</span>
+              <span className="text-xs mt-1 text-gray-400">{photos.length}/5 uploaded</span>
+              <input type="file" className="hidden" accept="image/*" multiple onChange={e => handlePhotoUpload(e.target.files)} />
             </label>
           </div>
-          <div>
+
+          {photos.length > 0 && (
+            <div className="col-span-full">
+              <p className="text-sm font-semibold mb-3 text-gray-600">Select Primary Photo ⭐</p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                {photos.map((photo, i) => (
+                  <div
+                    key={i}
+                    className="relative cursor-pointer rounded-xl overflow-hidden transition-all"
+                    style={{ border: i === primaryPhotoIndex ? "3px solid hsl(210, 80%, 55%)" : "2px solid #eee" }}
+                    onClick={() => setPrimaryPhotoIndex(i)}
+                  >
+                    <img src={URL.createObjectURL(photo)} alt="" className="w-full aspect-[3/4] object-cover" />
+                    {i === primaryPhotoIndex && (
+                      <div className="absolute inset-0 flex items-center justify-center" style={{ background: "hsl(210, 80%, 55% / 0.3)" }}>
+                        <Star size={24} className="text-white fill-white" />
+                      </div>
+                    )}
+                    <button
+                      onClick={e => { e.stopPropagation(); removePhoto(i); }}
+                      className="absolute -top-1 -right-1 w-6 h-6 text-white rounded-full text-xs flex items-center justify-center"
+                      style={{ background: "hsl(0, 60%, 55%)" }}
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="col-span-full">
             <label className="block text-sm font-semibold mb-1.5 text-gray-600">Horoscope File</label>
             <label className="flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 text-sm cursor-pointer hover:bg-gray-50">
               <Upload size={16} className="text-gray-400" />
@@ -332,7 +385,7 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
           <button onClick={handleSubmit} disabled={saving} className="px-8 py-3 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-60" style={{ background: "hsl(145, 65%, 42%)" }}>
             {saving ? "Creating Profile..." : "Create Profile"}
           </button>
-          <button onClick={() => { setForm(defaultForm); setProfilePhoto(null); setHoroscopeFile(null); }} className="px-6 py-3 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50">
+          <button onClick={() => { setForm(defaultForm); setPhotos([]); setPrimaryPhotoIndex(0); setHoroscopeFile(null); }} className="px-6 py-3 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50">
             Reset
           </button>
         </div>
