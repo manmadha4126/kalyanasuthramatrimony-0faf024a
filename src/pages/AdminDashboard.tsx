@@ -410,6 +410,33 @@ export default function AdminDashboard() {
     </div>
   );
 
+  const EditSelect = ({ label, field, options }: { label: string; field: string; options: string[] }) => (
+    <div className="mb-3">
+      <label className="block text-sm font-semibold text-gray-500 mb-1">{label}</label>
+      <select
+        value={(editForm as any)[field] || ""}
+        onChange={e => setEditField(field, e.target.value)}
+        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white"
+      >
+        <option value="">Select {label}</option>
+        {options.map(o => <option key={o} value={o}>{o}</option>)}
+      </select>
+    </div>
+  );
+
+  const editCasteOptions = useMemo(() => {
+    const rel = (editForm as any).religion || "";
+    return casteMappings[rel] || ["Other", "No Caste Preference"];
+  }, [(editForm as any).religion]);
+
+  // Subscription access state
+  const [subSelectedProfile, setSubSelectedProfile] = useState<Profile | null>(null);
+  const [subPackage, setSubPackage] = useState("");
+  const [subAmount, setSubAmount] = useState("");
+  const [subNotes, setSubNotes] = useState("");
+  const [subShowSummary, setSubShowSummary] = useState(false);
+  const [subSaving, setSubSaving] = useState(false);
+
   // ========================
   // FULL-SCREEN PROFILE VIEW
   // ========================
