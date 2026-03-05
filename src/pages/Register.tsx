@@ -356,6 +356,14 @@ export default function Register() {
 
       if (profileErr) throw profileErr;
 
+      // Update about_me and partner_expectations separately
+      if (form.aboutMe || form.partnerExpectations) {
+        await supabase.from("profiles").update({
+          about_me: form.aboutMe || null,
+          partner_expectations: form.partnerExpectations || null,
+        }).eq("user_id", userId);
+      }
+
       // Fetch the generated profile_id
       const { data: profileData } = await supabase.from("profiles").select("profile_id").eq("user_id", userId).single();
       if (profileData && (profileData as any).profile_id) {
