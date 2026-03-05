@@ -765,11 +765,17 @@ export default function AdminDashboard() {
                         <div className="flex-shrink-0 hidden sm:block">
                           <p className="text-sm text-gray-500">{p.occupation || "—"}</p>
                         </div>
+                        {(p as any).profile_id && (
+                          <span className="px-2 py-1 rounded-lg text-xs font-bold flex-shrink-0" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>{(p as any).profile_id}</span>
+                        )}
                         <StatusBadge status={p.profile_status} />
                         <div className="flex items-center gap-2 flex-shrink-0">
                           <span className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold" style={{ background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>
                             <Eye size={12} /> View
                           </span>
+                          <button onClick={(e) => { e.stopPropagation(); deleteProfile(p.id); }} className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}>
+                            <Trash2 size={12} /> Delete
+                          </button>
                         </div>
                       </motion.div>
                     ))}
