@@ -629,33 +629,29 @@ export default function AdminDashboard() {
                 ) : pendingProfiles.length === 0 ? (
                   <div className="text-center py-10 text-gray-400">No pending profile requests</div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                  <div className="space-y-3">
                     {pendingProfiles.map((p, i) => (
-                      <motion.div key={p.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
-                        className="bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all hover:shadow-lg"
+                      <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
+                        className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md flex items-center gap-4 px-5 py-4 cursor-pointer"
                         style={{ borderLeft: "4px solid hsl(38, 90%, 55%)" }}
+                        onClick={() => openProfile(p)}
                       >
-                        <div className="p-5">
-                          <div className="flex items-start gap-4 mb-4">
-                            <div className="w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
-                              {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><span className="text-xl font-bold text-gray-400">{p.full_name[0]}</span></div>}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-bold text-gray-800 text-base truncate">{p.full_name}</h3>
-                              <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs</p>
-                              <p className="text-sm text-gray-400 truncate">{[p.city, p.state].filter(Boolean).join(", ") || "—"}</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between mb-4">
-                            <StatusBadge status={p.profile_status} />
-                            <span className="text-xs text-gray-400">{new Date(p.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <button onClick={() => openProfile(p)} className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-sm font-semibold transition-all" style={{ background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>
-                              <Eye size={14} /> View
-                            </button>
-                            <button onClick={() => updateStatus(p.id, "active")} className="flex-1 py-2 rounded-xl text-sm font-semibold text-white transition-all" style={{ background: "hsl(145, 65%, 42%)" }}>Verify</button>
-                          </div>
+                        <div className="w-12 h-12 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
+                          {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><span className="text-lg font-bold text-gray-400">{p.full_name[0]}</span></div>}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-bold text-gray-800 text-base truncate">{p.full_name}</h3>
+                          <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {[p.city, p.state].filter(Boolean).join(", ") || "—"}</p>
+                        </div>
+                        <div className="flex-shrink-0 hidden sm:block">
+                          <p className="text-sm text-gray-500">{p.occupation || "—"}</p>
+                        </div>
+                        <StatusBadge status={p.profile_status} />
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <button onClick={(e) => { e.stopPropagation(); updateStatus(p.id, "active"); }} className="px-3 py-1.5 rounded-xl text-xs font-semibold text-white transition-all" style={{ background: "hsl(145, 65%, 42%)" }}>Verify</button>
+                          <span className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold" style={{ background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>
+                            <Eye size={12} /> View
+                          </span>
                         </div>
                       </motion.div>
                     ))}
