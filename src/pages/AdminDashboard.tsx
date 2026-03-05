@@ -732,12 +732,24 @@ export default function AdminDashboard() {
           </nav>
 
           <div className="space-y-1 border-t border-white/10 pt-4 mb-2">
-            <button onClick={() => navigate("/admin")} className="flex items-center gap-2 text-white/60 hover:text-white text-xs px-3 py-2 w-full transition-colors rounded-lg hover:bg-white/5">
+            <motion.button
+              onClick={() => navigate("/admin")}
+              whileHover={{ scale: 1.05, x: 4 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              className="flex items-center gap-2 text-white/60 hover:text-white text-xs px-3 py-2 w-full transition-colors rounded-lg hover:bg-white/5"
+            >
               <ArrowLeft size={14} /> Back to Staff Login
-            </button>
-            <button onClick={() => navigate("/")} className="flex items-center gap-2 text-white/60 hover:text-white text-xs px-3 py-2 w-full transition-colors rounded-lg hover:bg-white/5">
+            </motion.button>
+            <motion.button
+              onClick={() => navigate("/")}
+              whileHover={{ scale: 1.05, x: 4 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              className="flex items-center gap-2 text-white/60 hover:text-white text-xs px-3 py-2 w-full transition-colors rounded-lg hover:bg-white/5"
+            >
               <Home size={14} /> Back to Home
-            </button>
+            </motion.button>
           </div>
 
           <div className="border-t border-white/10 pt-4">
