@@ -7,7 +7,7 @@ import { Eye, EyeOff, ChevronLeft, ChevronRight, Check, Upload, Star, Heart, X, 
 import BackButton from "@/components/BackButton";
 import logo from "@/assets/kalyanasuthra-logo.png";
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 7;
 const THEME = {
   primary: "210, 55%, 45%",
   primaryDeep: "210, 60%, 35%",
