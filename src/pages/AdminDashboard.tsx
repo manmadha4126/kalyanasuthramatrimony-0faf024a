@@ -344,8 +344,8 @@ export default function AdminDashboard() {
         </header>
 
         <div className="max-w-5xl mx-auto p-4 sm:p-8">
-          {/* Top Section: Photo + Basic Info */}
-          <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 mb-6 flex flex-col sm:flex-row items-start gap-6 border border-gray-100">
+          {/* Top Section: Photo + ID + Status + Name + Age + City */}
+          <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 mb-6 flex flex-col sm:flex-row items-center gap-6 border border-gray-100">
             <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl flex-shrink-0 overflow-hidden shadow-md" style={{ background: "#E8ECF0" }}>
               {p.profile_photo_url ? (
                 <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" />
@@ -355,30 +355,18 @@ export default function AdminDashboard() {
                 </div>
               )}
             </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-4 mb-2">
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{p.full_name}</h2>
+            <div className="flex-1 text-center sm:text-left">
+              {selectedProfile.profile_id && (
+                <span className="inline-block px-3 py-1 rounded-full text-xs font-bold mb-2" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>
+                  ID: {selectedProfile.profile_id}
+                </span>
+              )}
+              <div className="flex items-center justify-center sm:justify-start gap-3 mb-1">
                 <StatusBadge status={selectedProfile.profile_status} />
-                {(selectedProfile as any).profile_id && (
-                  <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>
-                    ID: {(selectedProfile as any).profile_id}
-                  </span>
-                )}
               </div>
-              <div className="space-y-1 mt-3">
-                <p className="text-base text-gray-600"><strong>Age:</strong> {getAge(p.date_of_birth)} years</p>
-                <p className="text-base text-gray-600"><strong>Gender:</strong> {p.gender || "—"}</p>
-                <p className="text-base text-gray-600"><strong>Height:</strong> {p.height_cm ? `${p.height_cm} cm` : "—"}</p>
-                <p className="text-base text-gray-600"><strong>Weight:</strong> {p.weight_kg ? `${p.weight_kg} kg` : "—"}</p>
-                <p className="text-base text-gray-600"><strong>Complexion:</strong> {p.complexion || "—"}</p>
-                <p className="text-base text-gray-600"><strong>Blood Group:</strong> {p.blood_group || "—"}</p>
-                <p className="text-base text-gray-600"><strong>Profession:</strong> {p.occupation || "—"}</p>
-                <p className="text-base text-gray-600"><strong>Location:</strong> {[p.city, p.state, p.country].filter(Boolean).join(", ") || "—"}</p>
-                <p className="text-base text-gray-600"><strong>Marital Status:</strong> {p.marital_status || "—"}</p>
-                <p className="text-base text-gray-600"><strong>Religion:</strong> {p.religion}{p.caste ? ` - ${p.caste}` : ""}</p>
-                <p className="text-base text-gray-600"><strong>Profile Created By:</strong> {p.profile_created_by || "—"}</p>
-              </div>
-              <p className="text-sm text-gray-400 mt-3">Registered: {new Date(selectedProfile.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}</p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">{p.full_name}</h2>
+              <p className="text-lg text-gray-600 mt-1">{getAge(p.date_of_birth)} years • {p.city || "—"}</p>
+              <p className="text-sm text-gray-400 mt-2">Registered: {new Date(selectedProfile.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}</p>
             </div>
           </div>
 
@@ -447,7 +435,7 @@ export default function AdminDashboard() {
               </div>
             </div>
           ) : (
-            /* View Mode - Spacious cards */
+            /* View Mode - About Me first, then Personal Details with all fields */
             <div className="space-y-6">
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <DetailSection title="About Me">
@@ -456,22 +444,16 @@ export default function AdminDashboard() {
               </div>
 
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
-                <DetailSection title="Contact Details">
-                  <DetailRow label="Email" value={p.email} />
-                  <DetailRow label="Phone" value={p.phone} />
-                  <DetailRow label="WhatsApp" value={p.whatsapp} />
-                </DetailSection>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <DetailSection title="Personal Details">
+                  <DetailRow label="Full Name" value={p.full_name} />
                   <DetailRow label="Date of Birth" value={p.date_of_birth} />
+                  <DetailRow label="Age" value={p.date_of_birth ? `${getAge(p.date_of_birth)} years` : null} />
                   <DetailRow label="Gender" value={p.gender} />
-                  <DetailRow label="Mother Tongue" value={p.mother_tongue} />
                   <DetailRow label="Height" value={p.height_cm ? `${p.height_cm} cm` : null} />
                   <DetailRow label="Weight" value={p.weight_kg ? `${p.weight_kg} kg` : null} />
                   <DetailRow label="Complexion" value={p.complexion} />
                   <DetailRow label="Blood Group" value={p.blood_group} />
+                  <DetailRow label="Mother Tongue" value={p.mother_tongue} />
                   <DetailRow label="Marital Status" value={p.marital_status} />
                   <DetailRow label="Religion" value={p.religion} />
                   <DetailRow label="Caste" value={p.caste} />
@@ -483,6 +465,14 @@ export default function AdminDashboard() {
                   <DetailRow label="Native Place" value={p.native_place} />
                   <DetailRow label="Working City" value={p.working_city} />
                   <DetailRow label="Profile Created By" value={p.profile_created_by} />
+                </DetailSection>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
+                <DetailSection title="Contact Details">
+                  <DetailRow label="Email" value={p.email} />
+                  <DetailRow label="Phone" value={p.phone} />
+                  <DetailRow label="WhatsApp" value={p.whatsapp} />
                 </DetailSection>
               </div>
 
