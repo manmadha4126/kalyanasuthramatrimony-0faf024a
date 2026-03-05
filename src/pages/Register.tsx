@@ -793,6 +793,10 @@ export default function Register() {
                       <SummaryRow label="Chart Style" value={form.chartStyle} />
                       <SummaryRow label="Horoscope File" value={form.horoscopeFile?.name || "Not uploaded"} />
                     </SummarySection>
+                    <SummarySection title="💬 About Me & Partner Expectations">
+                      <SummaryRow label="About Me" value={form.aboutMe} />
+                      <SummaryRow label="Partner Expectations" value={form.partnerExpectations} />
+                    </SummarySection>
                   </motion.div>
                 )}
               </motion.div>
