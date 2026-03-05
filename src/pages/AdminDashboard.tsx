@@ -435,7 +435,7 @@ export default function AdminDashboard() {
               </div>
             </div>
           ) : (
-            /* View Mode - Spacious cards */
+            /* View Mode - About Me first, then Personal Details with all fields */
             <div className="space-y-6">
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <DetailSection title="About Me">
@@ -444,22 +444,16 @@ export default function AdminDashboard() {
               </div>
 
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
-                <DetailSection title="Contact Details">
-                  <DetailRow label="Email" value={p.email} />
-                  <DetailRow label="Phone" value={p.phone} />
-                  <DetailRow label="WhatsApp" value={p.whatsapp} />
-                </DetailSection>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <DetailSection title="Personal Details">
+                  <DetailRow label="Full Name" value={p.full_name} />
                   <DetailRow label="Date of Birth" value={p.date_of_birth} />
+                  <DetailRow label="Age" value={p.date_of_birth ? `${getAge(p.date_of_birth)} years` : null} />
                   <DetailRow label="Gender" value={p.gender} />
-                  <DetailRow label="Mother Tongue" value={p.mother_tongue} />
                   <DetailRow label="Height" value={p.height_cm ? `${p.height_cm} cm` : null} />
                   <DetailRow label="Weight" value={p.weight_kg ? `${p.weight_kg} kg` : null} />
                   <DetailRow label="Complexion" value={p.complexion} />
                   <DetailRow label="Blood Group" value={p.blood_group} />
+                  <DetailRow label="Mother Tongue" value={p.mother_tongue} />
                   <DetailRow label="Marital Status" value={p.marital_status} />
                   <DetailRow label="Religion" value={p.religion} />
                   <DetailRow label="Caste" value={p.caste} />
@@ -471,6 +465,14 @@ export default function AdminDashboard() {
                   <DetailRow label="Native Place" value={p.native_place} />
                   <DetailRow label="Working City" value={p.working_city} />
                   <DetailRow label="Profile Created By" value={p.profile_created_by} />
+                </DetailSection>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
+                <DetailSection title="Contact Details">
+                  <DetailRow label="Email" value={p.email} />
+                  <DetailRow label="Phone" value={p.phone} />
+                  <DetailRow label="WhatsApp" value={p.whatsapp} />
                 </DetailSection>
               </div>
 
