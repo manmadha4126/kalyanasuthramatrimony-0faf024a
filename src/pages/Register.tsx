@@ -184,6 +184,7 @@ const defaultForm: FormData = {
   familyStatus: "", familyType: "", fatherName: "", fatherOccupation: "", motherName: "", motherOccupation: "", siblings: "", siblingDetails: "",
   gothram: "", raashi: "", star: "", dosham: "", timeOfBirth: "", countryOfBirth: "India", stateOfBirth: "", birthPlace: "", language: "", chartStyle: "South Indian", horoscopeFile: null,
   photos: [], primaryPhotoIndex: 0,
+  aboutMe: "", partnerExpectations: "",
 };
 
 const SelectField = ({ label, value, onChange, options, required }: { label: string; value: string; onChange: (v: string) => void; options: string[]; required?: boolean }) => (
