@@ -221,6 +221,7 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
         dosham: form.dosham || null,
         whatsapp: form.phone || null,
         profile_photo_url: profilePhotoUrl,
+        additional_photos: additionalPhotoUrls.length > 0 ? additionalPhotoUrls : null,
         horoscope_url: horoscopeUrl,
         about_me: form.aboutMe || null,
         citizenship: form.citizenship || null,
