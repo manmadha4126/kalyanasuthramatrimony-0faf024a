@@ -6,10 +6,10 @@ import { Eye, EyeOff, Shield, Heart, Users, Star, Gem, ArrowLeft } from "lucide-
 import logo from "@/assets/kalyanasuthra-logo.png";
 
 const ADMIN_CREDENTIALS = [
-  { email: "menda.manmadha21@gmail.com", password: "0*MAha21" },
-  { email: "drakshayani@gmail.com", password: "admin@987" },
-  { email: "kalyanasuthra@gmail.com", password: "admin@123" },
-];
+{ email: "menda.manmadha21@gmail.com", password: "0*MAha21" },
+{ email: "drakshayani@gmail.com", password: "admin@987" },
+{ email: "kalyanasuthra@gmail.com", password: "admin@123" }];
+
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -25,7 +25,7 @@ export default function AdminLogin() {
     setError("");
     try {
       const adminCred = ADMIN_CREDENTIALS.find(
-        c => c.email === email.toLowerCase() && c.password === password
+        (c) => c.email === email.toLowerCase() && c.password === password
       );
       if (!adminCred) {
         setError("Invalid email or password. Access denied.");
@@ -60,13 +60,13 @@ export default function AdminLogin() {
   };
 
   const highlights = [
-    { icon: "🏛️", label: "15,000+ Profiles", desc: "Verified Telugu, Tamil & Kannada brides and grooms" },
-    { icon: "💍", label: "3,500+ Weddings", desc: "Successfully matched since 2018" },
-    { icon: "👨‍👩‍👧‍👦", label: "Family-First Approach", desc: "Traditional values meet modern matchmaking" },
-    { icon: "🌟", label: "Dedicated Managers", desc: "Personal relationship managers for premium clients" },
-    { icon: "📋", label: "Profile Management", desc: "Review and activate submitted profiles" },
-    { icon: "🎯", label: "Smart Matching", desc: "Horoscope, caste & preference-based matching" },
-  ];
+  { icon: "🏛️", label: "15,000+ Profiles", desc: "Verified Telugu, Tamil & Kannada brides and grooms" },
+  { icon: "💍", label: "3,500+ Weddings", desc: "Successfully matched since 2018" },
+  { icon: "👨‍👩‍👧‍👦", label: "Family-First Approach", desc: "Traditional values meet modern matchmaking" },
+  { icon: "🌟", label: "Dedicated Managers", desc: "Personal relationship managers for premium clients" },
+  { icon: "📋", label: "Profile Management", desc: "Review and activate submitted profiles" },
+  { icon: "🎯", label: "Smart Matching", desc: "Horoscope, caste & preference-based matching" }];
+
 
   return (
     <div className="min-h-screen flex" style={{ background: "linear-gradient(145deg, hsl(180, 65%, 42%) 0%, hsl(175, 55%, 48%) 50%, hsl(185, 60%, 40%) 100%)" }}>
@@ -88,28 +88,28 @@ export default function AdminLogin() {
             Welcome to the<br />
             <span style={{ color: "hsl(42, 50%, 85%)", fontSize: "3.4rem" }}>Admin Portal</span>
           </h1>
-          <p className="text-white/60 text-base leading-relaxed max-w-md mb-10" style={{ fontFamily: "'Open Sans', sans-serif" }}>
+          <p className="text-base leading-relaxed max-w-md mb-10 text-violet-950" style={{ fontFamily: "'Open Sans', sans-serif" }}>
             Managing South India's most trusted matrimonial platform. Every match we make writes a new chapter of love.
           </p>
 
           {/* Highlights Grid - bigger */}
           <div className="grid grid-cols-2 gap-4">
-            {highlights.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + i * 0.08 }}
-                className="flex items-start gap-3.5 p-4 rounded-xl"
-                style={{ background: "hsl(0, 0%, 100% / 0.06)", border: "1px solid hsl(0, 0%, 100% / 0.08)" }}
-              >
+            {highlights.map((item, i) =>
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 + i * 0.08 }}
+              className="flex items-start gap-3.5 p-4 rounded-xl"
+              style={{ background: "hsl(0, 0%, 100% / 0.06)", border: "1px solid hsl(0, 0%, 100% / 0.08)" }}>
+              
                 <span className="text-2xl flex-shrink-0">{item.icon}</span>
                 <div>
                   <p className="text-white font-semibold text-sm" style={{ fontFamily: "'Open Sans', sans-serif" }}>{item.label}</p>
-                  <p className="text-white/45 text-xs mt-1 leading-snug" style={{ fontFamily: "'Open Sans', sans-serif" }}>{item.desc}</p>
+                  <p className="mt-1 leading-snug text-popover-foreground text-base font-normal" style={{ fontFamily: "'Open Sans', sans-serif" }}>{item.desc}</p>
                 </div>
               </motion.div>
-            ))}
+            )}
           </div>
 
           {/* Bottom quote */}
@@ -130,8 +130,8 @@ export default function AdminLogin() {
             <button
               onClick={() => navigate("/")}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:opacity-90 shadow-lg"
-              style={{ background: "hsl(0, 0%, 8%)", color: "hsl(0, 0%, 100%)", fontFamily: "'Open Sans', sans-serif" }}
-            >
+              style={{ background: "hsl(0, 0%, 8%)", color: "hsl(0, 0%, 100%)", fontFamily: "'Open Sans', sans-serif" }}>
+              
               <ArrowLeft size={16} /> Back to Home
             </button>
           </div>
@@ -148,20 +148,20 @@ export default function AdminLogin() {
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1">Email Address</label>
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="admin@example.com" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@example.com" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1">Password</label>
                 <div className="relative">
-                  <input type={showPass ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter password" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 pr-10" />
+                  <input type={showPass ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 pr-10" />
                   <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
                     {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
                 </div>
               </div>
-              {error && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">{error}</motion.div>
-              )}
+              {error &&
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">{error}</motion.div>
+              }
               <button type="submit" disabled={loading} className="w-full py-3 rounded-lg font-semibold text-sm text-white transition-all disabled:opacity-60" style={{ background: "linear-gradient(135deg, hsl(220, 45%, 30%), hsl(230, 40%, 38%))" }}>
                 {loading ? "Verifying..." : "Sign In to Dashboard"}
               </button>
@@ -172,6 +172,6 @@ export default function AdminLogin() {
           </div>
         </motion.div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
