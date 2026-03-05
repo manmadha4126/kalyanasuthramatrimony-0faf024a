@@ -623,10 +623,10 @@ export default function AdminDashboard() {
       <motion.aside
         animate={{ width: sidebarOpen ? 240 : 0 }}
         transition={{ duration: 0.3 }}
-        className="overflow-hidden flex-shrink-0 hidden lg:block"
+        className="overflow-hidden flex-shrink-0 hidden lg:block h-screen sticky top-0"
         style={{ background: "hsl(213, 32%, 22%)" }}
       >
-        <div className="w-[240px] h-full flex flex-col py-6 px-4">
+        <div className="w-[240px] h-full flex flex-col py-6 px-4 overflow-y-auto">
           <div className="flex items-center gap-2 mb-8 px-1">
             <img src={adminLogo} alt="Kalyanasuthra" className="h-12 w-auto object-contain" />
           </div>
