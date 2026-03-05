@@ -1,11 +1,61 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload, FileText, Heart, UserPlus } from "lucide-react";
+import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload, FileText, Heart, UserPlus, CreditCard } from "lucide-react";
 import adminLogo from "@/assets/kalyanasuthra-logo.png";
 import AdminAddProfile from "@/components/AdminAddProfile";
+
+// ---- Dropdown options (mirrored from Register page) ----
+const genderOptions = ["Male", "Female"];
+const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative"];
+const motherTongueOptions = ["Tamil", "Telugu", "Kannada", "Malayalam", "Hindi", "English", "Marathi", "Bengali", "Gujarati", "Punjabi", "Urdu", "Odia", "Assamese", "Konkani", "Sindhi", "Sanskrit", "Other"];
+const maritalStatusOptions = ["Never Married", "Divorced", "Widowed", "Separated"];
+const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Jain", "Buddhist", "Parsi / Zoroastrian", "Jewish", "Bahai", "No Religion", "Spiritual", "Other"];
+const casteMappings: Record<string, string[]> = {
+  "Hindu": ["Brahmin","Kshatriya","Vaishya","Shudra","Agarwal","Arora","Bania","Chettiar","Devanga","Ezhava","Goud","Gounder","Iyer","Iyengar","Jat","Kamma","Kapu","Kayastha","Khandayat","Khatri","Kongu Vellalar","Kurmi","Lingayat","Maratha","Meena","Mudaliar","Nadar","Naidu","Nair","Padmashali","Patel","Pillai","Rajput","Reddy","Saini","Sengunthar","Thevar","Vanniyar","Velama","Vishwakarma","Vokkaliga","Yadav","SC / ST","OBC","Other","No Caste Preference"],
+  "Muslim": ["Ansari","Hanafi","Jat Muslim","Khoja","Lebbai","Malik","Mappila","Memon","Mughal","Pathan","Qureshi","Rajput Muslim","Rowther","Sayyid","Shafi","Sheikh","Siddiqui","Sunni","Shia","Other","No Caste Preference"],
+  "Christian": ["Anglo-Indian","Born Again","Catholic","CNI","CSI","Jacobite","Knanaya","Latin Catholic","Marthoma","Nadar Christian","Orthodox","Pentecostal","Protestant","Roman Catholic","Syrian Catholic","Syrian Orthodox","Other","No Caste Preference"],
+  "Sikh": ["Arora","Bhatia","Ghumar","Jat Sikh","Kamboj","Khatri","Labana","Mazhabi","Ramgarhia","Ravidasia","Saini","Other","No Caste Preference"],
+  "Jain": ["Agarwal","Digamber","Jaiswal","KVO","Oswal","Porwal","Shwetamber","Visa Oswal","Other","No Caste Preference"],
+  "Buddhist": ["Mahar","Neo-Buddhist","Theravada","Mahayana","Vajrayana","Other","No Caste Preference"],
+  "Parsi / Zoroastrian": ["Irani","Parsi","Other","No Caste Preference"],
+  "Jewish": ["Bene Israel","Cochin Jews","Baghdadi","Other","No Caste Preference"],
+  "Bahai": ["Bahai","Other"],
+  "No Religion": ["Not Applicable"],
+  "Spiritual": ["Not Applicable"],
+  "Other": ["Other","No Caste Preference"]
+};
+const countryOptions = ["India","USA","UK","Canada","Australia","UAE","Singapore","Germany","New Zealand","Malaysia","South Africa","Saudi Arabia","Qatar","Kuwait","Bahrain","Oman","Japan","South Korea","France","Italy","Netherlands","Sweden","Switzerland","Ireland","Other"];
+const indianStates = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"];
+const educationOptions = ["High School","Diploma","Bachelor's Degree","Master's Degree","PhD","Professional Degree (CA/CS/ICWA)","Other"];
+const graduationDetailsOptions = ["B.Tech / B.E.","B.Sc","B.Com","B.A.","B.B.A","B.C.A","B.Arch","B.Des","B.Ed","B.Pharm","B.L / LLB","MBBS","BDS","BAMS","BHMS","M.Tech / M.E.","M.Sc","M.Com","M.A.","MBA","MCA","M.Ed","M.Pharm","MD","MS","CA","CS","ICWA / CMA","Ph.D","Post Doctoral","Diploma / ITI","Other Degree"];
+const employmentOptions = ["Private Sector","Government","Self Employed / Business","Public Sector","Defence","Civil Services","Not Working","Student","Freelancer","Other"];
+const familyStatusOptions = ["Middle Class","Upper Middle Class","Rich","Affluent"];
+const familyTypeOptions = ["Joint Family","Nuclear Family","Extended Family"];
+const siblingsOptions = ["No Siblings","1 Brother","2 Brothers","3+ Brothers","1 Sister","2 Sisters","3+ Sisters","1 Brother 1 Sister","Multiple Siblings"];
+const gothramOptions = ["Kashyapa","Bharadwaja","Vasistha","Atri","Viswamitra","Agastya","Garga","Jamadagni","Shandilya","Koundinya","Dhananjaya","Haritasa","Other","Not Applicable"];
+const raashiOptions = ["Mesha (Aries)","Vrishabha (Taurus)","Mithuna (Gemini)","Karka (Cancer)","Simha (Leo)","Kanya (Virgo)","Tula (Libra)","Vrishchika (Scorpio)","Dhanu (Sagittarius)","Makara (Capricorn)","Kumbha (Aquarius)","Meena (Pisces)"];
+const starOptions = ["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishtha","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"];
+const doshamOptions = ["No Dosham","Chevvai Dosham","Rahu Dosham","Kethu Dosham","Shani Dosham","Not Known"];
+const citizenshipOptions = ["Indian Citizen","NRI","PIO","OCI","US Citizen","UK Citizen","Canadian Citizen","Australian Citizen","UAE Resident","Singapore Citizen / PR","German Citizen","Dual Citizenship","Foreign National","Other"];
+const residenceOptions = ["Own House","Rented House","Rented Apartment","Own Apartment / Flat","With Family / Parents","Company Provided","PG / Hostel","Co-Living","Independent Villa","Other"];
+const visaOptions = ["Not Applicable","H1-B","H4","L1","L2","F1","OPT / CPT","Green Card / PR (US)","US Citizen","Tier 2 (UK)","ILR (UK PR)","PR (Canada)","Work Permit (Canada)","PR (Australia)","Employment Pass (Singapore)","Work Visa (UAE)","Golden Visa (UAE)","Blue Card (EU)","Other"];
+const heightOptions = Array.from({ length: 26 }, (_, i) => { const t = 54 + i; return `${Math.floor(t/12)}'${t%12}"`; });
+const currencyOptions = ["INR (₹)","USD ($)","GBP (£)","EUR (€)","CAD (C$)","AUD (A$)","AED (د.إ)","SGD (S$)","Other"];
+const incomeByCountry: Record<string, string[]> = {
+  "INR (₹)": ["Below ₹1 Lakh","₹1-2 Lakhs","₹2-3 Lakhs","₹3-5 Lakhs","₹5-7 Lakhs","₹7-10 Lakhs","₹10-15 Lakhs","₹15-20 Lakhs","₹20-30 Lakhs","₹30-50 Lakhs","₹50-75 Lakhs","₹75 Lakhs-1 Crore","₹1 Crore+"],
+  "USD ($)": ["Below $10,000","$10,000-$20,000","$20,000-$30,000","$30,000-$50,000","$50,000-$70,000","$70,000-$100,000","$100,000-$150,000","$150,000-$200,000","$200,000+"],
+  "GBP (£)": ["Below £10,000","£10,000-£20,000","£20,000-£30,000","£30,000-£50,000","£50,000-£80,000","£80,000-£100,000","£100,000+"],
+  "EUR (€)": ["Below €10,000","€10,000-€20,000","€20,000-€30,000","€30,000-€50,000","€50,000-€80,000","€80,000-€100,000","€100,000+"],
+};
+const packageOptions = [
+  { label: "1 Month", value: "1_month", months: 1 },
+  { label: "3 Months", value: "3_months", months: 3 },
+  { label: "6 Months", value: "6_months", months: 6 },
+  { label: "12 Months", value: "12_months", months: 12 },
+];
 
 type Profile = {
   id: string; full_name: string; gender: string; religion: string; city: string | null;
