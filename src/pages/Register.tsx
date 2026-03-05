@@ -386,6 +386,13 @@ export default function Register() {
 
               <h2 className="text-2xl font-bold mb-4" style={{ color: `hsl(${THEME.primaryDeep})`, fontFamily: "system-ui, sans-serif" }}>Profile Created Successfully!</h2>
 
+              {createdProfileId && (
+                <div className="rounded-xl p-4 mb-5 flex items-center justify-center gap-3" style={{ background: "hsl(210, 80%, 96%)", border: "1px solid hsl(210, 80%, 85%)" }}>
+                  <span className="text-sm font-semibold" style={{ color: "hsl(210, 60%, 35%)" }}>Your Profile ID:</span>
+                  <span className="text-xl font-extrabold tracking-wider" style={{ color: "hsl(210, 80%, 40%)" }}>{createdProfileId}</span>
+                </div>
+              )}
+
               <div className="rounded-xl p-5 mb-5 text-left" style={{ background: `hsl(${THEME.accentLight})`, border: `1px solid hsl(${THEME.accent} / 0.3)` }}>
                 <p className="text-sm leading-relaxed" style={{ color: `hsl(${THEME.primaryDeep})` }}>
                   Your profile has been created successfully. Our assistance team will verify your profile and approve it shortly. You will be notified once your profile is verified and activated.
