@@ -69,7 +69,7 @@ export default function AdminLogin() {
   ];
 
   return (
-    <div className="min-h-screen flex" style={{ background: "linear-gradient(145deg, hsl(220, 45%, 15%) 0%, hsl(230, 40%, 22%) 50%, hsl(215, 50%, 18%) 100%)" }}>
+    <div className="min-h-screen flex" style={{ background: "linear-gradient(145deg, hsl(180, 65%, 42%) 0%, hsl(175, 55%, 48%) 50%, hsl(185, 60%, 40%) 100%)" }}>
       {/* Left Panel */}
       <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="hidden lg:flex flex-col items-start justify-center w-1/2 px-14 py-10 relative overflow-hidden">
         {/* Decorative circles */}
@@ -84,11 +84,11 @@ export default function AdminLogin() {
           </div>
 
           {/* Main heading */}
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "3rem", lineHeight: "1.15" }} className="font-bold text-white mb-3">
+          <h1 style={{ fontFamily: "'Kaushan Script', cursive", fontSize: "3rem", lineHeight: "1.2" }} className="text-white mb-3">
             Welcome to the<br />
-            <span style={{ color: "hsl(42, 50%, 70%)", fontStyle: "italic", fontSize: "3.2rem" }}>Admin Portal</span>
+            <span style={{ color: "hsl(42, 50%, 85%)", fontSize: "3.4rem" }}>Admin Portal</span>
           </h1>
-          <p className="text-white/50 text-base leading-relaxed max-w-md mb-10" style={{ fontFamily: "'Open Sans', sans-serif" }}>
+          <p className="text-white/60 text-base leading-relaxed max-w-md mb-10" style={{ fontFamily: "'Open Sans', sans-serif" }}>
             Managing South India's most trusted matrimonial platform. Every match we make writes a new chapter of love.
           </p>
 
