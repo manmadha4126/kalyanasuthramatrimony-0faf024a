@@ -509,24 +509,25 @@ export default function AdminDashboard() {
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">📋 Basic Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
                   <EditField label="Full Name" field="full_name" />
-                  <EditField label="Gender" field="gender" />
+                  <EditSelect label="Gender" field="gender" options={genderOptions} />
                   <EditField label="Date of Birth" field="date_of_birth" type="date" />
                   <EditField label="Email" field="email" />
                   <EditField label="Phone" field="phone" />
                   <EditField label="WhatsApp" field="whatsapp" />
-                  <EditField label="Profile Created By" field="profile_created_by" />
+                  <EditSelect label="Profile Created By" field="profile_created_by" options={profileForOptions} />
                 </div>
               </div>
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">👤 Personal Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <EditField label="Mother Tongue" field="mother_tongue" />
-                  <EditField label="Marital Status" field="marital_status" />
-                  <EditField label="Religion" field="religion" />
-                  <EditField label="Caste" field="caste" />
+                  <EditSelect label="Mother Tongue" field="mother_tongue" options={motherTongueOptions} />
+                  <EditSelect label="Height" field="height_cm" options={heightOptions} />
+                  <EditSelect label="Marital Status" field="marital_status" options={maritalStatusOptions} />
+                  <EditSelect label="Religion" field="religion" options={religionOptions} />
+                  <EditSelect label="Caste" field="caste" options={editCasteOptions} />
                   <EditField label="Sub Caste" field="sub_caste" />
-                  <EditField label="Country" field="country" />
-                  <EditField label="State" field="state" />
+                  <EditSelect label="Country" field="country" options={countryOptions} />
+                  <EditSelect label="State" field="state" options={(editForm as any).country === "India" ? indianStates : []} />
                   <EditField label="City" field="city" />
                   <EditField label="Native Place" field="native_place" />
                 </div>
@@ -538,32 +539,35 @@ export default function AdminDashboard() {
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">🎓 Education & Career</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <EditField label="Education" field="education" />
-                  <EditField label="Education Detail" field="education_detail" />
-                  <EditField label="Occupation" field="occupation" />
-                  <EditField label="Company" field="company_name" />
-                  <EditField label="Annual Income" field="annual_income" />
+                  <EditSelect label="Education" field="education" options={educationOptions} />
+                  <EditSelect label="Graduation Detail" field="education_detail" options={graduationDetailsOptions} />
+                  <EditSelect label="Employment Type" field="occupation" options={employmentOptions} />
+                  <EditField label="Company Name" field="company_name" />
+                  <EditSelect label="Annual Income" field="annual_income" options={incomeByCountry["INR (₹)"] || []} />
+                  <EditSelect label="Citizenship" field="citizenship" options={citizenshipOptions} />
+                  <EditSelect label="Visa Type" field="visa_type" options={visaOptions} />
+                  <EditSelect label="Residence Type" field="residence_type" options={residenceOptions} />
                 </div>
               </div>
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">👨‍👩‍👧‍👦 Family Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <EditField label="Family Status" field="family_status" />
-                  <EditField label="Family Type" field="family_type" />
+                  <EditSelect label="Family Status" field="family_status" options={familyStatusOptions} />
+                  <EditSelect label="Family Type" field="family_type" options={familyTypeOptions} />
                   <EditField label="Father's Name" field="father_name" />
                   <EditField label="Father's Occupation" field="father_occupation" />
                   <EditField label="Mother's Name" field="mother_name" />
                   <EditField label="Mother's Occupation" field="mother_occupation" />
-                  <EditField label="Siblings" field="siblings" />
+                  <EditSelect label="Siblings" field="siblings" options={siblingsOptions} />
                 </div>
               </div>
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">🔮 Horoscope Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <EditField label="Gothram" field="gothra" />
-                  <EditField label="Raasi" field="raasi" />
-                  <EditField label="Star" field="star" />
-                  <EditField label="Dosham" field="dosham" />
+                  <EditSelect label="Gothram" field="gothra" options={gothramOptions} />
+                  <EditSelect label="Raasi" field="raasi" options={raashiOptions} />
+                  <EditSelect label="Star" field="star" options={starOptions} />
+                  <EditSelect label="Dosham" field="dosham" options={doshamOptions} />
                 </div>
               </div>
             </div>
