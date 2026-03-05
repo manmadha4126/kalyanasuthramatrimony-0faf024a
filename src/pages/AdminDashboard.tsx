@@ -539,11 +539,6 @@ export default function AdminDashboard() {
                 </DetailSection>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
-                <DetailSection title="Partner Expectations">
-                  <p className="text-base text-gray-700 leading-relaxed">{p.partner_expectations || "—"}</p>
-                </DetailSection>
-              </div>
 
               {(p.profile_photo_url || (p.additional_photos && p.additional_photos.length > 0)) && (
                 <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
