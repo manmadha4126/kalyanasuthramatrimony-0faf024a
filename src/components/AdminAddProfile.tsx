@@ -253,7 +253,7 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
         {createdProfileId && (
           <p className="text-lg font-bold mb-4" style={{ color: "hsl(210, 80%, 45%)" }}>Profile ID: {createdProfileId}</p>
         )}
-        <button onClick={() => { setDone(false); setForm(defaultForm); setProfilePhoto(null); setHoroscopeFile(null); setCreatedProfileId(null); }} className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white" style={{ background: "hsl(210, 80%, 50%)" }}>
+        <button onClick={() => { setDone(false); setForm(defaultForm); setPhotos([]); setPrimaryPhotoIndex(0); setHoroscopeFile(null); setCreatedProfileId(null); }} className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white" style={{ background: "hsl(210, 80%, 50%)" }}>
           Add Another Profile
         </button>
       </div>
