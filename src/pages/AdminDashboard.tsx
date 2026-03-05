@@ -138,6 +138,49 @@ export default function AdminDashboard() {
     if (data) setFeaturedEntries(data as any);
   };
 
+  const fetchInterests = async () => {
+    const { data } = await supabase.from("profile_interests").select("*, profiles!profile_interests_to_profile_id_fkey(full_name, profile_photo_url, city, gender)").order("created_at", { ascending: false });
+    if (data) setInterests(data as any);
+  };
+
+  const addSuccessStory = async () => {
+    if (!storyForm.bride_name || !storyForm.groom_name || !storyForm.city || !storyForm.story) {
+      toast({ title: "Please fill all fields", variant: "destructive" });
+      return;
+    }
+    setSavingStory(true);
+    let imageUrl: string | null = null;
+    if (storyPhoto) {
+      const ext = storyPhoto.name.split(".").pop();
+      const path = `stories/${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("profile-photos").upload(path, storyPhoto, { upsert: true });
+      if (!upErr) {
+        const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
+        imageUrl = urlData.publicUrl;
+      }
+    }
+    const { data: { user } } = await supabase.auth.getUser();
+    const { error } = await supabase.from("success_stories").insert({
+      bride_name: storyForm.bride_name,
+      groom_name: storyForm.groom_name,
+      city: storyForm.city,
+      story: storyForm.story,
+      image_url: imageUrl,
+      status: "approved",
+      created_by: user?.id || null,
+    });
+    if (!error) {
+      toast({ title: "Success story added!" });
+      setStoryForm({ bride_name: "", groom_name: "", city: "", story: "" });
+      setStoryPhoto(null);
+      setShowStoryForm(false);
+      fetchSuccessStories();
+    } else {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    }
+    setSavingStory(false);
+  };
+
   const updateStoryStatus = async (id: string, status: string) => {
     const { error } = await supabase.from("success_stories").update({ status }).eq("id", id);
     if (!error) {
