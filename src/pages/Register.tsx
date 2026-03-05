@@ -157,7 +157,7 @@ const doshamOptions = ["No Dosham", "Chevvai Dosham", "Rahu Dosham", "Kethu Dosh
 const languageOptions = ["Tamil", "Telugu", "Kannada", "Malayalam", "Hindi", "Sanskrit", "English", "Other"];
 const chartStyleOptions = ["South Indian", "North Indian", "East Indian", "Sri Lankan"];
 
-const stepTitles = ["Basic Details", "Personal Details", "Family Details", "Horoscope", "Photo Upload", "Review & Submit"];
+const stepTitles = ["Basic Details", "Personal Details", "Family Details", "Horoscope", "Photo Upload", "About Me", "Review & Submit"];
 
 type FormData = {
   name: string; profileFor: string; gender: string; email: string; phone: string; password: string; confirmPassword: string;
