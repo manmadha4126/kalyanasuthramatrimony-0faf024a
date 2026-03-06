@@ -233,7 +233,16 @@ export default function CustomerDashboard() {
           )}
         </div>
         <p className="text-sm font-semibold text-center truncate w-full" style={{ color: themeDark }}>{userProfile?.full_name || "User"}</p>
-        <p className="text-[10px] font-medium" style={{ color: themeMid }}>ID: {profileId}</p>
+        <p className="text-sm font-bold tracking-wide" style={{ color: themeDark }}>ID: {profileId}</p>
+        {userProfile?.profile_status === "active" ? (
+          <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold" style={{ background: "hsl(145, 50%, 90%)", color: "hsl(145, 50%, 30%)" }}>
+            <CheckCircle size={12} /> Verified
+          </span>
+        ) : (
+          <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold" style={{ background: "hsl(38, 90%, 92%)", color: "hsl(38, 70%, 40%)" }}>
+            <XCircle size={12} /> Not Verified
+          </span>
+        )}
       </div>
 
       <nav className="space-y-1 flex-1">
