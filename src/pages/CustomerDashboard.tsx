@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, ChevronDown, X, BookHeart, CheckCircle, Edit, Eye, HelpCircle, Phone, User } from "lucide-react";
+import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, ChevronDown, X, BookHeart, CheckCircle, Edit, Eye, HelpCircle, Phone, User, ArrowLeft, MessageCircle, MapPin, Clock } from "lucide-react";
 import BackButton from "@/components/BackButton";
 
 type Profile = {
@@ -14,13 +14,14 @@ type Profile = {
 
 type UserProfileFull = {
   id: string; full_name: string; email: string | null; gender: string; profile_status?: string;
-  profile_photo_url: string | null; subscription_type?: string;
+  profile_photo_url: string | null; subscription_type?: string; profile_id?: string | null;
 };
 
 const NAV = [
   { icon: Home, label: "Home" },
   { icon: Users, label: "Matches" },
   { icon: Search, label: "Preferences" },
+  { icon: Heart, label: "Interests" },
   { icon: Settings, label: "Settings" },
 ];
 
@@ -30,7 +31,7 @@ export default function CustomerDashboard() {
   const [userProfile, setUserProfile] = useState<UserProfileFull | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeNav, setActiveNav] = useState("Home");
-  const [showUpgrade, setShowUpgrade] = useState(false);
+  const [showUpgradePage, setShowUpgradePage] = useState(false);
   const [shortlisted, setShortlisted] = useState<string[]>([]);
   const [showStoryForm, setShowStoryForm] = useState(false);
   const [storyForm, setStoryForm] = useState({ bride_name: "", groom_name: "", city: "", story: "" });
@@ -38,12 +39,14 @@ export default function CustomerDashboard() {
   const [userId, setUserId] = useState<string | null>(null);
   const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
   const [showHeaderDropdown, setShowHeaderDropdown] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [interests, setInterests] = useState<Profile[]>([]);
+  const [interestsLoading, setInterestsLoading] = useState(false);
   const settingsRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { checkAuth(); }, []);
 
-  // Close dropdowns on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (settingsRef.current && !settingsRef.current.contains(e.target as Node)) setShowSettingsDropdown(false);
@@ -57,9 +60,10 @@ export default function CustomerDashboard() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { navigate("/login"); return; }
     setUserId(user.id);
-    const { data: pData } = await supabase.from("profiles").select("id,full_name,email,gender,profile_status,profile_photo_url,subscription_type").eq("user_id", user.id).maybeSingle();
+    const { data: pData } = await supabase.from("profiles").select("id,full_name,email,gender,profile_status,profile_photo_url,subscription_type,profile_id").eq("user_id", user.id).maybeSingle();
     if (pData) setUserProfile(pData as UserProfileFull);
     fetchMatches(pData?.gender || "Male");
+    fetchInterests(user.id);
   };
 
   const fetchMatches = async (userGender: string) => {
@@ -67,6 +71,23 @@ export default function CustomerDashboard() {
     const { data } = await supabase.from("profiles").select("id,full_name,gender,religion,caste,city,state,occupation,education,date_of_birth,profile_photo_url,annual_income,is_featured,phone,email,whatsapp").eq("profile_status", "active").eq("gender", targetGender).limit(20);
     if (data) setMatches(data);
     setLoading(false);
+  };
+
+  const fetchInterests = async (uid: string) => {
+    setInterestsLoading(true);
+    const { data: interestData } = await supabase
+      .from("profile_interests")
+      .select("to_profile_id")
+      .eq("from_user_id", uid);
+    if (interestData && interestData.length > 0) {
+      const profileIds = interestData.map(i => i.to_profile_id);
+      const { data: profilesData } = await supabase
+        .from("profiles")
+        .select("id,full_name,gender,religion,caste,city,state,occupation,education,date_of_birth,profile_photo_url,annual_income,is_featured,phone,email,whatsapp")
+        .in("id", profileIds);
+      if (profilesData) setInterests(profilesData);
+    }
+    setInterestsLoading(false);
   };
 
   const logout = async () => { await supabase.auth.signOut(); navigate("/login"); };
@@ -89,13 +110,13 @@ export default function CustomerDashboard() {
   const themeLight = "hsl(160, 40%, 94%)";
   const themeMid = "hsl(160, 30%, 50%)";
 
-  const profileId = userProfile?.id?.slice(0, 8).toUpperCase() || "—";
+  const profileId = userProfile?.profile_id || userProfile?.id?.slice(0, 8).toUpperCase() || "—";
 
   const settingsItems = [
     { icon: Edit, label: "Edit Profile", action: () => navigate(`/profile/${userProfile?.id}`) },
     { icon: Eye, label: "View Profile", action: () => navigate(`/profile/${userProfile?.id}`) },
-    { icon: HelpCircle, label: "Help Us", action: () => {} },
-    { icon: Phone, label: "Contact Us", action: () => window.open("https://wa.me/919553306667", "_blank") },
+    { icon: HelpCircle, label: "Help Us", action: () => window.location.href = "tel:+919553306667" },
+    { icon: Phone, label: "Contact Us", action: () => setShowContactModal(true) },
     { icon: BookHeart, label: "Add Success Story", action: () => setShowStoryForm(true) },
     { icon: LogOut, label: "Logout", action: logout },
   ];
@@ -108,25 +129,135 @@ export default function CustomerDashboard() {
     { icon: LogOut, label: "Logout", action: logout },
   ];
 
+  const renderProfileCard = (profile: Profile, i: number) => (
+    <motion.div key={profile.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1 group">
+      <div className="relative h-48 bg-gray-100">
+        {profile.profile_photo_url ? (
+          <img src={profile.profile_photo_url} alt={profile.full_name} className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center" style={{ background: themeLight }}>
+            <span className="text-4xl font-bold" style={{ color: themeAccent }}>{profile.full_name[0]}</span>
+          </div>
+        )}
+        {profile.is_featured && (
+          <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: "hsl(42, 42%, 57%)", color: "white" }}>
+            <Star size={9} className="fill-white" /> Featured
+          </div>
+        )}
+        <button onClick={() => toggleShortlist(profile.id)} className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all" style={{ background: "hsl(0, 0%, 100% / 0.9)" }}>
+          <Heart size={15} style={{ color: shortlisted.includes(profile.id) ? themeAccent : "#ccc" }} className={shortlisted.includes(profile.id) ? "fill-current" : ""} />
+        </button>
+      </div>
+      <div className="p-4">
+        <h3 className="font-bold text-gray-800 text-sm">{profile.full_name}</h3>
+        <p className="text-xs text-gray-500 mt-0.5">{getAge(profile.date_of_birth)} yrs • {profile.religion}{profile.caste ? ` • ${profile.caste}` : ""}</p>
+        <div className="mt-2 space-y-0.5">
+          {profile.occupation && <p className="text-xs text-gray-600">💼 {profile.occupation}</p>}
+          {(profile.city || profile.state) && <p className="text-xs text-gray-500">📍 {[profile.city, profile.state].filter(Boolean).join(", ")}</p>}
+          {profile.annual_income && <p className="text-xs text-gray-500">💰 {profile.annual_income}</p>}
+          {userProfile?.subscription_type === "assisted" && profile.phone && <p className="text-xs text-gray-600">📞 {profile.phone}</p>}
+          {userProfile?.subscription_type === "assisted" && profile.email && <p className="text-xs text-gray-600">✉️ {profile.email}</p>}
+          {userProfile?.subscription_type !== "assisted" && (
+            <p className="text-[10px] mt-1 px-2 py-1 rounded-md" style={{ background: "hsl(38, 90%, 95%)", color: "hsl(38, 70%, 35%)" }}>🔒 Upgrade to see contact details</p>
+          )}
+        </div>
+        <button onClick={() => navigate(`/profile/${profile.id}`)} className="mt-3 w-full py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: themeLight, color: themeDark }}>
+          View Profile
+        </button>
+      </div>
+    </motion.div>
+  );
+
+  // If upgrade page is shown, render full page
+  if (showUpgradePage) {
+    return (
+      <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(160, 15%, 97%)" }}>
+        {/* Sidebar stays */}
+        <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 py-5 px-4 sticky top-0 h-screen overflow-hidden" style={{ background: "linear-gradient(180deg, hsl(160, 25%, 93%) 0%, hsl(155, 20%, 95%) 100%)", borderRight: "1px solid hsl(160, 20%, 88%)" }}>
+          <div className="flex flex-col items-center gap-2 mb-6 px-2 py-4 rounded-xl" style={{ background: "hsl(160, 20%, 90%)" }}>
+            <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border-2" style={{ borderColor: themeAccent }}>
+              {userProfile?.profile_photo_url ? (
+                <img src={userProfile.profile_photo_url} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-white font-bold text-xl" style={{ background: themeAccent }}>
+                  {userProfile?.full_name?.[0] || "U"}
+                </div>
+              )}
+            </div>
+            <p className="text-sm font-semibold text-center truncate w-full" style={{ color: themeDark }}>{userProfile?.full_name || "User"}</p>
+            <p className="text-[10px] font-medium" style={{ color: themeMid }}>ID: {profileId}</p>
+          </div>
+        </aside>
+
+        {/* Full page packages */}
+        <div className="flex-1 overflow-auto">
+          <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-sm border-b border-gray-100 px-6 py-4">
+            <button onClick={() => setShowUpgradePage(false)} className="inline-flex items-center gap-2 text-sm font-semibold transition-colors hover:opacity-80" style={{ color: themeAccent }}>
+              <ArrowLeft size={18} /> Back to Dashboard
+            </button>
+          </div>
+          <div className="p-6 max-w-5xl mx-auto">
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Star size={20} className="text-yellow-500 fill-yellow-500" />
+                <h1 className="text-2xl font-bold text-gray-800">Assisted Matrimony Services</h1>
+              </div>
+              <p className="text-sm text-gray-500">Choose the plan that suits you best</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {[
+                { title: "Support Matrimony", plans: [{ price: "₹13,000", period: "3 Months" }, { price: "₹20,000", period: "6 Months" }], features: ["Unlimited profiles", "Weekly mail updates", "Profile processing"], highlight: false },
+                { title: "Affluent Matrimony", plans: [{ price: "₹38,000", period: "Premium" }], features: ["Unlimited profiles", "Dedicated Relationship Manager", "Daily feedback", "Personal enquiry", "Up to settlement", "Well-settled profiles"], highlight: true },
+                { title: "Online Services", plans: [{ price: "₹7,000", period: "3 Months" }, { price: "₹10,000", period: "6 Months" }, { price: "₹15,000", period: "1 Year" }], features: ["Full online access", "Profile browsing", "Direct connect"], highlight: false },
+              ].map((pkg, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="rounded-2xl p-6 border-2 transition-all hover:shadow-lg" style={pkg.highlight ? { borderColor: themeAccent, background: themeLight } : { borderColor: "hsl(0,0%,90%)", background: "white" }}>
+                  {pkg.highlight && <div className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: themeAccent }}>★ Most Popular</div>}
+                  <h3 className="font-bold text-lg text-gray-800 mb-4">{pkg.title}</h3>
+                  <div className="space-y-1 mb-5">
+                    {pkg.plans.map((p, j) => (
+                      <div key={j} className="flex items-baseline gap-1">
+                        <span className="font-bold text-xl" style={{ color: themeDark }}>{p.price}</span>
+                        <span className="text-xs text-gray-400">/ {p.period}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <ul className="space-y-2 mb-6">
+                    {pkg.features.map(f => (
+                      <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
+                        <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: themeAccent }}></span>
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hello! I'm interested in the ${pkg.title} plan. Please provide more details.`)}`} target="_blank" rel="noopener noreferrer" className="block w-full py-2.5 rounded-xl text-center text-sm font-semibold transition-all hover:scale-[1.02]" style={pkg.highlight ? { background: themeAccent, color: "white" } : { background: themeLight, color: themeDark }}>
+                    Get Consultation
+                  </a>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(160, 15%, 97%)" }}>
-      {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 py-5 px-4" style={{ background: "linear-gradient(180deg, hsl(160, 25%, 93%) 0%, hsl(155, 20%, 95%) 100%)", borderRight: "1px solid hsl(160, 20%, 88%)" }}>
-        {/* User Profile in Sidebar */}
-        <div className="flex items-center gap-3 mb-6 px-2 py-3 rounded-xl" style={{ background: "hsl(160, 20%, 90%)" }}>
-          <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 border-2" style={{ borderColor: themeAccent }}>
+      {/* Sidebar - fixed, no scroll */}
+      <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 py-5 px-4 sticky top-0 h-screen overflow-hidden" style={{ background: "linear-gradient(180deg, hsl(160, 25%, 93%) 0%, hsl(155, 20%, 95%) 100%)", borderRight: "1px solid hsl(160, 20%, 88%)" }}>
+        {/* Profile Photo 2x2 size + Name + ID */}
+        <div className="flex flex-col items-center gap-2 mb-6 px-2 py-4 rounded-xl" style={{ background: "hsl(160, 20%, 90%)" }}>
+          <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border-2" style={{ borderColor: themeAccent }}>
             {userProfile?.profile_photo_url ? (
               <img src={userProfile.profile_photo_url} alt="" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-white font-bold text-sm" style={{ background: themeAccent }}>
+              <div className="w-full h-full flex items-center justify-center text-white font-bold text-xl" style={{ background: themeAccent }}>
                 {userProfile?.full_name?.[0] || "U"}
               </div>
             )}
           </div>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold truncate" style={{ color: themeDark }}>{userProfile?.full_name || "User"}</p>
-            <p className="text-[10px] font-medium" style={{ color: themeMid }}>ID: {profileId}</p>
-          </div>
+          <p className="text-sm font-semibold text-center truncate w-full" style={{ color: themeDark }}>{userProfile?.full_name || "User"}</p>
+          <p className="text-[10px] font-medium" style={{ color: themeMid }}>ID: {profileId}</p>
         </div>
 
         <nav className="space-y-1 flex-1">
@@ -134,10 +265,10 @@ export default function CustomerDashboard() {
             if (label === "Settings") {
               return (
                 <div key={label} ref={settingsRef} className="relative">
-                  <button onClick={() => setShowSettingsDropdown(p => !p)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={showSettingsDropdown ? { background: themeAccent, color: "white" } : { color: themeDark, background: "transparent" }}>
+                  <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowSettingsDropdown(p => !p)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={showSettingsDropdown ? { background: themeAccent, color: "white" } : { color: themeDark, background: "transparent" }}>
                     <Icon size={16} /> {label}
                     <ChevronDown size={14} className={`ml-auto transition-transform ${showSettingsDropdown ? "rotate-180" : ""}`} />
-                  </button>
+                  </motion.button>
                   <AnimatePresence>
                     {showSettingsDropdown && (
                       <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden ml-3 mt-1">
@@ -153,20 +284,20 @@ export default function CustomerDashboard() {
               );
             }
             return (
-              <button key={label} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(160, 35%, 38% / 0.3)` } : { color: themeDark, background: "transparent" }}>
+              <motion.button key={label} whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(160, 35%, 38% / 0.3)` } : { color: themeDark, background: "transparent" }}>
                 <Icon size={16} /> {label}
-              </button>
+              </motion.button>
             );
           })}
         </nav>
 
-        <button onClick={() => setShowUpgrade(true)} className="mt-4 w-full rounded-xl p-3 text-left transition-all hover:scale-[1.02]" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
+        <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowUpgradePage(true)} className="mt-4 w-full rounded-xl p-3 text-left" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
           <div className="flex items-center gap-2 mb-1">
             <Star size={13} className="text-yellow-300 fill-yellow-300" />
             <span className="text-white text-[11px] font-bold uppercase tracking-wide">Upgrade</span>
           </div>
           <p className="text-white/80 text-[10px] leading-snug">Assisted Matrimony Services</p>
-        </button>
+        </motion.button>
       </aside>
 
       {/* Main */}
@@ -188,7 +319,6 @@ export default function CustomerDashboard() {
                 <Bell size={16} className="text-gray-500" />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ background: themeAccent }}></span>
               </button>
-              {/* Header User Badge with Dropdown */}
               <div ref={headerRef} className="relative">
                 <button onClick={() => setShowHeaderDropdown(p => !p)} className="flex items-center gap-2 bg-gray-50 border border-gray-100 rounded-full pl-1 pr-3 py-1 hover:bg-gray-100 transition-colors">
                   <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0">
@@ -250,160 +380,184 @@ export default function CustomerDashboard() {
             </motion.div>
           )}
 
-          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
-              Welcome back, <span style={{ color: themeDark }}>{userProfile?.full_name?.split(" ")[0] || "Friend"}</span> 👋
-            </h1>
-            <p className="text-sm text-gray-500 mt-1">Here are your recommended matches</p>
-          </motion.div>
-
-          {/* Premium Service */}
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} onClick={() => setShowUpgrade(true)} className="mb-6 rounded-2xl p-4 sm:p-5 cursor-pointer hover:scale-[1.01] transition-transform" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <Star size={16} className="text-yellow-300 fill-yellow-300" />
-                  <span className="text-yellow-200 text-xs font-bold uppercase tracking-wider">Premium Service</span>
+          {/* Interests Section */}
+          {activeNav === "Interests" && (
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1 flex items-center gap-2">
+                <Heart size={22} style={{ color: themeAccent }} className="fill-current" /> My Interests
+              </h1>
+              <p className="text-sm text-gray-500 mb-6">Profiles you've shown interest in</p>
+              {interestsLoading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {[...Array(4)].map((_, i) => <div key={i} className="h-72 bg-gray-100 rounded-2xl animate-pulse" />)}
                 </div>
-                <h3 className="text-white font-bold text-base sm:text-lg">Upgrade Assisted Matrimony Services</h3>
-                <p className="text-white/70 text-xs mt-1">Get a dedicated Relationship Manager, daily feedback & faster matches</p>
-              </div>
-              <ChevronRight size={24} className="text-white/60 hidden sm:block" />
-            </div>
-          </motion.div>
+              ) : interests.length === 0 ? (
+                <div className="text-center py-16 text-gray-400">
+                  <Heart size={40} className="mx-auto mb-3 opacity-30" />
+                  <p className="font-medium">No interests yet</p>
+                  <p className="text-sm mt-1">Browse matches and express interest in profiles you like</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {interests.map((profile, i) => renderProfileCard(profile, i))}
+                </div>
+              )}
+            </motion.div>
+          )}
 
-          {/* Matches Section */}
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                  <Heart size={18} style={{ color: themeAccent }} className="fill-current" />
-                  Your Matches
-                </h2>
-                <p className="text-xs text-gray-400 mt-0.5">
-                  {userProfile?.gender === "Male" ? "Showing female profiles for you" : "Showing male profiles for you"}
-                </p>
-              </div>
-              <button onClick={() => setActiveNav("Matches")} className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors" style={{ color: themeAccent, background: themeLight }}>
-                View All
-              </button>
-            </div>
+          {/* Home content */}
+          {activeNav === "Home" && (
+            <>
+              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+                  Welcome back, <span style={{ color: themeDark }}>{userProfile?.full_name?.split(" ")[0] || "Friend"}</span> 👋
+                </h1>
+                <p className="text-sm text-gray-500 mt-1">Here are your recommended matches</p>
+              </motion.div>
 
-            {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {[...Array(8)].map((_, i) => <div key={i} className="h-72 bg-gray-100 rounded-2xl animate-pulse" />)}
-              </div>
-            ) : matches.length === 0 ? (
-              <div className="text-center py-16 text-gray-400">
-                <Users size={40} className="mx-auto mb-3 opacity-30" />
-                <p className="font-medium">No matches found yet</p>
-                <p className="text-sm mt-1">Our team is curating profiles for you</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {matches.map((profile, i) => (
-                  <motion.div key={profile.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1 group">
-                    <div className="relative h-48 bg-gray-100">
-                      {profile.profile_photo_url ? (
-                        <img src={profile.profile_photo_url} alt={profile.full_name} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center" style={{ background: themeLight }}>
-                          <span className="text-4xl font-bold" style={{ color: themeAccent }}>{profile.full_name[0]}</span>
-                        </div>
-                      )}
-                      {profile.is_featured && (
-                        <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: "hsl(42, 42%, 57%)", color: "white" }}>
-                          <Star size={9} className="fill-white" /> Featured
-                        </div>
-                      )}
-                      <button onClick={() => toggleShortlist(profile.id)} className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center transition-all" style={{ background: "hsl(0, 0%, 100% / 0.9)" }}>
-                        <Heart size={15} style={{ color: shortlisted.includes(profile.id) ? themeAccent : "#ccc" }} className={shortlisted.includes(profile.id) ? "fill-current" : ""} />
-                      </button>
+              {/* Premium Service */}
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} onClick={() => setShowUpgradePage(true)} className="mb-6 rounded-2xl p-4 sm:p-5 cursor-pointer hover:scale-[1.01] transition-transform" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Star size={16} className="text-yellow-300 fill-yellow-300" />
+                      <span className="text-yellow-200 text-xs font-bold uppercase tracking-wider">Premium Service</span>
                     </div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-gray-800 text-sm">{profile.full_name}</h3>
-                      <p className="text-xs text-gray-500 mt-0.5">{getAge(profile.date_of_birth)} yrs • {profile.religion}{profile.caste ? ` • ${profile.caste}` : ""}</p>
-                      <div className="mt-2 space-y-0.5">
-                        {profile.occupation && <p className="text-xs text-gray-600">💼 {profile.occupation}</p>}
-                        {(profile.city || profile.state) && <p className="text-xs text-gray-500">📍 {[profile.city, profile.state].filter(Boolean).join(", ")}</p>}
-                        {profile.annual_income && <p className="text-xs text-gray-500">💰 {profile.annual_income}</p>}
-                        {userProfile?.subscription_type === "assisted" && profile.phone && (
-                          <p className="text-xs text-gray-600">📞 {profile.phone}</p>
-                        )}
-                        {userProfile?.subscription_type === "assisted" && profile.email && (
-                          <p className="text-xs text-gray-600">✉️ {profile.email}</p>
-                        )}
-                        {userProfile?.subscription_type !== "assisted" && (
-                          <p className="text-[10px] mt-1 px-2 py-1 rounded-md" style={{ background: "hsl(38, 90%, 95%)", color: "hsl(38, 70%, 35%)" }}>🔒 Upgrade to see contact details</p>
-                        )}
-                      </div>
-                      <button onClick={() => navigate(`/profile/${profile.id}`)} className="mt-3 w-full py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: themeLight, color: themeDark }}>
-                        View Profile
-                      </button>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </motion.div>
+                    <h3 className="text-white font-bold text-base sm:text-lg">Upgrade Assisted Matrimony Services</h3>
+                    <p className="text-white/70 text-xs mt-1">Get a dedicated Relationship Manager, daily feedback & faster matches</p>
+                  </div>
+                  <ChevronRight size={24} className="text-white/60 hidden sm:block" />
+                </div>
+              </motion.div>
 
-          {/* Submit Success Story Button */}
-          <motion.button
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            onClick={() => setShowStoryForm(true)}
-            className="mb-6 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-[1.02]"
-            style={{ background: "hsl(170, 45%, 92%)", color: "hsl(170, 50%, 30%)", border: "1px solid hsl(170, 40%, 80%)" }}
-          >
-            <BookHeart size={16} /> Share Your Success Story
-          </motion.button>
+              {/* Matches - show only 5 on Home */}
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                      <Heart size={18} style={{ color: themeAccent }} className="fill-current" />
+                      Your Matches
+                    </h2>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {userProfile?.gender === "Male" ? "Showing female profiles for you" : "Showing male profiles for you"}
+                    </p>
+                  </div>
+                  <motion.button whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }} onClick={() => setActiveNav("Matches")} className="text-xs font-bold px-4 py-2 rounded-xl transition-colors border-2" style={{ color: themeAccent, background: themeLight, borderColor: themeAccent }}>
+                    View All →
+                  </motion.button>
+                </div>
+
+                {loading ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                    {[...Array(5)].map((_, i) => <div key={i} className="h-72 bg-gray-100 rounded-2xl animate-pulse" />)}
+                  </div>
+                ) : matches.length === 0 ? (
+                  <div className="text-center py-16 text-gray-400">
+                    <Users size={40} className="mx-auto mb-3 opacity-30" />
+                    <p className="font-medium">No matches found yet</p>
+                    <p className="text-sm mt-1">Our team is curating profiles for you</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                    {matches.slice(0, 5).map((profile, i) => renderProfileCard(profile, i))}
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Submit Success Story Button */}
+              <motion.button
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                onClick={() => setShowStoryForm(true)}
+                className="mb-6 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-[1.02]"
+                style={{ background: "hsl(170, 45%, 92%)", color: "hsl(170, 50%, 30%)", border: "1px solid hsl(170, 40%, 80%)" }}
+              >
+                <BookHeart size={16} /> Share Your Success Story
+              </motion.button>
+            </>
+          )}
+
+          {/* Matches tab - show all */}
+          {activeNav === "Matches" && (
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1">All Matches</h1>
+              <p className="text-sm text-gray-500 mb-6">
+                {userProfile?.gender === "Male" ? "Showing female profiles for you" : "Showing male profiles for you"}
+              </p>
+              {loading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {[...Array(8)].map((_, i) => <div key={i} className="h-72 bg-gray-100 rounded-2xl animate-pulse" />)}
+                </div>
+              ) : matches.length === 0 ? (
+                <div className="text-center py-16 text-gray-400">
+                  <Users size={40} className="mx-auto mb-3 opacity-30" />
+                  <p className="font-medium">No matches found yet</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {matches.map((profile, i) => renderProfileCard(profile, i))}
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* Preferences tab placeholder */}
+          {activeNav === "Preferences" && (
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="text-center py-16 text-gray-400">
+              <Search size={40} className="mx-auto mb-3 opacity-30" />
+              <p className="font-medium">Preferences</p>
+              <p className="text-sm mt-1">Set your partner preferences to get better matches</p>
+            </motion.div>
+          )}
         </div>
       </div>
 
-      {/* Upgrade Modal */}
-      {showUpgrade && (
+      {/* Contact Details Modal */}
+      {showContactModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsl(0, 0%, 0% / 0.5)" }}>
-          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl">
-              <div>
-                <h2 className="font-bold text-gray-800">Assisted Matrimony Services</h2>
-                <p className="text-xs text-gray-400">Choose the plan that suits you best</p>
-              </div>
-              <button onClick={() => setShowUpgrade(false)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
-                <X size={16} className="text-gray-500" />
-              </button>
+          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-2xl max-w-sm w-full overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+              <h2 className="font-bold text-gray-800">Contact Us</h2>
+              <button onClick={() => setShowContactModal(false)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><X size={16} className="text-gray-500" /></button>
             </div>
-            <div className="p-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {[
-                { title: "Support Matrimony", plans: [{ price: "₹13,000", period: "3 Months" }, { price: "₹20,000", period: "6 Months" }], features: ["Unlimited profiles", "Weekly mail updates", "Profile processing"], highlight: false },
-                { title: "Affluent Matrimony", plans: [{ price: "₹38,000", period: "Premium" }], features: ["Unlimited profiles", "Dedicated Relationship Manager", "Daily feedback", "Personal enquiry", "Up to settlement", "Well-settled profiles"], highlight: true },
-                { title: "Online Services", plans: [{ price: "₹7,000", period: "3 Months" }, { price: "₹10,000", period: "6 Months" }, { price: "₹15,000", period: "1 Year" }], features: ["Full online access", "Profile browsing", "Direct connect"], highlight: false },
-              ].map((pkg, i) => (
-                <div key={i} className="rounded-xl p-5 border-2 transition-all" style={pkg.highlight ? { borderColor: themeAccent, background: themeLight } : { borderColor: "hsl(var(--border))", background: "white" }}>
-                  {pkg.highlight && <div className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: themeAccent }}>★ Most Popular</div>}
-                  <h3 className="font-bold text-gray-800 mb-3">{pkg.title}</h3>
-                  <div className="space-y-1 mb-4">
-                    {pkg.plans.map((p, j) => (
-                      <div key={j} className="flex items-baseline gap-1">
-                        <span className="font-bold text-lg" style={{ color: themeDark }}>{p.price}</span>
-                        <span className="text-xs text-gray-400">/ {p.period}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <ul className="space-y-1.5 mb-5">
-                    {pkg.features.map(f => (
-                      <li key={f} className="flex items-start gap-2 text-xs text-gray-600">
-                        <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: themeAccent }}></span>
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hello! I'm interested in the ${pkg.title} plan. Please provide more details.`)}`} target="_blank" rel="noopener noreferrer" className="block w-full py-2 rounded-lg text-center text-xs font-semibold transition-all" style={pkg.highlight ? { background: themeAccent, color: "white" } : { background: themeLight, color: themeDark }}>
-                    Get Consultation
-                  </a>
+            <div className="p-6 space-y-4">
+              <a href="tel:+919553306667" className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors" style={{ border: "1px solid hsl(0,0%,90%)" }}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: themeLight }}>
+                  <Phone size={18} style={{ color: themeAccent }} />
                 </div>
-              ))}
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">Call Us</p>
+                  <p className="text-xs text-gray-500">+91 95533 06667</p>
+                </div>
+              </a>
+              <a href="https://wa.me/919553306667" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors" style={{ border: "1px solid hsl(0,0%,90%)" }}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "hsl(134, 60%, 93%)" }}>
+                  <MessageCircle size={18} style={{ color: "hsl(134, 60%, 35%)" }} />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">WhatsApp</p>
+                  <p className="text-xs text-gray-500">+91 95533 06667</p>
+                </div>
+              </a>
+              <a href="mailto:kalyanasuthra@gmail.com" className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors" style={{ border: "1px solid hsl(0,0%,90%)" }}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "hsl(210, 60%, 93%)" }}>
+                  <Eye size={18} style={{ color: "hsl(210, 60%, 40%)" }} />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">Email</p>
+                  <p className="text-xs text-gray-500">kalyanasuthra@gmail.com</p>
+                </div>
+              </a>
+              <div className="flex items-center gap-3 p-3 rounded-xl" style={{ border: "1px solid hsl(0,0%,90%)" }}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "hsl(30, 60%, 93%)" }}>
+                  <Clock size={18} style={{ color: "hsl(30, 60%, 40%)" }} />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">Working Hours</p>
+                  <p className="text-xs text-gray-500">Mon - Sat: 9 AM - 7 PM</p>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
