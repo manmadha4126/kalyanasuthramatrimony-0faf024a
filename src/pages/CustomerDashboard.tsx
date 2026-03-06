@@ -388,7 +388,16 @@ export default function CustomerDashboard() {
                     <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
                       <div className="px-3 py-2 border-b border-gray-50 mb-1">
                         <p className="text-xs font-semibold text-gray-800">{userProfile?.full_name}</p>
-                        <p className="text-[10px] text-gray-400">ID: {profileId}</p>
+                        <p className="text-[10px] font-bold text-gray-500 mt-0.5">ID: {profileId}</p>
+                        {userProfile?.profile_status === "active" ? (
+                          <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: "hsl(145, 50%, 90%)", color: "hsl(145, 50%, 30%)" }}>
+                            <CheckCircle size={10} /> Verified
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: "hsl(38, 90%, 92%)", color: "hsl(38, 70%, 40%)" }}>
+                            <XCircle size={10} /> Not Verified
+                          </span>
+                        )}
                       </div>
                       {headerMenuItems.map(item => (
                         <button key={item.label} onClick={() => { item.action(); setShowHeaderDropdown(false); }} className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium transition-colors hover:bg-gray-50" style={{ color: item.label === "Logout" ? "hsl(0, 60%, 50%)" : "#444" }}>
