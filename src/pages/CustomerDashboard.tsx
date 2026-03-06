@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, ChevronDown, X, BookHeart, CheckCircle, Edit, Eye, HelpCircle, Phone, User, ArrowLeft, MessageCircle, MapPin, Clock } from "lucide-react";
+import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, ChevronDown, X, BookHeart, CheckCircle, Edit, Eye, HelpCircle, Phone, User, ArrowLeft, MessageCircle, MapPin, Clock, Filter } from "lucide-react";
 import BackButton from "@/components/BackButton";
 
 type Profile = {
@@ -10,11 +10,22 @@ type Profile = {
   city: string | null; state: string | null; occupation: string | null; education: string | null;
   date_of_birth: string; profile_photo_url: string | null; annual_income: string | null; is_featured: boolean;
   profile_status?: string; phone?: string | null; email?: string | null; whatsapp?: string | null;
+  marital_status?: string; mother_tongue?: string | null; height_cm?: number | null;
 };
 
 type UserProfileFull = {
   id: string; full_name: string; email: string | null; gender: string; profile_status?: string;
   profile_photo_url: string | null; subscription_type?: string; profile_id?: string | null;
+};
+
+type Preferences = {
+  ageMin: string; ageMax: string; religion: string; caste: string; city: string;
+  education: string; maritalStatus: string; motherTongue: string;
+};
+
+const defaultPreferences: Preferences = {
+  ageMin: "", ageMax: "", religion: "", caste: "", city: "",
+  education: "", maritalStatus: "", motherTongue: "",
 };
 
 const NAV = [
@@ -42,6 +53,14 @@ export default function CustomerDashboard() {
   const [showContactModal, setShowContactModal] = useState(false);
   const [interests, setInterests] = useState<Profile[]>([]);
   const [interestsLoading, setInterestsLoading] = useState(false);
+  const [preferences, setPreferences] = useState<Preferences>(() => {
+    const saved = localStorage.getItem("matchPreferences");
+    return saved ? JSON.parse(saved) : defaultPreferences;
+  });
+  const [prefApplied, setPrefApplied] = useState(() => {
+    const saved = localStorage.getItem("matchPreferences");
+    return !!saved;
+  });
   const settingsRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -68,7 +87,7 @@ export default function CustomerDashboard() {
 
   const fetchMatches = async (userGender: string) => {
     const targetGender = userGender === "Male" ? "Female" : "Male";
-    const { data } = await supabase.from("profiles").select("id,full_name,gender,religion,caste,city,state,occupation,education,date_of_birth,profile_photo_url,annual_income,is_featured,phone,email,whatsapp").eq("profile_status", "active").eq("gender", targetGender).limit(20);
+    const { data } = await supabase.from("profiles").select("id,full_name,gender,religion,caste,city,state,occupation,education,date_of_birth,profile_photo_url,annual_income,is_featured,phone,email,whatsapp,marital_status,mother_tongue,height_cm").eq("profile_status", "active").eq("gender", targetGender).limit(50);
     if (data) setMatches(data);
     setLoading(false);
   };
@@ -104,6 +123,37 @@ export default function CustomerDashboard() {
     setStoryLoading(false);
     if (!error) { setShowStoryForm(false); setStoryForm({ bride_name: "", groom_name: "", city: "", story: "" }); }
   };
+
+  // Apply preferences filter
+  const applyPreferences = () => {
+    localStorage.setItem("matchPreferences", JSON.stringify(preferences));
+    setPrefApplied(true);
+    setActiveNav("Matches");
+  };
+
+  const clearPreferences = () => {
+    setPreferences(defaultPreferences);
+    localStorage.removeItem("matchPreferences");
+    setPrefApplied(false);
+  };
+
+  const getFilteredMatches = () => {
+    if (!prefApplied) return matches;
+    return matches.filter(p => {
+      const age = getAge(p.date_of_birth);
+      if (preferences.ageMin && age < parseInt(preferences.ageMin)) return false;
+      if (preferences.ageMax && age > parseInt(preferences.ageMax)) return false;
+      if (preferences.religion && p.religion.toLowerCase() !== preferences.religion.toLowerCase()) return false;
+      if (preferences.caste && p.caste && !p.caste.toLowerCase().includes(preferences.caste.toLowerCase())) return false;
+      if (preferences.city && p.city && !p.city.toLowerCase().includes(preferences.city.toLowerCase())) return false;
+      if (preferences.education && p.education && !p.education.toLowerCase().includes(preferences.education.toLowerCase())) return false;
+      if (preferences.maritalStatus && p.marital_status && p.marital_status.toLowerCase() !== preferences.maritalStatus.toLowerCase()) return false;
+      if (preferences.motherTongue && p.mother_tongue && !p.mother_tongue.toLowerCase().includes(preferences.motherTongue.toLowerCase())) return false;
+      return true;
+    });
+  };
+
+  const filteredMatches = getFilteredMatches();
 
   const themeAccent = "hsl(160, 35%, 38%)";
   const themeDark = "hsl(160, 30%, 25%)";
@@ -168,35 +218,80 @@ export default function CustomerDashboard() {
     </motion.div>
   );
 
+  // Sidebar component (reused in upgrade page)
+  const renderSidebar = () => (
+    <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 py-5 px-4 fixed top-0 left-0 h-screen overflow-hidden z-30" style={{ background: "linear-gradient(180deg, hsl(160, 25%, 93%) 0%, hsl(155, 20%, 95%) 100%)", borderRight: "1px solid hsl(160, 20%, 88%)" }}>
+      {/* Profile Photo 3.5x3.5 size + Name + ID */}
+      <div className="flex flex-col items-center gap-2 mb-5 px-2 py-4 rounded-xl" style={{ background: "hsl(160, 20%, 90%)" }}>
+        <div className="w-[140px] h-[140px] rounded-xl overflow-hidden flex-shrink-0 border-2" style={{ borderColor: themeAccent }}>
+          {userProfile?.profile_photo_url ? (
+            <img src={userProfile.profile_photo_url} alt="" className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-white font-bold text-3xl" style={{ background: themeAccent }}>
+              {userProfile?.full_name?.[0] || "U"}
+            </div>
+          )}
+        </div>
+        <p className="text-sm font-semibold text-center truncate w-full" style={{ color: themeDark }}>{userProfile?.full_name || "User"}</p>
+        <p className="text-[10px] font-medium" style={{ color: themeMid }}>ID: {profileId}</p>
+      </div>
+
+      <nav className="space-y-1 flex-1">
+        {NAV.map(({ icon: Icon, label }) => {
+          if (label === "Settings") {
+            return (
+              <div key={label} ref={settingsRef} className="relative">
+                <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowSettingsDropdown(p => !p)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={showSettingsDropdown ? { background: themeAccent, color: "white" } : { color: themeDark, background: "transparent" }}>
+                  <Icon size={16} /> {label}
+                  <ChevronDown size={14} className={`ml-auto transition-transform ${showSettingsDropdown ? "rotate-180" : ""}`} />
+                </motion.button>
+                <AnimatePresence>
+                  {showSettingsDropdown && (
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden ml-3 mt-1">
+                      {settingsItems.map(item => (
+                        <button key={item.label} onClick={() => { item.action(); setShowSettingsDropdown(false); }} className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg transition-colors hover:bg-white/60" style={{ color: item.label === "Logout" ? "hsl(0, 60%, 50%)" : themeDark }}>
+                          <item.icon size={13} /> {item.label}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          }
+          return (
+            <motion.button key={label} whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(160, 35%, 38% / 0.3)` } : { color: themeDark, background: "transparent" }}>
+              <Icon size={16} /> {label}
+              {label === "Preferences" && prefApplied && (
+                <span className="ml-auto w-2 h-2 rounded-full" style={{ background: "hsl(38, 90%, 50%)" }} />
+              )}
+            </motion.button>
+          );
+        })}
+      </nav>
+
+      <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowUpgradePage(true)} className="mt-4 w-full rounded-xl p-3 text-left" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
+        <div className="flex items-center gap-2 mb-1">
+          <Star size={13} className="text-yellow-300 fill-yellow-300" />
+          <span className="text-white text-[11px] font-bold uppercase tracking-wide">Upgrade</span>
+        </div>
+        <p className="text-white/80 text-[10px] leading-snug">Assisted Matrimony Services</p>
+      </motion.button>
+    </aside>
+  );
+
   // If upgrade page is shown, render full page
   if (showUpgradePage) {
     return (
       <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(160, 15%, 97%)" }}>
-        {/* Sidebar stays */}
-        <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 py-5 px-4 sticky top-0 h-screen overflow-hidden" style={{ background: "linear-gradient(180deg, hsl(160, 25%, 93%) 0%, hsl(155, 20%, 95%) 100%)", borderRight: "1px solid hsl(160, 20%, 88%)" }}>
-          <div className="flex flex-col items-center gap-2 mb-6 px-2 py-4 rounded-xl" style={{ background: "hsl(160, 20%, 90%)" }}>
-            <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border-2" style={{ borderColor: themeAccent }}>
-              {userProfile?.profile_photo_url ? (
-                <img src={userProfile.profile_photo_url} alt="" className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-white font-bold text-xl" style={{ background: themeAccent }}>
-                  {userProfile?.full_name?.[0] || "U"}
-                </div>
-              )}
-            </div>
-            <p className="text-sm font-semibold text-center truncate w-full" style={{ color: themeDark }}>{userProfile?.full_name || "User"}</p>
-            <p className="text-[10px] font-medium" style={{ color: themeMid }}>ID: {profileId}</p>
-          </div>
-        </aside>
-
-        {/* Full page packages */}
-        <div className="flex-1 overflow-auto">
-          <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-sm border-b border-gray-100 px-6 py-4">
+        {renderSidebar()}
+        <div className="flex-1 lg:ml-64 overflow-auto">
+          <div className="fixed top-0 right-0 left-0 lg:left-64 z-20 bg-white/90 backdrop-blur-sm border-b border-gray-100 px-6 py-4">
             <button onClick={() => setShowUpgradePage(false)} className="inline-flex items-center gap-2 text-sm font-semibold transition-colors hover:opacity-80" style={{ color: themeAccent }}>
               <ArrowLeft size={18} /> Back to Dashboard
             </button>
           </div>
-          <div className="p-6 max-w-5xl mx-auto">
+          <div className="p-6 pt-20 max-w-5xl mx-auto">
             <div className="text-center mb-8">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Star size={20} className="text-yellow-500 fill-yellow-500" />
@@ -243,66 +338,12 @@ export default function CustomerDashboard() {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(160, 15%, 97%)" }}>
-      {/* Sidebar - fixed, no scroll */}
-      <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 py-5 px-4 sticky top-0 h-screen overflow-hidden" style={{ background: "linear-gradient(180deg, hsl(160, 25%, 93%) 0%, hsl(155, 20%, 95%) 100%)", borderRight: "1px solid hsl(160, 20%, 88%)" }}>
-        {/* Profile Photo 2x2 size + Name + ID */}
-        <div className="flex flex-col items-center gap-2 mb-6 px-2 py-4 rounded-xl" style={{ background: "hsl(160, 20%, 90%)" }}>
-          <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border-2" style={{ borderColor: themeAccent }}>
-            {userProfile?.profile_photo_url ? (
-              <img src={userProfile.profile_photo_url} alt="" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-white font-bold text-xl" style={{ background: themeAccent }}>
-                {userProfile?.full_name?.[0] || "U"}
-              </div>
-            )}
-          </div>
-          <p className="text-sm font-semibold text-center truncate w-full" style={{ color: themeDark }}>{userProfile?.full_name || "User"}</p>
-          <p className="text-[10px] font-medium" style={{ color: themeMid }}>ID: {profileId}</p>
-        </div>
-
-        <nav className="space-y-1 flex-1">
-          {NAV.map(({ icon: Icon, label }) => {
-            if (label === "Settings") {
-              return (
-                <div key={label} ref={settingsRef} className="relative">
-                  <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowSettingsDropdown(p => !p)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={showSettingsDropdown ? { background: themeAccent, color: "white" } : { color: themeDark, background: "transparent" }}>
-                    <Icon size={16} /> {label}
-                    <ChevronDown size={14} className={`ml-auto transition-transform ${showSettingsDropdown ? "rotate-180" : ""}`} />
-                  </motion.button>
-                  <AnimatePresence>
-                    {showSettingsDropdown && (
-                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden ml-3 mt-1">
-                        {settingsItems.map(item => (
-                          <button key={item.label} onClick={() => { item.action(); setShowSettingsDropdown(false); }} className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg transition-colors hover:bg-white/60" style={{ color: item.label === "Logout" ? "hsl(0, 60%, 50%)" : themeDark }}>
-                            <item.icon size={13} /> {item.label}
-                          </button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            }
-            return (
-              <motion.button key={label} whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(160, 35%, 38% / 0.3)` } : { color: themeDark, background: "transparent" }}>
-                <Icon size={16} /> {label}
-              </motion.button>
-            );
-          })}
-        </nav>
-
-        <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowUpgradePage(true)} className="mt-4 w-full rounded-xl p-3 text-left" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
-          <div className="flex items-center gap-2 mb-1">
-            <Star size={13} className="text-yellow-300 fill-yellow-300" />
-            <span className="text-white text-[11px] font-bold uppercase tracking-wide">Upgrade</span>
-          </div>
-          <p className="text-white/80 text-[10px] leading-snug">Assisted Matrimony Services</p>
-        </motion.button>
-      </aside>
+      {renderSidebar()}
 
       {/* Main */}
-      <div className="flex-1 overflow-auto">
-        <header className="bg-white/80 backdrop-blur-sm border-b border-gray-100 px-4 sm:px-6 py-4 sticky top-0 z-20">
+      <div className="flex-1 lg:ml-64 overflow-auto">
+        {/* Fixed header */}
+        <header className="fixed top-0 right-0 left-0 lg:left-64 z-20 bg-white/90 backdrop-blur-sm border-b border-gray-100 px-4 sm:px-6 py-4">
           <div className="flex items-center gap-3">
             <div className="lg:hidden">
               <BackButton to="/" label="Home" />
@@ -353,7 +394,7 @@ export default function CustomerDashboard() {
           </div>
         </header>
 
-        <div className="p-4 sm:p-6">
+        <div className="p-4 sm:p-6 pt-20">
           {/* Profile Status Banner */}
           {userProfile?.profile_status && userProfile.profile_status !== "active" && (
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-4 flex items-center gap-3" style={
@@ -412,7 +453,9 @@ export default function CustomerDashboard() {
                 <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
                   Welcome back, <span style={{ color: themeDark }}>{userProfile?.full_name?.split(" ")[0] || "Friend"}</span> 👋
                 </h1>
-                <p className="text-sm text-gray-500 mt-1">Here are your recommended matches</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  {prefApplied ? "Showing matches based on your preferences" : "Here are your recommended matches"}
+                </p>
               </motion.div>
 
               {/* Premium Service */}
@@ -439,7 +482,7 @@ export default function CustomerDashboard() {
                       Your Matches
                     </h2>
                     <p className="text-xs text-gray-400 mt-0.5">
-                      {userProfile?.gender === "Male" ? "Showing female profiles for you" : "Showing male profiles for you"}
+                      {prefApplied ? `${filteredMatches.length} matches based on your preferences` : userProfile?.gender === "Male" ? "Showing female profiles for you" : "Showing male profiles for you"}
                     </p>
                   </div>
                   <motion.button whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }} onClick={() => setActiveNav("Matches")} className="text-xs font-bold px-4 py-2 rounded-xl transition-colors border-2" style={{ color: themeAccent, background: themeLight, borderColor: themeAccent }}>
@@ -451,15 +494,20 @@ export default function CustomerDashboard() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                     {[...Array(5)].map((_, i) => <div key={i} className="h-72 bg-gray-100 rounded-2xl animate-pulse" />)}
                   </div>
-                ) : matches.length === 0 ? (
+                ) : filteredMatches.length === 0 ? (
                   <div className="text-center py-16 text-gray-400">
                     <Users size={40} className="mx-auto mb-3 opacity-30" />
-                    <p className="font-medium">No matches found yet</p>
-                    <p className="text-sm mt-1">Our team is curating profiles for you</p>
+                    <p className="font-medium">No matches found</p>
+                    <p className="text-sm mt-1">{prefApplied ? "Try adjusting your preferences" : "Our team is curating profiles for you"}</p>
+                    {prefApplied && (
+                      <button onClick={() => setActiveNav("Preferences")} className="mt-3 text-xs font-semibold px-4 py-2 rounded-lg" style={{ background: themeLight, color: themeDark }}>
+                        Edit Preferences
+                      </button>
+                    )}
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                    {matches.slice(0, 5).map((profile, i) => renderProfileCard(profile, i))}
+                    {filteredMatches.slice(0, 5).map((profile, i) => renderProfileCard(profile, i))}
                   </div>
                 )}
               </motion.div>
@@ -481,33 +529,133 @@ export default function CustomerDashboard() {
           {/* Matches tab - show all */}
           {activeNav === "Matches" && (
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1">All Matches</h1>
+              <div className="flex items-center justify-between mb-1">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-800">All Matches</h1>
+                {prefApplied && (
+                  <button onClick={() => setActiveNav("Preferences")} className="text-xs font-semibold flex items-center gap-1 px-3 py-1.5 rounded-lg" style={{ background: themeLight, color: themeDark }}>
+                    <Filter size={12} /> Edit Preferences
+                  </button>
+                )}
+              </div>
               <p className="text-sm text-gray-500 mb-6">
-                {userProfile?.gender === "Male" ? "Showing female profiles for you" : "Showing male profiles for you"}
+                {prefApplied ? `${filteredMatches.length} matches based on your preferences` : userProfile?.gender === "Male" ? "Showing female profiles for you" : "Showing male profiles for you"}
               </p>
               {loading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {[...Array(8)].map((_, i) => <div key={i} className="h-72 bg-gray-100 rounded-2xl animate-pulse" />)}
                 </div>
-              ) : matches.length === 0 ? (
+              ) : filteredMatches.length === 0 ? (
                 <div className="text-center py-16 text-gray-400">
                   <Users size={40} className="mx-auto mb-3 opacity-30" />
-                  <p className="font-medium">No matches found yet</p>
+                  <p className="font-medium">No matches found</p>
+                  {prefApplied && <p className="text-sm mt-1">Try adjusting your preferences</p>}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {matches.map((profile, i) => renderProfileCard(profile, i))}
+                  {filteredMatches.map((profile, i) => renderProfileCard(profile, i))}
                 </div>
               )}
             </motion.div>
           )}
 
-          {/* Preferences tab placeholder */}
+          {/* Preferences tab */}
           {activeNav === "Preferences" && (
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="text-center py-16 text-gray-400">
-              <Search size={40} className="mx-auto mb-3 opacity-30" />
-              <p className="font-medium">Preferences</p>
-              <p className="text-sm mt-1">Set your partner preferences to get better matches</p>
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1 flex items-center gap-2">
+                <Filter size={22} style={{ color: themeAccent }} /> Match Preferences
+              </h1>
+              <p className="text-sm text-gray-500 mb-6">Set your preferences to find the perfect match</p>
+
+              <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100 max-w-2xl">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Min Age</label>
+                    <input type="number" value={preferences.ageMin} onChange={e => setPreferences(p => ({ ...p, ageMin: e.target.value }))} placeholder="e.g. 21" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Max Age</label>
+                    <input type="number" value={preferences.ageMax} onChange={e => setPreferences(p => ({ ...p, ageMax: e.target.value }))} placeholder="e.g. 30" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Religion</label>
+                    <select value={preferences.religion} onChange={e => setPreferences(p => ({ ...p, religion: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>Hindu</option>
+                      <option>Muslim</option>
+                      <option>Christian</option>
+                      <option>Sikh</option>
+                      <option>Jain</option>
+                      <option>Buddhist</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Caste</label>
+                    <input type="text" value={preferences.caste} onChange={e => setPreferences(p => ({ ...p, caste: e.target.value }))} placeholder="e.g. Reddy, Kamma" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">City</label>
+                    <input type="text" value={preferences.city} onChange={e => setPreferences(p => ({ ...p, city: e.target.value }))} placeholder="e.g. Hyderabad" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Education</label>
+                    <select value={preferences.education} onChange={e => setPreferences(p => ({ ...p, education: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>B.Tech / B.E</option>
+                      <option>M.Tech / M.E</option>
+                      <option>MBA / PGDM</option>
+                      <option>MBBS / MD</option>
+                      <option>B.Com / M.Com</option>
+                      <option>CA / ICWA</option>
+                      <option>B.Sc / M.Sc</option>
+                      <option>PhD</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Marital Status</label>
+                    <select value={preferences.maritalStatus} onChange={e => setPreferences(p => ({ ...p, maritalStatus: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>Never Married</option>
+                      <option>Divorced</option>
+                      <option>Widowed</option>
+                      <option>Separated</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Mother Tongue</label>
+                    <select value={preferences.motherTongue} onChange={e => setPreferences(p => ({ ...p, motherTongue: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>Telugu</option>
+                      <option>Tamil</option>
+                      <option>Kannada</option>
+                      <option>Malayalam</option>
+                      <option>Hindi</option>
+                      <option>Urdu</option>
+                      <option>Marathi</option>
+                      <option>Bengali</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 mt-6">
+                  <button onClick={applyPreferences} className="flex-1 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:scale-[1.02]" style={{ background: themeAccent }}>
+                    Apply Preferences & View Matches
+                  </button>
+                  {prefApplied && (
+                    <button onClick={clearPreferences} className="px-4 py-2.5 rounded-xl text-sm font-semibold transition-all" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 55%, 45%)" }}>
+                      Clear
+                    </button>
+                  )}
+                </div>
+
+                {prefApplied && (
+                  <p className="text-xs text-center mt-3" style={{ color: themeMid }}>
+                    ✓ Preferences saved — {filteredMatches.length} matching profiles found
+                  </p>
+                )}
+              </div>
             </motion.div>
           )}
         </div>
