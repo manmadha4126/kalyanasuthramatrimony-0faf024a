@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Heart, MapPin, Briefcase, GraduationCap, Phone, Star, Calendar, Users, Lock, ArrowLeft, MessageCircle, User, BookOpen } from "lucide-react";
+import { Heart, MapPin, Briefcase, GraduationCap, Phone, Star, Calendar, Users, Lock, ArrowLeft, MessageCircle, User, BookOpen, CheckCircle, XCircle } from "lucide-react";
 
 type Profile = {
   id: string; full_name: string; gender: string; religion: string; caste: string | null;
@@ -19,17 +19,26 @@ type Profile = {
   education_detail: string | null; native_place: string | null;
   phone: string | null; email: string | null; whatsapp: string | null;
   complexion: string | null; blood_group: string | null; profile_id: string | null;
+  profile_status: string; citizenship: string | null; visa_type: string | null;
+  residence_type: string | null; working_city: string | null; district: string | null;
+  horoscope_url: string | null;
 };
 
-const InfoRow = ({ label, value }: { label: string; value: string | null | undefined }) => {
-  if (!value) return null;
-  return (
-    <div className="flex justify-between py-2.5 border-b border-gray-50 last:border-0">
-      <span className="text-xs text-gray-500 font-medium">{label}</span>
-      <span className="text-sm text-gray-800 font-semibold text-right max-w-[60%]">{value}</span>
-    </div>
-  );
-};
+const InfoRow = ({ label, value }: { label: string; value: string | null | undefined }) => (
+  <div className="flex justify-between py-2.5 border-b border-gray-100 last:border-0">
+    <span className="text-xs text-gray-500 font-medium">{label}</span>
+    <span className={`text-sm font-semibold text-right max-w-[60%] ${value ? "text-gray-800" : "text-gray-300"}`}>
+      {value || "—"}
+    </span>
+  </div>
+);
+
+const SectionHeading = ({ icon: Icon, label, bgColor, textColor }: { icon: any; label: string; bgColor: string; textColor: string }) => (
+  <div className="flex items-center gap-2 px-4 py-3 rounded-t-2xl -mx-5 -mt-5 sm:-mx-6 sm:-mt-6 mb-4" style={{ background: bgColor }}>
+    <Icon size={17} style={{ color: textColor }} />
+    <h3 className="font-bold text-base" style={{ color: textColor, fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>{label}</h3>
+  </div>
+);
 
 const themeAccent = "hsl(160, 35%, 38%)";
 const themeDark = "hsl(160, 30%, 25%)";
@@ -55,7 +64,6 @@ export default function ProfileDetail() {
       setCurrentUserId(user.id);
       const { data: myProfile } = await supabase.from("profiles").select("subscription_type").eq("user_id", user.id).maybeSingle();
       if (myProfile) setUserSubscription((myProfile as any).subscription_type || "free");
-      // Check if interest already sent
       const { data: existing } = await supabase.from("profile_interests").select("id").eq("from_user_id", user.id).eq("to_profile_id", id!).maybeSingle();
       if (existing) setInterestSent(true);
     }
@@ -89,6 +97,7 @@ export default function ProfileDetail() {
   );
 
   const allPhotos = [profile.profile_photo_url, ...(profile.additional_photos || [])].filter(Boolean) as string[];
+  const isVerified = profile.profile_status === "active";
 
   return (
     <div className="min-h-screen" style={{ background: "hsl(160, 15%, 97%)" }}>
@@ -99,7 +108,18 @@ export default function ProfileDetail() {
             <ArrowLeft size={18} /> Back
           </button>
           <div className="ml-3">
-            <h1 className="font-bold text-gray-800 text-sm sm:text-base">{profile.full_name}</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="font-bold text-gray-800 text-sm sm:text-base">{profile.full_name}</h1>
+              {isVerified ? (
+                <span className="flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: "hsl(145, 50%, 90%)", color: "hsl(145, 50%, 30%)" }}>
+                  <CheckCircle size={10} className="fill-current" /> Verified
+                </span>
+              ) : (
+                <span className="flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: "hsl(38, 90%, 92%)", color: "hsl(38, 70%, 40%)" }}>
+                  <XCircle size={10} /> Not Verified
+                </span>
+              )}
+            </div>
             <p className="text-xs text-gray-400">{profile.profile_id || ""} • {getAge(profile.date_of_birth)} yrs • {profile.religion}</p>
           </div>
           {profile.is_featured && (
@@ -140,14 +160,14 @@ export default function ProfileDetail() {
                 )}
               </div>
 
-              {/* Expert Talk */}
+              {/* Expert Talk - Phone Call */}
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
                 <h3 className="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
                   <MessageCircle size={16} style={{ color: themeAccent }} /> Expert Talk
                 </h3>
                 <p className="text-xs text-gray-500 mb-3">Talk to our relationship expert about this profile</p>
-                <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hi, I'd like to know more about profile ${profile.profile_id || profile.full_name}. Please share details.`)}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.01]" style={{ background: themeAccent }}>
-                  <Phone size={15} /> Talk to Expert
+                <a href="tel:+919553306667" className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.01]" style={{ background: themeAccent }}>
+                  <Phone size={15} /> Call Expert
                 </a>
               </div>
 
@@ -173,20 +193,14 @@ export default function ProfileDetail() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-8 space-y-4">
 
             {/* About Me */}
-            {profile.about_me && (
-              <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-                <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <BookOpen size={16} style={{ color: themeAccent }} /> About Me
-                </h3>
-                <p className="text-sm text-gray-700 leading-relaxed">{profile.about_me}</p>
-              </div>
-            )}
+            <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
+              <SectionHeading icon={BookOpen} label="About Me" bgColor="hsl(200, 50%, 92%)" textColor="hsl(200, 50%, 30%)" />
+              <p className={`text-sm leading-relaxed ${profile.about_me ? "text-gray-700" : "text-gray-300"}`}>{profile.about_me || "—"}</p>
+            </div>
 
             {/* Personal Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <User size={16} style={{ color: themeAccent }} /> Personal Details
-              </h3>
+              <SectionHeading icon={User} label="Personal Details" bgColor="hsl(260, 45%, 92%)" textColor="hsl(260, 45%, 35%)" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
                 <InfoRow label="Full Name" value={profile.full_name} />
                 <InfoRow label="Date of Birth" value={profile.date_of_birth} />
@@ -201,17 +215,18 @@ export default function ProfileDetail() {
                 <InfoRow label="Religion" value={profile.religion} />
                 <InfoRow label="Caste" value={profile.caste} />
                 <InfoRow label="Sub Caste" value={profile.sub_caste} />
-                <InfoRow label="Location" value={[profile.city, profile.state, profile.country].filter(Boolean).join(", ")} />
+                <InfoRow label="Location" value={[profile.city, profile.state, profile.country].filter(Boolean).join(", ") || null} />
+                <InfoRow label="District" value={profile.district} />
                 <InfoRow label="Native Place" value={profile.native_place} />
+                <InfoRow label="Citizenship" value={profile.citizenship} />
+                <InfoRow label="Visa Type" value={profile.visa_type} />
+                <InfoRow label="Residence Type" value={profile.residence_type} />
               </div>
             </div>
 
             {/* Contact Details - Gated */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <Phone size={16} style={{ color: themeAccent }} /> Contact Details
-                {userSubscription !== "assisted" && <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: "hsl(38, 90%, 92%)", color: "hsl(38, 70%, 40%)" }}>🔒 Locked</span>}
-              </h3>
+              <SectionHeading icon={Phone} label="Contact Details" bgColor="hsl(38, 70%, 90%)" textColor="hsl(38, 60%, 30%)" />
               {userSubscription === "assisted" ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
                   <InfoRow label="Phone" value={profile.phone} />
@@ -230,25 +245,34 @@ export default function ProfileDetail() {
               )}
             </div>
 
+            {/* Horoscope Details */}
+            <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
+              <SectionHeading icon={Star} label="Horoscope Details" bgColor="hsl(310, 40%, 92%)" textColor="hsl(310, 40%, 35%)" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                <InfoRow label="Gothram" value={profile.gothra} />
+                <InfoRow label="Rashi" value={profile.raasi} />
+                <InfoRow label="Star" value={profile.star} />
+                <InfoRow label="Dosham" value={profile.dosham} />
+                <InfoRow label="Horoscope" value={profile.horoscope_url ? "Uploaded" : null} />
+              </div>
+            </div>
+
             {/* Education & Professional Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <GraduationCap size={16} style={{ color: themeAccent }} /> Education & Professional Details
-              </h3>
+              <SectionHeading icon={GraduationCap} label="Education & Professional Details" bgColor="hsl(160, 40%, 90%)" textColor="hsl(160, 40%, 28%)" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
                 <InfoRow label="Education" value={profile.education} />
                 <InfoRow label="Education Details" value={profile.education_detail} />
                 <InfoRow label="Occupation" value={profile.occupation} />
                 <InfoRow label="Company" value={profile.company_name} />
                 <InfoRow label="Annual Income" value={profile.annual_income} />
+                <InfoRow label="Working City" value={profile.working_city} />
               </div>
             </div>
 
             {/* Family Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <Users size={16} style={{ color: themeAccent }} /> Family Details
-              </h3>
+              <SectionHeading icon={Users} label="Family Details" bgColor="hsl(20, 60%, 92%)" textColor="hsl(20, 50%, 32%)" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
                 <InfoRow label="Family Status" value={profile.family_status} />
                 <InfoRow label="Family Type" value={profile.family_type} />
@@ -260,24 +284,11 @@ export default function ProfileDetail() {
               </div>
             </div>
 
-            {/* Horoscope Details */}
-            <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <h3 className="font-bold text-gray-800 mb-3">🔮 Horoscope Details</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
-                <InfoRow label="Gothram" value={profile.gothra} />
-                <InfoRow label="Rashi" value={profile.raasi} />
-                <InfoRow label="Star" value={profile.star} />
-                <InfoRow label="Dosham" value={profile.dosham} />
-              </div>
-            </div>
-
             {/* Partner Expectations */}
-            {profile.partner_expectations && (
-              <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-                <h3 className="font-bold text-gray-800 mb-3">💍 Partner Expectations</h3>
-                <p className="text-sm text-gray-700 leading-relaxed">{profile.partner_expectations}</p>
-              </div>
-            )}
+            <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
+              <SectionHeading icon={Heart} label="Partner Expectations" bgColor="hsl(348, 50%, 92%)" textColor="hsl(348, 50%, 35%)" />
+              <p className={`text-sm leading-relaxed ${profile.partner_expectations ? "text-gray-700" : "text-gray-300"}`}>{profile.partner_expectations || "—"}</p>
+            </div>
           </motion.div>
         </div>
       </div>
