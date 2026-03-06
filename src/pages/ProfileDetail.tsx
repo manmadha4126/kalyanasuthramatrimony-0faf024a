@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Heart, MapPin, Briefcase, GraduationCap, Phone, Star, Calendar, Users, Lock } from "lucide-react";
-import BackButton from "@/components/BackButton";
+import { Heart, MapPin, Briefcase, GraduationCap, Phone, Star, Calendar, Users, Lock, ArrowLeft, MessageCircle, User, BookOpen } from "lucide-react";
 
 type Profile = {
   id: string; full_name: string; gender: string; religion: string; caste: string | null;
@@ -18,20 +17,23 @@ type Profile = {
   gothra: string | null; raasi: string | null; star: string | null; dosham: string | null;
   about_me: string | null; partner_expectations: string | null;
   education_detail: string | null; native_place: string | null;
+  phone: string | null; email: string | null; whatsapp: string | null;
+  complexion: string | null; blood_group: string | null; profile_id: string | null;
 };
 
-const InfoRow = ({ icon: Icon, label, value }: { icon?: any; label: string; value: string | null | undefined }) => {
+const InfoRow = ({ label, value }: { label: string; value: string | null | undefined }) => {
   if (!value) return null;
   return (
-    <div className="flex items-start gap-3 py-2">
-      {Icon && <Icon size={14} className="text-gray-400 mt-0.5 flex-shrink-0" />}
-      <div>
-        <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">{label}</p>
-        <p className="text-sm text-gray-800">{value}</p>
-      </div>
+    <div className="flex justify-between py-2.5 border-b border-gray-50 last:border-0">
+      <span className="text-xs text-gray-500 font-medium">{label}</span>
+      <span className="text-sm text-gray-800 font-semibold text-right max-w-[60%]">{value}</span>
     </div>
   );
 };
+
+const themeAccent = "hsl(160, 35%, 38%)";
+const themeDark = "hsl(160, 30%, 25%)";
+const themeLight = "hsl(160, 40%, 94%)";
 
 export default function ProfileDetail() {
   const { id } = useParams<{ id: string }>();
@@ -40,19 +42,30 @@ export default function ProfileDetail() {
   const [loading, setLoading] = useState(true);
   const [activePhoto, setActivePhoto] = useState(0);
   const [userSubscription, setUserSubscription] = useState<string>("free");
+  const [interestSent, setInterestSent] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   useEffect(() => { if (id) fetchProfile(); }, [id]);
 
   const fetchProfile = async () => {
     const { data } = await supabase.from("profiles").select("*").eq("id", id!).maybeSingle();
-    if (data) setProfile(data as Profile);
-    // Check current user's subscription
+    if (data) setProfile(data as unknown as Profile);
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
+      setCurrentUserId(user.id);
       const { data: myProfile } = await supabase.from("profiles").select("subscription_type").eq("user_id", user.id).maybeSingle();
       if (myProfile) setUserSubscription((myProfile as any).subscription_type || "free");
+      // Check if interest already sent
+      const { data: existing } = await supabase.from("profile_interests").select("id").eq("from_user_id", user.id).eq("to_profile_id", id!).maybeSingle();
+      if (existing) setInterestSent(true);
     }
     setLoading(false);
+  };
+
+  const sendInterest = async () => {
+    if (!currentUserId || !id) return;
+    const { error } = await supabase.from("profile_interests").insert({ from_user_id: currentUserId, to_profile_id: id });
+    if (!error) setInterestSent(true);
   };
 
   const getAge = (dob: string) => Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
@@ -63,28 +76,31 @@ export default function ProfileDetail() {
   };
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: "hsl(30, 33%, 97%)" }}>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: "hsl(160, 15%, 97%)" }}>
       <div className="animate-pulse text-gray-400">Loading profile...</div>
     </div>
   );
 
   if (!profile) return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: "hsl(30, 33%, 97%)" }}>
+    <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: "hsl(160, 15%, 97%)" }}>
       <p className="text-gray-500">Profile not found</p>
-      <button onClick={() => navigate(-1)} className="btn-burgundy text-sm">Go Back</button>
+      <button onClick={() => navigate(-1)} className="text-sm font-semibold px-5 py-2 rounded-xl text-white" style={{ background: themeAccent }}>Go Back</button>
     </div>
   );
 
   const allPhotos = [profile.profile_photo_url, ...(profile.additional_photos || [])].filter(Boolean) as string[];
 
   return (
-    <div className="min-h-screen" style={{ background: "hsl(30, 33%, 97%)" }}>
-      <header className="bg-white/80 backdrop-blur-sm border-b border-gray-100 px-4 sm:px-6 py-3 sticky top-0 z-20">
-        <div className="max-w-4xl mx-auto flex items-center gap-3">
-          <BackButton label="Back" />
-          <div className="ml-2">
-            <h1 className="font-serif font-bold text-gray-800 text-sm sm:text-base">{profile.full_name}</h1>
-            <p className="text-xs text-gray-400">{getAge(profile.date_of_birth)} yrs • {profile.religion}</p>
+    <div className="min-h-screen" style={{ background: "hsl(160, 15%, 97%)" }}>
+      {/* Fixed Header */}
+      <header className="fixed top-0 left-0 right-0 z-20 bg-white/90 backdrop-blur-sm border-b border-gray-100 px-4 sm:px-6 py-3">
+        <div className="max-w-6xl mx-auto flex items-center gap-3">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm font-semibold transition-colors hover:opacity-80" style={{ color: themeAccent }}>
+            <ArrowLeft size={18} /> Back
+          </button>
+          <div className="ml-3">
+            <h1 className="font-bold text-gray-800 text-sm sm:text-base">{profile.full_name}</h1>
+            <p className="text-xs text-gray-400">{profile.profile_id || ""} • {getAge(profile.date_of_birth)} yrs • {profile.religion}</p>
           </div>
           {profile.is_featured && (
             <div className="ml-auto flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: "hsl(42, 42%, 90%)", color: "hsl(42, 42%, 40%)" }}>
@@ -94,92 +110,146 @@ export default function ProfileDetail() {
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="lg:col-span-1">
-            <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-              {allPhotos.length > 0 ? (
-                <>
-                  <div className="aspect-[3/4] relative">
-                    <img src={allPhotos[activePhoto]} alt={profile.full_name} className="w-full h-full object-cover" />
-                  </div>
-                  {allPhotos.length > 1 && (
-                    <div className="flex gap-1.5 p-3 overflow-x-auto">
-                      {allPhotos.map((url, i) => (
-                        <button key={i} onClick={() => setActivePhoto(i)} className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all" style={{ borderColor: i === activePhoto ? "hsl(var(--burgundy))" : "transparent" }}>
-                          <img src={url} alt="" className="w-full h-full object-cover" />
-                        </button>
-                      ))}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pt-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+          {/* LEFT COLUMN - Photo + Actions */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="lg:col-span-4">
+            <div className="lg:sticky lg:top-20 space-y-4">
+              {/* Photo Gallery */}
+              <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                {allPhotos.length > 0 ? (
+                  <>
+                    <div className="aspect-[3/4] relative">
+                      <img src={allPhotos[activePhoto]} alt={profile.full_name} className="w-full h-full object-cover" />
                     </div>
-                  )}
-                </>
-              ) : (
-                <div className="aspect-[3/4] flex items-center justify-center" style={{ background: "hsl(var(--burgundy-light))" }}>
-                  <span className="text-6xl font-serif font-bold" style={{ color: "hsl(var(--burgundy))" }}>{profile.full_name[0]}</span>
-                </div>
-              )}
-              <div className="p-4 space-y-2">
-                <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hi, I'm interested in the profile of ${profile.full_name}. Please share more details.`)}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.01]" style={{ background: "hsl(var(--burgundy))" }}>
-                  <Phone size={15} /> Express Interest
+                    {allPhotos.length > 1 && (
+                      <div className="flex gap-1.5 p-3 overflow-x-auto">
+                        {allPhotos.map((url, i) => (
+                          <button key={i} onClick={() => setActivePhoto(i)} className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all" style={{ borderColor: i === activePhoto ? themeAccent : "transparent" }}>
+                            <img src={url} alt="" className="w-full h-full object-cover" />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="aspect-[3/4] flex items-center justify-center" style={{ background: themeLight }}>
+                    <span className="text-6xl font-bold" style={{ color: themeAccent }}>{profile.full_name[0]}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Expert Talk */}
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                <h3 className="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                  <MessageCircle size={16} style={{ color: themeAccent }} /> Expert Talk
+                </h3>
+                <p className="text-xs text-gray-500 mb-3">Talk to our relationship expert about this profile</p>
+                <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hi, I'd like to know more about profile ${profile.profile_id || profile.full_name}. Please share details.`)}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.01]" style={{ background: themeAccent }}>
+                  <Phone size={15} /> Talk to Expert
                 </a>
-                <button className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all" style={{ background: "hsl(var(--burgundy-light))", color: "hsl(var(--burgundy))" }}>
-                  <Heart size={15} /> Shortlist Profile
-                </button>
+              </div>
+
+              {/* Interest Button */}
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-2">
+                {interestSent ? (
+                  <div className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm" style={{ background: themeLight, color: themeDark }}>
+                    <Heart size={15} className="fill-current" /> Interest Sent ✓
+                  </div>
+                ) : (
+                  <button onClick={sendInterest} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.01]" style={{ background: "hsl(348, 60%, 45%)" }}>
+                    <Heart size={15} /> Express Interest
+                  </button>
+                )}
+                <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hi, I'm interested in the profile of ${profile.full_name} (${profile.profile_id || ""}). Please share more details.`)}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all" style={{ background: themeLight, color: themeDark }}>
+                  <Phone size={15} /> Contact via WhatsApp
+                </a>
               </div>
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 space-y-4">
+          {/* RIGHT COLUMN - Full Details */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-8 space-y-4">
+
+            {/* About Me */}
+            {profile.about_me && (
+              <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
+                <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                  <BookOpen size={16} style={{ color: themeAccent }} /> About Me
+                </h3>
+                <p className="text-sm text-gray-700 leading-relaxed">{profile.about_me}</p>
+              </div>
+            )}
+
+            {/* Personal Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <h2 className="font-serif text-xl font-bold text-gray-800 mb-1">{profile.full_name}</h2>
-              <p className="text-sm text-gray-500 mb-4">{getAge(profile.date_of_birth)} years • {profile.marital_status} • {profile.religion}{profile.caste ? ` - ${profile.caste}` : ""}</p>
-              {profile.about_me && (
-                <div className="mb-4 p-3 rounded-xl bg-gray-50">
-                  <p className="text-sm text-gray-700 leading-relaxed">{profile.about_me}</p>
-                </div>
-              )}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                <InfoRow icon={Calendar} label="Date of Birth" value={profile.date_of_birth} />
-                <InfoRow icon={MapPin} label="Location" value={[profile.city, profile.state, profile.country].filter(Boolean).join(", ")} />
+              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <User size={16} style={{ color: themeAccent }} /> Personal Details
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                <InfoRow label="Full Name" value={profile.full_name} />
+                <InfoRow label="Date of Birth" value={profile.date_of_birth} />
+                <InfoRow label="Age" value={`${getAge(profile.date_of_birth)} years`} />
+                <InfoRow label="Gender" value={profile.gender} />
                 <InfoRow label="Height" value={getHeightFt(profile.height_cm)} />
-                <InfoRow label="Mother Tongue" value={profile.mother_tongue} />
-                <InfoRow label="Native Place" value={profile.native_place} />
+                <InfoRow label="Weight" value={profile.weight_kg ? `${profile.weight_kg} kg` : null} />
+                <InfoRow label="Complexion" value={profile.complexion} />
+                <InfoRow label="Blood Group" value={profile.blood_group} />
                 <InfoRow label="Marital Status" value={profile.marital_status} />
+                <InfoRow label="Mother Tongue" value={profile.mother_tongue} />
+                <InfoRow label="Religion" value={profile.religion} />
+                <InfoRow label="Caste" value={profile.caste} />
+                <InfoRow label="Sub Caste" value={profile.sub_caste} />
+                <InfoRow label="Location" value={[profile.city, profile.state, profile.country].filter(Boolean).join(", ")} />
+                <InfoRow label="Native Place" value={profile.native_place} />
               </div>
             </div>
-            {/* Contact Details - gated */}
+
+            {/* Contact Details - Gated */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <h3 className="font-serif font-bold text-gray-800 mb-3 flex items-center gap-2"><Phone size={16} className="text-gray-400" /> Contact Details</h3>
+              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <Phone size={16} style={{ color: themeAccent }} /> Contact Details
+                {userSubscription !== "assisted" && <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: "hsl(38, 90%, 92%)", color: "hsl(38, 70%, 40%)" }}>🔒 Locked</span>}
+              </h3>
               {userSubscription === "assisted" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <InfoRow icon={Phone} label="Phone" value={(profile as any).phone} />
-                  <InfoRow label="Email" value={(profile as any).email} />
-                  <InfoRow label="WhatsApp" value={(profile as any).whatsapp} />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                  <InfoRow label="Phone" value={profile.phone} />
+                  <InfoRow label="Email" value={profile.email} />
+                  <InfoRow label="WhatsApp" value={profile.whatsapp} />
                 </div>
               ) : (
                 <div className="text-center py-6 rounded-xl" style={{ background: "hsl(38, 90%, 96%)" }}>
                   <Lock size={24} className="mx-auto mb-2" style={{ color: "hsl(38, 70%, 45%)" }} />
                   <p className="text-sm font-semibold" style={{ color: "hsl(38, 70%, 35%)" }}>Contact details are hidden</p>
                   <p className="text-xs mt-1" style={{ color: "hsl(38, 50%, 45%)" }}>Upgrade to Assisted Matrimony to view phone, email & WhatsApp</p>
-                  <a href="https://wa.me/919553306667?text=Hi%2C%20I%20want%20to%20upgrade%20to%20Assisted%20Matrimony%20services" target="_blank" rel="noopener noreferrer" className="inline-block mt-3 px-5 py-2 rounded-xl text-sm font-semibold text-white" style={{ background: "hsl(280, 65%, 55%)" }}>
+                  <a href="https://wa.me/919553306667?text=Hi%2C%20I%20want%20to%20upgrade%20to%20Assisted%20Matrimony%20services" target="_blank" rel="noopener noreferrer" className="inline-block mt-3 px-5 py-2 rounded-xl text-sm font-semibold text-white" style={{ background: themeAccent }}>
                     Contact Us to Upgrade
                   </a>
                 </div>
               )}
             </div>
+
+            {/* Education & Professional Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <h3 className="font-serif font-bold text-gray-800 mb-3 flex items-center gap-2"><Briefcase size={16} className="text-gray-400" /> Professional Details</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                <InfoRow icon={GraduationCap} label="Education" value={profile.education} />
+              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <GraduationCap size={16} style={{ color: themeAccent }} /> Education & Professional Details
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                <InfoRow label="Education" value={profile.education} />
                 <InfoRow label="Education Details" value={profile.education_detail} />
                 <InfoRow label="Occupation" value={profile.occupation} />
                 <InfoRow label="Company" value={profile.company_name} />
                 <InfoRow label="Annual Income" value={profile.annual_income} />
               </div>
             </div>
+
+            {/* Family Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <h3 className="font-serif font-bold text-gray-800 mb-3 flex items-center gap-2"><Users size={16} className="text-gray-400" /> Family Details</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <Users size={16} style={{ color: themeAccent }} /> Family Details
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
                 <InfoRow label="Family Status" value={profile.family_status} />
                 <InfoRow label="Family Type" value={profile.family_type} />
                 <InfoRow label="Father's Name" value={profile.father_name} />
@@ -189,18 +259,22 @@ export default function ProfileDetail() {
                 <InfoRow label="Siblings" value={profile.siblings} />
               </div>
             </div>
+
+            {/* Horoscope Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <h3 className="font-serif font-bold text-gray-800 mb-3">🔮 Horoscope Details</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+              <h3 className="font-bold text-gray-800 mb-3">🔮 Horoscope Details</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
                 <InfoRow label="Gothram" value={profile.gothra} />
                 <InfoRow label="Rashi" value={profile.raasi} />
                 <InfoRow label="Star" value={profile.star} />
                 <InfoRow label="Dosham" value={profile.dosham} />
               </div>
             </div>
+
+            {/* Partner Expectations */}
             {profile.partner_expectations && (
               <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-                <h3 className="font-serif font-bold text-gray-800 mb-3">💍 Partner Expectations</h3>
+                <h3 className="font-bold text-gray-800 mb-3">💍 Partner Expectations</h3>
                 <p className="text-sm text-gray-700 leading-relaxed">{profile.partner_expectations}</p>
               </div>
             )}
