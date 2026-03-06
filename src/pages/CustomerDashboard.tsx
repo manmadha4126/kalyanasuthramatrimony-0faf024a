@@ -412,14 +412,14 @@ export default function CustomerDashboard() {
           </div>
         </header>
 
-        <div className="p-4 sm:p-6 pt-20">
-          {/* Profile Status Banner */}
-          {userProfile?.profile_status && userProfile.profile_status !== "active" && (
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-4 flex items-center gap-3" style={
-              userProfile.profile_status === "pending"
-                ? { background: "hsl(38, 90%, 95%)", border: "1px solid hsl(38, 80%, 85%)" }
-                : { background: "hsl(0, 65%, 96%)", border: "1px solid hsl(0, 55%, 88%)" }
-            }>
+        {/* Profile Status Banner - fixed below header */}
+        {userProfile?.profile_status && userProfile.profile_status !== "active" && (
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="fixed top-[57px] right-0 left-0 lg:left-64 z-[19] px-4 sm:px-6 py-2" style={
+            userProfile.profile_status === "pending"
+              ? { background: "hsl(38, 90%, 95%)", borderBottom: "1px solid hsl(38, 80%, 85%)" }
+              : { background: "hsl(0, 65%, 96%)", borderBottom: "1px solid hsl(0, 55%, 88%)" }
+          }>
+            <div className="flex items-center gap-3">
               <div className="w-3 h-3 rounded-full animate-pulse flex-shrink-0" style={{ background: userProfile.profile_status === "pending" ? "hsl(38, 90%, 50%)" : "hsl(0, 65%, 50%)" }} />
               <div>
                 <p className="text-sm font-semibold" style={{ color: userProfile.profile_status === "pending" ? "hsl(38, 70%, 30%)" : "hsl(0, 55%, 35%)" }}>
@@ -429,15 +429,18 @@ export default function CustomerDashboard() {
                   {userProfile.profile_status === "pending" ? "Our team is reviewing your profile. You will be notified once verified." : "Please contact support for more information."}
                 </p>
               </div>
-            </motion.div>
-          )}
+            </div>
+          </motion.div>
+        )}
 
-          {userProfile?.profile_status === "active" && (
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-3 flex items-center gap-2" style={{ background: "hsl(145, 55%, 95%)", border: "1px solid hsl(145, 45%, 85%)" }}>
-              <CheckCircle size={16} style={{ color: "hsl(145, 65%, 38%)" }} />
-              <span className="text-xs font-semibold" style={{ color: "hsl(145, 50%, 28%)" }}>Profile Verified ✓</span>
-            </motion.div>
-          )}
+        {userProfile?.profile_status === "active" && (
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="fixed top-[57px] right-0 left-0 lg:left-64 z-[19] px-4 sm:px-6 py-2 flex items-center gap-2" style={{ background: "hsl(145, 55%, 95%)", borderBottom: "1px solid hsl(145, 45%, 85%)" }}>
+            <CheckCircle size={16} style={{ color: "hsl(145, 65%, 38%)" }} />
+            <span className="text-xs font-semibold" style={{ color: "hsl(145, 50%, 28%)" }}>Profile Verified ✓</span>
+          </motion.div>
+        )}
+
+        <div className={`p-4 sm:p-6 ${userProfile?.profile_status ? "pt-28" : "pt-20"}`}>
 
           {/* Interests Section */}
           {activeNav === "Interests" && (
