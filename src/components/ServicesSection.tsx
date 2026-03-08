@@ -93,41 +93,72 @@ const ServicesSection = () => {
           ))}
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch">
           {packages.map((pkg, pi) => {
             const visiblePlans = selected ? pkg.plans.filter((p) => p.key === selected) : pkg.plans;
             if (selected && visiblePlans.length === 0) return null;
             return (
-              <motion.div key={pkg.title} className="rounded-2xl p-6 shadow-xl" style={pkg.highlighted ? { background: "linear-gradient(135deg, hsl(var(--burgundy) / 0.9), hsl(var(--deep-rose) / 0.8))", border: "2px solid hsl(var(--gold-accent) / 0.8)" } : { background: "hsl(220, 40%, 18%)", border: "1px solid hsl(220, 30%, 28%)" }} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: pi * 0.1 }}>
-                <h3 className="font-serif text-lg font-bold mb-4" style={{ color: pkg.highlighted ? "hsl(var(--gold-accent))" : "white" }}>{pkg.title}</h3>
-                <div className="space-y-4">
+              <motion.div
+                key={pkg.title}
+                className="rounded-2xl p-6 shadow-xl flex flex-col relative overflow-hidden"
+                style={{
+                  background: "hsl(0, 0%, 100%)",
+                  border: pkg.highlighted ? "2px solid hsl(160, 35%, 38%)" : "1px solid hsl(220, 15%, 88%)",
+                }}
+                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: pi * 0.1 }}
+              >
+                {/* Badge for highlighted */}
+                {pkg.badge && (
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "hsl(160, 35%, 38%)" }}>★ {pkg.badge}</span>
+                  </div>
+                )}
+
+                <h3 className="text-xl font-bold mb-4" style={{ color: "hsl(220, 50%, 15%)", fontFamily: "'DM Serif Display', serif" }}>{pkg.title}</h3>
+
+                {/* Prices */}
+                <div className="space-y-1 mb-5">
                   {visiblePlans.map((plan, i) => (
-                    <div key={i} className="pb-3 last:border-0" style={{ borderBottom: "1px solid hsl(220, 30%, 30%)" }}>
-                      <div className="flex items-baseline gap-2 mb-1">
-                        <span className="text-xl font-bold" style={{ color: pkg.highlighted ? "white" : "hsl(var(--gold-accent))", fontFamily: "'Georgia', serif", letterSpacing: "0.02em", fontVariantNumeric: "oldstyle-nums" }}>{plan.price}</span>
-                        <span className="text-xs" style={{ color: "hsl(220, 20%, 65%)" }}>/ {plan.duration}</span>
-                      </div>
-                      <ul className="mt-2 space-y-1">
-                        {plan.features.map((f) => (
-                          <li key={f} className="flex items-start gap-2 text-xs" style={{ color: pkg.highlighted ? "hsl(0, 0%, 90%)" : "hsl(220, 15%, 75%)" }}>
-                            <span className="w-1.5 h-1.5 rounded-full mt-1 flex-shrink-0" style={{ background: "hsl(var(--gold-accent))" }} />
-                            {f}
-                          </li>
-                        ))}
-                      </ul>
+                    <div key={i} className="flex items-baseline gap-2">
+                      <span className="text-2xl font-bold" style={{ color: "hsl(220, 50%, 15%)", fontFamily: "'Georgia', serif" }}>{plan.price}</span>
+                      <span className="text-sm" style={{ color: "hsl(160, 25%, 45%)" }}>/ {plan.duration}</span>
                     </div>
                   ))}
                 </div>
+
+                {/* Features */}
+                <ul className="space-y-2.5 mb-6 flex-1">
+                  {pkg.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: "hsl(220, 20%, 35%)" }}>
+                      <span className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ background: "hsl(160, 35%, 38%)" }} />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Benefits for Affluent */}
                 {pkg.benefits && !selected && (
-                  <div className="mt-4">
-                    <p className="text-xs uppercase tracking-wider mb-2 font-semibold" style={{ color: "hsl(var(--gold-accent))" }}>Benefits For</p>
+                  <div className="mb-5">
+                    <p className="text-xs uppercase tracking-wider mb-2 font-semibold" style={{ color: "hsl(160, 35%, 38%)" }}>Benefits For</p>
                     <div className="flex flex-wrap gap-1.5">
                       {pkg.benefits.map((b) => (
-                        <span key={b} className="text-[10px] px-2 py-1 rounded-full font-medium" style={{ background: "hsl(0, 0%, 100% / 0.15)", color: "hsl(0, 0%, 95%)" }}>{b}</span>
+                        <span key={b} className="text-[10px] px-2 py-1 rounded-full font-medium" style={{ background: "hsl(160, 35%, 94%)", color: "hsl(160, 35%, 30%)" }}>{b}</span>
                       ))}
                     </div>
                   </div>
                 )}
+
+                {/* CTA Button */}
+                <button
+                  onClick={() => setShowConsultation(true)}
+                  className="w-full py-3 rounded-full text-sm font-bold transition-all duration-200 hover:scale-[1.02]"
+                  style={pkg.highlighted
+                    ? { background: "hsl(160, 35%, 38%)", color: "white" }
+                    : { background: "transparent", color: "hsl(220, 20%, 35%)", border: "1.5px solid hsl(220, 15%, 82%)" }
+                  }
+                >
+                  Get Consultation
+                </button>
               </motion.div>
             );
           })}
