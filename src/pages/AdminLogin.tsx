@@ -86,10 +86,10 @@ export default function AdminLogin() {
 
           {/* Main heading */}
           <h1 style={{ fontFamily: "'Kaushan Script', cursive", fontSize: "3.2rem", lineHeight: "1.2" }} className="mb-3">
-            <span style={{ color: "hsl(42, 80%, 72%)" }}>Welcome to the</span><br />
-            <span style={{ color: "hsl(0, 0%, 100%)", fontSize: "3.6rem", textShadow: "0 2px 20px hsl(260, 50%, 50% / 0.3)" }}>Admin Portal</span>
+            <span style={{ color: "hsl(0, 0%, 100%)", textShadow: "0 2px 8px hsl(180, 50%, 25% / 0.4)" }}>Welcome to the</span><br />
+            <span style={{ color: "hsl(45, 100%, 90%)", fontSize: "3.6rem", textShadow: "0 2px 12px hsl(180, 50%, 20% / 0.5)" }}>Admin Portal</span>
           </h1>
-          <p className="text-base leading-relaxed max-w-md mb-10" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(220, 30%, 78%)" }}>
+          <p className="text-base leading-relaxed max-w-md mb-10" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(180, 10%, 98%)" }}>
             Managing South India's most trusted matrimonial platform. Every match we make writes a new chapter of love.
           </p>
 
