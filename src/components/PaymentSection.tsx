@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Phone, Mail, ChevronDown, ChevronUp, User } from "lucide-react";
 import paymentBg from "@/assets/payment-bg-new.jpg";
-import scannerImg from "@/assets/phonepe-scanner.jpeg";
+import scannerImg from "@/assets/phonepe-qr-new.jpeg";
 
 const owners = [
   { name: "Sai", phone: "9553306667", email: "info@kalyanasuthramatrimony.com" },
