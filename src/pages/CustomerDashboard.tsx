@@ -60,7 +60,9 @@ export default function CustomerDashboard() {
   const [showHeaderDropdown, setShowHeaderDropdown] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [interests, setInterests] = useState<Profile[]>([]);
+  const [receivedInterests, setReceivedInterests] = useState<Profile[]>([]);
   const [interestsLoading, setInterestsLoading] = useState(false);
+  const [interestTab, setInterestTab] = useState<"sent" | "received">("sent");
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
@@ -125,17 +127,23 @@ export default function CustomerDashboard() {
 
   const fetchInterests = async (uid: string) => {
     setInterestsLoading(true);
-    const { data: interestData } = await supabase.
-    from("profile_interests").
-    select("to_profile_id").
-    eq("from_user_id", uid);
-    if (interestData && interestData.length > 0) {
-      const profileIds = interestData.map((i) => i.to_profile_id);
-      const { data: profilesData } = await supabase.
-      from("profiles").
-      select("id,full_name,gender,religion,caste,city,state,occupation,education,date_of_birth,profile_photo_url,annual_income,is_featured,phone,email,whatsapp").
-      in("id", profileIds);
+    // Sent interests
+    const { data: sentData } = await supabase.from("profile_interests").select("to_profile_id").eq("from_user_id", uid);
+    if (sentData && sentData.length > 0) {
+      const profileIds = sentData.map((i) => i.to_profile_id);
+      const { data: profilesData } = await supabase.from("profiles").select("id,full_name,gender,religion,caste,city,state,occupation,education,date_of_birth,profile_photo_url,annual_income,is_featured,phone,email,whatsapp,marital_status,mother_tongue,height_cm").in("id", profileIds);
       if (profilesData) setInterests(profilesData);
+    }
+    // Received interests — find current user's profile, then get interests TO that profile
+    const { data: myProfile } = await supabase.from("profiles").select("id").eq("user_id", uid).maybeSingle();
+    if (myProfile) {
+      const { data: receivedData } = await supabase.from("profile_interests").select("from_user_id").eq("to_profile_id", myProfile.id);
+      if (receivedData && receivedData.length > 0) {
+        const fromUserIds = receivedData.map((i) => i.from_user_id);
+        // Get profiles by user_id (from_user_id is auth user id)
+        const { data: receivedProfiles } = await supabase.from("profiles").select("id,full_name,gender,religion,caste,city,state,occupation,education,date_of_birth,profile_photo_url,annual_income,is_featured,phone,email,whatsapp,marital_status,mother_tongue,height_cm").in("user_id", fromUserIds);
+        if (receivedProfiles) setReceivedInterests(receivedProfiles);
+      }
     }
     setInterestsLoading(false);
   };
@@ -290,7 +298,7 @@ export default function CustomerDashboard() {
         if (label === "Settings") {
           return (
             <div key={label} ref={settingsRef} className="relative">
-                <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowSettingsDropdown((p) => !p)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={{ fontFamily: "'DM Serif Display', serif", ...(showSettingsDropdown ? { background: themeAccent, color: "white" } : { color: themeDark, background: "transparent" }) }}>
+                <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowSettingsDropdown((p) => !p)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={showSettingsDropdown ? { background: themeAccent, color: "white" } : { color: themeDark, background: "transparent" }}>
                   <Icon size={16} /> {label}
                   <ChevronDown size={14} className={`ml-auto transition-transform ${showSettingsDropdown ? "rotate-180" : ""}`} />
                 </motion.button>
@@ -309,7 +317,7 @@ export default function CustomerDashboard() {
 
         }
         return (
-          <motion.button key={label} whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={{ fontFamily: "'DM Serif Display', serif", ...(activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(160, 35%, 38% / 0.3)` } : { color: themeDark, background: "transparent" }) }}>
+          <motion.button key={label} whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(160, 35%, 38% / 0.3)` } : { color: themeDark, background: "transparent" }}>
               <Icon size={16} /> {label}
               {label === "Preferences" && prefApplied &&
             <span className="ml-auto w-2 h-2 rounded-full" style={{ background: "hsl(38, 90%, 50%)" }} />
@@ -519,21 +527,43 @@ export default function CustomerDashboard() {
               <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1 flex items-center gap-2">
                 <Heart size={22} style={{ color: themeAccent }} className="fill-current" /> My Interests
               </h1>
-              <p className="text-sm text-gray-500 mb-6">Profiles you've shown interest in</p>
+              <p className="text-sm text-gray-500 mb-4">Manage your sent and received interests</p>
+
+              {/* Tabs */}
+              <div className="flex gap-2 mb-6">
+                <button onClick={() => setInterestTab("sent")} className="px-5 py-2 rounded-xl text-sm font-bold transition-all" style={interestTab === "sent" ? { background: themeAccent, color: "white" } : { background: themeLight, color: themeDark }}>
+                  Sent Interests ({interests.length})
+                </button>
+                <button onClick={() => setInterestTab("received")} className="px-5 py-2 rounded-xl text-sm font-bold transition-all" style={interestTab === "received" ? { background: themeAccent, color: "white" } : { background: themeLight, color: themeDark }}>
+                  Received Interests ({receivedInterests.length})
+                </button>
+              </div>
+
               {interestsLoading ?
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {[...Array(4)].map((_, i) => <div key={i} className="h-72 bg-gray-100 rounded-2xl animate-pulse" />)}
                 </div> :
-            interests.length === 0 ?
-            <div className="text-center py-16 text-gray-400">
-                  <Heart size={40} className="mx-auto mb-3 opacity-30" />
-                  <p className="font-medium">No interests yet</p>
-                  <p className="text-sm mt-1">Browse matches and express interest in profiles you like</p>
-                </div> :
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {interests.map((profile, i) => renderProfileCard(profile, i))}
-                </div>
+            interestTab === "sent" ? (
+              interests.length === 0 ?
+              <div className="text-center py-16 text-gray-400">
+                    <Heart size={40} className="mx-auto mb-3 opacity-30" />
+                    <p className="font-medium">No sent interests yet</p>
+                    <p className="text-sm mt-1">Browse matches and express interest in profiles you like</p>
+                  </div> :
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {interests.map((profile, i) => renderProfileCard(profile, i))}
+                  </div>
+            ) : (
+              receivedInterests.length === 0 ?
+              <div className="text-center py-16 text-gray-400">
+                    <Heart size={40} className="mx-auto mb-3 opacity-30" />
+                    <p className="font-medium">No received interests yet</p>
+                    <p className="text-sm mt-1">When someone shows interest in your profile, it will appear here</p>
+                  </div> :
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {receivedInterests.map((profile, i) => renderProfileCard(profile, i))}
+                  </div>
+            )
             }
             </motion.div>
           }
