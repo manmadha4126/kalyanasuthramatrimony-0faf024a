@@ -14,16 +14,19 @@ const features = [
     icon: ShieldCheck,
     title: "Privacy & Security",
     desc: "We provide 100% privacy & security against miss use of member profile and other details.",
+    gradient: "linear-gradient(180deg, hsl(220, 70%, 55%) 0%, hsl(190, 80%, 50%) 100%)",
   },
   {
     icon: Heart,
     title: "Best Matches",
     desc: "We provide many options for search member so that any member can meet the best matches according to his/her choice.",
+    gradient: "linear-gradient(180deg, hsl(160, 50%, 45%) 0%, hsl(180, 60%, 55%) 100%)",
   },
   {
     icon: ThumbsUp,
     title: "100% Satisfaction",
     desc: "We provide member to wider scope of search so that our member get 100% satisfied.",
+    gradient: "linear-gradient(180deg, hsl(25, 85%, 55%) 0%, hsl(340, 70%, 55%) 100%)",
   },
 ];
 
