@@ -167,6 +167,9 @@ export default function AdminDashboard() {
 
   // Interests
   const [interests, setInterests] = useState<any[]>([]);
+  const [interestNoteText, setInterestNoteText] = useState("");
+  const [savingInterestNote, setSavingInterestNote] = useState(false);
+  const [selectedInterest, setSelectedInterest] = useState<any>(null);
   useEffect(() => {
     const auth = sessionStorage.getItem("admin_auth");
     if (!auth) { navigate("/admin"); return; }
