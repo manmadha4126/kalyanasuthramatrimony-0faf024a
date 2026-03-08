@@ -127,17 +127,23 @@ export default function CustomerDashboard() {
 
   const fetchInterests = async (uid: string) => {
     setInterestsLoading(true);
-    const { data: interestData } = await supabase.
-    from("profile_interests").
-    select("to_profile_id").
-    eq("from_user_id", uid);
-    if (interestData && interestData.length > 0) {
-      const profileIds = interestData.map((i) => i.to_profile_id);
-      const { data: profilesData } = await supabase.
-      from("profiles").
-      select("id,full_name,gender,religion,caste,city,state,occupation,education,date_of_birth,profile_photo_url,annual_income,is_featured,phone,email,whatsapp").
-      in("id", profileIds);
+    // Sent interests
+    const { data: sentData } = await supabase.from("profile_interests").select("to_profile_id").eq("from_user_id", uid);
+    if (sentData && sentData.length > 0) {
+      const profileIds = sentData.map((i) => i.to_profile_id);
+      const { data: profilesData } = await supabase.from("profiles").select("id,full_name,gender,religion,caste,city,state,occupation,education,date_of_birth,profile_photo_url,annual_income,is_featured,phone,email,whatsapp,marital_status,mother_tongue,height_cm").in("id", profileIds);
       if (profilesData) setInterests(profilesData);
+    }
+    // Received interests — find current user's profile, then get interests TO that profile
+    const { data: myProfile } = await supabase.from("profiles").select("id").eq("user_id", uid).maybeSingle();
+    if (myProfile) {
+      const { data: receivedData } = await supabase.from("profile_interests").select("from_user_id").eq("to_profile_id", myProfile.id);
+      if (receivedData && receivedData.length > 0) {
+        const fromUserIds = receivedData.map((i) => i.from_user_id);
+        // Get profiles by user_id (from_user_id is auth user id)
+        const { data: receivedProfiles } = await supabase.from("profiles").select("id,full_name,gender,religion,caste,city,state,occupation,education,date_of_birth,profile_photo_url,annual_income,is_featured,phone,email,whatsapp,marital_status,mother_tongue,height_cm").in("user_id", fromUserIds);
+        if (receivedProfiles) setReceivedInterests(receivedProfiles);
+      }
     }
     setInterestsLoading(false);
   };
