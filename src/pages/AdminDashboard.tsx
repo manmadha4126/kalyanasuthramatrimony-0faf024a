@@ -1471,7 +1471,7 @@ export default function AdminDashboard() {
                               background: isCompleted ? "hsl(145, 60%, 90%)" : isNotCompleted ? "hsl(0, 60%, 90%)" : interest.interest_type === "shortlist" ? "hsl(38, 90%, 93%)" : "hsl(340, 65%, 93%)",
                               color: isCompleted ? "hsl(145, 60%, 25%)" : isNotCompleted ? "hsl(0, 60%, 25%)" : interest.interest_type === "shortlist" ? "hsl(38, 90%, 35%)" : "hsl(340, 65%, 40%)"
                             }}>
-                              {isCompleted ? "✓ Completed" : isNotCompleted ? "✗ Not Completed" : interest.interest_type === "shortlist" ? "⭐ Shortlisted" : "❤️ Interested"}
+                              {isCompleted ? "Completed" : isNotCompleted ? "Not Completed" : interest.interest_type === "shortlist" ? "Shortlisted" : "Interested"}
                             </span>
                             <div className="w-px h-6 bg-gray-200 flex-shrink-0" />
                             {fromPhone ? (
@@ -1541,7 +1541,7 @@ export default function AdminDashboard() {
                         <div className="grid grid-cols-2 gap-4">
                           <div className="rounded-xl p-4 border border-gray-200">
                             <p className="text-xs font-semibold text-gray-500 mb-1">Interest Type</p>
-                            <p className="text-sm font-bold text-gray-800">{interest.interest_type === "shortlist" ? "⭐ Shortlisted" : interest.interest_type === "completed" ? "✓ Completed" : interest.interest_type === "not_completed" ? "✗ Not Completed" : "❤️ Interested"}</p>
+                            <p className="text-sm font-bold text-gray-800">{interest.interest_type === "shortlist" ? "Shortlisted" : interest.interest_type === "completed" ? "Completed" : interest.interest_type === "not_completed" ? "Not Completed" : "Interested"}</p>
                           </div>
                           <div className="rounded-xl p-4 border border-gray-200">
                             <p className="text-xs font-semibold text-gray-500 mb-1">Date</p>
@@ -1560,11 +1560,11 @@ export default function AdminDashboard() {
                           <button onClick={async () => {
                             const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" } as any).eq("id", interest.id);
                             if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); setSelectedInterest(null); toast({ title: "Marked as completed!" }); }
-                          }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 42%)" }}>✓ Completed</button>
+                          }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 42%)" }}>Completed</button>
                           <button onClick={async () => {
                             const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" } as any).eq("id", interest.id);
                             if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); setSelectedInterest(null); toast({ title: "Marked as not completed!" }); }
-                          }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(0, 55%, 50%)" }}>✗ Not Completed</button>
+                          }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(0, 55%, 50%)" }}>Not Completed</button>
                         </div>
                         <div>
                           <label className="block text-sm font-semibold text-gray-600 mb-1.5">📝 Admin Note</label>
