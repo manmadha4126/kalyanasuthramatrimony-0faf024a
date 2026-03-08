@@ -102,12 +102,12 @@ export default function AdminLogin() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + i * 0.08 }}
               className="flex items-start gap-3.5 p-4 rounded-xl"
-              style={{ background: "hsl(0, 0%, 100% / 0.07)", border: "1px solid hsl(0, 0%, 100% / 0.1)", backdropFilter: "blur(8px)" }}>
+              style={{ background: "hsl(180, 40%, 30% / 0.35)", border: "1px solid hsl(0, 0%, 100% / 0.15)", backdropFilter: "blur(8px)" }}>
               
                 <span className="text-2xl flex-shrink-0">{item.icon}</span>
                 <div>
-                  <p className="font-semibold text-sm" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(42, 75%, 75%)" }}>{item.label}</p>
-                  <p className="mt-1 leading-snug text-xs font-normal" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(220, 20%, 72%)" }}>{item.desc}</p>
+                  <p className="font-semibold text-sm" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(0, 0%, 100%)" }}>{item.label}</p>
+                  <p className="mt-1 leading-snug text-xs font-normal" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(180, 15%, 90%)" }}>{item.desc}</p>
                 </div>
               </motion.div>
             )}
