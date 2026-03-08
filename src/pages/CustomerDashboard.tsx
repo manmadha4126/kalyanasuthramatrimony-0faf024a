@@ -81,6 +81,7 @@ export default function CustomerDashboard() {
     const handler = (e: MouseEvent) => {
       if (settingsRef.current && !settingsRef.current.contains(e.target as Node)) setShowSettingsDropdown(false);
       if (headerRef.current && !headerRef.current.contains(e.target as Node)) setShowHeaderDropdown(false);
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) setShowNotifDropdown(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
