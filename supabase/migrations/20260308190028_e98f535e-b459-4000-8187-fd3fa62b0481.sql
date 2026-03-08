@@ -1,0 +1,1 @@
+ALTER TABLE public.profile_interests ADD COLUMN admin_notes text DEFAULT null;

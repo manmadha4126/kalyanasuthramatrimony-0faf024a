@@ -82,6 +82,7 @@ export type Database = {
       }
       profile_interests: {
         Row: {
+          admin_notes: string | null
           created_at: string
           from_user_id: string
           id: string
@@ -89,6 +90,7 @@ export type Database = {
           to_profile_id: string
         }
         Insert: {
+          admin_notes?: string | null
           created_at?: string
           from_user_id: string
           id?: string
@@ -96,6 +98,7 @@ export type Database = {
           to_profile_id: string
         }
         Update: {
+          admin_notes?: string | null
           created_at?: string
           from_user_id?: string
           id?: string
