@@ -10,26 +10,30 @@ const packages = [
     title: "Support Matrimony",
     highlighted: false,
     plans: [
-      { price: "₹13,000", duration: "3 Months", key: "3months" as Duration, features: ["Unlimited number of profiles will be provided", "Weekly once we will mail you & process the selected ones"] },
-      { price: "₹20,000", duration: "6 Months", key: "6months" as Duration, features: ["Unlimited number of profiles will be provided", "Weekly once we will mail you & process the selected ones", "Normal profiles will be given in this package"] },
+      { price: "₹13,000", duration: "3 Months", key: "3months" as Duration },
+      { price: "₹20,000", duration: "6 Months", key: "6months" as Duration },
     ],
+    features: ["Unlimited profiles", "Weekly mail updates", "Profile processing"],
   },
   {
     title: "Affluent Matrimony",
     highlighted: true,
+    badge: "MOST POPULAR",
     plans: [
-      { price: "₹38,000", duration: "Premium", key: "premium" as Duration, features: ["Unlimited number of profiles will be provided", "Weekly once we will mail you & process the selected ones", "A dedicated Relationship Manager will be allotted to oversee your profile", "Daily feedback will be provided", "Well settled profiles will be given", "Up to settlement the service will be provided", "We will personally make enquiry of full details of bride/groom"] },
+      { price: "₹38,000", duration: "Premium", key: "premium" as Duration },
     ],
+    features: ["Unlimited profiles", "Dedicated Relationship Manager", "Daily feedback", "Personal enquiry", "Up to settlement", "Well-settled profiles"],
     benefits: ["IAS / IPS / Scientists / Group 1 Officials", "IIT / IIM / CA / NIT / BITS Pilani", "NRI Matches", "Annual Package Above ₹13L", "Entrepreneurs", "Doctors"],
   },
   {
     title: "Online Services",
     highlighted: false,
     plans: [
-      { price: "₹7,000", duration: "3 Months", key: "3months" as Duration, features: ["Full online access to profiles"] },
-      { price: "₹10,000", duration: "6 Months", key: "6months" as Duration, features: ["Full online access to profiles"] },
-      { price: "₹15,000", duration: "1 Year", key: "1year" as Duration, features: ["Full online access to profiles"] },
+      { price: "₹7,000", duration: "3 Months", key: "3months" as Duration },
+      { price: "₹10,000", duration: "6 Months", key: "6months" as Duration },
+      { price: "₹15,000", duration: "1 Year", key: "1year" as Duration },
     ],
+    features: ["Full online access", "Profile browsing", "Direct connect"],
   },
 ];
 
