@@ -18,14 +18,22 @@ type UserProfileFull = {
   profile_photo_url: string | null;subscription_type?: string;profile_id?: string | null;
 };
 
+type Notification = {
+  id: string; title: string; message: string; type: string; is_read: boolean; created_at: string;
+};
+
 type Preferences = {
   ageMin: string;ageMax: string;religion: string;caste: string;city: string;
   education: string;maritalStatus: string;motherTongue: string;
+  heightMin: string;heightMax: string;occupation: string;annualIncome: string;
+  state: string;country: string;dosham: string;star: string;
 };
 
 const defaultPreferences: Preferences = {
   ageMin: "", ageMax: "", religion: "", caste: "", city: "",
-  education: "", maritalStatus: "", motherTongue: ""
+  education: "", maritalStatus: "", motherTongue: "",
+  heightMin: "", heightMax: "", occupation: "", annualIncome: "",
+  state: "", country: "", dosham: "", star: ""
 };
 
 const NAV = [
