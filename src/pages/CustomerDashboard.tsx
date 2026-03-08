@@ -290,7 +290,7 @@ export default function CustomerDashboard() {
         if (label === "Settings") {
           return (
             <div key={label} ref={settingsRef} className="relative">
-                <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowSettingsDropdown((p) => !p)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={showSettingsDropdown ? { background: themeAccent, color: "white" } : { color: themeDark, background: "transparent" }}>
+                <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowSettingsDropdown((p) => !p)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={{ fontFamily: "'DM Serif Display', serif", ...(showSettingsDropdown ? { background: themeAccent, color: "white" } : { color: themeDark, background: "transparent" }) }}>
                   <Icon size={16} /> {label}
                   <ChevronDown size={14} className={`ml-auto transition-transform ${showSettingsDropdown ? "rotate-180" : ""}`} />
                 </motion.button>
@@ -309,7 +309,7 @@ export default function CustomerDashboard() {
 
         }
         return (
-          <motion.button key={label} whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(160, 35%, 38% / 0.3)` } : { color: themeDark, background: "transparent" }}>
+          <motion.button key={label} whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={{ fontFamily: "'DM Serif Display', serif", ...(activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(160, 35%, 38% / 0.3)` } : { color: themeDark, background: "transparent" }) }}>
               <Icon size={16} /> {label}
               {label === "Preferences" && prefApplied &&
             <span className="ml-auto w-2 h-2 rounded-full" style={{ background: "hsl(38, 90%, 50%)" }} />
@@ -690,7 +690,7 @@ export default function CustomerDashboard() {
 
               <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100 max-w-3xl">
                 {/* Section: Basic */}
-                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><User size={14} style={{ color: themeAccent }} /> Basic Details</h3>
+                <h3 className="text-sm font-bold mb-3 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ fontFamily: "'DM Serif Display', serif", background: themeLight, color: themeDark }}><User size={14} style={{ color: themeAccent }} /> Basic Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Min Age</label>
@@ -728,7 +728,7 @@ export default function CustomerDashboard() {
                 </div>
 
                 {/* Section: Religion & Community */}
-                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><Star size={14} style={{ color: themeAccent }} /> Religion & Community</h3>
+                <h3 className="text-sm font-bold mb-3 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ fontFamily: "'DM Serif Display', serif", background: themeLight, color: themeDark }}><Star size={14} style={{ color: themeAccent }} /> Religion & Community</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Religion</label>
@@ -755,7 +755,7 @@ export default function CustomerDashboard() {
                 </div>
 
                 {/* Section: Education & Career */}
-                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><Edit size={14} style={{ color: themeAccent }} /> Education & Career</h3>
+                <h3 className="text-sm font-bold mb-3 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ fontFamily: "'DM Serif Display', serif", background: themeLight, color: themeDark }}><Edit size={14} style={{ color: themeAccent }} /> Education & Career</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Education</label>
@@ -778,7 +778,7 @@ export default function CustomerDashboard() {
                 </div>
 
                 {/* Section: Location */}
-                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><MapPin size={14} style={{ color: themeAccent }} /> Location</h3>
+                <h3 className="text-sm font-bold mb-3 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ fontFamily: "'DM Serif Display', serif", background: themeLight, color: themeDark }}><MapPin size={14} style={{ color: themeAccent }} /> Location</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Country</label>
