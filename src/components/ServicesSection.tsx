@@ -97,19 +97,24 @@ const ServicesSection = () => {
           {packages.map((pkg, pi) => {
             const visiblePlans = selected ? pkg.plans.filter((p) => p.key === selected) : pkg.plans;
             if (selected && visiblePlans.length === 0) return null;
+            const cardColors = [
+              { bg: "hsl(200, 60%, 96%)", border: "hsl(200, 50%, 85%)", accent: "hsl(200, 55%, 40%)", dot: "hsl(200, 55%, 45%)" },
+              { bg: "hsl(160, 50%, 95%)", border: "hsl(160, 40%, 80%)", accent: "hsl(160, 35%, 38%)", dot: "hsl(160, 35%, 38%)" },
+              { bg: "hsl(270, 45%, 96%)", border: "hsl(270, 35%, 86%)", accent: "hsl(270, 40%, 45%)", dot: "hsl(270, 40%, 50%)" },
+            ][pi];
             return (
               <motion.div
                 key={pkg.title}
                 className="rounded-2xl p-5 shadow-xl flex flex-col relative overflow-hidden"
                 style={{
-                  background: "hsl(0, 0%, 100%)",
-                  border: pkg.highlighted ? "2px solid hsl(160, 35%, 38%)" : "1px solid hsl(220, 15%, 88%)",
+                  background: cardColors.bg,
+                  border: `1.5px solid ${cardColors.border}`,
                 }}
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: pi * 0.1 }}
               >
                 {pkg.badge && (
                   <div className="flex items-center gap-1.5 mb-1.5">
-                    <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "hsl(160, 35%, 38%)" }}>★ {pkg.badge}</span>
+                    <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: cardColors.accent }}>★ {pkg.badge}</span>
                   </div>
                 )}
 
@@ -118,16 +123,16 @@ const ServicesSection = () => {
                 <div className="space-y-0.5 mb-4">
                   {visiblePlans.map((plan, i) => (
                     <div key={i} className="flex items-baseline gap-2">
-                      <span className="text-xl font-bold" style={{ color: "hsl(220, 50%, 15%)", fontFamily: "'Georgia', serif" }}>{plan.price}</span>
-                      <span className="text-xs" style={{ color: "hsl(160, 25%, 45%)" }}>/ {plan.duration}</span>
+                      <span className="text-xl font-bold" style={{ color: cardColors.accent, fontFamily: "'Georgia', serif" }}>{plan.price}</span>
+                      <span className="text-xs" style={{ color: "hsl(220, 15%, 50%)" }}>/ {plan.duration}</span>
                     </div>
                   ))}
                 </div>
 
                 <ul className="space-y-2">
                   {pkg.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "hsl(220, 20%, 35%)" }}>
-                      <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: "hsl(160, 35%, 38%)" }} />
+                    <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "hsl(220, 20%, 30%)" }}>
+                      <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: cardColors.dot }} />
                       {f}
                     </li>
                   ))}
@@ -135,10 +140,10 @@ const ServicesSection = () => {
 
                 {pkg.benefits && !selected && (
                   <div className="mt-3">
-                    <p className="text-xs uppercase tracking-wider mb-1.5 font-semibold" style={{ color: "hsl(160, 35%, 38%)" }}>Benefits For</p>
+                    <p className="text-xs uppercase tracking-wider mb-1.5 font-semibold" style={{ color: cardColors.accent }}>Benefits For</p>
                     <div className="flex flex-wrap gap-1.5">
                       {pkg.benefits.map((b) => (
-                        <span key={b} className="text-[10px] px-2 py-0.5 rounded-full font-medium" style={{ background: "hsl(160, 35%, 94%)", color: "hsl(160, 35%, 30%)" }}>{b}</span>
+                        <span key={b} className="text-[10px] px-2 py-0.5 rounded-full font-medium" style={{ background: `${cardColors.border}`, color: cardColors.accent }}>{b}</span>
                       ))}
                     </div>
                   </div>
