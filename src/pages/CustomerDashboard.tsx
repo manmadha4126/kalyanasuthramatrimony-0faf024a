@@ -180,6 +180,11 @@ export default function CustomerDashboard() {
       if (preferences.education && p.education && !p.education.toLowerCase().includes(preferences.education.toLowerCase())) return false;
       if (preferences.maritalStatus && p.marital_status && p.marital_status.toLowerCase() !== preferences.maritalStatus.toLowerCase()) return false;
       if (preferences.motherTongue && p.mother_tongue && !p.mother_tongue.toLowerCase().includes(preferences.motherTongue.toLowerCase())) return false;
+      if (preferences.heightMin && p.height_cm && p.height_cm < parseInt(preferences.heightMin)) return false;
+      if (preferences.heightMax && p.height_cm && p.height_cm > parseInt(preferences.heightMax)) return false;
+      if (preferences.occupation && p.occupation && !p.occupation.toLowerCase().includes(preferences.occupation.toLowerCase())) return false;
+      if (preferences.annualIncome && p.annual_income && !p.annual_income.toLowerCase().includes(preferences.annualIncome.toLowerCase())) return false;
+      if (preferences.state && p.state && !p.state.toLowerCase().includes(preferences.state.toLowerCase())) return false;
       return true;
     });
   };
