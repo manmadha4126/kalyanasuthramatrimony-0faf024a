@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Phone, Mail, ChevronDown, ChevronUp, User } from "lucide-react";
-import paymentBg from "@/assets/payment-bg-new.jpg";
+import { Phone, Mail, ChevronDown, ChevronUp, User, CreditCard, Wallet, Banknote } from "lucide-react";
 import scannerImg from "@/assets/phonepe-qr-new.jpeg";
 
 const owners = [
@@ -9,15 +8,62 @@ const owners = [
   { name: "Drakshayani", phone: "9866288767", email: "info@kalyanasuthramatrimony.com" },
 ];
 
+const FloatingIcon = ({ icon: Icon, className, delay }: { icon: any; className: string; delay: number }) => (
+  <motion.div
+    className={`absolute opacity-10 ${className}`}
+    animate={{ y: [0, -15, 0], rotate: [0, 5, -5, 0] }}
+    transition={{ duration: 6, repeat: Infinity, delay, ease: "easeInOut" }}
+  >
+    <Icon size={48} className="text-white" />
+  </motion.div>
+);
+
 const PaymentSection = () => {
   const [showContacts, setShowContacts] = useState(false);
 
   return (
     <section className="py-20 relative overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
-        <img src={paymentBg} alt="" className="w-full h-full object-cover" />
-      </div>
-      <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(135deg, hsla(348, 56%, 27%, 0.75), hsla(220, 50%, 15%, 0.7))" }} />
+      {/* Dynamic animated gradient background */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: `
+          radial-gradient(ellipse 80% 50% at 20% 40%, hsla(280, 60%, 25%, 0.4) 0%, transparent 50%),
+          radial-gradient(ellipse 60% 40% at 80% 60%, hsla(200, 70%, 30%, 0.3) 0%, transparent 50%),
+          radial-gradient(ellipse 50% 30% at 50% 80%, hsla(45, 80%, 50%, 0.15) 0%, transparent 50%),
+          linear-gradient(135deg, hsl(220, 50%, 12%) 0%, hsl(260, 45%, 18%) 35%, hsl(280, 40%, 20%) 65%, hsl(220, 55%, 15%) 100%)
+        `
+      }} />
+
+      {/* Animated mesh overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.08]" style={{
+        backgroundImage: `
+          linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
+          linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px)
+        `,
+        backgroundSize: "60px 60px"
+      }} />
+
+      {/* Floating payment icons */}
+      <FloatingIcon icon={CreditCard} className="top-16 left-[10%]" delay={0} />
+      <FloatingIcon icon={Wallet} className="top-32 right-[15%]" delay={1.5} />
+      <FloatingIcon icon={Banknote} className="bottom-24 left-[20%]" delay={3} />
+      <FloatingIcon icon={CreditCard} className="bottom-16 right-[10%]" delay={2} />
+      <FloatingIcon icon={Wallet} className="top-1/2 left-[5%]" delay={4} />
+      <FloatingIcon icon={Banknote} className="top-20 right-[30%]" delay={2.5} />
+
+      {/* Glowing orbs */}
+      <motion.div
+        className="absolute w-72 h-72 rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, hsla(45, 80%, 60%, 0.15) 0%, transparent 70%)", top: "10%", left: "60%" }}
+        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute w-96 h-96 rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, hsla(200, 70%, 50%, 0.1) 0%, transparent 70%)", bottom: "-10%", left: "-10%" }}
+        animate={{ scale: [1.1, 1, 1.1], opacity: [0.2, 0.4, 0.2] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+      />
+
       <div className="container mx-auto px-4 relative z-10">
         <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-3" style={{ fontFamily: "'DM Serif Display', serif" }}>Payment Details</h2>
