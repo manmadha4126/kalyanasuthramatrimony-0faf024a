@@ -1201,13 +1201,21 @@ export default function AdminDashboard() {
                   ) : !subShowSummary ? (
                     <div className="p-6 space-y-5">
                       <div>
-                        <label className="block text-sm font-semibold text-gray-600 mb-2">📦 Select Package</label>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                          {packageOptions.map(pkg => (
-                            <button key={pkg.value} onClick={() => setSubPackage(pkg.value)}
-                              className={`px-4 py-3 rounded-xl text-sm font-semibold border-2 transition-all ${subPackage === pkg.value ? "border-purple-500 bg-purple-50 text-purple-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}>
-                              {pkg.label}
-                            </button>
+                        <label className="block text-sm font-semibold text-gray-600 mb-3">📦 Select Package</label>
+                        <div className="space-y-4">
+                          {MATRIMONY_PACKAGES.map(cat => (
+                            <div key={cat.category}>
+                              <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: cat.color }}>{cat.category}</p>
+                              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                {cat.options.map(pkg => (
+                                  <button key={pkg.value} onClick={() => { setSubPackage(pkg.value); setSubAmount(pkg.price.replace(/[₹,]/g, "")); }}
+                                    className={`px-4 py-3 rounded-xl text-sm font-semibold border-2 transition-all text-left ${subPackage === pkg.value ? "border-purple-500 bg-purple-50 text-purple-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}>
+                                    <span className="block font-bold">{pkg.price}</span>
+                                    <span className="text-xs opacity-70">/ {pkg.label}</span>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
                           ))}
                         </div>
                       </div>
