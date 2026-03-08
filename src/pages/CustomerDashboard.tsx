@@ -467,20 +467,50 @@ export default function CustomerDashboard() {
                 </p>
               </motion.div>
 
-              {/* Premium Service */}
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} onClick={() => setShowUpgradePage(true)} className="mb-6 rounded-2xl p-4 sm:p-5 cursor-pointer hover:scale-[1.01] transition-transform" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
-                <div className="flex items-center justify-between">
-                  <div>
+              {/* Subscription Details or Upgrade CTA */}
+              {userProfile?.subscription_type === "assisted" ? (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-6 rounded-2xl overflow-hidden" style={{ border: "2px solid hsl(160, 35%, 38%)" }}>
+                  <div className="p-4 sm:p-5" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
                     <div className="flex items-center gap-2 mb-1">
                       <Star size={16} className="text-yellow-300 fill-yellow-300" />
-                      <span className="text-yellow-200 text-xs font-bold uppercase tracking-wider">Premium Service</span>
+                      <span className="text-yellow-200 text-xs font-bold uppercase tracking-wider">Active Subscription</span>
                     </div>
-                    <h3 className="text-white font-bold text-base sm:text-lg">Upgrade Assisted Matrimony Services</h3>
-                    <p className="text-white/70 text-xs mt-1">Get a dedicated Relationship Manager, daily feedback & faster matches</p>
+                    <h3 className="text-white font-bold text-base sm:text-lg">Assisted Matrimony Service</h3>
                   </div>
-                  <ChevronRight size={24} className="text-white/60 hidden sm:block" />
-                </div>
-              </motion.div>
+                  <div className="p-4 sm:p-5 space-y-3" style={{ background: "hsl(160, 30%, 97%)" }}>
+                    <div className="flex items-center justify-between py-2 border-b" style={{ borderColor: "hsl(160, 20%, 88%)" }}>
+                      <span className="text-sm font-medium" style={{ color: "hsl(0, 0%, 45%)" }}>Plan Status</span>
+                      <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: "hsl(145, 55%, 90%)", color: "hsl(145, 55%, 28%)" }}>Active</span>
+                    </div>
+                    <div className="flex items-center justify-between py-2 border-b" style={{ borderColor: "hsl(160, 20%, 88%)" }}>
+                      <span className="text-sm font-medium" style={{ color: "hsl(0, 0%, 45%)" }}>Access Type</span>
+                      <span className="text-sm font-bold" style={{ color: themeDark }}>Assisted Access</span>
+                    </div>
+                    <div className="flex items-center justify-between py-2">
+                      <span className="text-sm font-medium" style={{ color: "hsl(0, 0%, 45%)" }}>Benefits</span>
+                      <span className="text-sm font-bold" style={{ color: themeDark }}>Full Contact Details Visible</span>
+                    </div>
+                    <div className="mt-2 rounded-xl p-3 flex items-center gap-2" style={{ background: "hsl(145, 50%, 93%)" }}>
+                      <CheckCircle size={14} style={{ color: "hsl(145, 55%, 35%)" }} />
+                      <span className="text-xs font-semibold" style={{ color: "hsl(145, 50%, 25%)" }}>You can view phone, email & WhatsApp of all profiles</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} onClick={() => setShowUpgradePage(true)} className="mb-6 rounded-2xl p-4 sm:p-5 cursor-pointer hover:scale-[1.01] transition-transform" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <Star size={16} className="text-yellow-300 fill-yellow-300" />
+                        <span className="text-yellow-200 text-xs font-bold uppercase tracking-wider">Premium Service</span>
+                      </div>
+                      <h3 className="text-white font-bold text-base sm:text-lg">Upgrade Assisted Matrimony Services</h3>
+                      <p className="text-white/70 text-xs mt-1">Get a dedicated Relationship Manager, daily feedback & faster matches</p>
+                    </div>
+                    <ChevronRight size={24} className="text-white/60 hidden sm:block" />
+                  </div>
+                </motion.div>
+              )}
 
               {/* Matches - show only 5 on Home */}
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mb-6">
