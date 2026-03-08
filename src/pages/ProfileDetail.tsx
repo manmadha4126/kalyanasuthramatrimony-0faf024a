@@ -92,6 +92,21 @@ export default function ProfileDetail() {
     if (!error) setInterestSent(true);
   };
 
+  const revealDetails = async (viewType: "contact" | "horoscope") => {
+    if (!currentUserId || !id) return;
+    await supabase.from("detail_views").upsert(
+      { viewer_user_id: currentUserId, viewed_profile_id: id, view_type: viewType },
+      { onConflict: "viewer_user_id,viewed_profile_id,view_type" }
+    );
+    if (viewType === "contact") {
+      setContactRevealed(true);
+      setContactViewCount(prev => prev + 1);
+    } else {
+      setHoroscopeRevealed(true);
+      setHoroscopeViewCount(prev => prev + 1);
+    }
+  };
+
   const getAge = (dob: string) => Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
   const getHeightFt = (cm: number | null) => {
     if (!cm) return null;
