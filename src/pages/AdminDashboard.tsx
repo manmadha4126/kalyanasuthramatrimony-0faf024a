@@ -1453,7 +1453,7 @@ export default function AdminDashboard() {
                           <motion.div key={interest.id}
                             initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
                             className="flex items-center gap-4 rounded-xl border border-gray-200 px-4 py-3 cursor-pointer hover:shadow-md transition-all"
-                            style={{ background: isCompleted ? "hsl(145, 50%, 97%)" : isNotCompleted ? "hsl(0, 50%, 97%)" : "hsl(0, 0%, 100%)" }}
+                            style={{ background: isCompleted ? "hsl(145, 55%, 90%)" : isNotCompleted ? "hsl(0, 55%, 92%)" : "hsl(0, 0%, 100%)" }}
                             onClick={() => { setSelectedInterest(interest); setInterestNoteText(interest.admin_notes || ""); }}
                           >
                             <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
