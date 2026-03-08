@@ -209,8 +209,15 @@ export default function AdminDashboard() {
   };
 
   const fetchInterests = async () => {
-    const { data } = await supabase.from("profile_interests").select("*, profiles!profile_interests_to_profile_id_fkey(full_name, profile_photo_url, city, gender)").order("created_at", { ascending: false });
-    if (data) setInterests(data as any);
+    const { data } = await supabase.from("profile_interests").select("*, profiles!profile_interests_to_profile_id_fkey(full_name, profile_photo_url, city, gender, phone)").order("created_at", { ascending: false });
+    if (data) {
+      // Fetch from_user profile info
+      const userIds = [...new Set(data.map((d: any) => d.from_user_id))];
+      const { data: fromProfiles } = await supabase.from("profiles").select("user_id, full_name, phone").in("user_id", userIds);
+      const fromMap: Record<string, { full_name: string; phone: string | null }> = {};
+      (fromProfiles || []).forEach((p: any) => { if (p.user_id) fromMap[p.user_id] = { full_name: p.full_name, phone: p.phone }; });
+      setInterests(data.map((d: any) => ({ ...d, from_profile: fromMap[d.from_user_id] || null })));
+    }
   };
 
   const addSuccessStory = async () => {
