@@ -115,8 +115,8 @@ export default function AdminLogin() {
 
           {/* Bottom quote */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="mt-10 flex items-center gap-2">
-            <Heart size={14} style={{ color: "hsl(42, 70%, 65%)" }} className="fill-current" />
-            <span className="text-xs" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", color: "hsl(260, 30%, 65%)" }}>
+            <Heart size={14} style={{ color: "hsl(45, 100%, 90%)" }} className="fill-current" />
+            <span className="text-xs" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", color: "hsl(0, 0%, 100%)" }}>
               "Where tradition meets technology in every match"
             </span>
           </motion.div>
