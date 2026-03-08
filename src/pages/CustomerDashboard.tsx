@@ -157,12 +157,31 @@ export default function CustomerDashboard() {
   const submitStory = async () => {
     if (!userId || !storyForm.bride_name || !storyForm.groom_name || !storyForm.city || !storyForm.story) return;
     setStoryLoading(true);
+    let imageUrl: string | null = null;
+    if (storyPhoto) {
+      const fileExt = storyPhoto.name.split(".").pop();
+      const filePath = `${userId}/${Date.now()}.${fileExt}`;
+      const { error: uploadError } = await supabase.storage.from("success-story-photos").upload(filePath, storyPhoto);
+      if (!uploadError) {
+        const { data: urlData } = supabase.storage.from("success-story-photos").getPublicUrl(filePath);
+        imageUrl = urlData.publicUrl;
+      }
+    }
     const { error } = await supabase.from("success_stories").insert({
       bride_name: storyForm.bride_name, groom_name: storyForm.groom_name,
-      city: storyForm.city, story: storyForm.story, created_by: userId
+      city: storyForm.city, story: storyForm.story, created_by: userId,
+      image_url: imageUrl
     });
     setStoryLoading(false);
-    if (!error) {setShowStoryForm(false);setStoryForm({ bride_name: "", groom_name: "", city: "", story: "" });}
+    if (!error) { setShowStoryForm(false); setStoryForm({ bride_name: "", groom_name: "", city: "", story: "" }); setStoryPhoto(null); setStoryPhotoPreview(null); }
+  };
+
+  const handleStoryPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setStoryPhoto(file);
+      setStoryPhotoPreview(URL.createObjectURL(file));
+    }
   };
 
   // Apply preferences filter
