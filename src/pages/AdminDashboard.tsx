@@ -1255,7 +1255,7 @@ export default function AdminDashboard() {
                         </div>
                         <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
                           <span className="text-sm text-gray-600 font-medium">Package</span>
-                          <span className="text-sm font-bold text-gray-800">{packageOptions.find(p => p.value === subPackage)?.label}</span>
+                          <span className="text-sm font-bold text-gray-800">{MATRIMONY_PACKAGES.flatMap(c => c.options).find(p => p.value === subPackage)?.label} — {MATRIMONY_PACKAGES.find(c => c.options.some(o => o.value === subPackage))?.category}</span>
                         </div>
                         <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
                           <span className="text-sm text-gray-600 font-medium">Amount Paid</span>
