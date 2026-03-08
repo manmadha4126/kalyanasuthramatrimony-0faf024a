@@ -527,21 +527,43 @@ export default function CustomerDashboard() {
               <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1 flex items-center gap-2">
                 <Heart size={22} style={{ color: themeAccent }} className="fill-current" /> My Interests
               </h1>
-              <p className="text-sm text-gray-500 mb-6">Profiles you've shown interest in</p>
+              <p className="text-sm text-gray-500 mb-4">Manage your sent and received interests</p>
+
+              {/* Tabs */}
+              <div className="flex gap-2 mb-6">
+                <button onClick={() => setInterestTab("sent")} className="px-5 py-2 rounded-xl text-sm font-bold transition-all" style={interestTab === "sent" ? { background: themeAccent, color: "white" } : { background: themeLight, color: themeDark }}>
+                  Sent Interests ({interests.length})
+                </button>
+                <button onClick={() => setInterestTab("received")} className="px-5 py-2 rounded-xl text-sm font-bold transition-all" style={interestTab === "received" ? { background: themeAccent, color: "white" } : { background: themeLight, color: themeDark }}>
+                  Received Interests ({receivedInterests.length})
+                </button>
+              </div>
+
               {interestsLoading ?
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {[...Array(4)].map((_, i) => <div key={i} className="h-72 bg-gray-100 rounded-2xl animate-pulse" />)}
                 </div> :
-            interests.length === 0 ?
-            <div className="text-center py-16 text-gray-400">
-                  <Heart size={40} className="mx-auto mb-3 opacity-30" />
-                  <p className="font-medium">No interests yet</p>
-                  <p className="text-sm mt-1">Browse matches and express interest in profiles you like</p>
-                </div> :
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {interests.map((profile, i) => renderProfileCard(profile, i))}
-                </div>
+            interestTab === "sent" ? (
+              interests.length === 0 ?
+              <div className="text-center py-16 text-gray-400">
+                    <Heart size={40} className="mx-auto mb-3 opacity-30" />
+                    <p className="font-medium">No sent interests yet</p>
+                    <p className="text-sm mt-1">Browse matches and express interest in profiles you like</p>
+                  </div> :
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {interests.map((profile, i) => renderProfileCard(profile, i))}
+                  </div>
+            ) : (
+              receivedInterests.length === 0 ?
+              <div className="text-center py-16 text-gray-400">
+                    <Heart size={40} className="mx-auto mb-3 opacity-30" />
+                    <p className="font-medium">No received interests yet</p>
+                    <p className="text-sm mt-1">When someone shows interest in your profile, it will appear here</p>
+                  </div> :
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {receivedInterests.map((profile, i) => renderProfileCard(profile, i))}
+                  </div>
+            )
             }
             </motion.div>
           }
