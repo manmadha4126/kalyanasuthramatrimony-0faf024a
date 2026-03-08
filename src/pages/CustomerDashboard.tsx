@@ -60,7 +60,9 @@ export default function CustomerDashboard() {
   const [showHeaderDropdown, setShowHeaderDropdown] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [interests, setInterests] = useState<Profile[]>([]);
+  const [receivedInterests, setReceivedInterests] = useState<Profile[]>([]);
   const [interestsLoading, setInterestsLoading] = useState(false);
+  const [interestTab, setInterestTab] = useState<"sent" | "received">("sent");
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
