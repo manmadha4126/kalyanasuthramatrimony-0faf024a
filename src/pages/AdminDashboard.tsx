@@ -1255,7 +1255,14 @@ export default function AdminDashboard() {
                         <button onClick={() => setSubSelectedProfile(null)} className="px-4 py-2.5 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50">Cancel</button>
                       </div>
                     </div>
-                  ) : (
+                  ) : (() => {
+                    const selectedPkg = MATRIMONY_PACKAGES.flatMap(c => c.options).find(p => p.value === subPackage);
+                    const selectedCat = MATRIMONY_PACKAGES.find(c => c.options.some(o => o.value === subPackage))?.category;
+                    const today = new Date();
+                    const validityEnd = new Date(today);
+                    if (selectedPkg) validityEnd.setMonth(validityEnd.getMonth() + selectedPkg.months);
+                    const formatDate = (d: Date) => d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+                    return (
                     <div className="p-6 space-y-5">
                       <h4 className="text-base font-bold text-gray-800 flex items-center gap-2"><CreditCard size={18} /> Subscription Summary</h4>
                       <div className="rounded-xl p-5 space-y-3" style={{ background: "hsl(280, 65%, 97%)", border: "1px solid hsl(280, 65%, 90%)" }}>
@@ -1265,11 +1272,19 @@ export default function AdminDashboard() {
                         </div>
                         <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
                           <span className="text-sm text-gray-600 font-medium">Package</span>
-                          <span className="text-sm font-bold text-gray-800">{MATRIMONY_PACKAGES.flatMap(c => c.options).find(p => p.value === subPackage)?.label} — {MATRIMONY_PACKAGES.find(c => c.options.some(o => o.value === subPackage))?.category}</span>
+                          <span className="text-sm font-bold text-gray-800">{selectedPkg?.label} — {selectedCat}</span>
                         </div>
                         <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
                           <span className="text-sm text-gray-600 font-medium">Amount Paid</span>
                           <span className="text-sm font-bold text-gray-800">₹{subAmount}</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
+                          <span className="text-sm text-gray-600 font-medium">Validity</span>
+                          <span className="text-sm font-bold text-gray-800">{formatDate(today)} → {formatDate(validityEnd)}</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
+                          <span className="text-sm text-gray-600 font-medium">Duration</span>
+                          <span className="text-sm font-bold" style={{ color: "hsl(280, 65%, 50%)" }}>{selectedPkg?.months} Month{(selectedPkg?.months || 0) > 1 ? "s" : ""}</span>
                         </div>
                         {subNotes && (
                           <div className="flex justify-between py-2 border-b" style={{ borderColor: "hsl(280, 65%, 90%)" }}>
@@ -1305,7 +1320,8 @@ export default function AdminDashboard() {
                         <button onClick={() => setSubShowSummary(false)} className="px-4 py-2.5 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50">Back</button>
                       </div>
                     </div>
-                  )}
+                    );
+                  })()}
                 </motion.div>
               )}
             </div>
