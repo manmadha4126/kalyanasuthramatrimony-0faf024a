@@ -1473,6 +1473,7 @@ export default function AdminDashboard() {
                             }}>
                               {isCompleted ? "✓ Done" : isNotCompleted ? "✗ Not Done" : interest.interest_type === "shortlist" ? "⭐ Shortlist" : "❤️ Interest"}
                             </span>
+                            <div className="w-px h-6 bg-gray-200 flex-shrink-0" />
                             {fromPhone ? (
                               <a href={`https://wa.me/${fromPhone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi ${fromName}, you shortlisted the profile of ${toName}. Would you like more details about this profile? We can help you connect. - Kalyanasuthra Matrimony`)}`}
                                 target="_blank" rel="noopener noreferrer"
