@@ -155,7 +155,7 @@ const ServicesSection = () => {
         <motion.div
           className="max-w-3xl mx-auto text-center rounded-2xl py-8 px-8 shadow-2xl relative overflow-hidden"
           style={{
-            background: "linear-gradient(135deg, hsl(348, 56%, 22%) 0%, hsl(348, 50%, 30%) 50%, hsl(348, 56%, 22%) 100%)",
+            background: "linear-gradient(135deg, hsl(220, 60%, 10%) 0%, hsl(240, 50%, 18%) 50%, hsl(210, 55%, 12%) 100%)",
             border: "2px solid hsl(var(--gold-accent) / 0.5)",
             boxShadow: "0 20px 60px -15px rgba(0,0,0,0.5)",
           }}
