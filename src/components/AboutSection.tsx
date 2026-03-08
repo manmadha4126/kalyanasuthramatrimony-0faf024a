@@ -195,7 +195,7 @@ const AboutSection = () => {
         <div className="container mx-auto px-4">
           <motion.h3
             className="text-center text-3xl md:text-4xl font-bold mb-12"
-            style={{ fontFamily: "'Pinyon Script', cursive", color: "hsl(var(--primary))" }}
+            style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--primary))", letterSpacing: "1px" }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
