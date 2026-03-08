@@ -1467,11 +1467,11 @@ export default function AdminDashboard() {
                               <p className="text-sm font-bold text-gray-800 truncate">{fromName} → {toName}</p>
                               <p className="text-xs text-gray-500">{new Date(interest.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</p>
                             </div>
-                            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold flex-shrink-0" style={{
+                            <span className="px-3 py-1.5 rounded-full text-xs font-bold flex-shrink-0" style={{
                               background: isCompleted ? "hsl(145, 60%, 90%)" : isNotCompleted ? "hsl(0, 60%, 90%)" : interest.interest_type === "shortlist" ? "hsl(38, 90%, 93%)" : "hsl(340, 65%, 93%)",
-                              color: isCompleted ? "hsl(145, 60%, 30%)" : isNotCompleted ? "hsl(0, 60%, 30%)" : interest.interest_type === "shortlist" ? "hsl(38, 90%, 35%)" : "hsl(340, 65%, 40%)"
+                              color: isCompleted ? "hsl(145, 60%, 25%)" : isNotCompleted ? "hsl(0, 60%, 25%)" : interest.interest_type === "shortlist" ? "hsl(38, 90%, 35%)" : "hsl(340, 65%, 40%)"
                             }}>
-                              {isCompleted ? "✓ Done" : isNotCompleted ? "✗ Not Done" : interest.interest_type === "shortlist" ? "⭐ Shortlist" : "❤️ Interest"}
+                              {isCompleted ? "✓ Completed" : isNotCompleted ? "✗ Not Completed" : interest.interest_type === "shortlist" ? "⭐ Shortlisted" : "❤️ Interested"}
                             </span>
                             <div className="w-px h-6 bg-gray-200 flex-shrink-0" />
                             {fromPhone ? (
