@@ -1400,97 +1400,179 @@ export default function AdminDashboard() {
           )}
 
           {/* Interests */}
-          {tab === "Interests" && (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-bold text-gray-800">Profile Interests ({interests.length})</h3>
-              </div>
-              <div className="p-4">
-                {interests.length === 0 ? (
-                  <div className="text-center py-10 text-gray-400">No interests recorded yet</div>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="text-sm text-gray-400 uppercase tracking-wider">
-                          <th className="text-left py-3 px-4 font-semibold">From User</th>
-                          <th className="text-left py-3 px-4 font-semibold">Interested In</th>
-                          <th className="text-left py-3 px-4 font-semibold">Type</th>
-                          <th className="text-left py-3 px-4 font-semibold">Date</th>
-                          <th className="text-left py-3 px-4 font-semibold">Contact</th>
-                          <th className="text-left py-3 px-4 font-semibold">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-50">
-                        {interests.map((interest: any) => {
-                          const fromName = interest.from_profile?.full_name || interest.from_user_id?.slice(0, 8) + "...";
-                          const fromPhone = interest.from_profile?.phone || "";
-                          const toName = interest.profiles?.full_name || "Unknown";
-                          const whatsappMsg = encodeURIComponent(`Hi ${fromName}, you shortlisted the profile of ${toName}. Would you like more details about this profile? We can help you connect. - Kalyanasuthra Matrimony`);
-                          const whatsappLink = fromPhone ? `https://wa.me/${fromPhone.replace(/[^0-9]/g, "")}?text=${whatsappMsg}` : "";
-                          return (
-                          <tr key={interest.id} className="hover:bg-gray-50 transition-colors">
-                            <td className="py-4 px-4 text-sm text-gray-800 font-medium">{fromName}</td>
-                            <td className="py-4 px-4">
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                                  {interest.profiles?.profile_photo_url ? (
-                                    <img src={interest.profiles.profile_photo_url} alt="" className="w-full h-full object-cover" />
-                                  ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-xs font-bold text-gray-400">{interest.profiles?.full_name?.[0] || "?"}</div>
-                                  )}
-                                </div>
-                                <div>
-                                  <p className="text-sm font-semibold text-gray-800">{toName}</p>
-                                  <p className="text-xs text-gray-500">{interest.profiles?.city || "—"} • {interest.profiles?.gender || "—"}</p>
-                                </div>
+          {tab === "Interests" && (() => {
+            const interestSearch = searchQuery.toLowerCase();
+            const filteredInterests = interests.filter((interest: any) => {
+              const fromName = interest.from_profile?.full_name || "";
+              const toName = interest.profiles?.full_name || "";
+              const fromPhone = interest.from_profile?.phone || "";
+              return fromName.toLowerCase().includes(interestSearch) || toName.toLowerCase().includes(interestSearch) || fromPhone.includes(interestSearch);
+            });
+            return (
+            <div className="space-y-4">
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <h3 className="text-lg font-bold text-gray-800">Profile Interests ({filteredInterests.length})</h3>
+                  <div className="relative w-full sm:w-72">
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search by name or phone..."
+                      className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                  </div>
+                </div>
+                <div className="p-4">
+                  {filteredInterests.length === 0 ? (
+                    <div className="text-center py-10 text-gray-400">No interests found</div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                      {filteredInterests.map((interest: any) => {
+                        const fromName = interest.from_profile?.full_name || interest.from_user_id?.slice(0, 8) + "...";
+                        const fromPhone = interest.from_profile?.phone || "";
+                        const toName = interest.profiles?.full_name || "Unknown";
+                        const isCompleted = interest.interest_type === "completed";
+                        const isNotCompleted = interest.interest_type === "not_completed";
+                        return (
+                          <motion.div key={interest.id}
+                            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                            className="rounded-xl border border-gray-200 p-4 cursor-pointer hover:shadow-md transition-all"
+                            style={{ background: isCompleted ? "hsl(145, 50%, 97%)" : isNotCompleted ? "hsl(0, 50%, 97%)" : "hsl(0, 0%, 100%)" }}
+                            onClick={() => setSelectedProfile({ ...interest, _isInterestDetail: true } as any)}
+                          >
+                            <div className="flex items-start gap-3 mb-3">
+                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                                {interest.profiles?.profile_photo_url ? (
+                                  <img src={interest.profiles.profile_photo_url} alt="" className="w-full h-full object-cover" />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-sm font-bold text-gray-400">{interest.profiles?.full_name?.[0] || "?"}</div>
+                                )}
                               </div>
-                            </td>
-                            <td className="py-4 px-4">
-                              <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: interest.interest_type === "shortlist" ? "hsl(38, 90%, 93%)" : "hsl(340, 65%, 93%)", color: interest.interest_type === "shortlist" ? "hsl(38, 90%, 35%)" : "hsl(340, 65%, 40%)" }}>
-                                {interest.interest_type === "shortlist" ? "⭐ Shortlisted" : "❤️ Interested"}
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-bold text-gray-800 truncate">{fromName} → {toName}</p>
+                                <p className="text-xs text-gray-500">{new Date(interest.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</p>
+                              </div>
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold flex-shrink-0" style={{
+                                background: isCompleted ? "hsl(145, 60%, 90%)" : isNotCompleted ? "hsl(0, 60%, 90%)" : interest.interest_type === "shortlist" ? "hsl(38, 90%, 93%)" : "hsl(340, 65%, 93%)",
+                                color: isCompleted ? "hsl(145, 60%, 30%)" : isNotCompleted ? "hsl(0, 60%, 30%)" : interest.interest_type === "shortlist" ? "hsl(38, 90%, 35%)" : "hsl(340, 65%, 40%)"
+                              }}>
+                                {isCompleted ? "✓ Done" : isNotCompleted ? "✗ Not Done" : interest.interest_type === "shortlist" ? "⭐ Shortlist" : "❤️ Interest"}
                               </span>
-                            </td>
-                            <td className="py-4 px-4 text-sm text-gray-500">{new Date(interest.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</td>
-                            <td className="py-4 px-4">
+                            </div>
+                            <div className="flex items-center gap-2 mb-3">
                               {fromPhone ? (
-                                <a href={whatsappLink} target="_blank" rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-80"
+                                <a href={`https://wa.me/${fromPhone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi ${fromName}, you shortlisted the profile of ${toName}. Would you like more details about this profile? We can help you connect. - Kalyanasuthra Matrimony`)}`}
+                                  target="_blank" rel="noopener noreferrer"
+                                  onClick={e => e.stopPropagation()}
+                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold"
                                   style={{ background: "hsl(142, 70%, 93%)", color: "hsl(142, 70%, 30%)" }}>
                                   📱 {fromPhone}
                                 </a>
-                              ) : (
-                                <span className="text-xs text-gray-400">No phone</span>
-                              )}
-                            </td>
-                            <td className="py-4 px-4">
-                              {interest.interest_type === "completed" ? (
-                                <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: "hsl(145, 60%, 92%)", color: "hsl(145, 60%, 30%)" }}>✓ Completed</span>
-                              ) : (
-                                <button
-                                  onClick={async () => {
-                                    const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" }).eq("id", interest.id);
-                                    if (!error) {
-                                      setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i));
-                                      toast({ title: "Marked as completed!" });
-                                    }
-                                  }}
-                                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-80"
-                                  style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>
-                                  Mark Completed
+                              ) : <span className="text-xs text-gray-400">No phone</span>}
+                            </div>
+                            <div className="flex items-center gap-2 flex-wrap" onClick={e => e.stopPropagation()}>
+                              {!isCompleted && (
+                                <button onClick={async () => {
+                                  const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" } as any).eq("id", interest.id);
+                                  if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); toast({ title: "Marked as completed!" }); }
+                                }} className="px-2.5 py-1 rounded-lg text-xs font-semibold" style={{ background: "hsl(145, 65%, 92%)", color: "hsl(145, 65%, 30%)" }}>
+                                  ✓ Completed
                                 </button>
                               )}
-                            </td>
-                          </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
+                              {!isNotCompleted && (
+                                <button onClick={async () => {
+                                  const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" } as any).eq("id", interest.id);
+                                  if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); toast({ title: "Marked as not completed!" }); }
+                                }} className="px-2.5 py-1 rounded-lg text-xs font-semibold" style={{ background: "hsl(0, 65%, 93%)", color: "hsl(0, 65%, 35%)" }}>
+                                  ✗ Not Completed
+                                </button>
+                              )}
+                            </div>
+                            {interest.admin_notes && (
+                              <div className="mt-2 text-xs text-gray-500 italic border-t border-gray-100 pt-2">📝 {interest.admin_notes}</div>
+                            )}
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
+
+              {/* Interest Detail Modal */}
+              {selectedProfile && (selectedProfile as any)._isInterestDetail && (() => {
+                const interest = selectedProfile as any;
+                const fromName = interest.from_profile?.full_name || interest.from_user_id?.slice(0, 8) + "...";
+                const fromPhone = interest.from_profile?.phone || "";
+                const toName = interest.profiles?.full_name || "Unknown";
+                const [noteText, setNoteText] = useState(interest.admin_notes || "");
+                const [savingNote, setSavingNote] = useState(false);
+                return (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(0, 0%, 0%, 0.5)" }}>
+                    <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto">
+                      <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                        <h3 className="text-lg font-bold text-gray-800">Interest Details</h3>
+                        <button onClick={() => setSelectedProfile(null)} className="p-2 rounded-lg hover:bg-gray-100"><X size={18} /></button>
+                      </div>
+                      <div className="p-6 space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="rounded-xl p-4 border border-gray-200" style={{ background: "hsl(210, 50%, 97%)" }}>
+                            <p className="text-xs font-semibold text-gray-500 mb-1">From User</p>
+                            <p className="text-sm font-bold text-gray-800">{fromName}</p>
+                            {fromPhone && <p className="text-xs text-gray-500 mt-1">📱 {fromPhone}</p>}
+                          </div>
+                          <div className="rounded-xl p-4 border border-gray-200" style={{ background: "hsl(340, 50%, 97%)" }}>
+                            <p className="text-xs font-semibold text-gray-500 mb-1">Interested In</p>
+                            <p className="text-sm font-bold text-gray-800">{toName}</p>
+                            <p className="text-xs text-gray-500 mt-1">{interest.profiles?.city || "—"} • {interest.profiles?.gender || "—"}</p>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="rounded-xl p-4 border border-gray-200">
+                            <p className="text-xs font-semibold text-gray-500 mb-1">Interest Type</p>
+                            <p className="text-sm font-bold text-gray-800">{interest.interest_type === "shortlist" ? "⭐ Shortlisted" : interest.interest_type === "completed" ? "✓ Completed" : interest.interest_type === "not_completed" ? "✗ Not Completed" : "❤️ Interested"}</p>
+                          </div>
+                          <div className="rounded-xl p-4 border border-gray-200">
+                            <p className="text-xs font-semibold text-gray-500 mb-1">Date</p>
+                            <p className="text-sm font-bold text-gray-800">{new Date(interest.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</p>
+                          </div>
+                        </div>
+                        {fromPhone && (
+                          <a href={`https://wa.me/${fromPhone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi ${fromName}, you shortlisted the profile of ${toName}. Would you like more details about this profile? We can help you connect. - Kalyanasuthra Matrimony`)}`}
+                            target="_blank" rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold transition-all hover:opacity-90"
+                            style={{ background: "hsl(142, 65%, 42%)", color: "white" }}>
+                            📱 Contact on WhatsApp
+                          </a>
+                        )}
+                        <div className="flex gap-2">
+                          <button onClick={async () => {
+                            const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" } as any).eq("id", interest.id);
+                            if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); setSelectedProfile(null); toast({ title: "Marked as completed!" }); }
+                          }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 42%)" }}>✓ Completed</button>
+                          <button onClick={async () => {
+                            const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" } as any).eq("id", interest.id);
+                            if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); setSelectedProfile(null); toast({ title: "Marked as not completed!" }); }
+                          }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(0, 55%, 50%)" }}>✗ Not Completed</button>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-600 mb-1.5">📝 Admin Note</label>
+                          <textarea value={noteText} onChange={e => setNoteText(e.target.value)} placeholder="Add a note about this interest..." rows={3}
+                            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                          <button disabled={savingNote} onClick={async () => {
+                            setSavingNote(true);
+                            const { error } = await supabase.from("profile_interests").update({ admin_notes: noteText } as any).eq("id", interest.id);
+                            if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, admin_notes: noteText } : i)); toast({ title: "Note saved!" }); }
+                            setSavingNote(false);
+                          }} className="mt-2 px-5 py-2 rounded-xl text-xs font-bold text-white disabled:opacity-60" style={{ background: "hsl(210, 80%, 50%)" }}>
+                            {savingNote ? "Saving..." : "Save Note"}
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                );
+              })()}
             </div>
-          )}
+            );
+          })()}
         </div>
       </div>
     </div>
