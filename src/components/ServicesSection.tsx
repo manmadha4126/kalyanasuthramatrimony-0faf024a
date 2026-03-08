@@ -98,9 +98,9 @@ const ServicesSection = () => {
             const visiblePlans = selected ? pkg.plans.filter((p) => p.key === selected) : pkg.plans;
             if (selected && visiblePlans.length === 0) return null;
             const cardColors = [
-              { bg: "hsl(200, 60%, 96%)", border: "hsl(200, 50%, 85%)", accent: "hsl(200, 55%, 40%)", dot: "hsl(200, 55%, 45%)" },
-              { bg: "hsl(160, 50%, 95%)", border: "hsl(160, 40%, 80%)", accent: "hsl(160, 35%, 38%)", dot: "hsl(160, 35%, 38%)" },
-              { bg: "hsl(270, 45%, 96%)", border: "hsl(270, 35%, 86%)", accent: "hsl(270, 40%, 45%)", dot: "hsl(270, 40%, 50%)" },
+              { bg: "hsl(200, 65%, 93%)", border: "hsl(200, 55%, 80%)", accent: "hsl(200, 55%, 35%)", dot: "hsl(200, 55%, 40%)" },
+              { bg: "hsl(160, 55%, 92%)", border: "hsl(160, 45%, 76%)", accent: "hsl(160, 40%, 32%)", dot: "hsl(160, 40%, 35%)" },
+              { bg: "hsl(270, 50%, 93%)", border: "hsl(270, 40%, 82%)", accent: "hsl(270, 45%, 40%)", dot: "hsl(270, 45%, 45%)" },
             ][pi];
             return (
               <motion.div
@@ -118,13 +118,13 @@ const ServicesSection = () => {
                   </div>
                 )}
 
-                <h3 className="text-lg font-bold mb-3" style={{ color: "hsl(220, 50%, 15%)", fontFamily: "'DM Serif Display', serif" }}>{pkg.title}</h3>
+                <h3 className="text-lg font-bold mb-3" style={{ color: "hsl(220, 50%, 15%)", fontFamily: "system-ui, sans-serif" }}>{pkg.title}</h3>
 
                 <div className="space-y-0.5 mb-4">
                   {visiblePlans.map((plan, i) => (
                     <div key={i} className="flex items-baseline gap-2">
-                      <span className="text-xl font-bold" style={{ color: cardColors.accent, fontFamily: "'Georgia', serif" }}>{plan.price}</span>
-                      <span className="text-xs" style={{ color: "hsl(220, 15%, 50%)" }}>/ {plan.duration}</span>
+                      <span className="text-xl font-bold" style={{ color: cardColors.accent, fontFamily: "system-ui, sans-serif" }}>{plan.price}</span>
+                      <span className="text-xs" style={{ color: "hsl(220, 15%, 50%)", fontFamily: "system-ui, sans-serif" }}>/ {plan.duration}</span>
                     </div>
                   ))}
                 </div>
