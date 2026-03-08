@@ -287,7 +287,7 @@ export default function ProfileDetail() {
             {/* Partner Expectations */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <SectionHeading icon={Heart} label="Partner Expectations" bgColor="hsl(348, 50%, 92%)" textColor="hsl(348, 50%, 35%)" />
-              <p className={`text-sm leading-relaxed ${profile.partner_expectations ? "text-gray-700" : "text-gray-300"}`}>{profile.partner_expectations || "—"}</p>
+              <p className={`text-[15px] leading-relaxed ${profile.partner_expectations ? "text-gray-800" : "text-gray-400"}`}>{profile.partner_expectations || "—"}</p>
             </div>
           </motion.div>
         </div>
