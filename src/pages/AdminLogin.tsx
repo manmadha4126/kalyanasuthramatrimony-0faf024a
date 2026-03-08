@@ -69,13 +69,14 @@ export default function AdminLogin() {
 
 
   return (
-    <div className="min-h-screen flex" style={{ background: "linear-gradient(145deg, hsl(180, 65%, 42%) 0%, hsl(175, 55%, 48%) 50%, hsl(185, 60%, 40%) 100%)" }}>
+    <div className="min-h-screen flex" style={{ background: "linear-gradient(145deg, hsl(220, 60%, 18%) 0%, hsl(240, 50%, 22%) 40%, hsl(260, 45%, 28%) 100%)" }}>
       {/* Left Panel */}
       <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="hidden lg:flex flex-col items-start justify-center w-1/2 px-14 py-10 relative overflow-hidden">
         {/* Decorative circles */}
-        <div className="absolute top-10 right-10 w-72 h-72 rounded-full opacity-8" style={{ background: "radial-gradient(circle, hsl(42,50%,60% / 0.12), transparent 70%)" }} />
-        <div className="absolute bottom-20 left-0 w-48 h-48 rounded-full opacity-8" style={{ background: "radial-gradient(circle, hsl(200,60%,50% / 0.1), transparent 70%)" }} />
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, white 1px, transparent 0)", backgroundSize: "40px 40px" }} />
+        <div className="absolute top-10 right-10 w-80 h-80 rounded-full" style={{ background: "radial-gradient(circle, hsl(280,60%,60% / 0.15), transparent 70%)" }} />
+        <div className="absolute bottom-16 left-0 w-56 h-56 rounded-full" style={{ background: "radial-gradient(circle, hsl(42,70%,55% / 0.12), transparent 70%)" }} />
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ background: "radial-gradient(circle, hsl(200,60%,50% / 0.08), transparent 70%)" }} />
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, hsl(42,60%,70%) 1px, transparent 0)", backgroundSize: "36px 36px" }} />
 
         <div className="relative z-10 w-full">
           {/* Logo */}
@@ -84,15 +85,15 @@ export default function AdminLogin() {
           </div>
 
           {/* Main heading */}
-          <h1 style={{ fontFamily: "'Kaushan Script', cursive", fontSize: "3rem", lineHeight: "1.2" }} className="text-white mb-3">
-            Welcome to the<br />
-            <span style={{ color: "hsl(42, 50%, 85%)", fontSize: "3.4rem" }}>Admin Portal</span>
+          <h1 style={{ fontFamily: "'Kaushan Script', cursive", fontSize: "3.2rem", lineHeight: "1.2" }} className="mb-3">
+            <span style={{ color: "hsl(42, 80%, 72%)" }}>Welcome to the</span><br />
+            <span style={{ color: "hsl(0, 0%, 100%)", fontSize: "3.6rem", textShadow: "0 2px 20px hsl(260, 50%, 50% / 0.3)" }}>Admin Portal</span>
           </h1>
-          <p className="text-base leading-relaxed max-w-md mb-10 text-violet-950" style={{ fontFamily: "'Open Sans', sans-serif" }}>
+          <p className="text-base leading-relaxed max-w-md mb-10" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(220, 30%, 78%)" }}>
             Managing South India's most trusted matrimonial platform. Every match we make writes a new chapter of love.
           </p>
 
-          {/* Highlights Grid - bigger */}
+          {/* Highlights Grid */}
           <div className="grid grid-cols-2 gap-4">
             {highlights.map((item, i) =>
             <motion.div
@@ -101,12 +102,12 @@ export default function AdminLogin() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + i * 0.08 }}
               className="flex items-start gap-3.5 p-4 rounded-xl"
-              style={{ background: "hsl(0, 0%, 100% / 0.06)", border: "1px solid hsl(0, 0%, 100% / 0.08)" }}>
+              style={{ background: "hsl(0, 0%, 100% / 0.07)", border: "1px solid hsl(0, 0%, 100% / 0.1)", backdropFilter: "blur(8px)" }}>
               
                 <span className="text-2xl flex-shrink-0">{item.icon}</span>
                 <div>
-                  <p className="text-white font-semibold text-sm" style={{ fontFamily: "'Open Sans', sans-serif" }}>{item.label}</p>
-                  <p className="mt-1 leading-snug text-popover-foreground text-base font-normal" style={{ fontFamily: "'Open Sans', sans-serif" }}>{item.desc}</p>
+                  <p className="font-semibold text-sm" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(42, 75%, 75%)" }}>{item.label}</p>
+                  <p className="mt-1 leading-snug text-xs font-normal" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(220, 20%, 72%)" }}>{item.desc}</p>
                 </div>
               </motion.div>
             )}
@@ -114,8 +115,8 @@ export default function AdminLogin() {
 
           {/* Bottom quote */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="mt-10 flex items-center gap-2">
-            <Heart size={14} style={{ color: "hsl(42, 50%, 60%)" }} className="fill-current" />
-            <span className="text-white/40 text-xs" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}>
+            <Heart size={14} style={{ color: "hsl(42, 70%, 65%)" }} className="fill-current" />
+            <span className="text-xs" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", color: "hsl(260, 30%, 65%)" }}>
               "Where tradition meets technology in every match"
             </span>
           </motion.div>
