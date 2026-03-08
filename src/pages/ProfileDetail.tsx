@@ -257,12 +257,32 @@ export default function ProfileDetail() {
 
             {/* Contact Details - Gated */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <SectionHeading icon={Phone} label="Contact Details" bgColor="hsl(38, 70%, 90%)" textColor="hsl(38, 60%, 30%)" />
-              {userSubscription === "assisted" ? (
+              <div className="flex items-center justify-between gap-2 px-4 py-3.5 rounded-t-2xl -mx-5 -mt-5 sm:-mx-6 sm:-mt-6 mb-4" style={{ background: "hsl(38, 70%, 90%)" }}>
+                <div className="flex items-center gap-2.5">
+                  <Phone size={18} style={{ color: "hsl(38, 60%, 30%)" }} />
+                  <h3 className="font-bold text-[15px]" style={{ color: "hsl(38, 60%, 30%)", fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>Contact Details</h3>
+                </div>
+                {userSubscription === "assisted" && !contactRevealed && (
+                  <button onClick={() => revealDetails("contact")} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105" style={{ background: "hsl(38, 60%, 40%)" }}>
+                    <Eye size={13} /> View Contact Details
+                  </button>
+                )}
+                {userSubscription === "assisted" && contactRevealed && (
+                  <span className="text-xs font-semibold px-2 py-1 rounded-lg" style={{ background: "hsl(38, 90%, 96%)", color: "hsl(38, 60%, 35%)" }}>
+                    {contactViewCount} profile{contactViewCount !== 1 ? "s" : ""} viewed
+                  </span>
+                )}
+              </div>
+              {userSubscription === "assisted" && contactRevealed ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
                   <InfoRow label="Phone" value={profile.phone} />
                   <InfoRow label="Email" value={profile.email} />
                   <InfoRow label="WhatsApp" value={profile.whatsapp} />
+                </div>
+              ) : userSubscription === "assisted" && !contactRevealed ? (
+                <div className="text-center py-6 rounded-xl" style={{ background: "hsl(38, 90%, 96%)" }}>
+                  <Eye size={24} className="mx-auto mb-2" style={{ color: "hsl(38, 70%, 45%)" }} />
+                  <p className="text-sm font-semibold" style={{ color: "hsl(38, 70%, 35%)" }}>Click "View Contact Details" above to reveal</p>
                 </div>
               ) : (
                 <div className="text-center py-6 rounded-xl" style={{ background: "hsl(38, 90%, 96%)" }}>
@@ -276,16 +296,47 @@ export default function ProfileDetail() {
               )}
             </div>
 
-            {/* Horoscope Details */}
+            {/* Horoscope Details - Gated */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <SectionHeading icon={Star} label="Horoscope Details" bgColor="hsl(310, 40%, 92%)" textColor="hsl(310, 40%, 35%)" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
-                <InfoRow label="Gothram" value={profile.gothra} />
-                <InfoRow label="Rashi" value={profile.raasi} />
-                <InfoRow label="Star" value={profile.star} />
-                <InfoRow label="Dosham" value={profile.dosham} />
-                <InfoRow label="Horoscope" value={profile.horoscope_url ? "Uploaded" : null} />
+              <div className="flex items-center justify-between gap-2 px-4 py-3.5 rounded-t-2xl -mx-5 -mt-5 sm:-mx-6 sm:-mt-6 mb-4" style={{ background: "hsl(310, 40%, 92%)" }}>
+                <div className="flex items-center gap-2.5">
+                  <Star size={18} style={{ color: "hsl(310, 40%, 35%)" }} />
+                  <h3 className="font-bold text-[15px]" style={{ color: "hsl(310, 40%, 35%)", fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>Horoscope Details</h3>
+                </div>
+                {userSubscription === "assisted" && !horoscopeRevealed && (
+                  <button onClick={() => revealDetails("horoscope")} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105" style={{ background: "hsl(310, 40%, 40%)" }}>
+                    <Eye size={13} /> View Horoscope Details
+                  </button>
+                )}
+                {userSubscription === "assisted" && horoscopeRevealed && (
+                  <span className="text-xs font-semibold px-2 py-1 rounded-lg" style={{ background: "hsl(310, 40%, 96%)", color: "hsl(310, 40%, 35%)" }}>
+                    {horoscopeViewCount} profile{horoscopeViewCount !== 1 ? "s" : ""} viewed
+                  </span>
+                )}
               </div>
+              {userSubscription === "assisted" && horoscopeRevealed ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                  <InfoRow label="Gothram" value={profile.gothra} />
+                  <InfoRow label="Rashi" value={profile.raasi} />
+                  <InfoRow label="Star" value={profile.star} />
+                  <InfoRow label="Dosham" value={profile.dosham} />
+                  <InfoRow label="Horoscope" value={profile.horoscope_url ? "Uploaded" : null} />
+                </div>
+              ) : userSubscription === "assisted" && !horoscopeRevealed ? (
+                <div className="text-center py-6 rounded-xl" style={{ background: "hsl(310, 40%, 96%)" }}>
+                  <Eye size={24} className="mx-auto mb-2" style={{ color: "hsl(310, 40%, 45%)" }} />
+                  <p className="text-sm font-semibold" style={{ color: "hsl(310, 40%, 35%)" }}>Click "View Horoscope Details" above to reveal</p>
+                </div>
+              ) : (
+                <div className="text-center py-6 rounded-xl" style={{ background: "hsl(310, 40%, 96%)" }}>
+                  <Lock size={24} className="mx-auto mb-2" style={{ color: "hsl(310, 40%, 45%)" }} />
+                  <p className="text-sm font-semibold" style={{ color: "hsl(310, 40%, 35%)" }}>Horoscope details are hidden</p>
+                  <p className="text-xs mt-1" style={{ color: "hsl(310, 30%, 50%)" }}>Upgrade to Assisted Matrimony to view horoscope details</p>
+                  <a href="https://wa.me/919553306667?text=Hi%2C%20I%20want%20to%20upgrade%20to%20Assisted%20Matrimony%20services" target="_blank" rel="noopener noreferrer" className="inline-block mt-3 px-5 py-2 rounded-xl text-sm font-semibold text-white" style={{ background: themeAccent }}>
+                    Contact Us to Upgrade
+                  </a>
+                </div>
+              )}
             </div>
 
             {/* Education & Professional Details */}
