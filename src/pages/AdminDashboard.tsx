@@ -1471,7 +1471,7 @@ export default function AdminDashboard() {
                               background: isCompleted ? "hsl(145, 60%, 90%)" : isNotCompleted ? "hsl(0, 60%, 90%)" : interest.interest_type === "shortlist" ? "hsl(38, 90%, 93%)" : "hsl(340, 65%, 93%)",
                               color: isCompleted ? "hsl(145, 60%, 25%)" : isNotCompleted ? "hsl(0, 60%, 25%)" : interest.interest_type === "shortlist" ? "hsl(38, 90%, 35%)" : "hsl(340, 65%, 40%)"
                             }}>
-                              {isCompleted ? "✓ Completed" : isNotCompleted ? "✗ Not Completed" : interest.interest_type === "shortlist" ? "⭐ Shortlisted" : "❤️ Interested"}
+                              {isCompleted ? "Completed" : isNotCompleted ? "Not Completed" : interest.interest_type === "shortlist" ? "Shortlisted" : "Interested"}
                             </span>
                             <div className="w-px h-6 bg-gray-200 flex-shrink-0" />
                             {fromPhone ? (
