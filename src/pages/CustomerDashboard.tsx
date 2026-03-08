@@ -427,7 +427,7 @@ export default function CustomerDashboard() {
               <BackButton to="/" label="Home" />
             </div>
             <nav className="hidden lg:flex items-center gap-1 mx-auto">
-              {["Home", "Matches", "Preferences"].map((item) =>
+              {["Home", "Matches", "Interests", "Preferences"].map((item) =>
               <button key={item} onClick={() => setActiveNav(item)} className="px-4 py-2 rounded-lg text-sm font-semibold transition-all" style={activeNav === item ? { color: themeDark, background: themeLight } : { color: "#888" }}>
                   {item}
                 </button>
