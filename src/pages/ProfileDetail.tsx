@@ -25,18 +25,18 @@ type Profile = {
 };
 
 const InfoRow = ({ label, value }: { label: string; value: string | null | undefined }) => (
-  <div className="flex justify-between py-2.5 border-b border-gray-100 last:border-0">
-    <span className="text-xs text-gray-500 font-medium">{label}</span>
-    <span className={`text-sm font-semibold text-right max-w-[60%] ${value ? "text-gray-800" : "text-gray-300"}`}>
+  <div className="flex justify-between py-3 border-b border-gray-100 last:border-0">
+    <span className="text-sm text-gray-600 font-semibold">{label}</span>
+    <span className={`text-sm font-bold text-right max-w-[60%] ${value ? "text-gray-900" : "text-gray-400"}`}>
       {value || "—"}
     </span>
   </div>
 );
 
 const SectionHeading = ({ icon: Icon, label, bgColor, textColor }: { icon: any; label: string; bgColor: string; textColor: string }) => (
-  <div className="flex items-center gap-2 px-4 py-3 rounded-t-2xl -mx-5 -mt-5 sm:-mx-6 sm:-mt-6 mb-4" style={{ background: bgColor }}>
-    <Icon size={17} style={{ color: textColor }} />
-    <h3 className="font-bold text-base" style={{ color: textColor, fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>{label}</h3>
+  <div className="flex items-center gap-2.5 px-4 py-3.5 rounded-t-2xl -mx-5 -mt-5 sm:-mx-6 sm:-mt-6 mb-4" style={{ background: bgColor }}>
+    <Icon size={18} style={{ color: textColor }} />
+    <h3 className="font-bold text-[15px]" style={{ color: textColor, fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>{label}</h3>
   </div>
 );
 
