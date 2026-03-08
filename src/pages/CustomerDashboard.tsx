@@ -95,6 +95,25 @@ export default function CustomerDashboard() {
     if (pData) setUserProfile(pData as UserProfileFull);
     fetchMatches(pData?.gender || "Male");
     fetchInterests(user.id);
+    fetchNotifications(user.id);
+  };
+
+  const fetchNotifications = async (uid: string) => {
+    const { data } = await supabase.from("notifications").select("*").eq("user_id", uid).order("created_at", { ascending: false }).limit(20);
+    if (data) setNotifications(data as Notification[]);
+  };
+
+  const markNotifRead = async (id: string) => {
+    await supabase.from("notifications").update({ is_read: true }).eq("id", id);
+    setNotifications((prev) => prev.map((n) => n.id === id ? { ...n, is_read: true } : n));
+  };
+
+  const markAllRead = async () => {
+    if (!userId) return;
+    const unreadIds = notifications.filter(n => !n.is_read).map(n => n.id);
+    if (unreadIds.length === 0) return;
+    await supabase.from("notifications").update({ is_read: true }).in("id", unreadIds);
+    setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
   };
 
   const fetchMatches = async (userGender: string) => {
