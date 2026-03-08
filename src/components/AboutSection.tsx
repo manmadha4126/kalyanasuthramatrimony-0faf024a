@@ -82,7 +82,8 @@ const AboutSection = () => {
 
           {/* Text content - right side */}
           <motion.div
-            className="lg:w-[58%] bg-background rounded-2xl shadow-lg p-8 md:p-10 lg:pl-14 flex flex-col justify-center relative z-0"
+            className="lg:w-[58%] rounded-2xl shadow-lg p-8 md:p-10 lg:pl-14 flex flex-col justify-center relative z-0"
+            style={{ background: "hsl(140, 30%, 82%)" }}
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
