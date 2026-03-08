@@ -1500,19 +1500,17 @@ export default function AdminDashboard() {
               </div>
 
               {/* Interest Detail Modal */}
-              {selectedProfile && (selectedProfile as any)._isInterestDetail && (() => {
-                const interest = selectedProfile as any;
+              {selectedInterest && (() => {
+                const interest = selectedInterest;
                 const fromName = interest.from_profile?.full_name || interest.from_user_id?.slice(0, 8) + "...";
                 const fromPhone = interest.from_profile?.phone || "";
                 const toName = interest.profiles?.full_name || "Unknown";
-                const [noteText, setNoteText] = useState(interest.admin_notes || "");
-                const [savingNote, setSavingNote] = useState(false);
                 return (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsla(0, 0%, 0%, 0.5)" }}>
                     <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto">
                       <div className="p-6 border-b border-gray-100 flex items-center justify-between">
                         <h3 className="text-lg font-bold text-gray-800">Interest Details</h3>
-                        <button onClick={() => setSelectedProfile(null)} className="p-2 rounded-lg hover:bg-gray-100"><X size={18} /></button>
+                        <button onClick={() => setSelectedInterest(null)} className="p-2 rounded-lg hover:bg-gray-100"><X size={18} /></button>
                       </div>
                       <div className="p-6 space-y-4">
                         <div className="grid grid-cols-2 gap-4">
@@ -1548,24 +1546,24 @@ export default function AdminDashboard() {
                         <div className="flex gap-2">
                           <button onClick={async () => {
                             const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" } as any).eq("id", interest.id);
-                            if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); setSelectedProfile(null); toast({ title: "Marked as completed!" }); }
+                            if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); setSelectedInterest(null); toast({ title: "Marked as completed!" }); }
                           }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 42%)" }}>✓ Completed</button>
                           <button onClick={async () => {
                             const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" } as any).eq("id", interest.id);
-                            if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); setSelectedProfile(null); toast({ title: "Marked as not completed!" }); }
+                            if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); setSelectedInterest(null); toast({ title: "Marked as not completed!" }); }
                           }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(0, 55%, 50%)" }}>✗ Not Completed</button>
                         </div>
                         <div>
                           <label className="block text-sm font-semibold text-gray-600 mb-1.5">📝 Admin Note</label>
-                          <textarea value={noteText} onChange={e => setNoteText(e.target.value)} placeholder="Add a note about this interest..." rows={3}
+                          <textarea value={interestNoteText} onChange={e => setInterestNoteText(e.target.value)} placeholder="Add a note about this interest..." rows={3}
                             className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
-                          <button disabled={savingNote} onClick={async () => {
-                            setSavingNote(true);
-                            const { error } = await supabase.from("profile_interests").update({ admin_notes: noteText } as any).eq("id", interest.id);
-                            if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, admin_notes: noteText } : i)); toast({ title: "Note saved!" }); }
-                            setSavingNote(false);
+                          <button disabled={savingInterestNote} onClick={async () => {
+                            setSavingInterestNote(true);
+                            const { error } = await supabase.from("profile_interests").update({ admin_notes: interestNoteText } as any).eq("id", interest.id);
+                            if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, admin_notes: interestNoteText } : i)); toast({ title: "Note saved!" }); }
+                            setSavingInterestNote(false);
                           }} className="mt-2 px-5 py-2 rounded-xl text-xs font-bold text-white disabled:opacity-60" style={{ background: "hsl(210, 80%, 50%)" }}>
-                            {savingNote ? "Saving..." : "Save Note"}
+                            {savingInterestNote ? "Saving..." : "Save Note"}
                           </button>
                         </div>
                       </div>
