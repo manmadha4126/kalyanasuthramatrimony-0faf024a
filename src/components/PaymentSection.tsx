@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Phone, Mail, ChevronDown, ChevronUp, User } from "lucide-react";
 import paymentBg from "@/assets/payment-bg-new.jpg";
-import scannerImg from "@/assets/phonepe-scanner.jpeg";
+import scannerImg from "@/assets/phonepe-qr-new.jpeg";
 
 const owners = [
   { name: "Sai", phone: "9553306667", email: "info@kalyanasuthramatrimony.com" },
@@ -24,25 +24,25 @@ const PaymentSection = () => {
           <div className="h-[2px] w-20 mx-auto" style={{ background: "hsl(var(--gold-accent))" }} />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
           {/* QR Scanner */}
           <motion.div
             className="flex flex-col items-center justify-center rounded-2xl p-6"
             style={{ background: "hsla(0,0%,100%,0.95)", border: "1px solid hsl(var(--gold-accent) / 0.4)" }}
             initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
           >
-            <img src={scannerImg} alt="Kalyanasuthra PhonePe QR" className="w-72 h-auto rounded-xl shadow-md mb-4" />
+            <img src={scannerImg} alt="Kalyanasuthra PhonePe QR" className="w-64 h-auto rounded-xl shadow-md mb-4" />
             <p className="text-base font-semibold text-muted-foreground">Scan & Pay with PhonePe / UPI / Cards</p>
           </motion.div>
 
           {/* Bank Details */}
           <motion.div
-            className="rounded-2xl p-7"
+            className="rounded-2xl p-7 flex flex-col justify-center"
             style={{ background: "hsla(0,0%,100%,0.95)", border: "1px solid hsl(var(--gold-accent) / 0.4)" }}
             initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
           >
             <h3 className="text-xl font-extrabold mb-5" style={{ color: "hsl(var(--burgundy))", fontFamily: "'DM Serif Display', serif" }}>Bank Details</h3>
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {[
                 ["Account Name", "Kalyanasuthra Matrimony"],
                 ["Bank", "HDFC Bank"],
@@ -51,7 +51,7 @@ const PaymentSection = () => {
                 ["IFSC", "HDFC0007817"],
                 ["Account Type", "Current Account"],
               ].map(([label, value]) => (
-                <div key={label} className="flex justify-between py-2.5 border-b border-border last:border-0">
+                <div key={label} className="flex justify-between py-2 border-b border-border last:border-0">
                   <span className="text-base font-extrabold text-foreground">{label}</span>
                   <span className="text-base font-medium text-muted-foreground text-right">{value}</span>
                 </div>
