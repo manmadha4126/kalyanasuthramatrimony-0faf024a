@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, ChevronDown, X, BookHeart, CheckCircle, Edit, Eye, HelpCircle, Phone, User, ArrowLeft, MessageCircle, MapPin, Clock, Filter, XCircle } from "lucide-react";
+import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, ChevronDown, X, BookHeart, CheckCircle, Edit, Eye, HelpCircle, Phone, User, ArrowLeft, MessageCircle, MapPin, Clock, Filter, XCircle, BellRing } from "lucide-react";
 import BackButton from "@/components/BackButton";
 
 type Profile = {
@@ -18,14 +18,22 @@ type UserProfileFull = {
   profile_photo_url: string | null;subscription_type?: string;profile_id?: string | null;
 };
 
+type Notification = {
+  id: string; title: string; message: string; type: string; is_read: boolean; created_at: string;
+};
+
 type Preferences = {
   ageMin: string;ageMax: string;religion: string;caste: string;city: string;
   education: string;maritalStatus: string;motherTongue: string;
+  heightMin: string;heightMax: string;occupation: string;annualIncome: string;
+  state: string;country: string;dosham: string;star: string;
 };
 
 const defaultPreferences: Preferences = {
   ageMin: "", ageMax: "", religion: "", caste: "", city: "",
-  education: "", maritalStatus: "", motherTongue: ""
+  education: "", maritalStatus: "", motherTongue: "",
+  heightMin: "", heightMax: "", occupation: "", annualIncome: "",
+  state: "", country: "", dosham: "", star: ""
 };
 
 const NAV = [
@@ -53,9 +61,12 @@ export default function CustomerDashboard() {
   const [showContactModal, setShowContactModal] = useState(false);
   const [interests, setInterests] = useState<Profile[]>([]);
   const [interestsLoading, setInterestsLoading] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [showNotifDropdown, setShowNotifDropdown] = useState(false);
+  const notifRef = useRef<HTMLDivElement>(null);
   const [preferences, setPreferences] = useState<Preferences>(() => {
     const saved = localStorage.getItem("matchPreferences");
-    return saved ? JSON.parse(saved) : defaultPreferences;
+    return saved ? { ...defaultPreferences, ...JSON.parse(saved) } : defaultPreferences;
   });
   const [prefApplied, setPrefApplied] = useState(() => {
     const saved = localStorage.getItem("matchPreferences");
@@ -70,6 +81,7 @@ export default function CustomerDashboard() {
     const handler = (e: MouseEvent) => {
       if (settingsRef.current && !settingsRef.current.contains(e.target as Node)) setShowSettingsDropdown(false);
       if (headerRef.current && !headerRef.current.contains(e.target as Node)) setShowHeaderDropdown(false);
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) setShowNotifDropdown(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -83,6 +95,25 @@ export default function CustomerDashboard() {
     if (pData) setUserProfile(pData as UserProfileFull);
     fetchMatches(pData?.gender || "Male");
     fetchInterests(user.id);
+    fetchNotifications(user.id);
+  };
+
+  const fetchNotifications = async (uid: string) => {
+    const { data } = await supabase.from("notifications").select("*").eq("user_id", uid).order("created_at", { ascending: false }).limit(20);
+    if (data) setNotifications(data as Notification[]);
+  };
+
+  const markNotifRead = async (id: string) => {
+    await supabase.from("notifications").update({ is_read: true }).eq("id", id);
+    setNotifications((prev) => prev.map((n) => n.id === id ? { ...n, is_read: true } : n));
+  };
+
+  const markAllRead = async () => {
+    if (!userId) return;
+    const unreadIds = notifications.filter(n => !n.is_read).map(n => n.id);
+    if (unreadIds.length === 0) return;
+    await supabase.from("notifications").update({ is_read: true }).in("id", unreadIds);
+    setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
   };
 
   const fetchMatches = async (userGender: string) => {
@@ -149,6 +180,11 @@ export default function CustomerDashboard() {
       if (preferences.education && p.education && !p.education.toLowerCase().includes(preferences.education.toLowerCase())) return false;
       if (preferences.maritalStatus && p.marital_status && p.marital_status.toLowerCase() !== preferences.maritalStatus.toLowerCase()) return false;
       if (preferences.motherTongue && p.mother_tongue && !p.mother_tongue.toLowerCase().includes(preferences.motherTongue.toLowerCase())) return false;
+      if (preferences.heightMin && p.height_cm && p.height_cm < parseInt(preferences.heightMin)) return false;
+      if (preferences.heightMax && p.height_cm && p.height_cm > parseInt(preferences.heightMax)) return false;
+      if (preferences.occupation && p.occupation && !p.occupation.toLowerCase().includes(preferences.occupation.toLowerCase())) return false;
+      if (preferences.annualIncome && p.annual_income && !p.annual_income.toLowerCase().includes(preferences.annualIncome.toLowerCase())) return false;
+      if (preferences.state && p.state && !p.state.toLowerCase().includes(preferences.state.toLowerCase())) return false;
       return true;
     });
   };
@@ -223,7 +259,7 @@ export default function CustomerDashboard() {
   <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 py-5 px-4 fixed top-0 left-0 h-screen overflow-hidden z-30" style={{ background: "linear-gradient(180deg, hsl(160, 25%, 93%) 0%, hsl(155, 20%, 95%) 100%)", borderRight: "1px solid hsl(160, 20%, 88%)" }}>
       {/* Brand Name */}
       <div className="text-center mb-3">
-        <h2 style={{ fontFamily: "'Great Vibes', cursive", fontSize: "1.5rem", background: "linear-gradient(135deg, hsl(340, 65%, 47%), hsl(280, 50%, 50%), hsl(210, 70%, 50%))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Kalyanasuthra</h2>
+        <h2 style={{ fontFamily: "'Great Vibes', cursive", fontSize: "1.5rem", background: "linear-gradient(135deg, hsl(340, 65%, 47%), hsl(280, 50%, 50%), hsl(210, 70%, 50%))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", lineHeight: "1.3" }}>Kalyanasuthra<br /><span style={{ fontSize: "1.1rem" }}>Matrimony</span></h2>
       </div>
       {/* Profile Photo 3.5x3.5 size + Name + ID */}
       <div className="flex flex-col items-center gap-2 mb-5 px-2 py-4 rounded-xl" style={{ background: "hsl(160, 20%, 90%)" }}>
@@ -369,10 +405,53 @@ export default function CustomerDashboard() {
               )}
             </nav>
             <div className="ml-auto flex items-center gap-3">
-              <button className="relative w-9 h-9 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors">
-                <Bell size={16} className="text-gray-500" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ background: themeAccent }}></span>
-              </button>
+              {/* Notification Bell */}
+              <div ref={notifRef} className="relative">
+                <button onClick={() => setShowNotifDropdown((p) => !p)} className="relative w-9 h-9 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors">
+                  <Bell size={16} className="text-gray-500" />
+                  {notifications.some(n => !n.is_read) && <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full animate-pulse" style={{ background: "hsl(0, 70%, 55%)" }}></span>}
+                </button>
+                <AnimatePresence>
+                  {showNotifDropdown && (
+                    <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} className="absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-100 z-50 overflow-hidden">
+                      <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <BellRing size={14} style={{ color: themeAccent }} />
+                          <span className="text-sm font-bold text-gray-800">Notifications</span>
+                          {notifications.filter(n => !n.is_read).length > 0 && (
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full text-white" style={{ background: "hsl(0, 70%, 55%)" }}>{notifications.filter(n => !n.is_read).length}</span>
+                          )}
+                        </div>
+                        {notifications.some(n => !n.is_read) && (
+                          <button onClick={markAllRead} className="text-[10px] font-semibold" style={{ color: themeAccent }}>Mark all read</button>
+                        )}
+                      </div>
+                      <div className="max-h-72 overflow-y-auto">
+                        {notifications.length === 0 ? (
+                          <div className="py-8 text-center">
+                            <Bell size={24} className="mx-auto mb-2 text-gray-300" />
+                            <p className="text-xs text-gray-400">No notifications yet</p>
+                          </div>
+                        ) : (
+                          notifications.map((n) => (
+                            <button key={n.id} onClick={() => markNotifRead(n.id)} className="w-full text-left px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors flex gap-3" style={{ background: n.is_read ? "transparent" : "hsl(160, 40%, 97%)" }}>
+                              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: n.type === "admin_contact" ? "hsl(134, 60%, 93%)" : n.type === "admin_whatsapp" ? "hsl(134, 60%, 90%)" : themeLight }}>
+                                {n.type === "admin_contact" || n.type === "admin_whatsapp" ? <MessageCircle size={14} style={{ color: "hsl(134, 60%, 35%)" }} /> : <Bell size={14} style={{ color: themeAccent }} />}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs font-semibold text-gray-800 truncate">{n.title}</p>
+                                <p className="text-[11px] text-gray-500 mt-0.5 line-clamp-2">{n.message}</p>
+                                <p className="text-[10px] text-gray-300 mt-1">{new Date(n.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</p>
+                              </div>
+                              {!n.is_read && <div className="w-2 h-2 rounded-full flex-shrink-0 mt-2" style={{ background: themeAccent }}></div>}
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
               <div ref={headerRef} className="relative">
                 <button onClick={() => setShowHeaderDropdown((p) => !p)} className="flex items-center gap-2 bg-gray-50 border border-gray-100 rounded-full pl-1 pr-3 py-1 hover:bg-gray-100 transition-colors">
                   <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0">
@@ -407,7 +486,7 @@ export default function CustomerDashboard() {
           </div>
         </header>
 
-        <div className="p-4 sm:p-6 pt-20">
+        <div className="p-4 sm:p-6 pt-24">
           {/* Profile Status Banner */}
           {userProfile?.profile_status && userProfile.profile_status !== "active" &&
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-4 my-[29px] mx-[230px] px-[16px] flex-col flex items-center justify-center gap-[15px]" style={
@@ -609,8 +688,10 @@ export default function CustomerDashboard() {
               </h1>
               <p className="text-sm text-gray-500 mb-6">Set your preferences to find the perfect match</p>
 
-              <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100 max-w-2xl">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100 max-w-3xl">
+                {/* Section: Basic */}
+                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><User size={14} style={{ color: themeAccent }} /> Basic Details</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Min Age</label>
                     <input type="number" value={preferences.ageMin} onChange={(e) => setPreferences((p) => ({ ...p, ageMin: e.target.value }))} placeholder="e.g. 21" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
@@ -618,42 +699,6 @@ export default function CustomerDashboard() {
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Max Age</label>
                     <input type="number" value={preferences.ageMax} onChange={(e) => setPreferences((p) => ({ ...p, ageMax: e.target.value }))} placeholder="e.g. 30" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Religion</label>
-                    <select value={preferences.religion} onChange={(e) => setPreferences((p) => ({ ...p, religion: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
-                      <option value="">Any</option>
-                      <option>Hindu</option>
-                      <option>Muslim</option>
-                      <option>Christian</option>
-                      <option>Sikh</option>
-                      <option>Jain</option>
-                      <option>Buddhist</option>
-                      <option>Other</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Caste</label>
-                    <input type="text" value={preferences.caste} onChange={(e) => setPreferences((p) => ({ ...p, caste: e.target.value }))} placeholder="e.g. Reddy, Kamma" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">City</label>
-                    <input type="text" value={preferences.city} onChange={(e) => setPreferences((p) => ({ ...p, city: e.target.value }))} placeholder="e.g. Hyderabad" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Education</label>
-                    <select value={preferences.education} onChange={(e) => setPreferences((p) => ({ ...p, education: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
-                      <option value="">Any</option>
-                      <option>B.Tech / B.E</option>
-                      <option>M.Tech / M.E</option>
-                      <option>MBA / PGDM</option>
-                      <option>MBBS / MD</option>
-                      <option>B.Com / M.Com</option>
-                      <option>CA / ICWA</option>
-                      <option>B.Sc / M.Sc</option>
-                      <option>PhD</option>
-                      <option>Other</option>
-                    </select>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Marital Status</label>
@@ -666,19 +711,89 @@ export default function CustomerDashboard() {
                     </select>
                   </div>
                   <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Min Height (cm)</label>
+                    <input type="number" value={preferences.heightMin} onChange={(e) => setPreferences((p) => ({ ...p, heightMin: e.target.value }))} placeholder="e.g. 150" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Max Height (cm)</label>
+                    <input type="number" value={preferences.heightMax} onChange={(e) => setPreferences((p) => ({ ...p, heightMax: e.target.value }))} placeholder="e.g. 180" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Mother Tongue</label>
                     <select value={preferences.motherTongue} onChange={(e) => setPreferences((p) => ({ ...p, motherTongue: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
                       <option value="">Any</option>
-                      <option>Telugu</option>
-                      <option>Tamil</option>
-                      <option>Kannada</option>
-                      <option>Malayalam</option>
-                      <option>Hindi</option>
-                      <option>Urdu</option>
-                      <option>Marathi</option>
-                      <option>Bengali</option>
-                      <option>Other</option>
+                      <option>Telugu</option><option>Tamil</option><option>Kannada</option><option>Malayalam</option><option>Hindi</option><option>Urdu</option><option>Marathi</option><option>Bengali</option><option>Other</option>
                     </select>
+                  </div>
+                </div>
+
+                {/* Section: Religion & Community */}
+                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><Star size={14} style={{ color: themeAccent }} /> Religion & Community</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Religion</label>
+                    <select value={preferences.religion} onChange={(e) => setPreferences((p) => ({ ...p, religion: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>Hindu</option><option>Muslim</option><option>Christian</option><option>Sikh</option><option>Jain</option><option>Buddhist</option><option>Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Caste</label>
+                    <input type="text" value={preferences.caste} onChange={(e) => setPreferences((p) => ({ ...p, caste: e.target.value }))} placeholder="e.g. Reddy, Kamma" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Star (Nakshatram)</label>
+                    <input type="text" value={preferences.star} onChange={(e) => setPreferences((p) => ({ ...p, star: e.target.value }))} placeholder="e.g. Rohini" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Dosham</label>
+                    <select value={preferences.dosham} onChange={(e) => setPreferences((p) => ({ ...p, dosham: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>No Dosham</option><option>Chevvai / Manglik</option><option>Sevvai</option><option>Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Section: Education & Career */}
+                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><Edit size={14} style={{ color: themeAccent }} /> Education & Career</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Education</label>
+                    <select value={preferences.education} onChange={(e) => setPreferences((p) => ({ ...p, education: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>B.Tech / B.E</option><option>M.Tech / M.E</option><option>MBA / PGDM</option><option>MBBS / MD</option><option>B.Com / M.Com</option><option>CA / ICWA</option><option>B.Sc / M.Sc</option><option>PhD</option><option>Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Occupation</label>
+                    <input type="text" value={preferences.occupation} onChange={(e) => setPreferences((p) => ({ ...p, occupation: e.target.value }))} placeholder="e.g. Software Engineer" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Annual Income</label>
+                    <select value={preferences.annualIncome} onChange={(e) => setPreferences((p) => ({ ...p, annualIncome: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>Below 3 Lakhs</option><option>3-5 Lakhs</option><option>5-10 Lakhs</option><option>10-20 Lakhs</option><option>20-50 Lakhs</option><option>50 Lakhs+</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Section: Location */}
+                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><MapPin size={14} style={{ color: themeAccent }} /> Location</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Country</label>
+                    <select value={preferences.country} onChange={(e) => setPreferences((p) => ({ ...p, country: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>India</option><option>USA</option><option>UK</option><option>Canada</option><option>Australia</option><option>UAE</option><option>Singapore</option><option>Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">State</label>
+                    <input type="text" value={preferences.state} onChange={(e) => setPreferences((p) => ({ ...p, state: e.target.value }))} placeholder="e.g. Andhra Pradesh" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">City</label>
+                    <input type="text" value={preferences.city} onChange={(e) => setPreferences((p) => ({ ...p, city: e.target.value }))} placeholder="e.g. Hyderabad" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
                   </div>
                 </div>
 
