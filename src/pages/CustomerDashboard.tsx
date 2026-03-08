@@ -945,6 +945,22 @@ export default function CustomerDashboard() {
                 <label className="block text-xs font-semibold text-gray-600 mb-1">Your Story</label>
                 <textarea value={storyForm.story} onChange={(e) => setStoryForm((p) => ({ ...p, story: e.target.value }))} rows={3} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none resize-none focus:ring-2 focus:ring-teal-300" required />
               </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">Upload Photo (Optional)</label>
+                <div className="relative">
+                  {storyPhotoPreview ? (
+                    <div className="relative w-full h-40 rounded-lg overflow-hidden border border-gray-200">
+                      <img src={storyPhotoPreview} alt="Preview" className="w-full h-full object-cover" />
+                      <button onClick={() => { setStoryPhoto(null); setStoryPhotoPreview(null); }} className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center hover:bg-white"><X size={12} className="text-gray-600" /></button>
+                    </div>
+                  ) : (
+                    <label className="flex flex-col items-center justify-center w-full h-28 rounded-lg border-2 border-dashed border-gray-200 cursor-pointer hover:border-teal-300 transition-colors">
+                      <Camera size={20} className="text-gray-400 mb-1" />
+                      <span className="text-xs text-gray-400">Click to upload your wedding photo</span>
+                      <input type="file" accept="image/*" onChange={handleStoryPhotoChange} className="hidden" />
+                    </label>
+                  )}
+                </div>
               <button onClick={submitStory} disabled={storyLoading} className="w-full py-2.5 rounded-lg text-sm font-bold text-white transition-all disabled:opacity-60" style={{ background: themeAccent }}>
                 {storyLoading ? "Submitting..." : "Submit Story"}
               </button>
