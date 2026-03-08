@@ -50,11 +50,31 @@ const incomeByCountry: Record<string, string[]> = {
   "GBP (£)": ["Below £10,000","£10,000-£20,000","£20,000-£30,000","£30,000-£50,000","£50,000-£80,000","£80,000-£100,000","£100,000+"],
   "EUR (€)": ["Below €10,000","€10,000-€20,000","€20,000-€30,000","€30,000-€50,000","€50,000-€80,000","€80,000-€100,000","€100,000+"],
 };
-const packageOptions = [
-  { label: "1 Month", value: "1_month", months: 1 },
-  { label: "3 Months", value: "3_months", months: 3 },
-  { label: "6 Months", value: "6_months", months: 6 },
-  { label: "12 Months", value: "12_months", months: 12 },
+const MATRIMONY_PACKAGES = [
+  {
+    category: "Support Matrimony",
+    color: "hsl(210, 70%, 50%)",
+    options: [
+      { label: "3 Months", value: "support_3m", price: "₹13,000", months: 3 },
+      { label: "6 Months", value: "support_6m", price: "₹20,000", months: 6 },
+    ],
+  },
+  {
+    category: "Affluent Matrimony",
+    color: "hsl(280, 65%, 55%)",
+    options: [
+      { label: "Premium", value: "affluent_premium", price: "₹38,000", months: 12 },
+    ],
+  },
+  {
+    category: "Online Services",
+    color: "hsl(160, 50%, 42%)",
+    options: [
+      { label: "3 Months", value: "online_3m", price: "₹7,000", months: 3 },
+      { label: "6 Months", value: "online_6m", price: "₹10,000", months: 6 },
+      { label: "1 Year", value: "online_1y", price: "₹15,000", months: 12 },
+    ],
+  },
 ];
 
 type Profile = {
