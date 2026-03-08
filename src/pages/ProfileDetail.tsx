@@ -195,7 +195,7 @@ export default function ProfileDetail() {
             {/* About Me */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <SectionHeading icon={BookOpen} label="About Me" bgColor="hsl(200, 50%, 92%)" textColor="hsl(200, 50%, 30%)" />
-              <p className={`text-sm leading-relaxed ${profile.about_me ? "text-gray-700" : "text-gray-300"}`}>{profile.about_me || "—"}</p>
+              <p className={`text-[15px] leading-relaxed ${profile.about_me ? "text-gray-800" : "text-gray-400"}`}>{profile.about_me || "—"}</p>
             </div>
 
             {/* Personal Details */}
