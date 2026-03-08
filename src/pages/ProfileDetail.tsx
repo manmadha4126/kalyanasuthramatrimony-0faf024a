@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Heart, MapPin, Briefcase, GraduationCap, Phone, Star, Calendar, Users, Lock, ArrowLeft, MessageCircle, User, BookOpen, CheckCircle, XCircle } from "lucide-react";
+import { Heart, MapPin, Briefcase, GraduationCap, Phone, Star, Calendar, Users, Lock, ArrowLeft, MessageCircle, User, BookOpen, CheckCircle, XCircle, Eye } from "lucide-react";
 
 type Profile = {
   id: string; full_name: string; gender: string; religion: string; caste: string | null;
@@ -53,6 +53,10 @@ export default function ProfileDetail() {
   const [userSubscription, setUserSubscription] = useState<string>("free");
   const [interestSent, setInterestSent] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [contactRevealed, setContactRevealed] = useState(false);
+  const [horoscopeRevealed, setHoroscopeRevealed] = useState(false);
+  const [contactViewCount, setContactViewCount] = useState(0);
+  const [horoscopeViewCount, setHoroscopeViewCount] = useState(0);
 
   useEffect(() => { if (id) fetchProfile(); }, [id]);
 
@@ -66,6 +70,18 @@ export default function ProfileDetail() {
       if (myProfile) setUserSubscription((myProfile as any).subscription_type || "free");
       const { data: existing } = await supabase.from("profile_interests").select("id").eq("from_user_id", user.id).eq("to_profile_id", id!).maybeSingle();
       if (existing) setInterestSent(true);
+
+      // Check if already viewed contact/horoscope for this profile
+      const { data: contactView } = await supabase.from("detail_views").select("id").eq("viewer_user_id", user.id).eq("viewed_profile_id", id!).eq("view_type", "contact").maybeSingle();
+      if (contactView) setContactRevealed(true);
+      const { data: horoscopeView } = await supabase.from("detail_views").select("id").eq("viewer_user_id", user.id).eq("viewed_profile_id", id!).eq("view_type", "horoscope").maybeSingle();
+      if (horoscopeView) setHoroscopeRevealed(true);
+
+      // Get total view counts
+      const { count: cCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", user.id).eq("view_type", "contact");
+      setContactViewCount(cCount || 0);
+      const { count: hCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", user.id).eq("view_type", "horoscope");
+      setHoroscopeViewCount(hCount || 0);
     }
     setLoading(false);
   };
@@ -74,6 +90,21 @@ export default function ProfileDetail() {
     if (!currentUserId || !id) return;
     const { error } = await supabase.from("profile_interests").insert({ from_user_id: currentUserId, to_profile_id: id });
     if (!error) setInterestSent(true);
+  };
+
+  const revealDetails = async (viewType: "contact" | "horoscope") => {
+    if (!currentUserId || !id) return;
+    await supabase.from("detail_views").upsert(
+      { viewer_user_id: currentUserId, viewed_profile_id: id, view_type: viewType },
+      { onConflict: "viewer_user_id,viewed_profile_id,view_type" }
+    );
+    if (viewType === "contact") {
+      setContactRevealed(true);
+      setContactViewCount(prev => prev + 1);
+    } else {
+      setHoroscopeRevealed(true);
+      setHoroscopeViewCount(prev => prev + 1);
+    }
   };
 
   const getAge = (dob: string) => Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
@@ -226,12 +257,32 @@ export default function ProfileDetail() {
 
             {/* Contact Details - Gated */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <SectionHeading icon={Phone} label="Contact Details" bgColor="hsl(38, 70%, 90%)" textColor="hsl(38, 60%, 30%)" />
-              {userSubscription === "assisted" ? (
+              <div className="flex items-center justify-between gap-2 px-4 py-3.5 rounded-t-2xl -mx-5 -mt-5 sm:-mx-6 sm:-mt-6 mb-4" style={{ background: "hsl(38, 70%, 90%)" }}>
+                <div className="flex items-center gap-2.5">
+                  <Phone size={18} style={{ color: "hsl(38, 60%, 30%)" }} />
+                  <h3 className="font-bold text-[15px]" style={{ color: "hsl(38, 60%, 30%)", fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>Contact Details</h3>
+                </div>
+                {userSubscription === "assisted" && !contactRevealed && (
+                  <button onClick={() => revealDetails("contact")} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105" style={{ background: "hsl(38, 60%, 40%)" }}>
+                    <Eye size={13} /> View Contact Details
+                  </button>
+                )}
+                {userSubscription === "assisted" && contactRevealed && (
+                  <span className="text-xs font-semibold px-2 py-1 rounded-lg" style={{ background: "hsl(38, 90%, 96%)", color: "hsl(38, 60%, 35%)" }}>
+                    {contactViewCount} profile{contactViewCount !== 1 ? "s" : ""} viewed
+                  </span>
+                )}
+              </div>
+              {userSubscription === "assisted" && contactRevealed ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
                   <InfoRow label="Phone" value={profile.phone} />
                   <InfoRow label="Email" value={profile.email} />
                   <InfoRow label="WhatsApp" value={profile.whatsapp} />
+                </div>
+              ) : userSubscription === "assisted" && !contactRevealed ? (
+                <div className="text-center py-6 rounded-xl" style={{ background: "hsl(38, 90%, 96%)" }}>
+                  <Eye size={24} className="mx-auto mb-2" style={{ color: "hsl(38, 70%, 45%)" }} />
+                  <p className="text-sm font-semibold" style={{ color: "hsl(38, 70%, 35%)" }}>Click "View Contact Details" above to reveal</p>
                 </div>
               ) : (
                 <div className="text-center py-6 rounded-xl" style={{ background: "hsl(38, 90%, 96%)" }}>
@@ -245,16 +296,47 @@ export default function ProfileDetail() {
               )}
             </div>
 
-            {/* Horoscope Details */}
+            {/* Horoscope Details - Gated */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
-              <SectionHeading icon={Star} label="Horoscope Details" bgColor="hsl(310, 40%, 92%)" textColor="hsl(310, 40%, 35%)" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
-                <InfoRow label="Gothram" value={profile.gothra} />
-                <InfoRow label="Rashi" value={profile.raasi} />
-                <InfoRow label="Star" value={profile.star} />
-                <InfoRow label="Dosham" value={profile.dosham} />
-                <InfoRow label="Horoscope" value={profile.horoscope_url ? "Uploaded" : null} />
+              <div className="flex items-center justify-between gap-2 px-4 py-3.5 rounded-t-2xl -mx-5 -mt-5 sm:-mx-6 sm:-mt-6 mb-4" style={{ background: "hsl(310, 40%, 92%)" }}>
+                <div className="flex items-center gap-2.5">
+                  <Star size={18} style={{ color: "hsl(310, 40%, 35%)" }} />
+                  <h3 className="font-bold text-[15px]" style={{ color: "hsl(310, 40%, 35%)", fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>Horoscope Details</h3>
+                </div>
+                {userSubscription === "assisted" && !horoscopeRevealed && (
+                  <button onClick={() => revealDetails("horoscope")} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105" style={{ background: "hsl(310, 40%, 40%)" }}>
+                    <Eye size={13} /> View Horoscope Details
+                  </button>
+                )}
+                {userSubscription === "assisted" && horoscopeRevealed && (
+                  <span className="text-xs font-semibold px-2 py-1 rounded-lg" style={{ background: "hsl(310, 40%, 96%)", color: "hsl(310, 40%, 35%)" }}>
+                    {horoscopeViewCount} profile{horoscopeViewCount !== 1 ? "s" : ""} viewed
+                  </span>
+                )}
               </div>
+              {userSubscription === "assisted" && horoscopeRevealed ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                  <InfoRow label="Gothram" value={profile.gothra} />
+                  <InfoRow label="Rashi" value={profile.raasi} />
+                  <InfoRow label="Star" value={profile.star} />
+                  <InfoRow label="Dosham" value={profile.dosham} />
+                  <InfoRow label="Horoscope" value={profile.horoscope_url ? "Uploaded" : null} />
+                </div>
+              ) : userSubscription === "assisted" && !horoscopeRevealed ? (
+                <div className="text-center py-6 rounded-xl" style={{ background: "hsl(310, 40%, 96%)" }}>
+                  <Eye size={24} className="mx-auto mb-2" style={{ color: "hsl(310, 40%, 45%)" }} />
+                  <p className="text-sm font-semibold" style={{ color: "hsl(310, 40%, 35%)" }}>Click "View Horoscope Details" above to reveal</p>
+                </div>
+              ) : (
+                <div className="text-center py-6 rounded-xl" style={{ background: "hsl(310, 40%, 96%)" }}>
+                  <Lock size={24} className="mx-auto mb-2" style={{ color: "hsl(310, 40%, 45%)" }} />
+                  <p className="text-sm font-semibold" style={{ color: "hsl(310, 40%, 35%)" }}>Horoscope details are hidden</p>
+                  <p className="text-xs mt-1" style={{ color: "hsl(310, 30%, 50%)" }}>Upgrade to Assisted Matrimony to view horoscope details</p>
+                  <a href="https://wa.me/919553306667?text=Hi%2C%20I%20want%20to%20upgrade%20to%20Assisted%20Matrimony%20services" target="_blank" rel="noopener noreferrer" className="inline-block mt-3 px-5 py-2 rounded-xl text-sm font-semibold text-white" style={{ background: themeAccent }}>
+                    Contact Us to Upgrade
+                  </a>
+                </div>
+              )}
             </div>
 
             {/* Education & Professional Details */}
