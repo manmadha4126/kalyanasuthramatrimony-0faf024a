@@ -124,14 +124,14 @@ const TABS = ["Dashboard", "Profile Requests", "All Profiles", "Subscription Acc
 
 const DetailRow = ({ label, value }: { label: string; value: string | null | undefined }) => (
   <div className="flex justify-between py-3 border-b border-gray-100 last:border-0">
-    <span className="text-sm font-semibold text-gray-500 w-2/5">{label}</span>
-    <span className="text-sm text-gray-800 text-right w-3/5">{value || "—"}</span>
+    <span className="text-base font-semibold w-2/5" style={{ color: "hsl(0, 0%, 35%)" }}>{label}</span>
+    <span className="text-base font-medium text-right w-3/5" style={{ color: "hsl(0, 0%, 15%)" }}>{value || "—"}</span>
   </div>
 );
 
 const DetailSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div className="mb-6">
-    <h4 className="text-base font-bold mb-3 px-4 py-3 rounded-xl" style={{ background: "hsl(130, 50%, 92%)", color: "hsl(130, 45%, 28%)", fontFamily: "'Roboto', system-ui, sans-serif" }}>{title}</h4>
+    <h4 className="text-lg font-bold mb-3 px-4 py-3 rounded-xl" style={{ background: "hsl(130, 50%, 92%)", color: "hsl(130, 45%, 25%)", fontFamily: "'Roboto', system-ui, sans-serif" }}>{title}</h4>
     <div className="px-3">{children}</div>
   </div>
 );
