@@ -1438,7 +1438,7 @@ export default function AdminDashboard() {
                             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                             className="rounded-xl border border-gray-200 p-4 cursor-pointer hover:shadow-md transition-all"
                             style={{ background: isCompleted ? "hsl(145, 50%, 97%)" : isNotCompleted ? "hsl(0, 50%, 97%)" : "hsl(0, 0%, 100%)" }}
-                            onClick={() => setSelectedProfile({ ...interest, _isInterestDetail: true } as any)}
+                            onClick={() => { setSelectedInterest(interest); setInterestNoteText(interest.admin_notes || ""); }}
                           >
                             <div className="flex items-start gap-3 mb-3">
                               <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
