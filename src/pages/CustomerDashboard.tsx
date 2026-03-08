@@ -481,7 +481,7 @@ export default function CustomerDashboard() {
           </div>
         </header>
 
-        <div className="p-4 sm:p-6 pt-20">
+        <div className="p-4 sm:p-6 pt-24">
           {/* Profile Status Banner */}
           {userProfile?.profile_status && userProfile.profile_status !== "active" &&
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-4 my-[29px] mx-[230px] px-[16px] flex-col flex items-center justify-center gap-[15px]" style={
