@@ -683,8 +683,10 @@ export default function CustomerDashboard() {
               </h1>
               <p className="text-sm text-gray-500 mb-6">Set your preferences to find the perfect match</p>
 
-              <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100 max-w-2xl">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100 max-w-3xl">
+                {/* Section: Basic */}
+                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><User size={14} style={{ color: themeAccent }} /> Basic Details</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Min Age</label>
                     <input type="number" value={preferences.ageMin} onChange={(e) => setPreferences((p) => ({ ...p, ageMin: e.target.value }))} placeholder="e.g. 21" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
@@ -692,42 +694,6 @@ export default function CustomerDashboard() {
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Max Age</label>
                     <input type="number" value={preferences.ageMax} onChange={(e) => setPreferences((p) => ({ ...p, ageMax: e.target.value }))} placeholder="e.g. 30" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Religion</label>
-                    <select value={preferences.religion} onChange={(e) => setPreferences((p) => ({ ...p, religion: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
-                      <option value="">Any</option>
-                      <option>Hindu</option>
-                      <option>Muslim</option>
-                      <option>Christian</option>
-                      <option>Sikh</option>
-                      <option>Jain</option>
-                      <option>Buddhist</option>
-                      <option>Other</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Caste</label>
-                    <input type="text" value={preferences.caste} onChange={(e) => setPreferences((p) => ({ ...p, caste: e.target.value }))} placeholder="e.g. Reddy, Kamma" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">City</label>
-                    <input type="text" value={preferences.city} onChange={(e) => setPreferences((p) => ({ ...p, city: e.target.value }))} placeholder="e.g. Hyderabad" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Education</label>
-                    <select value={preferences.education} onChange={(e) => setPreferences((p) => ({ ...p, education: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
-                      <option value="">Any</option>
-                      <option>B.Tech / B.E</option>
-                      <option>M.Tech / M.E</option>
-                      <option>MBA / PGDM</option>
-                      <option>MBBS / MD</option>
-                      <option>B.Com / M.Com</option>
-                      <option>CA / ICWA</option>
-                      <option>B.Sc / M.Sc</option>
-                      <option>PhD</option>
-                      <option>Other</option>
-                    </select>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Marital Status</label>
@@ -740,19 +706,89 @@ export default function CustomerDashboard() {
                     </select>
                   </div>
                   <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Min Height (cm)</label>
+                    <input type="number" value={preferences.heightMin} onChange={(e) => setPreferences((p) => ({ ...p, heightMin: e.target.value }))} placeholder="e.g. 150" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Max Height (cm)</label>
+                    <input type="number" value={preferences.heightMax} onChange={(e) => setPreferences((p) => ({ ...p, heightMax: e.target.value }))} placeholder="e.g. 180" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Mother Tongue</label>
                     <select value={preferences.motherTongue} onChange={(e) => setPreferences((p) => ({ ...p, motherTongue: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
                       <option value="">Any</option>
-                      <option>Telugu</option>
-                      <option>Tamil</option>
-                      <option>Kannada</option>
-                      <option>Malayalam</option>
-                      <option>Hindi</option>
-                      <option>Urdu</option>
-                      <option>Marathi</option>
-                      <option>Bengali</option>
-                      <option>Other</option>
+                      <option>Telugu</option><option>Tamil</option><option>Kannada</option><option>Malayalam</option><option>Hindi</option><option>Urdu</option><option>Marathi</option><option>Bengali</option><option>Other</option>
                     </select>
+                  </div>
+                </div>
+
+                {/* Section: Religion & Community */}
+                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><Star size={14} style={{ color: themeAccent }} /> Religion & Community</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Religion</label>
+                    <select value={preferences.religion} onChange={(e) => setPreferences((p) => ({ ...p, religion: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>Hindu</option><option>Muslim</option><option>Christian</option><option>Sikh</option><option>Jain</option><option>Buddhist</option><option>Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Caste</label>
+                    <input type="text" value={preferences.caste} onChange={(e) => setPreferences((p) => ({ ...p, caste: e.target.value }))} placeholder="e.g. Reddy, Kamma" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Star (Nakshatram)</label>
+                    <input type="text" value={preferences.star} onChange={(e) => setPreferences((p) => ({ ...p, star: e.target.value }))} placeholder="e.g. Rohini" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Dosham</label>
+                    <select value={preferences.dosham} onChange={(e) => setPreferences((p) => ({ ...p, dosham: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>No Dosham</option><option>Chevvai / Manglik</option><option>Sevvai</option><option>Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Section: Education & Career */}
+                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><Edit size={14} style={{ color: themeAccent }} /> Education & Career</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Education</label>
+                    <select value={preferences.education} onChange={(e) => setPreferences((p) => ({ ...p, education: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>B.Tech / B.E</option><option>M.Tech / M.E</option><option>MBA / PGDM</option><option>MBBS / MD</option><option>B.Com / M.Com</option><option>CA / ICWA</option><option>B.Sc / M.Sc</option><option>PhD</option><option>Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Occupation</label>
+                    <input type="text" value={preferences.occupation} onChange={(e) => setPreferences((p) => ({ ...p, occupation: e.target.value }))} placeholder="e.g. Software Engineer" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Annual Income</label>
+                    <select value={preferences.annualIncome} onChange={(e) => setPreferences((p) => ({ ...p, annualIncome: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>Below 3 Lakhs</option><option>3-5 Lakhs</option><option>5-10 Lakhs</option><option>10-20 Lakhs</option><option>20-50 Lakhs</option><option>50 Lakhs+</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Section: Location */}
+                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><MapPin size={14} style={{ color: themeAccent }} /> Location</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Country</label>
+                    <select value={preferences.country} onChange={(e) => setPreferences((p) => ({ ...p, country: e.target.value }))} className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300 bg-white">
+                      <option value="">Any</option>
+                      <option>India</option><option>USA</option><option>UK</option><option>Canada</option><option>Australia</option><option>UAE</option><option>Singapore</option><option>Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">State</label>
+                    <input type="text" value={preferences.state} onChange={(e) => setPreferences((p) => ({ ...p, state: e.target.value }))} placeholder="e.g. Andhra Pradesh" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">City</label>
+                    <input type="text" value={preferences.city} onChange={(e) => setPreferences((p) => ({ ...p, city: e.target.value }))} placeholder="e.g. Hyderabad" className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" />
                   </div>
                 </div>
 
