@@ -53,6 +53,10 @@ export default function ProfileDetail() {
   const [userSubscription, setUserSubscription] = useState<string>("free");
   const [interestSent, setInterestSent] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [contactRevealed, setContactRevealed] = useState(false);
+  const [horoscopeRevealed, setHoroscopeRevealed] = useState(false);
+  const [contactViewCount, setContactViewCount] = useState(0);
+  const [horoscopeViewCount, setHoroscopeViewCount] = useState(0);
 
   useEffect(() => { if (id) fetchProfile(); }, [id]);
 
