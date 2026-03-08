@@ -91,6 +91,9 @@ const ServicesSection = () => {
               {opt.label}
             </button>
           ))}
+          <button onClick={() => setSelected(null)} className="px-5 py-2 rounded-full text-sm font-semibold border transition-all duration-200" style={selected === null ? { background: "hsl(var(--gold-accent))", color: "hsl(220, 60%, 10%)", borderColor: "hsl(var(--gold-accent))" } : { background: "transparent", color: "hsl(var(--gold-accent))", borderColor: "hsl(var(--gold-accent) / 0.6)" }}>
+            See All
+          </button>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-5 max-w-6xl mx-auto">
