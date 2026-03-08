@@ -54,6 +54,8 @@ export default function CustomerDashboard() {
   const [shortlisted, setShortlisted] = useState<string[]>([]);
   const [showStoryForm, setShowStoryForm] = useState(false);
   const [storyForm, setStoryForm] = useState({ bride_name: "", groom_name: "", city: "", story: "" });
+  const [storyPhoto, setStoryPhoto] = useState<File | null>(null);
+  const [storyPhotoPreview, setStoryPhotoPreview] = useState<string | null>(null);
   const [storyLoading, setStoryLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
