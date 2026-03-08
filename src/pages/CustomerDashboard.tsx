@@ -259,7 +259,7 @@ export default function CustomerDashboard() {
   <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 py-5 px-4 fixed top-0 left-0 h-screen overflow-hidden z-30" style={{ background: "linear-gradient(180deg, hsl(160, 25%, 93%) 0%, hsl(155, 20%, 95%) 100%)", borderRight: "1px solid hsl(160, 20%, 88%)" }}>
       {/* Brand Name */}
       <div className="text-center mb-3">
-        <h2 style={{ fontFamily: "'Great Vibes', cursive", fontSize: "1.5rem", background: "linear-gradient(135deg, hsl(340, 65%, 47%), hsl(280, 50%, 50%), hsl(210, 70%, 50%))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", lineHeight: "1.3" }}>Kalyanasuthra<br /><span style={{ fontSize: "1.1rem" }}>Matrimony</span></h2>
+        <h2 style={{ fontFamily: "'Great Vibes', cursive", fontSize: "2rem", background: "linear-gradient(135deg, hsl(340, 65%, 47%), hsl(280, 50%, 50%), hsl(210, 70%, 50%))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", lineHeight: "1.3" }}>Kalyanasuthra<br />Matrimony</h2>
       </div>
       {/* Profile Photo 3.5x3.5 size + Name + ID */}
       <div className="flex flex-col items-center gap-2 mb-5 px-2 py-4 rounded-xl" style={{ background: "hsl(160, 20%, 90%)" }}>
