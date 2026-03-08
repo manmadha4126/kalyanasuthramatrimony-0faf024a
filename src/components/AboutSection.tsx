@@ -36,7 +36,7 @@ const AboutSection = () => {
   const [showContacts, setShowContacts] = useState(false);
   return (
     <>
-    <section id="about" className="py-20 relative overflow-hidden" style={{ background: "hsl(140, 30%, 82%)" }}>
+    <section id="about" className="py-20 bg-muted/40 relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-32 h-32 md:w-48 md:h-48 opacity-20">
         <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
