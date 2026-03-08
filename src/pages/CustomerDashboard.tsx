@@ -961,6 +961,7 @@ export default function CustomerDashboard() {
                     </label>
                   )}
                 </div>
+              </div>
               <button onClick={submitStory} disabled={storyLoading} className="w-full py-2.5 rounded-lg text-sm font-bold text-white transition-all disabled:opacity-60" style={{ background: themeAccent }}>
                 {storyLoading ? "Submitting..." : "Submit Story"}
               </button>
