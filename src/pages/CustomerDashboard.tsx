@@ -61,9 +61,12 @@ export default function CustomerDashboard() {
   const [showContactModal, setShowContactModal] = useState(false);
   const [interests, setInterests] = useState<Profile[]>([]);
   const [interestsLoading, setInterestsLoading] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [showNotifDropdown, setShowNotifDropdown] = useState(false);
+  const notifRef = useRef<HTMLDivElement>(null);
   const [preferences, setPreferences] = useState<Preferences>(() => {
     const saved = localStorage.getItem("matchPreferences");
-    return saved ? JSON.parse(saved) : defaultPreferences;
+    return saved ? { ...defaultPreferences, ...JSON.parse(saved) } : defaultPreferences;
   });
   const [prefApplied, setPrefApplied] = useState(() => {
     const saved = localStorage.getItem("matchPreferences");
