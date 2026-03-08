@@ -290,7 +290,7 @@ export default function CustomerDashboard() {
         if (label === "Settings") {
           return (
             <div key={label} ref={settingsRef} className="relative">
-                <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowSettingsDropdown((p) => !p)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={showSettingsDropdown ? { background: themeAccent, color: "white" } : { color: themeDark, background: "transparent" }}>
+                <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowSettingsDropdown((p) => !p)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={{ fontFamily: "'DM Serif Display', serif", ...(showSettingsDropdown ? { background: themeAccent, color: "white" } : { color: themeDark, background: "transparent" }) }}>
                   <Icon size={16} /> {label}
                   <ChevronDown size={14} className={`ml-auto transition-transform ${showSettingsDropdown ? "rotate-180" : ""}`} />
                 </motion.button>
