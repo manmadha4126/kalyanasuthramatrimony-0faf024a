@@ -14,16 +14,19 @@ const features = [
     icon: ShieldCheck,
     title: "Privacy & Security",
     desc: "We provide 100% privacy & security against miss use of member profile and other details.",
+    gradient: "linear-gradient(180deg, hsl(220, 70%, 55%) 0%, hsl(190, 80%, 50%) 100%)",
   },
   {
     icon: Heart,
     title: "Best Matches",
     desc: "We provide many options for search member so that any member can meet the best matches according to his/her choice.",
+    gradient: "linear-gradient(180deg, hsl(160, 50%, 45%) 0%, hsl(180, 60%, 55%) 100%)",
   },
   {
     icon: ThumbsUp,
     title: "100% Satisfaction",
     desc: "We provide member to wider scope of search so that our member get 100% satisfied.",
+    gradient: "linear-gradient(180deg, hsl(25, 85%, 55%) 0%, hsl(340, 70%, 55%) 100%)",
   },
 ];
 
@@ -191,31 +194,33 @@ const AboutSection = () => {
       <div className="bg-muted/40 py-14">
         <div className="container mx-auto px-4">
           <motion.h3
-            className="text-center font-serif text-2xl md:text-3xl font-bold text-primary mb-10"
+            className="text-center text-3xl md:text-4xl font-bold mb-12"
+            style={{ fontFamily: "'Pinyon Script', cursive", color: "hsl(var(--primary))" }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
             Our Features
           </motion.h3>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {features.map((f, i) => (
               <motion.div
                 key={f.title}
-                className="flex flex-col items-center text-center gap-4"
-                initial={{ opacity: 0, y: 20 }}
+                className="relative flex flex-col items-center text-center pt-12 pb-6 px-5 rounded-[2rem] rounded-b-2xl shadow-xl overflow-hidden"
+                style={{ background: f.gradient }}
+                initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15 }}
+                whileHover={{ scale: 1.04, y: -6 }}
               >
-                <div
-                  className="w-16 h-16 rounded-full flex items-center justify-center shadow-md"
-                  style={{ background: "hsl(var(--burgundy))" }}
-                >
-                  <f.icon size={28} className="text-white" />
+                {/* Icon circle */}
+                <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg mb-5 -mt-2" style={{ background: "white" }}>
+                  <f.icon size={28} style={{ color: "hsl(220, 30%, 30%)" }} />
                 </div>
-                <h4 className="font-serif text-lg font-bold text-primary">{f.title}</h4>
-                <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+
+                <h4 className="text-base font-bold text-white mb-2" style={{ fontFamily: "system-ui, sans-serif" }}>{f.title}</h4>
+                <p className="text-sm leading-relaxed mb-4" style={{ color: "hsla(0, 0%, 100%, 0.88)", fontFamily: "system-ui, sans-serif" }}>{f.desc}</p>
               </motion.div>
             ))}
           </div>
