@@ -93,72 +93,56 @@ const ServicesSection = () => {
           ))}
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch">
+        <div className="grid md:grid-cols-3 gap-5 max-w-6xl mx-auto">
           {packages.map((pkg, pi) => {
             const visiblePlans = selected ? pkg.plans.filter((p) => p.key === selected) : pkg.plans;
             if (selected && visiblePlans.length === 0) return null;
             return (
               <motion.div
                 key={pkg.title}
-                className="rounded-2xl p-6 shadow-xl flex flex-col relative overflow-hidden"
+                className="rounded-2xl p-5 shadow-xl flex flex-col relative overflow-hidden"
                 style={{
                   background: "hsl(0, 0%, 100%)",
                   border: pkg.highlighted ? "2px solid hsl(160, 35%, 38%)" : "1px solid hsl(220, 15%, 88%)",
                 }}
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: pi * 0.1 }}
               >
-                {/* Badge for highlighted */}
                 {pkg.badge && (
-                  <div className="flex items-center gap-1.5 mb-2">
+                  <div className="flex items-center gap-1.5 mb-1.5">
                     <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "hsl(160, 35%, 38%)" }}>★ {pkg.badge}</span>
                   </div>
                 )}
 
-                <h3 className="text-xl font-bold mb-4" style={{ color: "hsl(220, 50%, 15%)", fontFamily: "'DM Serif Display', serif" }}>{pkg.title}</h3>
+                <h3 className="text-lg font-bold mb-3" style={{ color: "hsl(220, 50%, 15%)", fontFamily: "'DM Serif Display', serif" }}>{pkg.title}</h3>
 
-                {/* Prices */}
-                <div className="space-y-1 mb-5">
+                <div className="space-y-0.5 mb-4">
                   {visiblePlans.map((plan, i) => (
                     <div key={i} className="flex items-baseline gap-2">
-                      <span className="text-2xl font-bold" style={{ color: "hsl(220, 50%, 15%)", fontFamily: "'Georgia', serif" }}>{plan.price}</span>
-                      <span className="text-sm" style={{ color: "hsl(160, 25%, 45%)" }}>/ {plan.duration}</span>
+                      <span className="text-xl font-bold" style={{ color: "hsl(220, 50%, 15%)", fontFamily: "'Georgia', serif" }}>{plan.price}</span>
+                      <span className="text-xs" style={{ color: "hsl(160, 25%, 45%)" }}>/ {plan.duration}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Features */}
-                <ul className="space-y-2.5 mb-6 flex-1">
+                <ul className="space-y-2">
                   {pkg.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: "hsl(220, 20%, 35%)" }}>
-                      <span className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ background: "hsl(160, 35%, 38%)" }} />
+                    <li key={f} className="flex items-start gap-2 text-sm" style={{ color: "hsl(220, 20%, 35%)" }}>
+                      <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: "hsl(160, 35%, 38%)" }} />
                       {f}
                     </li>
                   ))}
                 </ul>
 
-                {/* Benefits for Affluent */}
                 {pkg.benefits && !selected && (
-                  <div className="mb-5">
-                    <p className="text-xs uppercase tracking-wider mb-2 font-semibold" style={{ color: "hsl(160, 35%, 38%)" }}>Benefits For</p>
+                  <div className="mt-3">
+                    <p className="text-xs uppercase tracking-wider mb-1.5 font-semibold" style={{ color: "hsl(160, 35%, 38%)" }}>Benefits For</p>
                     <div className="flex flex-wrap gap-1.5">
                       {pkg.benefits.map((b) => (
-                        <span key={b} className="text-[10px] px-2 py-1 rounded-full font-medium" style={{ background: "hsl(160, 35%, 94%)", color: "hsl(160, 35%, 30%)" }}>{b}</span>
+                        <span key={b} className="text-[10px] px-2 py-0.5 rounded-full font-medium" style={{ background: "hsl(160, 35%, 94%)", color: "hsl(160, 35%, 30%)" }}>{b}</span>
                       ))}
                     </div>
                   </div>
                 )}
-
-                {/* CTA Button */}
-                <button
-                  onClick={() => setShowConsultation(true)}
-                  className="w-full py-3 rounded-full text-sm font-bold transition-all duration-200 hover:scale-[1.02]"
-                  style={pkg.highlighted
-                    ? { background: "hsl(160, 35%, 38%)", color: "white" }
-                    : { background: "transparent", color: "hsl(220, 20%, 35%)", border: "1.5px solid hsl(220, 15%, 82%)" }
-                  }
-                >
-                  Get Consultation
-                </button>
               </motion.div>
             );
           })}
