@@ -131,7 +131,7 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h3 className="text-3xl md:text-4xl leading-snug" style={{ fontFamily: "'Great Vibes', cursive", color: "hsl(348, 56%, 27%)" }}>
+            <h3 className="text-4xl md:text-5xl font-extrabold leading-snug" style={{ fontFamily: "'Great Vibes', cursive", color: "hsl(0, 0%, 5%)" }}>
               Exclusive Services from<br />
               Kalyanasuthra Matrimony
             </h3>
