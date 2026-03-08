@@ -70,6 +70,18 @@ export default function ProfileDetail() {
       if (myProfile) setUserSubscription((myProfile as any).subscription_type || "free");
       const { data: existing } = await supabase.from("profile_interests").select("id").eq("from_user_id", user.id).eq("to_profile_id", id!).maybeSingle();
       if (existing) setInterestSent(true);
+
+      // Check if already viewed contact/horoscope for this profile
+      const { data: contactView } = await supabase.from("detail_views").select("id").eq("viewer_user_id", user.id).eq("viewed_profile_id", id!).eq("view_type", "contact").maybeSingle();
+      if (contactView) setContactRevealed(true);
+      const { data: horoscopeView } = await supabase.from("detail_views").select("id").eq("viewer_user_id", user.id).eq("viewed_profile_id", id!).eq("view_type", "horoscope").maybeSingle();
+      if (horoscopeView) setHoroscopeRevealed(true);
+
+      // Get total view counts
+      const { count: cCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", user.id).eq("view_type", "contact");
+      setContactViewCount(cCount || 0);
+      const { count: hCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", user.id).eq("view_type", "horoscope");
+      setHoroscopeViewCount(hCount || 0);
     }
     setLoading(false);
   };
