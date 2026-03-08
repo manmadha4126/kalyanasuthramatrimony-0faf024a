@@ -14,13 +14,6 @@ import wedding10 from "@/assets/wedding-10.jpeg";
 
 const images = [wedding1, wedding2, wedding3, wedding4, wedding5, wedding6, wedding7, wedding8, wedding9, wedding10];
 
-const bullets = [
-  "10,000+ Successful Marriages",
-  "Verified & Trusted Profiles",
-  "Traditional Values, Modern Approach",
-  "Personalized Matchmaking Services",
-];
-
 const HeroSection = () => {
   const [current, setCurrent] = useState(0);
 
@@ -33,81 +26,84 @@ const HeroSection = () => {
     return () => clearInterval(timer);
   }, [next]);
 
-  const prev = (current - 1 + images.length) % images.length;
-
   return (
-    <section id="home" className="bg-foreground py-16 pt-28 lg:pt-24 min-h-screen flex items-center" style={{ background: "#0f0f0f" }}>
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-          {/* Slideshow */}
-          <div className="w-full lg:w-[60%] relative">
-            <div className="relative rounded-2xl overflow-hidden aspect-[4/3] lg:aspect-[16/9]" style={{ border: "1px solid rgba(198,167,94,0.3)" }}>
-              <img src={images[prev]} alt="" className="absolute inset-0 w-full h-full object-cover scale-110 opacity-50 blur-[3px]" />
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={current}
-                  src={images[current]}
-                  alt={`Wedding ${current + 1}`}
-                  className="absolute inset-4 w-[calc(100%-2rem)] h-[calc(100%-2rem)] object-contain z-10 rounded-xl"
-                  initial={{ opacity: 0, scale: 0.92 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.03 }}
-                  transition={{ duration: 0.8 }}
-                />
-              </AnimatePresence>
-              <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
-              {/* Dots */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-2">
-                {images.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setCurrent(i)}
-                    className="h-2 rounded-full transition-all duration-300"
-                    style={{
-                      width: i === current ? "24px" : "8px",
-                      background: i === current ? "hsl(var(--gold-accent))" : "rgba(255,255,255,0.4)",
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+    <section id="home" className="relative w-full" style={{ marginTop: "80px" }}>
+      {/* Peach/rose top bar */}
+      <div className="w-full h-3" style={{ background: "hsl(var(--burgundy-light))" }} />
 
-          {/* Right Content */}
-          <div className="w-full lg:w-[40%] text-center lg:text-left">
-            <motion.h2
-              className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold mb-3"
-              style={{ color: "#ffffff" }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+      {/* Slideshow container */}
+      <div className="relative w-full overflow-hidden" style={{ height: "clamp(400px, 70vh, 700px)" }}>
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={current}
+            src={images[current]}
+            alt={`Wedding ${current + 1}`}
+            className="absolute inset-0 w-full h-full object-cover"
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.8 }}
+          />
+        </AnimatePresence>
+
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/30 z-10" />
+
+        {/* Center content card */}
+        <div className="absolute inset-0 z-20 flex items-center justify-center">
+          <motion.div
+            className="bg-white/85 backdrop-blur-sm px-10 py-8 md:px-16 md:py-10 text-center max-w-lg mx-4"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          >
+            <p
+              className="text-lg md:text-xl italic mb-1"
+              style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--gold-accent))" }}
             >
-              Kalyanasuthra Matrimony
-            </motion.h2>
-            <motion.p
-              className="text-lg lg:text-xl mb-8 italic"
-              style={{ color: "rgba(255,255,255,0.7)" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
+              The Wedding Chapter
+            </p>
+            <h1
+              className="text-3xl md:text-5xl font-bold mb-3"
+              style={{ fontFamily: "'Playfair Display', serif", color: "hsl(var(--foreground))" }}
             >
-              "The Wedding Chapter Starts Here……"
-            </motion.p>
-            <motion.ul className="space-y-3 mb-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}>
-              {bullets.map((b) => (
-                <li key={b} className="flex items-center gap-3 justify-center lg:justify-start">
-                  <span className="w-2 h-2 rounded-full" style={{ background: "hsl(var(--gold-accent))" }} />
-                  <span style={{ color: "rgba(255,255,255,0.85)" }}>{b}</span>
-                </li>
-              ))}
-            </motion.ul>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
-              <a href="#register" className="btn-burgundy inline-block text-base px-8 py-4">
-                Start Now – Register for Best Matches
-              </a>
-            </motion.div>
-          </div>
+              Kalyanasuthra
+            </h1>
+            <p className="text-sm md:text-base mb-6 text-muted-foreground">
+              Trusted matchmaking with traditional values and a modern approach. Your perfect match awaits.
+            </p>
+            <a
+              href="#register"
+              className="inline-block border-2 border-foreground px-8 py-3 text-sm font-semibold tracking-widest uppercase hover:bg-foreground hover:text-primary-foreground transition-colors duration-300"
+              style={{ color: "hsl(var(--foreground))" }}
+            >
+              Get Started
+            </a>
+          </motion.div>
         </div>
+
+        {/* Dots */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2.5">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              className="w-3 h-3 rounded-full border-2 transition-all duration-300"
+              style={{
+                background: i === current ? "hsl(var(--gold-accent))" : "transparent",
+                borderColor: i === current ? "hsl(var(--gold-accent))" : "rgba(255,255,255,0.7)",
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom peach bar with subscribe-style strip */}
+      <div
+        className="w-full py-3 flex flex-col md:flex-row items-center justify-center gap-3 text-xs md:text-sm tracking-wide uppercase text-center"
+        style={{ background: "hsl(var(--burgundy-light))", color: "hsl(var(--soft-gray))" }}
+      >
+        <span>10,000+ Successful Marriages • Verified Profiles • Personalized Matchmaking</span>
       </div>
     </section>
   );
