@@ -47,6 +47,38 @@ export type Database = {
         }
         Relationships: []
       }
+      detail_views: {
+        Row: {
+          id: string
+          view_type: string
+          viewed_at: string
+          viewed_profile_id: string
+          viewer_user_id: string
+        }
+        Insert: {
+          id?: string
+          view_type: string
+          viewed_at?: string
+          viewed_profile_id: string
+          viewer_user_id: string
+        }
+        Update: {
+          id?: string
+          view_type?: string
+          viewed_at?: string
+          viewed_profile_id?: string
+          viewer_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "detail_views_viewed_profile_id_fkey"
+            columns: ["viewed_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       featured_profiles: {
         Row: {
           age: number
