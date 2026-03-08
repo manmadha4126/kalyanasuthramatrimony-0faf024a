@@ -131,7 +131,7 @@ export default function AdminLogin() {
             <button
               onClick={() => navigate("/")}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:opacity-90 shadow-lg"
-              style={{ background: "hsl(0, 0%, 8%)", color: "hsl(0, 0%, 100%)", fontFamily: "'Open Sans', sans-serif" }}>
+              style={{ background: "hsl(0, 0%, 100%)", color: "hsl(0, 0%, 10%)", fontFamily: "'Open Sans', sans-serif" }}>
               
               <ArrowLeft size={16} /> Back to Home
             </button>
