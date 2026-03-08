@@ -1417,12 +1417,20 @@ export default function AdminDashboard() {
                           <th className="text-left py-3 px-4 font-semibold">Interested In</th>
                           <th className="text-left py-3 px-4 font-semibold">Type</th>
                           <th className="text-left py-3 px-4 font-semibold">Date</th>
+                          <th className="text-left py-3 px-4 font-semibold">Contact</th>
+                          <th className="text-left py-3 px-4 font-semibold">Status</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-50">
-                        {interests.map((interest: any) => (
+                        {interests.map((interest: any) => {
+                          const fromName = interest.from_profile?.full_name || interest.from_user_id?.slice(0, 8) + "...";
+                          const fromPhone = interest.from_profile?.phone || "";
+                          const toName = interest.profiles?.full_name || "Unknown";
+                          const whatsappMsg = encodeURIComponent(`Hi ${fromName}, you shortlisted the profile of ${toName}. Would you like more details about this profile? We can help you connect. - Kalyanasuthra Matrimony`);
+                          const whatsappLink = fromPhone ? `https://wa.me/${fromPhone.replace(/[^0-9]/g, "")}?text=${whatsappMsg}` : "";
+                          return (
                           <tr key={interest.id} className="hover:bg-gray-50 transition-colors">
-                            <td className="py-4 px-4 text-sm text-gray-800 font-medium">{interest.from_user_id?.slice(0, 8)}...</td>
+                            <td className="py-4 px-4 text-sm text-gray-800 font-medium">{fromName}</td>
                             <td className="py-4 px-4">
                               <div className="flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
@@ -1433,7 +1441,7 @@ export default function AdminDashboard() {
                                   )}
                                 </div>
                                 <div>
-                                  <p className="text-sm font-semibold text-gray-800">{interest.profiles?.full_name || "Unknown"}</p>
+                                  <p className="text-sm font-semibold text-gray-800">{toName}</p>
                                   <p className="text-xs text-gray-500">{interest.profiles?.city || "—"} • {interest.profiles?.gender || "—"}</p>
                                 </div>
                               </div>
@@ -1444,8 +1452,38 @@ export default function AdminDashboard() {
                               </span>
                             </td>
                             <td className="py-4 px-4 text-sm text-gray-500">{new Date(interest.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</td>
+                            <td className="py-4 px-4">
+                              {fromPhone ? (
+                                <a href={whatsappLink} target="_blank" rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-80"
+                                  style={{ background: "hsl(142, 70%, 93%)", color: "hsl(142, 70%, 30%)" }}>
+                                  📱 {fromPhone}
+                                </a>
+                              ) : (
+                                <span className="text-xs text-gray-400">No phone</span>
+                              )}
+                            </td>
+                            <td className="py-4 px-4">
+                              {interest.interest_type === "completed" ? (
+                                <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: "hsl(145, 60%, 92%)", color: "hsl(145, 60%, 30%)" }}>✓ Completed</span>
+                              ) : (
+                                <button
+                                  onClick={async () => {
+                                    const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" }).eq("id", interest.id);
+                                    if (!error) {
+                                      setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i));
+                                      toast({ title: "Marked as completed!" });
+                                    }
+                                  }}
+                                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-80"
+                                  style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>
+                                  Mark Completed
+                                </button>
+                              )}
+                            </td>
                           </tr>
-                        ))}
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
