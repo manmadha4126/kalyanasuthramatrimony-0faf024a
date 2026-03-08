@@ -1,6 +1,8 @@
-import { motion } from "framer-motion";
-import { ShieldCheck, Heart, ThumbsUp } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ShieldCheck, Heart, ThumbsUp, Phone, Mail, User, ChevronDown, ChevronUp } from "lucide-react";
 import aboutMain from "@/assets/about-main.png";
+import exclusiveBg from "@/assets/exclusive-bg.png";
 import wedding1 from "@/assets/wedding-1.jpeg";
 import wedding2 from "@/assets/wedding-2.jpeg";
 import wedding3 from "@/assets/wedding-3.jpeg";
@@ -25,7 +27,13 @@ const features = [
   },
 ];
 
+const owners = [
+  { name: "Sai", phone: "9553306667", email: "info@kalyanasuthramatrimony.com" },
+  { name: "Drakshayani", phone: "9866288767", email: "info@kalyanasuthramatrimony.com" },
+];
+
 const AboutSection = () => {
+  const [showContacts, setShowContacts] = useState(false);
   return (
     <>
     <section id="about" className="py-20 bg-muted/40 relative overflow-hidden">
@@ -112,25 +120,61 @@ const AboutSection = () => {
       <div className="h-px bg-border mx-8 opacity-50" />
 
       {/* CTA block */}
-      <div className="py-16 bg-primary/10">
-        <motion.div
-          className="container mx-auto px-4 text-center space-y-4"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <h3 className="font-serif text-2xl md:text-3xl font-bold text-primary leading-snug">
-            Exclusive Service from<br />
-            Kalyanasuthra Matrimony
-          </h3>
-          <a
-            href="#contact"
-            className="btn-burgundy inline-block text-sm font-semibold px-6 py-3 rounded-lg"
+      <div className="relative overflow-hidden">
+        <img src={exclusiveBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0" style={{ background: "hsla(35, 40%, 20%, 0.25)" }} />
+        <div className="relative z-10 py-16">
+          <motion.div
+            className="container mx-auto px-4 text-center space-y-5"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Contact Us
-          </a>
-        </motion.div>
+            <h3 className="text-3xl md:text-4xl leading-snug" style={{ fontFamily: "'Great Vibes', cursive", color: "hsl(348, 56%, 27%)" }}>
+              Exclusive Services from<br />
+              Kalyanasuthra Matrimony
+            </h3>
+            <button
+              onClick={() => setShowContacts(!showContacts)}
+              className="inline-flex items-center gap-2 text-sm font-bold px-7 py-3 rounded-lg transition-all hover:scale-105 shadow-lg"
+              style={{ background: "hsl(348, 56%, 27%)", color: "white" }}
+            >
+              <Phone size={16} />
+              Contact Us
+              {showContacts ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </button>
+
+            <AnimatePresence>
+              {showContacts && (
+                <motion.div
+                  className="mt-4 grid sm:grid-cols-2 gap-4 max-w-lg mx-auto"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {owners.map((owner, i) => (
+                    <div key={i} className="rounded-xl p-4 text-left shadow-md" style={{ background: "hsla(0,0%,100%,0.92)", border: "1px solid hsl(35, 40%, 75%)" }}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: "hsl(348, 56%, 27%)" }}>
+                          <User size={14} className="text-white" />
+                        </div>
+                        <span className="text-base font-bold" style={{ color: "hsl(348, 56%, 27%)" }}>{owner.name}</span>
+                      </div>
+                      <a href={`tel:${owner.phone}`} className="flex items-center gap-2 text-sm font-semibold mb-1 transition-colors" style={{ color: "hsl(220, 30%, 25%)" }}>
+                        <Phone size={14} style={{ color: "hsl(348, 56%, 27%)" }} /> {owner.phone}
+                      </a>
+                      <a href={`mailto:${owner.email}`} className="flex items-center gap-2 text-xs transition-colors" style={{ color: "hsl(220, 15%, 45%)" }}>
+                        <Mail size={12} style={{ color: "hsl(348, 56%, 27%)" }} /> {owner.email}
+                      </a>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </div>
       </div>
 
       {/* Three features below Contact Us */}
