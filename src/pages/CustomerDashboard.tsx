@@ -728,7 +728,7 @@ export default function CustomerDashboard() {
                 </div>
 
                 {/* Section: Religion & Community */}
-                <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2"><Star size={14} style={{ color: themeAccent }} /> Religion & Community</h3>
+                <h3 className="text-sm font-bold mb-3 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ fontFamily: "'DM Serif Display', serif", background: themeLight, color: themeDark }}><Star size={14} style={{ color: themeAccent }} /> Religion & Community</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Religion</label>
