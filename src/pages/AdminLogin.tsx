@@ -86,10 +86,10 @@ export default function AdminLogin() {
 
           {/* Main heading */}
           <h1 style={{ fontFamily: "'Kaushan Script', cursive", fontSize: "3.2rem", lineHeight: "1.2" }} className="mb-3">
-            <span style={{ color: "hsl(42, 80%, 72%)" }}>Welcome to the</span><br />
-            <span style={{ color: "hsl(0, 0%, 100%)", fontSize: "3.6rem", textShadow: "0 2px 20px hsl(260, 50%, 50% / 0.3)" }}>Admin Portal</span>
+            <span style={{ color: "hsl(0, 0%, 100%)", textShadow: "0 2px 8px hsl(180, 50%, 25% / 0.4)" }}>Welcome to the</span><br />
+            <span style={{ color: "hsl(45, 100%, 90%)", fontSize: "3.6rem", textShadow: "0 2px 12px hsl(180, 50%, 20% / 0.5)" }}>Admin Portal</span>
           </h1>
-          <p className="text-base leading-relaxed max-w-md mb-10" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(220, 30%, 78%)" }}>
+          <p className="text-base leading-relaxed max-w-md mb-10" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(180, 10%, 98%)" }}>
             Managing South India's most trusted matrimonial platform. Every match we make writes a new chapter of love.
           </p>
 
@@ -102,12 +102,12 @@ export default function AdminLogin() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + i * 0.08 }}
               className="flex items-start gap-3.5 p-4 rounded-xl"
-              style={{ background: "hsl(0, 0%, 100% / 0.07)", border: "1px solid hsl(0, 0%, 100% / 0.1)", backdropFilter: "blur(8px)" }}>
+              style={{ background: "hsl(180, 40%, 30% / 0.35)", border: "1px solid hsl(0, 0%, 100% / 0.15)", backdropFilter: "blur(8px)" }}>
               
                 <span className="text-2xl flex-shrink-0">{item.icon}</span>
                 <div>
-                  <p className="font-semibold text-sm" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(42, 75%, 75%)" }}>{item.label}</p>
-                  <p className="mt-1 leading-snug text-xs font-normal" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(220, 20%, 72%)" }}>{item.desc}</p>
+                  <p className="font-semibold text-sm" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(0, 0%, 100%)" }}>{item.label}</p>
+                  <p className="mt-1 leading-snug text-xs font-normal" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(180, 15%, 90%)" }}>{item.desc}</p>
                 </div>
               </motion.div>
             )}
@@ -115,8 +115,8 @@ export default function AdminLogin() {
 
           {/* Bottom quote */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="mt-10 flex items-center gap-2">
-            <Heart size={14} style={{ color: "hsl(42, 70%, 65%)" }} className="fill-current" />
-            <span className="text-xs" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", color: "hsl(260, 30%, 65%)" }}>
+            <Heart size={14} style={{ color: "hsl(45, 100%, 90%)" }} className="fill-current" />
+            <span className="text-xs" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", color: "hsl(0, 0%, 100%)" }}>
               "Where tradition meets technology in every match"
             </span>
           </motion.div>
