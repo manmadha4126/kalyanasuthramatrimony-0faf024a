@@ -978,7 +978,7 @@ export default function CustomerDashboard() {
             key={label}
             onClick={() => setActiveNav(label)}
             className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-all min-w-0"
-            style={activeNav === label ? { color: themeAccent } : { color: "#999" }}
+            style={activeNav === label ? { color: "#ffffff" } : { color: "rgba(255,255,255,0.65)" }}
           >
             <Icon size={18} />
             <span className="text-[10px] font-semibold truncate">{label}</span>
