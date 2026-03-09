@@ -52,28 +52,47 @@ const HeroSection = () => {
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-10 left-10 w-64 h-64 rounded-full opacity-10 blur-3xl" style={{ background: "hsl(var(--gold-accent))" }} />
           <div className="absolute bottom-10 right-10 w-80 h-80 rounded-full opacity-10 blur-3xl" style={{ background: "hsl(348, 60%, 45%)" }} />
-          {/* Floating hearts */}
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute"
-              style={{
-                left: `${15 + i * 18}%`,
-                top: `${20 + (i % 3) * 25}%`,
-              }}
-              animate={{
-                y: [-10, 10, -10],
-                opacity: [0.1, 0.2, 0.1],
-              }}
-              transition={{
-                duration: 4 + i,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              <Heart className="w-4 h-4 sm:w-6 sm:h-6" style={{ color: "hsl(var(--gold-accent))" }} fill="currentColor" />
-            </motion.div>
-          ))}
+          {/* Floating hearts - large scattered */}
+          {[...Array(14)].map((_, i) => {
+            const positions = [
+              { left: "5%", top: "10%" }, { left: "92%", top: "15%" },
+              { left: "18%", top: "70%" }, { left: "80%", top: "75%" },
+              { left: "45%", top: "8%" }, { left: "60%", top: "85%" },
+              { left: "30%", top: "40%" }, { left: "75%", top: "45%" },
+              { left: "10%", top: "50%" }, { left: "88%", top: "55%" },
+              { left: "50%", top: "60%" }, { left: "25%", top: "20%" },
+              { left: "70%", top: "25%" }, { left: "40%", top: "90%" },
+            ];
+            const sizes = ["w-3 h-3", "w-4 h-4", "w-5 h-5", "w-6 h-6", "w-7 h-7", "w-8 h-8"];
+            const colors = [
+              "hsl(var(--gold-accent))",
+              "hsl(348, 70%, 55%)",
+              "hsl(310, 50%, 60%)",
+              "hsl(0, 65%, 55%)",
+              "hsl(330, 60%, 50%)",
+            ];
+            return (
+              <motion.div
+                key={i}
+                className="absolute"
+                style={positions[i]}
+                animate={{
+                  y: [-12, 14, -12],
+                  x: [-6, 6, -6],
+                  opacity: [0.08, 0.25, 0.08],
+                  rotate: [0, i % 2 === 0 ? 15 : -15, 0],
+                }}
+                transition={{
+                  duration: 3.5 + (i % 5) * 1.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.4,
+                }}
+              >
+                <Heart className={sizes[i % sizes.length]} style={{ color: colors[i % colors.length] }} fill="currentColor" />
+              </motion.div>
+            );
+          })}
         </div>
 
         <div className="container mx-auto px-4 py-10 md:py-16 lg:py-20">
