@@ -175,7 +175,7 @@ const HeroSection = () => {
               transition={{ duration: 0.7, delay: 0.4 }}
             >
               {/* Large Background Rectangle Slideshow */}
-              <div className="absolute -inset-8 sm:-inset-12 lg:-inset-16 rounded-2xl overflow-hidden">
+              <div className="absolute -inset-x-8 -inset-y-4 sm:-inset-x-12 sm:-inset-y-6 lg:-inset-x-16 lg:-inset-y-8 rounded-2xl overflow-hidden">
                 {images.map((img, i) => (
                   <motion.img
                     key={`bg-large-${i}`}
