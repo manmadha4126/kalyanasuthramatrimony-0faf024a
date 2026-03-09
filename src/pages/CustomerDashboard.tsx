@@ -421,8 +421,8 @@ export default function CustomerDashboard() {
       {/* Main */}
       <div className="flex-1 lg:ml-64 overflow-auto">
         {/* Fixed header */}
-        <header className="fixed top-0 right-0 left-0 lg:left-64 z-20 backdrop-blur-sm border-b border-transparent lg:border-gray-100 px-4 sm:px-6 py-4 lg:bg-white/90" style={{ background: `linear-gradient(135deg, ${themeDark}, ${themeAccent})` }}>
-          <style>{`@media (min-width: 1024px) { .dashboard-top-header { background: rgba(255,255,255,0.9) !important; } }`}</style>
+        <style>{`@media (min-width: 1024px) { .dashboard-top-header { background: rgba(255,255,255,0.9) !important; border-bottom: 1px solid #f3f4f6 !important; } }`}</style>
+        <header className="dashboard-top-header fixed top-0 right-0 left-0 lg:left-64 z-20 backdrop-blur-sm px-4 sm:px-6 py-4" style={{ background: `linear-gradient(135deg, ${themeDark}, ${themeAccent})` }}>
           <div className="flex items-center gap-3">
             <div className="lg:hidden">
               <BackButton to="/" label="Home" />
