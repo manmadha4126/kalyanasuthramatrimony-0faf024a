@@ -174,7 +174,7 @@ const HeroSection = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
             >
-              <div className="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] max-w-sm sm:max-w-md mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
+              <div className="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] max-w-lg lg:max-w-xl mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
                 {/* Animated background blur slideshow */}
                 <div className="absolute inset-0 overflow-hidden">
                   <AnimatePresence mode="wait">
