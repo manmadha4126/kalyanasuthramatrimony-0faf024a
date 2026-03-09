@@ -427,12 +427,9 @@ export default function CustomerDashboard() {
               <button onClick={() => navigate("/")} className="p-1 rounded-full hover:opacity-80 transition-colors" style={{ color: themeDark }}>
                 <ArrowLeft size={20} />
               </button>
-              <span className="text-base font-bold tracking-wide" style={{
+              <span style={{
                 fontFamily: "'Great Vibes', cursive",
-                background: "linear-gradient(135deg, hsl(348, 56%, 27%), hsl(280, 55%, 50%))",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
+                color: "hsl(348, 56%, 27%)",
                 fontSize: "1.25rem",
               }}>Kalyanasuthra Matrimony</span>
             </div>
