@@ -423,8 +423,15 @@ export default function CustomerDashboard() {
         {/* Fixed header */}
         <header className="fixed top-0 right-0 left-0 lg:left-64 z-20 backdrop-blur-sm px-4 sm:px-6 py-4 bg-white/90 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="lg:hidden">
+            <div className="lg:hidden flex items-center gap-2">
               <BackButton to="/" label="Home" />
+              <span className="text-sm font-bold tracking-wide" style={{
+                fontFamily: "'Playfair Display', serif",
+                background: `linear-gradient(135deg, ${themeAccent}, ${themeDark})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>Kalyanasuthra Matrimony</span>
             </div>
             <nav className="hidden lg:flex items-center gap-1 mx-auto">
               {["Home", "Matches", "Interests", "Preferences"].map((item) =>
