@@ -97,7 +97,7 @@ const FeaturedProfiles = () => {
 
   return (
     <section className="py-20 relative overflow-hidden" style={{
-      background: "linear-gradient(135deg, hsl(275, 40%, 15%) 0%, hsl(310, 35%, 22%) 25%, hsl(340, 30%, 18%) 50%, hsl(280, 45%, 20%) 75%, hsl(260, 50%, 12%) 100%)"
+      background: "linear-gradient(135deg, #E1989A 0%, #B4717A 100%)"
     }}>
       {/* Mandala-inspired geometric pattern */}
       <div className="absolute inset-0 opacity-[0.08] pointer-events-none"
