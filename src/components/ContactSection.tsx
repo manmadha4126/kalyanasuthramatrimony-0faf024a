@@ -81,7 +81,7 @@ const ContactSection = () => {
           <textarea
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
-            rows={3}
+            rows={2}
             className="w-full px-3 py-2 rounded-md text-sm border border-gray-200 outline-none resize-none focus:ring-2 focus:ring-purple-500/20 transition-all"
             style={{ background: inputBg }}
           />
