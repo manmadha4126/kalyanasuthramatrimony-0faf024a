@@ -882,25 +882,30 @@ export default function AdminDashboard() {
                   <div className="space-y-3">
                     {pendingProfiles.map((p, i) => (
                       <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
-                        className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md flex items-center gap-4 px-5 py-4 cursor-pointer"
+                        className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md cursor-pointer"
                         style={{ borderLeft: "4px solid hsl(38, 90%, 55%)" }}
                         onClick={() => openProfile(p)}
                       >
-                        <div className="w-12 h-12 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
-                          {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><span className="text-lg font-bold text-gray-400">{p.full_name[0]}</span></div>}
+                        <div className="flex items-center gap-3 px-4 py-3">
+                          <div className="w-11 h-11 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
+                            {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><span className="text-lg font-bold text-gray-400">{p.full_name[0]}</span></div>}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-bold text-gray-800 text-sm sm:text-base truncate">{p.full_name}</h3>
+                            <p className="text-xs sm:text-sm text-gray-500 truncate">{p.gender} • {getAge(p.date_of_birth)} yrs • {[p.city, p.state].filter(Boolean).join(", ") || "—"}</p>
+                          </div>
+                          <div className="flex-shrink-0 hidden sm:block">
+                            <p className="text-sm text-gray-500">{p.occupation || "—"}</p>
+                          </div>
+                          {(p as any).profile_id && (
+                            <span className="px-2 py-1 rounded-lg text-xs font-bold flex-shrink-0 hidden sm:inline" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>{(p as any).profile_id}</span>
+                          )}
+                          <StatusBadge status={p.profile_status} />
                         </div>
-                         <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-gray-800 text-base truncate">{p.full_name}</h3>
-                          <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {[p.city, p.state].filter(Boolean).join(", ") || "—"}</p>
-                        </div>
-                        <div className="flex-shrink-0 hidden sm:block">
-                          <p className="text-sm text-gray-500">{p.occupation || "—"}</p>
-                        </div>
-                        {(p as any).profile_id && (
-                          <span className="px-2 py-1 rounded-lg text-xs font-bold flex-shrink-0" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>{(p as any).profile_id}</span>
-                        )}
-                        <StatusBadge status={p.profile_status} />
-                        <div className="flex items-center gap-2 flex-shrink-0">
+                        <div className="flex items-center gap-2 px-4 pb-3 flex-wrap">
+                          {(p as any).profile_id && (
+                            <span className="px-2 py-1 rounded-lg text-xs font-bold sm:hidden" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>{(p as any).profile_id}</span>
+                          )}
                           <button onClick={(e) => { e.stopPropagation(); updateStatus(p.id, "active"); }} className="px-3 py-1.5 rounded-xl text-xs font-semibold text-white transition-all" style={{ background: "hsl(145, 65%, 42%)" }}>Verify</button>
                           <span className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold" style={{ background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>
                             <Eye size={12} /> View
