@@ -107,7 +107,7 @@ const HeroSection = () => {
               The Wedding Chapter
             </p>
             <h1
-              className="text-3xl md:text-5xl font-bold mb-3"
+              className="text-2xl sm:text-3xl md:text-5xl font-bold mb-3"
               style={{ fontFamily: "'Playfair Display', serif", color: "hsl(var(--foreground))" }}
             >
               Kalyanasuthra

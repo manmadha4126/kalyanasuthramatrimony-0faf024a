@@ -135,8 +135,8 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h3
-              className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-snug"
+             <h3
+               className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-snug"
               style={{
                 fontFamily: "'Pinyon Script', cursive",
                 color: "hsl(0, 0%, 5%)",

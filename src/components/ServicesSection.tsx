@@ -159,7 +159,7 @@ const ServicesSection = () => {
       </div>
 
       {/* CTA bridging with Contact Us owner details */}
-      <div className="relative z-20" style={{ marginBottom: "-60px", marginTop: "40px" }}>
+      <div className="relative z-20 px-4" style={{ marginBottom: "-40px", marginTop: "30px" }}>
         <motion.div
           className="max-w-3xl mx-auto text-center rounded-2xl py-8 px-8 shadow-2xl relative overflow-hidden"
           style={{
