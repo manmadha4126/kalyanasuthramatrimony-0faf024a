@@ -174,24 +174,23 @@ const HeroSection = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
             >
-              <div className="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] max-w-sm sm:max-w-md mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
-                {/* Animated background blur slideshow */}
+              <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] max-w-xs sm:max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
+                {/* Background slideshow with 65% opacity fade-in */}
                 <div className="absolute inset-0 overflow-hidden">
-                  <AnimatePresence mode="wait">
+                  {images.map((img, i) => (
                     <motion.img
-                      key={`bg-${current}`}
-                      src={images[current]}
+                      key={`bg-${i}`}
+                      src={img}
                       alt=""
-                      className="absolute inset-0 w-full h-full object-cover scale-110 blur-lg opacity-40"
+                      className="absolute inset-0 w-full h-full object-cover scale-110 blur-md"
                       initial={{ opacity: 0 }}
-                      animate={{ opacity: 0.4 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.8 }}
+                      animate={{ opacity: i === current ? 0.65 : 0 }}
+                      transition={{ duration: 1.2, ease: "easeInOut" }}
                     />
-                  </AnimatePresence>
+                  ))}
                 </div>
 
-                {/* Main image */}
+                {/* Main image with sequential fade */}
                 <AnimatePresence mode="wait" custom={direction}>
                   <motion.div
                     key={current}
@@ -238,18 +237,28 @@ const HeroSection = () => {
                   <ChevronRight className="w-5 h-5 text-white" />
                 </button>
 
-                {/* Dots */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+                {/* Progress bar indicator */}
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">
                   {images.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}
-                      className="w-2.5 h-2.5 rounded-full transition-all duration-300"
+                      className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300"
                       style={{
-                        background: i === current ? "hsl(var(--gold-accent))" : "rgba(255,255,255,0.4)",
-                        transform: i === current ? "scale(1.3)" : "scale(1)",
+                        width: i === current ? "24px" : "8px",
+                        background: "rgba(255,255,255,0.3)",
                       }}
-                    />
+                    >
+                      {i === current && (
+                        <motion.div
+                          className="absolute inset-0 rounded-full"
+                          style={{ background: "hsl(var(--gold-accent))" }}
+                          initial={{ scaleX: 0, originX: 0 }}
+                          animate={{ scaleX: 1 }}
+                          transition={{ duration: 3.5, ease: "linear" }}
+                        />
+                      )}
+                    </button>
                   ))}
                 </div>
               </div>
