@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart, Volume2, VolumeX } from "lucide-react";
 
 import wedding1 from "@/assets/wedding-1.jpeg";
 import wedding2 from "@/assets/wedding-2.jpeg";
@@ -18,6 +18,28 @@ const images = [wedding1, wedding2, wedding3, wedding4, wedding5, wedding6, wedd
 const HeroSection = () => {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [isMuted, setIsMuted] = useState(true);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio("/audio/background-music.mp3");
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.5;
+    return () => {
+      audioRef.current?.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+    if (isMuted) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+    setIsMuted(!isMuted);
+  };
 
   const goNext = useCallback(() => {
     setDirection(1);
@@ -282,6 +304,20 @@ const HeroSection = () => {
 
       {/* Decorative bottom border */}
       <div className="w-full h-1.5" style={{ background: "linear-gradient(90deg, hsl(var(--burgundy-light)), hsl(var(--gold-accent)), hsl(var(--burgundy-light)))" }} />
+
+      {/* Music toggle button - bottom right */}
+      <button
+        onClick={toggleMusic}
+        className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110"
+        style={{ background: "linear-gradient(135deg, hsl(348, 60%, 45%), hsl(348, 55%, 35%))", border: "2px solid hsl(var(--gold-accent) / 0.6)" }}
+        aria-label={isMuted ? "Play music" : "Mute music"}
+      >
+        {isMuted ? (
+          <VolumeX className="w-5 h-5 text-white" />
+        ) : (
+          <Volume2 className="w-5 h-5 text-white" />
+        )}
+      </button>
     </section>
   );
 };
