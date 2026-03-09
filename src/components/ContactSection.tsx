@@ -56,7 +56,7 @@ const ContactSection = () => {
         <span className="text-lg">✍</span>
       </div>
       <div className="w-full h-px mb-3" style={{ background: "hsl(220 10% 85%)" }} />
-      <div className="space-y-3.5">
+      <div className="space-y-2.5">
         {[
           { label: "Full Name", type: "text", key: "name" as const, color: textDark },
           { label: "Email", type: "email", key: "email" as const, color: "hsl(348 50% 35%)", required: true },
