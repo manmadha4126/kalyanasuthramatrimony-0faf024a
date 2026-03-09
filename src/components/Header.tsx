@@ -30,7 +30,7 @@ const Header = () => {
         {/* Logo */}
         <a href="#home" className="flex items-center gap-2">
           <img src={logo} alt="Kalyanasuthra Matrimony" className="h-14 w-auto object-contain" />
-          <span className="font-serif text-lg font-semibold text-primary hidden sm:inline">
+          <span className="font-serif text-base sm:text-lg font-semibold text-primary">
             Kalyanasuthra Matrimony
           </span>
         </a>
