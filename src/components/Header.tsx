@@ -50,9 +50,27 @@ const Header = () => {
 
         {/* Right side buttons */}
         <div className="hidden lg:flex items-center gap-3 ml-auto">
-          <a href="/register" className="text-sm px-5 py-2.5 rounded-lg font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg" style={{ background: "linear-gradient(135deg, hsl(348, 60%, 38%), hsl(348, 50%, 28%))" }}>Register</a>
-          <a href="/login" className="text-sm px-5 py-2.5 rounded-lg font-bold transition-all duration-300 hover:scale-105 hover:shadow-md" style={{ background: "hsl(42, 50%, 90%)", color: "hsl(42, 50%, 30%)" }}>Login</a>
-          <a href="/admin" className="text-sm px-5 py-2.5 rounded-lg font-bold transition-all duration-300 hover:scale-105 hover:shadow-md" style={{ background: "hsl(220, 45%, 92%)", color: "hsl(220, 45%, 30%)" }}>Admin</a>
+          <a 
+            href="/register" 
+            className="text-sm px-5 py-2.5 rounded-lg font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg" 
+            style={{ background: "linear-gradient(135deg, hsl(160, 45%, 40%), hsl(160, 50%, 30%))" }}
+          >
+            Register
+          </a>
+          <a 
+            href="/login" 
+            className="text-sm px-5 py-2.5 rounded-lg font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-md" 
+            style={{ background: "linear-gradient(135deg, hsl(280, 55%, 50%), hsl(280, 60%, 40%))" }}
+          >
+            Login
+          </a>
+          <a 
+            href="/admin" 
+            className="text-sm px-5 py-2.5 rounded-lg font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-md" 
+            style={{ background: "linear-gradient(135deg, hsl(35, 85%, 55%), hsl(25, 90%, 45%))" }}
+          >
+            Admin
+          </a>
         </div>
 
         {/* Mobile */}
@@ -75,9 +93,32 @@ const Header = () => {
                   {link.label}
                 </a>
               ))}
-              <a href="/register" className="btn-burgundy text-xs mt-2" onClick={() => setMobileOpen(false)}>Register</a>
-              <a href="/login" className="text-xs font-semibold" style={{ color: "hsl(var(--burgundy))" }} onClick={() => setMobileOpen(false)}>Login</a>
-              <a href="/admin" className="text-xs font-semibold text-gray-500" onClick={() => setMobileOpen(false)}>Admin</a>
+              <div className="flex items-center gap-2 mt-2">
+                <a 
+                  href="/register" 
+                  className="text-xs px-4 py-2 rounded-lg font-bold text-white" 
+                  style={{ background: "linear-gradient(135deg, hsl(160, 45%, 40%), hsl(160, 50%, 30%))" }}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Register
+                </a>
+                <a 
+                  href="/login" 
+                  className="text-xs px-4 py-2 rounded-lg font-bold text-white" 
+                  style={{ background: "linear-gradient(135deg, hsl(280, 55%, 50%), hsl(280, 60%, 40%))" }}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Login
+                </a>
+                <a 
+                  href="/admin" 
+                  className="text-xs px-4 py-2 rounded-lg font-bold text-white" 
+                  style={{ background: "linear-gradient(135deg, hsl(35, 85%, 55%), hsl(25, 90%, 45%))" }}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Admin
+                </a>
+              </div>
             </nav>
           </motion.div>
         )}
