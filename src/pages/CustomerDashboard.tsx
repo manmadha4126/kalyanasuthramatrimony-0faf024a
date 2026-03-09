@@ -970,6 +970,28 @@ export default function CustomerDashboard() {
           </motion.div>
         </div>
       }
+      {/* Mobile Bottom Navigation */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 flex items-center justify-around py-2 px-1 safe-area-bottom">
+        {NAV.filter(n => n.label !== "Settings").map(({ icon: Icon, label }) => (
+          <button
+            key={label}
+            onClick={() => setActiveNav(label)}
+            className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-all min-w-0"
+            style={activeNav === label ? { color: themeAccent } : { color: "#999" }}
+          >
+            <Icon size={18} />
+            <span className="text-[10px] font-semibold truncate">{label}</span>
+          </button>
+        ))}
+        <button
+          onClick={logout}
+          className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-all min-w-0"
+          style={{ color: "#999" }}
+        >
+          <LogOut size={18} />
+          <span className="text-[10px] font-semibold">Logout</span>
+        </button>
+      </nav>
     </div>);
 
 }
