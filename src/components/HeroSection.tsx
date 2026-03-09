@@ -170,12 +170,12 @@ const HeroSection = () => {
 
       {/* Bottom accent strip */}
       <div
-        className="w-full py-3.5 flex items-center justify-center gap-4 text-xs md:text-sm tracking-wider uppercase text-center"
+        className="w-full py-3 px-4 flex items-center justify-center gap-2 text-[10px] sm:text-xs md:text-sm tracking-wider uppercase text-center flex-wrap"
         style={{ background: "hsl(var(--burgundy-light))", color: "hsl(var(--soft-gray))" }}
       >
-        <span className="w-8 h-px" style={{ background: "hsl(var(--gold-accent))" }} />
+        <span className="w-6 h-px hidden sm:block" style={{ background: "hsl(var(--gold-accent))" }} />
         <span>10,000+ Successful Marriages • Verified Profiles • Personalized Matchmaking</span>
-        <span className="w-8 h-px" style={{ background: "hsl(var(--gold-accent))" }} />
+        <span className="w-6 h-px hidden sm:block" style={{ background: "hsl(var(--gold-accent))" }} />
       </div>
 
       {/* Decorative bottom border */}
