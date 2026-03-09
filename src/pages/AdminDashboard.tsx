@@ -793,22 +793,34 @@ export default function AdminDashboard() {
 
       {/* Main */}
       <div className="flex-1 overflow-auto">
-        <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex items-center gap-4 sticky top-0 z-10 shadow-sm">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-400 hover:text-gray-600 hidden lg:block">
-            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-          <div className="flex items-center gap-2 lg:hidden">
-            <button onClick={() => navigate("/")} className="text-xs px-2 py-1.5 rounded-lg border border-gray-200 text-gray-500 flex items-center gap-1">
+        {/* Mobile header */}
+        <header className="sticky top-0 z-10 shadow-md lg:hidden" style={{ background: "hsl(213, 32%, 22%)" }}>
+          <div className="flex items-center gap-3 px-4 py-3">
+            <img src={adminLogo} alt="Kalyanasuthra" className="h-9 w-auto object-contain" />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-bold leading-tight" style={{ color: "hsl(42, 60%, 78%)" }}>Admin Dashboard</p>
+              <p className="text-[10px] truncate" style={{ color: "hsl(0,0%,60%)" }}>{adminEmail}</p>
+            </div>
+            <button onClick={() => navigate("/")} className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: "hsl(42, 55%, 55%)", color: "hsl(213, 32%, 12%)" }}>
               <Home size={12} /> Home
             </button>
+            <button onClick={logout} className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: "hsl(0, 65%, 50%)", color: "white" }}>
+              <LogOut size={12} /> Out
+            </button>
           </div>
-          <img src={adminLogo} alt="Kalyanasuthra" className="h-10 w-auto object-contain hidden sm:block lg:hidden" />
-          <div className="hidden lg:block">
+        </header>
+
+        {/* Desktop header */}
+        <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 items-center gap-4 sticky top-0 z-10 shadow-sm hidden lg:flex">
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-400 hover:text-gray-600">
+            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+          <div>
             <h1 className="text-lg font-bold text-gray-800">Admin Dashboard</h1>
             <p className="text-sm text-gray-400">Kalyanasuthra Matrimony Management</p>
           </div>
           <div className="ml-auto flex items-center gap-3">
-            <span className="text-sm text-gray-500 hidden sm:block">{adminEmail}</span>
+            <span className="text-sm text-gray-500">{adminEmail}</span>
             <button onClick={logout} className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-red-500 transition-colors border border-gray-200 px-4 py-2 rounded-xl">
               <LogOut size={14} /> Logout
             </button>
@@ -817,9 +829,17 @@ export default function AdminDashboard() {
 
         <div className="p-4 sm:p-6">
           {/* Mobile tabs */}
-          <div className="flex border-b border-gray-200 mb-6 gap-2 overflow-x-auto lg:hidden pb-2">
+          <div className="flex mb-6 gap-1.5 overflow-x-auto lg:hidden pb-2 scrollbar-hide">
             {TABS.map(t => (
-              <button key={t} onClick={() => setTab(t)} className="px-3 py-2 text-sm font-semibold rounded-lg whitespace-nowrap transition-all" style={tab === t ? { background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" } : { color: "#aaa" }}>
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className="px-3 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition-all flex-shrink-0"
+                style={tab === t
+                  ? { background: "hsl(213, 32%, 22%)", color: "hsl(42, 60%, 78%)", boxShadow: "0 2px 8px hsl(213,32%,22%/0.3)" }
+                  : { background: "hsl(213, 25%, 92%)", color: "hsl(213, 32%, 35%)" }
+                }
+              >
                 {t}
               </button>
             ))}
