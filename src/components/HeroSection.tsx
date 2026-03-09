@@ -82,7 +82,7 @@ const HeroSection = () => {
   const variants = {
     enter: (d: number) => ({ opacity: 0, x: d > 0 ? 60 : -60, scale: 1.02 }),
     center: { opacity: 1, x: 0, scale: 1 },
-    exit: (d: number) => ({ opacity: 0, x: d > 0 ? -60 : 60, scale: 0.98 }),
+    exit: (d: number) => ({ opacity: 0, x: d > 0 ? -60 : 60, scale: 0.98 })
   };
 
   return (
@@ -100,22 +100,22 @@ const HeroSection = () => {
           {/* Floating hearts - large scattered */}
           {[...Array(14)].map((_, i) => {
             const positions = [
-              { left: "5%", top: "10%" }, { left: "92%", top: "15%" },
-              { left: "18%", top: "70%" }, { left: "80%", top: "75%" },
-              { left: "45%", top: "8%" }, { left: "60%", top: "85%" },
-              { left: "30%", top: "40%" }, { left: "75%", top: "45%" },
-              { left: "10%", top: "50%" }, { left: "88%", top: "55%" },
-              { left: "50%", top: "60%" }, { left: "25%", top: "20%" },
-              { left: "70%", top: "25%" }, { left: "40%", top: "90%" },
-            ];
+            { left: "5%", top: "10%" }, { left: "92%", top: "15%" },
+            { left: "18%", top: "70%" }, { left: "80%", top: "75%" },
+            { left: "45%", top: "8%" }, { left: "60%", top: "85%" },
+            { left: "30%", top: "40%" }, { left: "75%", top: "45%" },
+            { left: "10%", top: "50%" }, { left: "88%", top: "55%" },
+            { left: "50%", top: "60%" }, { left: "25%", top: "20%" },
+            { left: "70%", top: "25%" }, { left: "40%", top: "90%" }];
+
             const sizes = ["w-3 h-3", "w-4 h-4", "w-5 h-5", "w-6 h-6", "w-7 h-7", "w-8 h-8"];
             const colors = [
-              "hsl(var(--gold-accent))",
-              "hsl(348, 70%, 55%)",
-              "hsl(310, 50%, 60%)",
-              "hsl(0, 65%, 55%)",
-              "hsl(330, 60%, 50%)",
-            ];
+            "hsl(var(--gold-accent))",
+            "hsl(348, 70%, 55%)",
+            "hsl(310, 50%, 60%)",
+            "hsl(0, 65%, 55%)",
+            "hsl(330, 60%, 50%)"];
+
             return (
               <motion.div
                 key={i}
@@ -125,18 +125,18 @@ const HeroSection = () => {
                   y: [-12, 14, -12],
                   x: [-6, 6, -6],
                   opacity: [0.08, 0.25, 0.08],
-                  rotate: [0, i % 2 === 0 ? 15 : -15, 0],
+                  rotate: [0, i % 2 === 0 ? 15 : -15, 0]
                 }}
                 transition={{
-                  duration: 3.5 + (i % 5) * 1.2,
+                  duration: 3.5 + i % 5 * 1.2,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: i * 0.4,
-                }}
-              >
+                  delay: i * 0.4
+                }}>
+                
                 <Heart className={sizes[i % sizes.length]} style={{ color: colors[i % colors.length] }} fill="currentColor" />
-              </motion.div>
-            );
+              </motion.div>);
+
           })}
         </div>
 
@@ -144,28 +144,28 @@ const HeroSection = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             
             {/* Left - Content */}
-            <motion.div 
+            <motion.div
               className="text-center lg:text-left order-2 lg:order-1 z-10"
               initial={{ opacity: 0, x: -40 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-            >
+              transition={{ duration: 0.7, delay: 0.2 }}>
+              
               {/* Decorative line */}
               <div className="flex items-center gap-3 justify-center lg:justify-start mb-4">
                 <div className="w-10 h-px" style={{ background: "hsl(var(--gold-accent))" }} />
                 <p
                   className="text-base md:text-lg italic"
-                  style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--gold-accent))" }}
-                >
-                  The Wedding Chapter
+                  style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--gold-accent))" }}>
+                  
+                  The Wedding Chapter Starts Here.....  
                 </p>
                 <div className="w-10 h-px" style={{ background: "hsl(var(--gold-accent))" }} />
               </div>
 
               <h1
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
-                style={{ fontFamily: "'Playfair Display', serif", color: "white" }}
-              >
+                style={{ fontFamily: "'Playfair Display', serif", color: "white" }}>
+                
                 Kalyanasuthra
               </h1>
 
@@ -198,40 +198,40 @@ const HeroSection = () => {
                 <a
                   href="/register"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
-                  style={{ background: "linear-gradient(135deg, hsl(348, 60%, 45%), hsl(348, 55%, 35%))" }}
-                >
+                  style={{ background: "linear-gradient(135deg, hsl(348, 60%, 45%), hsl(348, 55%, 35%))" }}>
+                  
                   Get Started
                 </a>
                 <a
                   href="#about"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 hover:scale-105 border-2"
-                  style={{ borderColor: "hsl(var(--gold-accent))", color: "hsl(var(--gold-accent))" }}
-                >
+                  style={{ borderColor: "hsl(var(--gold-accent))", color: "hsl(var(--gold-accent))" }}>
+                  
                   Learn More
                 </a>
               </div>
             </motion.div>
 
             {/* Right - Slider */}
-            <motion.div 
+            <motion.div
               className="relative order-1 lg:order-2 z-10 lg:mr-16 xl:mr-24"
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-            >
+              transition={{ duration: 0.7, delay: 0.4 }}>
+              
               {/* Large Background Rectangle Slideshow */}
               <div className="absolute -inset-x-6 inset-y-0 sm:-inset-x-10 sm:inset-y-0 lg:-inset-x-12 lg:inset-y-0 rounded-2xl overflow-hidden">
-                {images.map((img, i) => (
-                  <motion.img
-                    key={`bg-large-${i}`}
-                    src={img}
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: i === current ? 0.65 : 0 }}
-                    transition={{ duration: 1.2, ease: "easeInOut" }}
-                  />
-                ))}
+                {images.map((img, i) =>
+                <motion.img
+                  key={`bg-large-${i}`}
+                  src={img}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: i === current ? 0.65 : 0 }}
+                  transition={{ duration: 1.2, ease: "easeInOut" }} />
+
+                )}
                 {/* Dark overlay on background */}
                 <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.4)" }} />
                 {/* Slideshow pause/play button on background */}
@@ -239,13 +239,13 @@ const HeroSection = () => {
                   onClick={toggleSlideshow}
                   className="absolute bottom-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
                   style={{ background: "hsl(var(--gold-accent) / 0.8)" }}
-                  aria-label={isPaused ? "Play slideshow" : "Pause slideshow"}
-                >
-                  {isPaused ? (
-                    <Play className="w-4 h-4 text-white ml-0.5" fill="white" />
-                  ) : (
-                    <Pause className="w-4 h-4 text-white" fill="white" />
-                  )}
+                  aria-label={isPaused ? "Play slideshow" : "Pause slideshow"}>
+                  
+                  {isPaused ?
+                  <Play className="w-4 h-4 text-white ml-0.5" fill="white" /> :
+
+                  <Pause className="w-4 h-4 text-white" fill="white" />
+                  }
                 </button>
               </div>
 
@@ -261,13 +261,13 @@ const HeroSection = () => {
                     animate="center"
                     exit="exit"
                     transition={{ duration: 0.6, ease: "easeInOut" }}
-                    className="absolute inset-0"
-                  >
+                    className="absolute inset-0">
+                    
                     <img
                       src={images[current]}
                       alt={`Wedding ${current + 1}`}
-                      className="w-full h-full object-cover"
-                    />
+                      className="w-full h-full object-cover" />
+                    
                   </motion.div>
                 </AnimatePresence>
 
@@ -286,41 +286,41 @@ const HeroSection = () => {
                 <button
                   onClick={goPrev}
                   className="absolute left-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
-                  style={{ background: "hsl(var(--gold-accent) / 0.8)" }}
-                >
+                  style={{ background: "hsl(var(--gold-accent) / 0.8)" }}>
+                  
                   <ChevronLeft className="w-5 h-5 text-white" />
                 </button>
                 <button
                   onClick={goNext}
                   className="absolute right-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
-                  style={{ background: "hsl(var(--gold-accent) / 0.8)" }}
-                >
+                  style={{ background: "hsl(var(--gold-accent) / 0.8)" }}>
+                  
                   <ChevronRight className="w-5 h-5 text-white" />
                 </button>
 
                 {/* Progress bar indicator */}
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">
-                  {images.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}
-                      className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300"
-                      style={{
-                        width: i === current ? "24px" : "8px",
-                        background: "rgba(255,255,255,0.3)",
-                      }}
-                    >
-                      {i === current && (
-                        <motion.div
-                          className="absolute inset-0 rounded-full"
-                          style={{ background: "hsl(var(--gold-accent))" }}
-                          initial={{ scaleX: 0, originX: 0 }}
-                          animate={{ scaleX: 1 }}
-                          transition={{ duration: 3.5, ease: "linear" }}
-                        />
-                      )}
+                  {images.map((_, i) =>
+                  <button
+                    key={i}
+                    onClick={() => {setDirection(i > current ? 1 : -1);setCurrent(i);}}
+                    className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300"
+                    style={{
+                      width: i === current ? "24px" : "8px",
+                      background: "rgba(255,255,255,0.3)"
+                    }}>
+                    
+                      {i === current &&
+                    <motion.div
+                      className="absolute inset-0 rounded-full"
+                      style={{ background: "hsl(var(--gold-accent))" }}
+                      initial={{ scaleX: 0, originX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ duration: 3.5, ease: "linear" }} />
+
+                    }
                     </button>
-                  ))}
+                  )}
                 </div>
 
               </div>
@@ -332,8 +332,8 @@ const HeroSection = () => {
       {/* Bottom accent strip */}
       <div
         className="w-full py-3 px-4 flex items-center justify-center gap-2 text-[10px] sm:text-xs md:text-sm tracking-wider uppercase text-center flex-wrap"
-        style={{ background: "hsl(var(--burgundy-light))", color: "hsl(var(--soft-gray))" }}
-      >
+        style={{ background: "hsl(var(--burgundy-light))", color: "hsl(var(--soft-gray))" }}>
+        
         <span className="w-6 h-px hidden sm:block" style={{ background: "hsl(var(--gold-accent))" }} />
         <span>10,000+ Successful Marriages • Verified Profiles • Personalized Matchmaking</span>
         <span className="w-6 h-px hidden sm:block" style={{ background: "hsl(var(--gold-accent))" }} />
@@ -347,16 +347,16 @@ const HeroSection = () => {
         onClick={toggleMusic}
         className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110"
         style={{ background: "linear-gradient(135deg, hsl(348, 60%, 45%), hsl(348, 55%, 35%))", border: "2px solid hsl(var(--gold-accent) / 0.6)" }}
-        aria-label={isMuted ? "Play music" : "Mute music"}
-      >
-        {isMuted ? (
-          <VolumeX className="w-5 h-5 text-white" />
-        ) : (
-          <Volume2 className="w-5 h-5 text-white" />
-        )}
+        aria-label={isMuted ? "Play music" : "Mute music"}>
+        
+        {isMuted ?
+        <VolumeX className="w-5 h-5 text-white" /> :
+
+        <Volume2 className="w-5 h-5 text-white" />
+        }
       </button>
-    </section>
-  );
+    </section>);
+
 };
 
 export default HeroSection;
