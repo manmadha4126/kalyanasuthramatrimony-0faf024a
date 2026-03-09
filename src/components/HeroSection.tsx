@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 
 import wedding1 from "@/assets/wedding-1.jpeg";
 import wedding2 from "@/assets/wedding-2.jpeg";
@@ -35,9 +35,9 @@ const HeroSection = () => {
   }, [goNext]);
 
   const variants = {
-    enter: (d: number) => ({ opacity: 0, x: d > 0 ? 80 : -80, scale: 1.02 }),
+    enter: (d: number) => ({ opacity: 0, x: d > 0 ? 60 : -60, scale: 1.02 }),
     center: { opacity: 1, x: 0, scale: 1 },
-    exit: (d: number) => ({ opacity: 0, x: d > 0 ? -80 : 80, scale: 0.98 }),
+    exit: (d: number) => ({ opacity: 0, x: d > 0 ? -60 : 60, scale: 0.98 }),
   };
 
   return (
@@ -45,126 +45,195 @@ const HeroSection = () => {
       {/* Decorative top border */}
       <div className="w-full h-1.5" style={{ background: "linear-gradient(90deg, hsl(var(--burgundy-light)), hsl(var(--gold-accent)), hsl(var(--burgundy-light)))" }} />
 
-      {/* Main slideshow */}
-      <div className="relative w-full overflow-hidden" style={{ height: "clamp(350px, 75vh, 850px)" }}>
-        {/* Background blur layer */}
-        <div className="absolute inset-0">
-          <img
-            src={images[current]}
-            alt=""
-            className="w-full h-full object-cover scale-110 blur-md opacity-40"
-          />
-        </div>
-
-        {/* Main image */}
-        <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
-            key={current}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.7, ease: "easeInOut" }}
-            className="absolute inset-0 flex items-center justify-center"
-          >
-            <img
-              src={images[current]}
-              alt={`Wedding ${current + 1}`}
-              className="w-full h-full object-contain"
-              style={{ maxHeight: "100%", maxWidth: "100%" }}
-            />
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Gradient overlays for depth */}
-        <div className="absolute inset-0 z-10 pointer-events-none" style={{
-          background: "linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.4) 100%)"
-        }} />
-        <div className="absolute inset-0 z-10 pointer-events-none" style={{
-          background: "linear-gradient(to right, rgba(0,0,0,0.15) 0%, transparent 15%, transparent 85%, rgba(0,0,0,0.15) 100%)"
-        }} />
-
-        {/* Decorative corner elements */}
-        <div className="absolute top-6 left-6 z-20 w-16 h-16 border-t-2 border-l-2 opacity-50" style={{ borderColor: "hsl(var(--gold-accent))" }} />
-        <div className="absolute top-6 right-6 z-20 w-16 h-16 border-t-2 border-r-2 opacity-50" style={{ borderColor: "hsl(var(--gold-accent))" }} />
-        <div className="absolute bottom-16 left-6 z-20 w-16 h-16 border-b-2 border-l-2 opacity-50" style={{ borderColor: "hsl(var(--gold-accent))" }} />
-        <div className="absolute bottom-16 right-6 z-20 w-16 h-16 border-b-2 border-r-2 opacity-50" style={{ borderColor: "hsl(var(--gold-accent))" }} />
-
-        {/* Center content card */}
-        <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-          <motion.div
-            className="pointer-events-auto bg-white/80 backdrop-blur-md px-6 py-6 sm:px-10 sm:py-8 md:px-16 md:py-10 text-center max-w-lg mx-4 border"
-            style={{ borderColor: "hsl(var(--gold-accent) / 0.3)" }}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-          >
-            <p
-              className="text-lg md:text-xl italic mb-1"
-              style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--gold-accent))" }}
-            >
-              The Wedding Chapter
-            </p>
-            <h1
-              className="text-2xl sm:text-3xl md:text-5xl font-bold mb-3"
-              style={{ fontFamily: "'Playfair Display', serif", color: "hsl(var(--foreground))" }}
-            >
-              Kalyanasuthra
-            </h1>
-            <div className="w-16 h-0.5 mx-auto mb-4" style={{ background: "hsl(var(--gold-accent))" }} />
-            <p className="text-sm md:text-base mb-6 text-muted-foreground leading-relaxed">
-              Trusted matchmaking with traditional values and a modern approach. Your perfect match awaits.
-            </p>
-            <a
-              href="#register"
-              className="inline-block border-2 px-8 py-3 text-sm font-semibold tracking-widest uppercase transition-all duration-300 hover:text-primary-foreground"
-              style={{
-                borderColor: "hsl(var(--burgundy))",
-                color: "hsl(var(--burgundy))",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "hsl(var(--burgundy))";
-                e.currentTarget.style.color = "white";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = "hsl(var(--burgundy))";
-              }}
-            >
-              Get Started
-            </a>
-          </motion.div>
-        </div>
-
-        {/* Navigation arrows */}
-        <button
-          onClick={goPrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full flex items-center justify-center bg-white/30 backdrop-blur-sm hover:bg-white/50 transition-colors"
-        >
-          <ChevronLeft className="w-5 h-5 text-white" />
-        </button>
-        <button
-          onClick={goNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full flex items-center justify-center bg-white/30 backdrop-blur-sm hover:bg-white/50 transition-colors"
-        >
-          <ChevronRight className="w-5 h-5 text-white" />
-        </button>
-
-        {/* Dots */}
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-30 flex gap-2.5">
-          {images.map((_, i) => (
-            <button
+      {/* Main Hero - Split Layout */}
+      <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(348, 45%, 12%) 0%, hsl(280, 40%, 15%) 50%, hsl(220, 50%, 12%) 100%)" }}>
+        
+        {/* Decorative elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-10 left-10 w-64 h-64 rounded-full opacity-10 blur-3xl" style={{ background: "hsl(var(--gold-accent))" }} />
+          <div className="absolute bottom-10 right-10 w-80 h-80 rounded-full opacity-10 blur-3xl" style={{ background: "hsl(348, 60%, 45%)" }} />
+          {/* Floating hearts */}
+          {[...Array(5)].map((_, i) => (
+            <motion.div
               key={i}
-              onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}
-              className="w-3 h-3 rounded-full border-2 transition-all duration-300"
+              className="absolute"
               style={{
-                background: i === current ? "hsl(var(--gold-accent))" : "transparent",
-                borderColor: i === current ? "hsl(var(--gold-accent))" : "rgba(255,255,255,0.6)",
-                transform: i === current ? "scale(1.2)" : "scale(1)",
+                left: `${15 + i * 18}%`,
+                top: `${20 + (i % 3) * 25}%`,
               }}
-            />
+              animate={{
+                y: [-10, 10, -10],
+                opacity: [0.1, 0.2, 0.1],
+              }}
+              transition={{
+                duration: 4 + i,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <Heart className="w-4 h-4 sm:w-6 sm:h-6" style={{ color: "hsl(var(--gold-accent))" }} fill="currentColor" />
+            </motion.div>
           ))}
+        </div>
+
+        <div className="container mx-auto px-4 py-10 md:py-16 lg:py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            
+            {/* Left - Content */}
+            <motion.div 
+              className="text-center lg:text-left order-2 lg:order-1 z-10"
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+            >
+              {/* Decorative line */}
+              <div className="flex items-center gap-3 justify-center lg:justify-start mb-4">
+                <div className="w-10 h-px" style={{ background: "hsl(var(--gold-accent))" }} />
+                <p
+                  className="text-base md:text-lg italic"
+                  style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--gold-accent))" }}
+                >
+                  The Wedding Chapter
+                </p>
+                <div className="w-10 h-px" style={{ background: "hsl(var(--gold-accent))" }} />
+              </div>
+
+              <h1
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+                style={{ fontFamily: "'Playfair Display', serif", color: "white" }}
+              >
+                Kalyanasuthra
+              </h1>
+
+              <div className="w-20 h-1 mx-auto lg:mx-0 mb-5 rounded-full" style={{ background: "linear-gradient(90deg, hsl(var(--gold-accent)), hsl(348, 60%, 50%))" }} />
+
+              <p className="text-sm md:text-base lg:text-lg mb-8 leading-relaxed max-w-md mx-auto lg:mx-0" style={{ color: "hsl(0, 0%, 75%)" }}>
+                Trusted matchmaking with traditional values and a modern approach. Your perfect match awaits — find your soulmate today.
+              </p>
+
+              {/* Stats */}
+              <div className="flex items-center justify-center lg:justify-start gap-6 mb-8">
+                <div className="text-center">
+                  <p className="text-2xl md:text-3xl font-bold" style={{ color: "hsl(var(--gold-accent))" }}>10K+</p>
+                  <p className="text-xs" style={{ color: "hsl(0, 0%, 60%)" }}>Marriages</p>
+                </div>
+                <div className="w-px h-10" style={{ background: "hsl(0, 0%, 30%)" }} />
+                <div className="text-center">
+                  <p className="text-2xl md:text-3xl font-bold" style={{ color: "hsl(var(--gold-accent))" }}>50K+</p>
+                  <p className="text-xs" style={{ color: "hsl(0, 0%, 60%)" }}>Profiles</p>
+                </div>
+                <div className="w-px h-10" style={{ background: "hsl(0, 0%, 30%)" }} />
+                <div className="text-center">
+                  <p className="text-2xl md:text-3xl font-bold" style={{ color: "hsl(var(--gold-accent))" }}>15+</p>
+                  <p className="text-xs" style={{ color: "hsl(0, 0%, 60%)" }}>Years</p>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex items-center justify-center lg:justify-start gap-4">
+                <a
+                  href="/register"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                  style={{ background: "linear-gradient(135deg, hsl(348, 60%, 45%), hsl(348, 55%, 35%))" }}
+                >
+                  Get Started
+                </a>
+                <a
+                  href="#about"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 hover:scale-105 border-2"
+                  style={{ borderColor: "hsl(var(--gold-accent))", color: "hsl(var(--gold-accent))" }}
+                >
+                  Learn More
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Right - Slider */}
+            <motion.div 
+              className="relative order-1 lg:order-2 z-10"
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+            >
+              <div className="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] max-w-sm sm:max-w-md mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
+                {/* Background blur */}
+                <div className="absolute inset-0">
+                  <img
+                    src={images[current]}
+                    alt=""
+                    className="w-full h-full object-cover scale-110 blur-md opacity-30"
+                  />
+                </div>
+
+                {/* Main image */}
+                <AnimatePresence mode="wait" custom={direction}>
+                  <motion.div
+                    key={current}
+                    custom={direction}
+                    variants={variants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                    className="absolute inset-0"
+                  >
+                    <img
+                      src={images[current]}
+                      alt={`Wedding ${current + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 z-10 pointer-events-none" style={{
+                  background: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 40%)"
+                }} />
+
+                {/* Corner decorations */}
+                <div className="absolute top-4 left-4 z-20 w-10 h-10 border-t-2 border-l-2" style={{ borderColor: "hsl(var(--gold-accent))" }} />
+                <div className="absolute top-4 right-4 z-20 w-10 h-10 border-t-2 border-r-2" style={{ borderColor: "hsl(var(--gold-accent))" }} />
+                <div className="absolute bottom-4 left-4 z-20 w-10 h-10 border-b-2 border-l-2" style={{ borderColor: "hsl(var(--gold-accent))" }} />
+                <div className="absolute bottom-4 right-4 z-20 w-10 h-10 border-b-2 border-r-2" style={{ borderColor: "hsl(var(--gold-accent))" }} />
+
+                {/* Navigation arrows */}
+                <button
+                  onClick={goPrev}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                  style={{ background: "hsl(var(--gold-accent) / 0.8)" }}
+                >
+                  <ChevronLeft className="w-5 h-5 text-white" />
+                </button>
+                <button
+                  onClick={goNext}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                  style={{ background: "hsl(var(--gold-accent) / 0.8)" }}
+                >
+                  <ChevronRight className="w-5 h-5 text-white" />
+                </button>
+
+                {/* Dots */}
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+                  {images.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}
+                      className="w-2.5 h-2.5 rounded-full transition-all duration-300"
+                      style={{
+                        background: i === current ? "hsl(var(--gold-accent))" : "rgba(255,255,255,0.4)",
+                        transform: i === current ? "scale(1.3)" : "scale(1)",
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Image counter */}
+                <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 px-3 py-1 rounded-full text-xs font-bold" style={{ background: "hsl(var(--gold-accent) / 0.9)", color: "white" }}>
+                  {current + 1} / {images.length}
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
 
