@@ -18,6 +18,28 @@ const images = [wedding1, wedding2, wedding3, wedding4, wedding5, wedding6, wedd
 const HeroSection = () => {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [isMuted, setIsMuted] = useState(true);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio("/audio/background-music.mp3");
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.5;
+    return () => {
+      audioRef.current?.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+    if (isMuted) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+    setIsMuted(!isMuted);
+  };
 
   const goNext = useCallback(() => {
     setDirection(1);
