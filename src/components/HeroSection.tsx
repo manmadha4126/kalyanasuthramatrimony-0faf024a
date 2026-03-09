@@ -67,7 +67,18 @@ const HeroSection = () => {
   }, [goNext, isPaused]);
 
   const toggleSlideshow = () => {
-    setIsPaused(!isPaused);
+    const newPaused = !isPaused;
+    setIsPaused(newPaused);
+    // Also pause/play music when slideshow is paused/played
+    if (audioRef.current) {
+      if (newPaused) {
+        audioRef.current.pause();
+        setIsMuted(true);
+      } else {
+        audioRef.current.play().catch(() => {});
+        setIsMuted(false);
+      }
+    }
   };
 
   const variants = {
