@@ -70,7 +70,7 @@ const PaymentSection = () => {
           <div className="h-[2px] w-20 mx-auto" style={{ background: "hsl(var(--gold-accent))" }} />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto items-stretch">
           {/* QR Scanner */}
           <motion.div
             className="flex flex-col items-center justify-center rounded-2xl p-6"
