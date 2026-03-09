@@ -97,9 +97,9 @@ const PaymentSection = () => {
                 ["IFSC", "HDFC0007817"],
                 ["Account Type", "Current Account"],
               ].map(([label, value]) => (
-                <div key={label} className="flex justify-between py-2 border-b border-border last:border-0">
-                  <span className="text-base font-extrabold text-foreground">{label}</span>
-                  <span className="text-base font-medium text-muted-foreground text-right">{value}</span>
+                <div key={label} className="flex flex-col sm:flex-row sm:justify-between py-2 border-b border-border last:border-0 gap-0.5">
+                  <span className="text-sm sm:text-base font-extrabold text-foreground">{label}</span>
+                  <span className="text-sm sm:text-base font-medium text-muted-foreground sm:text-right">{value}</span>
                 </div>
               ))}
             </div>
