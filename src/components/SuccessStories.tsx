@@ -77,7 +77,7 @@ const SuccessStories = () => {
   }, [rotationOffset, stories]);
 
   return (
-    <section id="stories" className="relative w-full overflow-hidden" style={{ minHeight: "400px", height: "auto" }}>
+    <section id="stories" className="relative w-full overflow-hidden" style={{ minHeight: "550px", height: "auto" }}>
       <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
 
       {/* Background */}
