@@ -987,7 +987,7 @@ export default function CustomerDashboard() {
         <button
           onClick={logout}
           className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-all min-w-0"
-          style={{ color: "#999" }}
+          style={{ color: "rgba(255,255,255,0.65)" }}
         >
           <LogOut size={18} />
           <span className="text-[10px] font-semibold">Logout</span>
