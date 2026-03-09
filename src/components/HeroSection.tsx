@@ -61,9 +61,14 @@ const HeroSection = () => {
   }, []);
 
   useEffect(() => {
+    if (isPaused) return;
     const timer = setInterval(goNext, 3500);
     return () => clearInterval(timer);
-  }, [goNext]);
+  }, [goNext, isPaused]);
+
+  const toggleSlideshow = () => {
+    setIsPaused(!isPaused);
+  };
 
   const variants = {
     enter: (d: number) => ({ opacity: 0, x: d > 0 ? 60 : -60, scale: 1.02 }),
