@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Heart, Volume2, VolumeX } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart, Volume2, VolumeX, Play, Pause } from "lucide-react";
 
 import wedding1 from "@/assets/wedding-1.jpeg";
 import wedding2 from "@/assets/wedding-2.jpeg";
@@ -19,6 +19,7 @@ const HeroSection = () => {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -60,9 +61,14 @@ const HeroSection = () => {
   }, []);
 
   useEffect(() => {
+    if (isPaused) return;
     const timer = setInterval(goNext, 3500);
     return () => clearInterval(timer);
-  }, [goNext]);
+  }, [goNext, isPaused]);
+
+  const toggleSlideshow = () => {
+    setIsPaused(!isPaused);
+  };
 
   const variants = {
     enter: (d: number) => ({ opacity: 0, x: d > 0 ? 60 : -60, scale: 1.02 }),
@@ -294,6 +300,20 @@ const HeroSection = () => {
                     </button>
                   ))}
                 </div>
+
+                {/* Slideshow pause/play button */}
+                <button
+                  onClick={toggleSlideshow}
+                  className="absolute bottom-6 right-6 z-30 w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                  style={{ background: "hsl(var(--gold-accent) / 0.8)" }}
+                  aria-label={isPaused ? "Play slideshow" : "Pause slideshow"}
+                >
+                  {isPaused ? (
+                    <Play className="w-4 h-4 text-white ml-0.5" fill="white" />
+                  ) : (
+                    <Pause className="w-4 h-4 text-white" fill="white" />
+                  )}
+                </button>
               </div>
             </motion.div>
           </div>
