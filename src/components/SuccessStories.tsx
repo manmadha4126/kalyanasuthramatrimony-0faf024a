@@ -296,12 +296,17 @@ const SuccessStories = () => {
         </div>
       </div>
 
-      {/* Mobile scroll */}
-      <div className="lg:hidden absolute bottom-0 left-0 right-0 z-10 px-4 pb-5">
-        <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
-          {stories.slice(0, 6).map((story, idx) => (
-            <motion.div key={story.id} className="flex-shrink-0 rounded-xl overflow-hidden" style={{ width: 160, background: "white", boxShadow: "0 6px 20px rgba(0,0,0,0.18)", border: "2px solid rgba(255,255,255,0.5)" }}
-              animate={{ scale: idx === rotationOffset % 6 ? 1.06 : 1 }} transition={{ duration: 0.4 }}>
+      {/* Mobile auto-scroll */}
+      <div className="lg:hidden absolute bottom-0 left-0 right-0 z-10 pb-5 overflow-hidden">
+        <style>{`
+          @keyframes marqueeScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+        `}</style>
+        <div className="flex gap-3" style={{ animation: "marqueeScroll 20s linear infinite", width: "max-content" }}>
+          {[...stories.slice(0, 6), ...stories.slice(0, 6)].map((story, idx) => (
+            <div key={`mobile-${story.id}-${idx}`} className="flex-shrink-0 rounded-xl overflow-hidden" style={{ width: 160, background: "white", boxShadow: "0 6px 20px rgba(0,0,0,0.18)", border: "2px solid rgba(255,255,255,0.5)" }}>
               <div className="h-[100px] overflow-hidden">
                 <img src={story.image_url || wedding1} alt={`${story.bride_name} & ${story.groom_name}`} className="w-full h-full object-cover" />
               </div>
@@ -312,7 +317,7 @@ const SuccessStories = () => {
                 <p className="text-[10px] mt-0.5" style={{ color: "hsl(var(--muted-foreground))" }}>{story.city}</p>
                 <p className="text-[10px] mt-1 leading-snug italic" style={{ color: "#666" }}>"{story.story}"</p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
