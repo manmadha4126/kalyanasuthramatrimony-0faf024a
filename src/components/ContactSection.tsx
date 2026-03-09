@@ -42,21 +42,21 @@ const ContactSection = () => {
   const formCard = (
     <motion.form
       onSubmit={handleSubmit}
-      className="w-full rounded-xl shadow-2xl p-4"
-      style={{ background: "white", border: "2px solid white", width: 430, maxWidth: "100%" }}
+      className="w-full rounded-xl shadow-2xl p-3"
+      style={{ background: "white", border: "2px solid white", width: 360, maxWidth: "100%" }}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: 0.2 }}
     >
-      <h3 className="text-lg font-bold text-center mb-1" style={{ fontFamily: fontSerif, color: textDark }}>
+      <h3 className="text-base font-bold text-center mb-1" style={{ fontFamily: fontSerif, color: textDark }}>
         Schedule a Free Consultation
       </h3>
-      <div className="flex justify-center mb-4">
-        <span className="text-xl">✍</span>
+      <div className="flex justify-center mb-3">
+        <span className="text-lg">✍</span>
       </div>
-      <div className="w-full h-px mb-5" style={{ background: "hsl(220 10% 85%)" }} />
-      <div className="space-y-3.5">
+      <div className="w-full h-px mb-3" style={{ background: "hsl(220 10% 85%)" }} />
+      <div className="space-y-2.5">
         {[
           { label: "Full Name", type: "text", key: "name" as const, color: textDark },
           { label: "Email", type: "email", key: "email" as const, color: "hsl(348 50% 35%)", required: true },
@@ -81,7 +81,7 @@ const ContactSection = () => {
           <textarea
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
-            rows={3}
+            rows={2}
             className="w-full px-3 py-2 rounded-md text-sm border border-gray-200 outline-none resize-none focus:ring-2 focus:ring-purple-500/20 transition-all"
             style={{ background: inputBg }}
           />
