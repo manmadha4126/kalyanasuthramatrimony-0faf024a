@@ -156,13 +156,20 @@ const HeroSection = () => {
               transition={{ duration: 0.7, delay: 0.4 }}
             >
               <div className="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] max-w-sm sm:max-w-md mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
-                {/* Background blur */}
-                <div className="absolute inset-0">
-                  <img
-                    src={images[current]}
-                    alt=""
-                    className="w-full h-full object-cover scale-110 blur-md opacity-30"
-                  />
+                {/* Animated background blur slideshow */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={`bg-${current}`}
+                      src={images[current]}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover scale-110 blur-lg opacity-40"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 0.4 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.8 }}
+                    />
+                  </AnimatePresence>
                 </div>
 
                 {/* Main image */}
@@ -225,11 +232,6 @@ const HeroSection = () => {
                       }}
                     />
                   ))}
-                </div>
-
-                {/* Image counter */}
-                <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 px-3 py-1 rounded-full text-xs font-bold" style={{ background: "hsl(var(--gold-accent) / 0.9)", color: "white" }}>
-                  {current + 1} / {images.length}
                 </div>
               </div>
             </motion.div>
