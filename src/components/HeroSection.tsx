@@ -199,13 +199,13 @@ const HeroSection = () => {
 
             {/* Right - Slider */}
             <motion.div 
-              className="relative order-1 lg:order-2 z-10"
+              className="relative order-1 lg:order-2 z-10 lg:mr-8 xl:mr-12"
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
             >
               {/* Large Background Rectangle Slideshow */}
-              <div className="absolute -inset-x-8 inset-y-0 sm:-inset-x-12 sm:inset-y-0 lg:-inset-x-16 lg:inset-y-0 rounded-2xl overflow-hidden">
+              <div className="absolute -inset-x-6 inset-y-0 sm:-inset-x-10 sm:inset-y-0 lg:-inset-x-12 lg:inset-y-0 rounded-2xl overflow-hidden">
                 {images.map((img, i) => (
                   <motion.img
                     key={`bg-large-${i}`}
