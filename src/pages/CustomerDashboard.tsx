@@ -971,7 +971,7 @@ export default function CustomerDashboard() {
         </div>
       }
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-30 border-t border-transparent flex items-center justify-around py-2 px-1 safe-area-bottom" style={{ background: `linear-gradient(135deg, ${themeDark}, ${themeAccent})` }}>
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-30 border-t border-gray-800 flex items-center justify-around py-2 px-1 safe-area-bottom" style={{ background: "linear-gradient(135deg, #1a1a2e, #16213e)" }}>
         {NAV.filter(n => n.label !== "Settings").map(({ icon: Icon, label }) => (
           <button
             key={label}
