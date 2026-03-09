@@ -49,13 +49,13 @@ const ContactSection = () => {
       viewport={{ once: true }}
       transition={{ delay: 0.2 }}
     >
-      <h3 className="text-lg font-bold text-center mb-1" style={{ fontFamily: fontSerif, color: textDark }}>
+      <h3 className="text-base font-bold text-center mb-1" style={{ fontFamily: fontSerif, color: textDark }}>
         Schedule a Free Consultation
       </h3>
-      <div className="flex justify-center mb-4">
-        <span className="text-xl">✍</span>
+      <div className="flex justify-center mb-3">
+        <span className="text-lg">✍</span>
       </div>
-      <div className="w-full h-px mb-5" style={{ background: "hsl(220 10% 85%)" }} />
+      <div className="w-full h-px mb-3" style={{ background: "hsl(220 10% 85%)" }} />
       <div className="space-y-3.5">
         {[
           { label: "Full Name", type: "text", key: "name" as const, color: textDark },
