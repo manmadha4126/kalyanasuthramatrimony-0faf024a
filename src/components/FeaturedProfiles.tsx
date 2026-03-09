@@ -135,7 +135,7 @@ const FeaturedProfiles = () => {
           <div className="h-[2px] w-20 mx-auto rounded-full" style={{ background: "linear-gradient(90deg, transparent, hsl(42, 60%, 65%), transparent)" }} />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           {/* Groom */}
           <div>
             <h3 className="font-serif text-xl font-semibold mb-6 text-center" style={{ color: "hsl(310, 30%, 78%)" }}>Groom Profiles</h3>
