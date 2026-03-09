@@ -160,7 +160,7 @@ const FeaturedProfiles = () => {
         </div>
 
         {/* Contact strip */}
-        <div className="mt-12 py-4 px-6 text-center rounded-3xl border-2" style={{ background: "linear-gradient(135deg, hsl(275, 35%, 25%), hsl(310, 30%, 28%))", borderColor: "hsl(42, 50%, 50%)" }}>
+        <div className="mt-8 sm:mt-12 py-4 px-4 sm:px-6 text-center rounded-3xl border-2" style={{ background: "linear-gradient(135deg, hsl(275, 35%, 25%), hsl(310, 30%, 28%))", borderColor: "hsl(42, 50%, 50%)" }}>
           <p className="text-sm font-medium" style={{ color: "hsl(42, 55%, 80%)" }}>
             Contact for more profiles: <span className="font-bold">📞 9553306667</span> | <span className="font-bold">📞 9866288767</span>
           </p>

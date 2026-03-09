@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer style={{ backgroundColor: "#0D1137" }}>
       <div className="container mx-auto px-4 py-10">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
           <div>
             <h3 className="font-serif text-xl font-bold text-white mb-2">Kalyanasuthra Matrimony</h3>
             <p className="text-sm text-white/80">The Wedding Chapter Starts Here… Trusted matchmaking since 2020.</p>

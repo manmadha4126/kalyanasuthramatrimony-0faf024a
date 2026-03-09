@@ -96,7 +96,7 @@ const ServicesSection = () => {
           </button>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-5 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 max-w-6xl mx-auto">
           {packages.map((pkg, pi) => {
             const visiblePlans = selected ? pkg.plans.filter((p) => p.key === selected) : pkg.plans;
             if (selected && visiblePlans.length === 0) return null;
