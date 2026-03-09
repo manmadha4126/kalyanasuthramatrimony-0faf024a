@@ -94,7 +94,7 @@ const HeroSection = () => {
         {/* Center content card */}
         <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
           <motion.div
-            className="pointer-events-auto bg-white/80 backdrop-blur-md px-10 py-8 md:px-16 md:py-10 text-center max-w-lg mx-4 border"
+            className="pointer-events-auto bg-white/80 backdrop-blur-md px-6 py-6 sm:px-10 sm:py-8 md:px-16 md:py-10 text-center max-w-lg mx-4 border"
             style={{ borderColor: "hsl(var(--gold-accent) / 0.3)" }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
