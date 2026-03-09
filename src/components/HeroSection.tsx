@@ -96,7 +96,7 @@ const HeroSection = () => {
         </div>
 
         <div className="container mx-auto px-4 py-10 md:py-16 lg:py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             
             {/* Left - Content */}
             <motion.div 
@@ -174,7 +174,7 @@ const HeroSection = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
             >
-              <div className="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-[3/4] w-full max-w-2xl mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
+              <div className="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] max-w-sm sm:max-w-md mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
                 {/* Animated background blur slideshow */}
                 <div className="absolute inset-0 overflow-hidden">
                   <AnimatePresence mode="wait">
