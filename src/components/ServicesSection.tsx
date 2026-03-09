@@ -84,7 +84,7 @@ const ServicesSection = () => {
         </motion.div>
 
         {/* Duration Filter */}
-        <motion.div className="flex flex-wrap justify-center gap-3 mb-10" initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+        <motion.div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10" initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
           <span className="self-center text-sm font-semibold mr-1" style={{ color: "hsl(220, 20%, 70%)" }}>Filter by duration:</span>
           {durationOptions.map((opt) => (
             <button key={opt.key} onClick={() => setSelected(selected === opt.key ? null : opt.key)} className="px-5 py-2 rounded-full text-sm font-semibold border transition-all duration-200" style={selected === opt.key ? { background: "hsl(var(--gold-accent))", color: "hsl(220, 60%, 10%)", borderColor: "hsl(var(--gold-accent))" } : { background: "transparent", color: "hsl(var(--gold-accent))", borderColor: "hsl(var(--gold-accent) / 0.6)" }}>
