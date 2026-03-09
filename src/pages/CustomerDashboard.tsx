@@ -424,13 +424,16 @@ export default function CustomerDashboard() {
         <header className="fixed top-0 right-0 left-0 lg:left-64 z-20 backdrop-blur-sm px-4 sm:px-6 py-4 bg-white/90 border-b border-gray-100">
           <div className="flex items-center gap-3">
             <div className="lg:hidden flex items-center gap-2">
-              <BackButton to="/" label="Home" />
-              <span className="text-sm font-bold tracking-wide" style={{
-                fontFamily: "'Playfair Display', serif",
-                background: `linear-gradient(135deg, ${themeAccent}, ${themeDark})`,
+              <button onClick={() => navigate("/")} className="p-1 rounded-full hover:opacity-80 transition-colors" style={{ color: themeDark }}>
+                <ArrowLeft size={20} />
+              </button>
+              <span className="text-base font-bold tracking-wide" style={{
+                fontFamily: "'Great Vibes', cursive",
+                background: "linear-gradient(135deg, hsl(348, 56%, 27%), hsl(280, 55%, 50%))",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
+                fontSize: "1.25rem",
               }}>Kalyanasuthra Matrimony</span>
             </div>
             <nav className="hidden lg:flex items-center gap-1 mx-auto">
