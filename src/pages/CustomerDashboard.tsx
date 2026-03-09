@@ -518,7 +518,7 @@ export default function CustomerDashboard() {
         <div className="p-4 sm:p-6 pt-24">
           {/* Profile Status Banner */}
           {userProfile?.profile_status && userProfile.profile_status !== "active" &&
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-4 my-[29px] mx-[230px] px-[16px] flex-col flex items-center justify-center gap-[15px]" style={
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-4 mx-0 sm:mx-4 lg:mx-8 flex-col flex items-center justify-center gap-[15px]" style={
           userProfile.profile_status === "pending" ?
           { background: "hsl(38, 90%, 95%)", border: "1px solid hsl(38, 80%, 85%)" } :
           { background: "hsl(0, 65%, 96%)", border: "1px solid hsl(0, 55%, 88%)" }
