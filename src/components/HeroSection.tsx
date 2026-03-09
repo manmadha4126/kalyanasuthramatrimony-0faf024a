@@ -239,12 +239,10 @@ const HeroSection = () => {
                   onClick={toggleSlideshow}
                   className="absolute bottom-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
                   style={{ background: "hsl(var(--gold-accent) / 0.8)" }}
-                  aria-label={isPaused ? "Play slideshow" : "Pause slideshow"}>
-                  
-                  {isPaused ?
-                  <Play className="w-4 h-4 text-white ml-0.5" fill="white" /> :
-
-                  <Pause className="w-4 h-4 text-white" fill="white" />
+                  aria-label={isMuted ? "Play music" : "Pause music"}>
+                  {isMuted ?
+                    <Pause className="w-4 h-4 text-white" fill="white" /> :
+                    <Play className="w-4 h-4 text-white ml-0.5" fill="white" />
                   }
                 </button>
               </div>
