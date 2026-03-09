@@ -46,7 +46,7 @@ const HeroSection = () => {
       <div className="w-full h-1.5" style={{ background: "linear-gradient(90deg, hsl(var(--burgundy-light)), hsl(var(--gold-accent)), hsl(var(--burgundy-light)))" }} />
 
       {/* Main slideshow */}
-      <div className="relative w-full overflow-hidden" style={{ height: "clamp(500px, 85vh, 850px)" }}>
+      <div className="relative w-full overflow-hidden" style={{ height: "clamp(350px, 75vh, 850px)" }}>
         {/* Background blur layer */}
         <div className="absolute inset-0">
           <img
