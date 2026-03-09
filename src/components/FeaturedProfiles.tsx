@@ -135,7 +135,7 @@ const FeaturedProfiles = () => {
           <div className="h-[2px] w-20 mx-auto rounded-full" style={{ background: "linear-gradient(90deg, transparent, hsl(42, 60%, 65%), transparent)" }} />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           {/* Groom */}
           <div>
             <h3 className="font-serif text-xl font-semibold mb-6 text-center" style={{ color: "hsl(310, 30%, 78%)" }}>Groom Profiles</h3>
@@ -160,7 +160,7 @@ const FeaturedProfiles = () => {
         </div>
 
         {/* Contact strip */}
-        <div className="mt-12 py-4 px-6 text-center rounded-3xl border-2" style={{ background: "linear-gradient(135deg, hsl(275, 35%, 25%), hsl(310, 30%, 28%))", borderColor: "hsl(42, 50%, 50%)" }}>
+        <div className="mt-8 sm:mt-12 py-4 px-4 sm:px-6 text-center rounded-3xl border-2" style={{ background: "linear-gradient(135deg, hsl(275, 35%, 25%), hsl(310, 30%, 28%))", borderColor: "hsl(42, 50%, 50%)" }}>
           <p className="text-sm font-medium" style={{ color: "hsl(42, 55%, 80%)" }}>
             Contact for more profiles: <span className="font-bold">📞 9553306667</span> | <span className="font-bold">📞 9866288767</span>
           </p>

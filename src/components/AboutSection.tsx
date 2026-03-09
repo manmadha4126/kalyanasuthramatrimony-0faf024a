@@ -135,8 +135,8 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h3
-              className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-snug"
+             <h3
+               className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-snug"
               style={{
                 fontFamily: "'Pinyon Script', cursive",
                 color: "hsl(0, 0%, 5%)",
@@ -230,7 +230,7 @@ const AboutSection = () => {
 
     {/* Five wedding images - full screen width, 3:4 ratio, hover zoom */}
     <section>
-      <div className="grid grid-cols-5 gap-0">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-0">
         {[wedding1, wedding2, wedding3, wedding4, wedding5].map((img, i) => (
           <motion.div
             key={i}

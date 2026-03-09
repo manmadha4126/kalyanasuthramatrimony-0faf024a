@@ -478,28 +478,28 @@ export default function AdminDashboard() {
           <button onClick={() => { setSelectedProfile(null); setEditMode(false); }} className="flex items-center gap-2 text-base font-semibold text-gray-600 hover:text-gray-800 transition-colors">
             <ChevronLeft size={20} /> Back
           </button>
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex items-center gap-2 flex-wrap justify-end">
             {!editMode ? (
               <>
-                <button onClick={startEdit} className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
-                  <Edit3 size={15} /> Edit Profile
+                <button onClick={startEdit} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                  <Edit3 size={14} /> <span className="hidden sm:inline">Edit Profile</span><span className="sm:hidden">Edit</span>
                 </button>
                 {selectedProfile.profile_status !== "active" && (
-                  <button onClick={() => updateStatus(selectedProfile.id, "active")} className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-colors" style={{ background: "hsl(145, 65%, 42%)" }}>
-                    <UserCheck size={15} /> Verify
+                  <button onClick={() => updateStatus(selectedProfile.id, "active")} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white transition-colors" style={{ background: "hsl(145, 65%, 42%)" }}>
+                    <UserCheck size={14} /> Verify
                   </button>
                 )}
                 {selectedProfile.profile_status !== "rejected" && (
-                  <button onClick={() => updateStatus(selectedProfile.id, "rejected")} className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-colors" style={{ background: "hsl(0, 65%, 50%)" }}>
-                    <UserX size={15} /> Reject
+                  <button onClick={() => updateStatus(selectedProfile.id, "rejected")} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white transition-colors" style={{ background: "hsl(0, 65%, 50%)" }}>
+                    <UserX size={14} /> Reject
                   </button>
                 )}
               </>
             ) : (
               <>
-                <button onClick={() => setEditMode(false)} className="px-4 py-2 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">Cancel</button>
-                <button onClick={saveEdit} disabled={savingEdit} className="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold text-white transition-colors disabled:opacity-60" style={{ background: "hsl(210, 80%, 50%)" }}>
-                  <Save size={15} /> {savingEdit ? "Saving..." : "Save Changes"}
+                <button onClick={() => setEditMode(false)} className="px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">Cancel</button>
+                <button onClick={saveEdit} disabled={savingEdit} className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white transition-colors disabled:opacity-60" style={{ background: "hsl(210, 80%, 50%)" }}>
+                  <Save size={14} /> {savingEdit ? "Saving..." : "Save"}
                 </button>
               </>
             )}

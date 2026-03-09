@@ -70,7 +70,7 @@ const PaymentSection = () => {
           <div className="h-[2px] w-20 mx-auto" style={{ background: "hsl(var(--gold-accent))" }} />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto items-stretch">
           {/* QR Scanner */}
           <motion.div
             className="flex flex-col items-center justify-center rounded-2xl p-6"
@@ -97,9 +97,9 @@ const PaymentSection = () => {
                 ["IFSC", "HDFC0007817"],
                 ["Account Type", "Current Account"],
               ].map(([label, value]) => (
-                <div key={label} className="flex justify-between py-2 border-b border-border last:border-0">
-                  <span className="text-base font-extrabold text-foreground">{label}</span>
-                  <span className="text-base font-medium text-muted-foreground text-right">{value}</span>
+                <div key={label} className="flex flex-col sm:flex-row sm:justify-between py-2 border-b border-border last:border-0 gap-0.5">
+                  <span className="text-sm sm:text-base font-extrabold text-foreground">{label}</span>
+                  <span className="text-sm sm:text-base font-medium text-muted-foreground sm:text-right">{value}</span>
                 </div>
               ))}
             </div>

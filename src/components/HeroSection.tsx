@@ -46,7 +46,7 @@ const HeroSection = () => {
       <div className="w-full h-1.5" style={{ background: "linear-gradient(90deg, hsl(var(--burgundy-light)), hsl(var(--gold-accent)), hsl(var(--burgundy-light)))" }} />
 
       {/* Main slideshow */}
-      <div className="relative w-full overflow-hidden" style={{ height: "clamp(500px, 85vh, 850px)" }}>
+      <div className="relative w-full overflow-hidden" style={{ height: "clamp(350px, 75vh, 850px)" }}>
         {/* Background blur layer */}
         <div className="absolute inset-0">
           <img
@@ -94,7 +94,7 @@ const HeroSection = () => {
         {/* Center content card */}
         <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
           <motion.div
-            className="pointer-events-auto bg-white/80 backdrop-blur-md px-10 py-8 md:px-16 md:py-10 text-center max-w-lg mx-4 border"
+            className="pointer-events-auto bg-white/80 backdrop-blur-md px-6 py-6 sm:px-10 sm:py-8 md:px-16 md:py-10 text-center max-w-lg mx-4 border"
             style={{ borderColor: "hsl(var(--gold-accent) / 0.3)" }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -107,7 +107,7 @@ const HeroSection = () => {
               The Wedding Chapter
             </p>
             <h1
-              className="text-3xl md:text-5xl font-bold mb-3"
+              className="text-2xl sm:text-3xl md:text-5xl font-bold mb-3"
               style={{ fontFamily: "'Playfair Display', serif", color: "hsl(var(--foreground))" }}
             >
               Kalyanasuthra
@@ -170,12 +170,12 @@ const HeroSection = () => {
 
       {/* Bottom accent strip */}
       <div
-        className="w-full py-3.5 flex items-center justify-center gap-4 text-xs md:text-sm tracking-wider uppercase text-center"
+        className="w-full py-3 px-4 flex items-center justify-center gap-2 text-[10px] sm:text-xs md:text-sm tracking-wider uppercase text-center flex-wrap"
         style={{ background: "hsl(var(--burgundy-light))", color: "hsl(var(--soft-gray))" }}
       >
-        <span className="w-8 h-px" style={{ background: "hsl(var(--gold-accent))" }} />
+        <span className="w-6 h-px hidden sm:block" style={{ background: "hsl(var(--gold-accent))" }} />
         <span>10,000+ Successful Marriages • Verified Profiles • Personalized Matchmaking</span>
-        <span className="w-8 h-px" style={{ background: "hsl(var(--gold-accent))" }} />
+        <span className="w-6 h-px hidden sm:block" style={{ background: "hsl(var(--gold-accent))" }} />
       </div>
 
       {/* Decorative bottom border */}

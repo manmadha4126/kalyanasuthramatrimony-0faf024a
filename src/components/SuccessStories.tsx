@@ -77,7 +77,7 @@ const SuccessStories = () => {
   }, [rotationOffset, stories]);
 
   return (
-    <section id="stories" className="relative w-full overflow-hidden" style={{ height: "clamp(400px, 42vw, 520px)" }}>
+    <section id="stories" className="relative w-full overflow-hidden" style={{ minHeight: "400px", height: "auto" }}>
       <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
 
       {/* Background */}
@@ -228,10 +228,10 @@ const SuccessStories = () => {
       </div>
 
       {/* Main Content */}
-      <div className="absolute inset-0 z-10 flex items-center">
-        <div className="w-full flex items-center" style={{ padding: "0 4%" }}>
+      <div className="relative z-10 flex items-center py-10 lg:py-0 lg:absolute lg:inset-0">
+        <div className="w-full flex flex-col lg:flex-row items-center lg:items-center" style={{ padding: "0 4%" }}>
           {/* LEFT - Heading */}
-          <motion.div className="w-[35%] flex-shrink-0 pr-[2%]" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+          <motion.div className="w-full lg:w-[35%] flex-shrink-0 pr-0 lg:pr-[2%] text-center lg:text-left mb-6 lg:mb-0" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div className="relative mb-1">
               <svg width="16" height="16" viewBox="0 0 20 20" fill="white" opacity="0.35" className="inline-block mr-1 -mt-2">
                 <path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z" />

@@ -84,7 +84,7 @@ const ServicesSection = () => {
         </motion.div>
 
         {/* Duration Filter */}
-        <motion.div className="flex flex-wrap justify-center gap-3 mb-10" initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+        <motion.div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10" initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
           <span className="self-center text-sm font-semibold mr-1" style={{ color: "hsl(220, 20%, 70%)" }}>Filter by duration:</span>
           {durationOptions.map((opt) => (
             <button key={opt.key} onClick={() => setSelected(selected === opt.key ? null : opt.key)} className="px-5 py-2 rounded-full text-sm font-semibold border transition-all duration-200" style={selected === opt.key ? { background: "hsl(var(--gold-accent))", color: "hsl(220, 60%, 10%)", borderColor: "hsl(var(--gold-accent))" } : { background: "transparent", color: "hsl(var(--gold-accent))", borderColor: "hsl(var(--gold-accent) / 0.6)" }}>
@@ -96,7 +96,7 @@ const ServicesSection = () => {
           </button>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-5 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 max-w-6xl mx-auto">
           {packages.map((pkg, pi) => {
             const visiblePlans = selected ? pkg.plans.filter((p) => p.key === selected) : pkg.plans;
             if (selected && visiblePlans.length === 0) return null;
@@ -159,7 +159,7 @@ const ServicesSection = () => {
       </div>
 
       {/* CTA bridging with Contact Us owner details */}
-      <div className="relative z-20" style={{ marginBottom: "-60px", marginTop: "40px" }}>
+      <div className="relative z-20 px-4" style={{ marginBottom: "-40px", marginTop: "30px" }}>
         <motion.div
           className="max-w-3xl mx-auto text-center rounded-2xl py-8 px-8 shadow-2xl relative overflow-hidden"
           style={{

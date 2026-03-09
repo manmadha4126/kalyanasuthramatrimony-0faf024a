@@ -515,10 +515,10 @@ export default function CustomerDashboard() {
           </div>
         </header>
 
-        <div className="p-4 sm:p-6 pt-24">
+        <div className="p-4 sm:p-6 pt-24 pb-20 lg:pb-6">
           {/* Profile Status Banner */}
           {userProfile?.profile_status && userProfile.profile_status !== "active" &&
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-4 my-[29px] mx-[230px] px-[16px] flex-col flex items-center justify-center gap-[15px]" style={
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-4 mx-0 sm:mx-4 lg:mx-8 flex-col flex items-center justify-center gap-[15px]" style={
           userProfile.profile_status === "pending" ?
           { background: "hsl(38, 90%, 95%)", border: "1px solid hsl(38, 80%, 85%)" } :
           { background: "hsl(0, 65%, 96%)", border: "1px solid hsl(0, 55%, 88%)" }
@@ -970,6 +970,28 @@ export default function CustomerDashboard() {
           </motion.div>
         </div>
       }
+      {/* Mobile Bottom Navigation */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 flex items-center justify-around py-2 px-1 safe-area-bottom">
+        {NAV.filter(n => n.label !== "Settings").map(({ icon: Icon, label }) => (
+          <button
+            key={label}
+            onClick={() => setActiveNav(label)}
+            className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-all min-w-0"
+            style={activeNav === label ? { color: themeAccent } : { color: "#999" }}
+          >
+            <Icon size={18} />
+            <span className="text-[10px] font-semibold truncate">{label}</span>
+          </button>
+        ))}
+        <button
+          onClick={logout}
+          className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-all min-w-0"
+          style={{ color: "#999" }}
+        >
+          <LogOut size={18} />
+          <span className="text-[10px] font-semibold">Logout</span>
+        </button>
+      </nav>
     </div>);
 
 }
