@@ -174,21 +174,24 @@ const HeroSection = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
             >
+              {/* Large Background Rectangle Slideshow */}
+              <div className="absolute -inset-8 sm:-inset-12 lg:-inset-16 rounded-2xl overflow-hidden">
+                {images.map((img, i) => (
+                  <motion.img
+                    key={`bg-large-${i}`}
+                    src={img}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: i === current ? 0.65 : 0 }}
+                    transition={{ duration: 1.2, ease: "easeInOut" }}
+                  />
+                ))}
+                {/* Dark overlay on background */}
+                <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.4)" }} />
+              </div>
+
               <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] max-w-xs sm:max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
-                {/* Background slideshow with 65% opacity fade-in */}
-                <div className="absolute inset-0 overflow-hidden">
-                  {images.map((img, i) => (
-                    <motion.img
-                      key={`bg-${i}`}
-                      src={img}
-                      alt=""
-                      className="absolute inset-0 w-full h-full object-cover scale-110 blur-md"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: i === current ? 0.65 : 0 }}
-                      transition={{ duration: 1.2, ease: "easeInOut" }}
-                    />
-                  ))}
-                </div>
 
                 {/* Main image with sequential fade */}
                 <AnimatePresence mode="wait" custom={direction}>
