@@ -246,9 +246,9 @@ export default function CustomerDashboard() {
 
   const renderProfileCard = (profile: Profile, i: number) =>
   <motion.div key={profile.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1 group">
-      <div className="relative h-48 bg-gray-100">
+      <div className="relative aspect-[3/4] bg-gray-100">
         {profile.profile_photo_url ?
-      <img src={profile.profile_photo_url} alt={profile.full_name} className="w-full h-full object-cover" /> :
+      <img src={profile.profile_photo_url} alt={profile.full_name} className="w-full h-full object-contain" /> :
 
       <div className="w-full h-full flex items-center justify-center" style={{ background: themeLight }}>
             <span className="text-4xl font-bold" style={{ color: themeAccent }}>{profile.full_name[0]}</span>
