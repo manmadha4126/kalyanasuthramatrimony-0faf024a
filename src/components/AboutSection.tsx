@@ -32,7 +32,7 @@ const features = [
 
 const owners = [
   { name: "Sai", phone: "9553306667", email: "info@kalyanasuthramatrimony.com" },
-  { name: "Drakshayani", phone: "9866288767", email: "info@kalyanasuthramatrimony.com" },
+  { name: "Kavya", phone: "9866288767", email: "info@kalyanasuthramatrimony.com" },
 ];
 
 const AboutSection = () => {
