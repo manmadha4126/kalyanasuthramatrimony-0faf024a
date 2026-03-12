@@ -136,17 +136,16 @@ const AboutSection = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
              <h3
-               className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-snug"
+               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-snug"
               style={{
-                fontFamily: "'Pinyon Script', cursive",
-                color: "hsl(0, 0%, 5%)",
-                WebkitTextStroke: "1.5px white",
-                paintOrder: "stroke fill",
-                textShadow: "2px 2px 4px hsla(0, 0%, 0%, 0.15)",
+                fontFamily: "'Alex Brush', cursive",
+                color: "hsl(0, 0%, 100%)",
+                textShadow: "2px 3px 6px hsla(0, 0%, 0%, 0.4), 0 0 20px hsla(348, 56%, 27%, 0.3)",
+                letterSpacing: "0.02em",
               }}
             >
               Exclusive Services from<br />
-              Kalyanasuthra Matrimony
+              <span style={{ color: "hsl(40, 70%, 65%)" }}>Kalyanasuthra Matrimony</span>
             </h3>
             <button
               onClick={() => setShowContacts(!showContacts)}
