@@ -130,7 +130,7 @@ const AIChatBot = () => {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-24 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110"
+            className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110"
             style={{
               background: "linear-gradient(135deg, hsl(280, 60%, 45%), hsl(320, 70%, 50%))",
               border: "2px solid hsl(40, 70%, 65%)",
