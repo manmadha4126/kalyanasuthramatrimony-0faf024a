@@ -10,10 +10,10 @@ import ServicesSection from "@/components/ServicesSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import AIChatBot from "@/components/AIChatBot";
 
 const Index = () => {
   useEffect(() => {
-    // Smooth scroll for anchor links
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const anchor = target.closest('a[href^="#"]');
@@ -43,6 +43,7 @@ const Index = () => {
       <ContactSection />
       <Footer />
       <WhatsAppButton />
+      <AIChatBot />
     </div>
   );
 };
