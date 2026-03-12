@@ -78,7 +78,7 @@ const ServicesSection = () => {
       <div className="container mx-auto px-4">
         <motion.div className="text-center mb-14" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <p className="text-sm uppercase tracking-[0.2em] font-semibold mb-2" style={{ color: "hsl(var(--gold-accent))", fontFamily: "'Lato', sans-serif" }}>✦ Premium Assisted Services ✦</p>
-          <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ fontFamily: "'DM Serif Display', serif", color: "white" }}>Exclusive Services from Kalyanasuthra Matrimony</h2>
+          <h2 className="text-4xl md:text-5xl mb-3" style={{ fontFamily: "'Alex Brush', cursive", color: "white", textShadow: "2px 3px 6px hsla(0, 0%, 0%, 0.3)", letterSpacing: "0.02em" }}>Exclusive Services from <span style={{ color: "hsl(40, 70%, 65%)" }}>Kalyanasuthra Matrimony</span></h2>
           <p className="max-w-xl mx-auto mb-3" style={{ color: "hsl(220, 20%, 75%)" }}>Our dedicated relationship managers provide profile handling, match filtering, feedback support, and direct communication management.</p>
           <div className="gold-divider" />
         </motion.div>
