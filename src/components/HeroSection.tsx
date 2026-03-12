@@ -97,24 +97,34 @@ const HeroSection = () => {
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-10 left-10 w-64 h-64 rounded-full opacity-10 blur-3xl" style={{ background: "hsl(var(--gold-accent))" }} />
           <div className="absolute bottom-10 right-10 w-80 h-80 rounded-full opacity-10 blur-3xl" style={{ background: "hsl(348, 60%, 45%)" }} />
-          {/* Floating hearts - large scattered */}
-          {[...Array(14)].map((_, i) => {
+          {/* Floating hearts - scattered with more on left side */}
+          {[...Array(25)].map((_, i) => {
             const positions = [
-            { left: "5%", top: "10%" }, { left: "92%", top: "15%" },
-            { left: "18%", top: "70%" }, { left: "80%", top: "75%" },
-            { left: "45%", top: "8%" }, { left: "60%", top: "85%" },
-            { left: "30%", top: "40%" }, { left: "75%", top: "45%" },
-            { left: "10%", top: "50%" }, { left: "88%", top: "55%" },
-            { left: "50%", top: "60%" }, { left: "25%", top: "20%" },
-            { left: "70%", top: "25%" }, { left: "40%", top: "90%" }];
+            // Left side concentration (0-14)
+            { left: "3%", top: "8%" }, { left: "8%", top: "25%" },
+            { left: "15%", top: "55%" }, { left: "6%", top: "70%" },
+            { left: "20%", top: "15%" }, { left: "12%", top: "40%" },
+            { left: "25%", top: "80%" }, { left: "18%", top: "65%" },
+            { left: "10%", top: "88%" }, { left: "22%", top: "35%" },
+            { left: "4%", top: "45%" }, { left: "28%", top: "50%" },
+            { left: "14%", top: "12%" }, { left: "7%", top: "60%" },
+            { left: "30%", top: "22%" },
+            // Right side scattered (15-24)
+            { left: "92%", top: "15%" }, { left: "80%", top: "75%" },
+            { left: "60%", top: "85%" }, { left: "75%", top: "45%" },
+            { left: "88%", top: "55%" }, { left: "70%", top: "25%" },
+            { left: "45%", top: "8%" }, { left: "50%", top: "60%" },
+            { left: "35%", top: "90%" }, { left: "40%", top: "42%" }];
 
-            const sizes = ["w-3 h-3", "w-4 h-4", "w-5 h-5", "w-6 h-6", "w-7 h-7", "w-8 h-8"];
+            const sizes = ["w-3 h-3", "w-4 h-4", "w-5 h-5", "w-6 h-6", "w-7 h-7", "w-8 h-8", "w-9 h-9", "w-10 h-10"];
             const colors = [
             "hsl(var(--gold-accent))",
             "hsl(348, 70%, 55%)",
             "hsl(310, 50%, 60%)",
             "hsl(0, 65%, 55%)",
-            "hsl(330, 60%, 50%)"];
+            "hsl(330, 60%, 50%)",
+            "hsl(340, 75%, 65%)",
+            "hsl(350, 60%, 48%)"];
 
             return (
               <motion.div
@@ -122,16 +132,16 @@ const HeroSection = () => {
                 className="absolute"
                 style={positions[i]}
                 animate={{
-                  y: [-12, 14, -12],
-                  x: [-6, 6, -6],
-                  opacity: [0.08, 0.25, 0.08],
-                  rotate: [0, i % 2 === 0 ? 15 : -15, 0]
+                  y: [-14, 16, -14],
+                  x: [-8, 8, -8],
+                  opacity: [0.1, 0.35, 0.1],
+                  rotate: [0, i % 2 === 0 ? 18 : -18, 0]
                 }}
                 transition={{
-                  duration: 3.5 + i % 5 * 1.2,
+                  duration: 3 + i % 6 * 1.1,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: i * 0.4
+                  delay: i * 0.3
                 }}>
                 
                 <Heart className={sizes[i % sizes.length]} style={{ color: colors[i % colors.length] }} fill="currentColor" />
