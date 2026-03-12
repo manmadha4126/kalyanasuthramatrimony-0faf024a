@@ -145,7 +145,7 @@ const AboutSection = () => {
               }}
             >
               Exclusive Services from<br />
-              <span style={{ color: "hsl(348, 80%, 55%)", fontSize: "1.15em" }}>Kalyanasuthra Matrimony</span>
+              <span style={{ color: "hsl(0, 0%, 0%)", fontSize: "1.15em" }}>Kalyanasuthra Matrimony</span>
             </h3>
             <button
               onClick={() => setShowContacts(!showContacts)}
