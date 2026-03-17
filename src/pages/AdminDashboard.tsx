@@ -1517,16 +1517,16 @@ export default function AdminDashboard() {
                                   <button onClick={async () => {
                                     const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" } as any).eq("id", interest.id);
                                     if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); toast({ title: "Marked as completed!" }); }
-                                  }} className="px-2.5 py-1 rounded-lg text-xs font-semibold" style={{ background: "hsl(145, 65%, 92%)", color: "hsl(145, 65%, 30%)" }}>
-                                    ✓
+                                  }} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: "hsl(145, 65%, 88%)", color: "hsl(145, 65%, 25%)" }}>
+                                    Completed
                                   </button>
                                 )}
                                 {!isNotCompleted && (
                                   <button onClick={async () => {
                                     const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" } as any).eq("id", interest.id);
                                     if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); toast({ title: "Marked as not completed!" }); }
-                                  }} className="px-2.5 py-1 rounded-lg text-xs font-semibold" style={{ background: "hsl(0, 65%, 93%)", color: "hsl(0, 65%, 35%)" }}>
-                                    ✗
+                                  }} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: "hsl(0, 65%, 90%)", color: "hsl(0, 65%, 30%)" }}>
+                                    Not Completed
                                   </button>
                                 )}
                               </div>
