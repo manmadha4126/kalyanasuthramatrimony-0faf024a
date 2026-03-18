@@ -61,7 +61,7 @@ const FeaturedProfiles = () => {
 
         {/* Back - Info */}
         <div
-          className="absolute inset-0 rounded-2xl overflow-hidden shadow-lg flex flex-col items-center justify-center p-4"
+          className="absolute inset-0 rounded-full overflow-hidden shadow-lg flex flex-col items-center justify-center p-4"
           style={{
             backfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
