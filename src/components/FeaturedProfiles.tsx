@@ -45,7 +45,7 @@ const FeaturedProfiles = () => {
       >
         {/* Front - Photo only */}
         <div
-          className="absolute inset-0 rounded-2xl overflow-hidden shadow-lg"
+          className="absolute inset-0 rounded-full overflow-hidden shadow-lg"
           style={{ backfaceVisibility: "hidden" }}
         >
           {profile.profile_photo_url ? (
