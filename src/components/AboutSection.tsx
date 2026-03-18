@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShieldCheck, Heart, ThumbsUp, Phone, Mail, User, ChevronDown, ChevronUp } from "lucide-react";
+import { ShieldCheck, Heart, ThumbsUp, Phone, Mail, User, ChevronDown, ChevronUp, Plus } from "lucide-react";
 import aboutMain from "@/assets/about-main.png";
 import exclusiveBg from "@/assets/exclusive-bg.png";
 import wedding1 from "@/assets/wedding-1.jpeg";
