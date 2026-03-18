@@ -37,15 +37,15 @@ const FeaturedProfiles = () => {
       viewport={{ once: true }}
       transition={{ delay: index * 0.06 }}
     >
-      <motion.div
-        className="relative w-full aspect-[3/4] rounded-2xl"
+    <motion.div
+        className="relative w-full aspect-square rounded-full"
         style={{ transformStyle: "preserve-3d" }}
         whileHover={{ rotateY: 180 }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
       >
         {/* Front - Photo only */}
         <div
-          className="absolute inset-0 rounded-2xl overflow-hidden shadow-lg"
+          className="absolute inset-0 rounded-full overflow-hidden shadow-lg"
           style={{ backfaceVisibility: "hidden" }}
         >
           {profile.profile_photo_url ? (
@@ -61,7 +61,7 @@ const FeaturedProfiles = () => {
 
         {/* Back - Info */}
         <div
-          className="absolute inset-0 rounded-2xl overflow-hidden shadow-lg flex flex-col items-center justify-center p-4"
+          className="absolute inset-0 rounded-full overflow-hidden shadow-lg flex flex-col items-center justify-center p-4"
           style={{
             backfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
@@ -81,7 +81,7 @@ const FeaturedProfiles = () => {
 
   const PlaceholderCard = ({ index }: { index: number }) => (
     <motion.div
-      className="aspect-[3/4] rounded-2xl overflow-hidden shadow-md"
+      className="aspect-square rounded-full overflow-hidden shadow-md"
       style={{ background: "hsl(275, 30%, 20%)", border: "1px solid hsl(42, 40%, 40%)" }}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
