@@ -126,11 +126,11 @@ const AboutSection = () => {
       {/* Top divider line */}
       <div className="h-px bg-border mx-8 opacity-50" />
 
-      {/* CTA block */}
+      {/* Find Your Match CTA block */}
       <div className="relative overflow-hidden">
-        <img src={exclusiveBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ background: "hsla(35, 40%, 20%, 0.25)" }} />
-        <div className="relative z-10 py-16">
+        <img src={findMatchBg} alt="Wedding venue with candles" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0" style={{ background: "hsla(0, 0%, 0%, 0.45)" }} />
+        <div className="relative z-10 py-20">
           <motion.div
             className="container mx-auto px-4 text-center space-y-5"
             initial={{ opacity: 0, y: 20 }}
@@ -138,56 +138,33 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-             <h3
-               className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-snug"
+            <h3
+              className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight"
               style={{
-                fontFamily: "'Alex Brush', cursive",
+                fontFamily: "'DM Serif Display', serif",
                 color: "hsl(0, 0%, 100%)",
-                textShadow: "2px 3px 6px hsla(0, 0%, 0%, 0.4), 0 0 20px hsla(348, 56%, 27%, 0.3)",
-                letterSpacing: "0.02em",
+                textShadow: "2px 3px 8px hsla(0, 0%, 0%, 0.5)",
               }}
             >
-              Exclusive Services from<br />
-              <span style={{ color: "hsl(0, 0%, 0%)", fontSize: "1.15em" }}>Kalyanasuthra Matrimony</span>
+              Find Your Match Today
             </h3>
-            <button
-              onClick={() => setShowContacts(!showContacts)}
-              className="inline-flex items-center gap-2 text-sm font-bold px-7 py-3 rounded-lg transition-all hover:scale-105 shadow-lg"
-              style={{ background: "hsl(348, 56%, 27%)", color: "white" }}
+            <p
+              className="text-base sm:text-lg md:text-xl max-w-xl mx-auto"
+              style={{
+                color: "hsla(0, 0%, 100%, 0.9)",
+                fontFamily: "system-ui, sans-serif",
+              }}
             >
-              <Phone size={16} />
-              Contact Us
-              {showContacts ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              Get started today and meet people who truly matter.
+            </p>
+            <button
+              onClick={() => navigate("/register")}
+              className="inline-flex items-center gap-2 text-base font-bold px-8 py-3.5 rounded-full transition-all hover:scale-105 shadow-xl"
+              style={{ background: "hsl(24, 90%, 55%)", color: "hsl(0, 0%, 100%)" }}
+            >
+              Register Now
+              <Plus size={18} />
             </button>
-
-            <AnimatePresence>
-              {showContacts && (
-                <motion.div
-                  className="mt-4 grid sm:grid-cols-2 gap-4 max-w-lg mx-auto"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {owners.map((owner, i) => (
-                    <div key={i} className="rounded-xl p-4 text-left shadow-md" style={{ background: "hsla(0,0%,100%,0.92)", border: "1px solid hsl(35, 40%, 75%)" }}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: "hsl(348, 56%, 27%)" }}>
-                          <User size={14} className="text-white" />
-                        </div>
-                        <span className="text-base font-bold" style={{ color: "hsl(348, 56%, 27%)" }}>{owner.name}</span>
-                      </div>
-                      <a href={`tel:${owner.phone}`} className="flex items-center gap-2 text-sm font-semibold mb-1 transition-colors" style={{ color: "hsl(220, 30%, 25%)" }}>
-                        <Phone size={14} style={{ color: "hsl(348, 56%, 27%)" }} /> {owner.phone}
-                      </a>
-                      <a href={`mailto:${owner.email}`} className="flex items-center gap-2 text-xs transition-colors" style={{ color: "hsl(220, 15%, 45%)" }}>
-                        <Mail size={12} style={{ color: "hsl(348, 56%, 27%)" }} /> {owner.email}
-                      </a>
-                    </div>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
           </motion.div>
         </div>
       </div>
