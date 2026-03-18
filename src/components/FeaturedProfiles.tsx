@@ -81,7 +81,7 @@ const FeaturedProfiles = () => {
 
   const PlaceholderCard = ({ index }: { index: number }) => (
     <motion.div
-      className="aspect-[3/4] rounded-2xl overflow-hidden shadow-md"
+      className="aspect-square rounded-full overflow-hidden shadow-md"
       style={{ background: "hsl(275, 30%, 20%)", border: "1px solid hsl(42, 40%, 40%)" }}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
