@@ -39,6 +39,7 @@ const owners = [
 
 const AboutSection = () => {
   const [showContacts, setShowContacts] = useState(false);
+  const navigate = useNavigate();
   return (
     <>
     <section id="about" className="py-20 bg-muted/40 relative overflow-hidden">
