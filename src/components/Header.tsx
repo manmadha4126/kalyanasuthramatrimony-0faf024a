@@ -28,14 +28,11 @@ const Header = () => {
     >
       <div className="container mx-auto h-full flex items-center px-4 relative">
         {/* Logo */}
-        <a href="#home" className="flex items-center gap-2">
+        <a href="#home" className="flex items-center gap-2 ml-4 sm:ml-8">
           <img src={logo} alt="Kalyanasuthra Matrimony" className="h-14 w-auto object-contain" />
-          <span className="text-base sm:text-lg font-bold tracking-wide" style={{
+          <span className="text-lg sm:text-xl font-extrabold tracking-wide" style={{
             fontFamily: "'Playfair Display', serif",
-            background: "linear-gradient(135deg, hsl(var(--gold-accent)), hsl(348, 60%, 45%), hsl(var(--gold-accent)))",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
+            color: "hsl(348, 70%, 35%)",
           }}>
             Kalyanasuthra Matrimony
           </span>
@@ -47,7 +44,8 @@ const Header = () => {
             <a
               key={link.label}
               href={link.href}
-              className="nav-link-premium font-bold text-base px-4 py-2 rounded-lg transition-all duration-300 hover:bg-primary/10 hover:text-primary hover:shadow-md"
+              className="font-bold text-base px-4 py-2 rounded-lg transition-all duration-300 hover:bg-primary/10 hover:scale-105 hover:shadow-md"
+              style={{ color: "hsl(0, 0%, 0%)" }}
             >
               {link.label}
             </a>
