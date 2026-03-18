@@ -37,8 +37,8 @@ const FeaturedProfiles = () => {
       viewport={{ once: true }}
       transition={{ delay: index * 0.06 }}
     >
-      <motion.div
-        className="relative w-full aspect-[3/4] rounded-2xl"
+    <motion.div
+        className="relative w-full aspect-square rounded-full"
         style={{ transformStyle: "preserve-3d" }}
         whileHover={{ rotateY: 180 }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
