@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ShieldCheck, Heart, ThumbsUp, Phone, Mail, User, ChevronDown, ChevronUp, Plus } from "lucide-react";
 import aboutMain from "@/assets/about-main.png";
 import exclusiveBg from "@/assets/exclusive-bg.png";
+import findMatchBg from "@/assets/find-match-bg.png";
 import wedding1 from "@/assets/wedding-1.jpeg";
 import wedding2 from "@/assets/wedding-2.jpeg";
 import wedding3 from "@/assets/wedding-3.jpeg";
