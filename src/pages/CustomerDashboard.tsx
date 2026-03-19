@@ -46,6 +46,7 @@ const NAV = [
 
 
 export default function CustomerDashboard() {
+  useSessionSecurity("/login");
   const navigate = useNavigate();
   const [matches, setMatches] = useState<Profile[]>([]);
   const [userProfile, setUserProfile] = useState<UserProfileFull | null>(null);

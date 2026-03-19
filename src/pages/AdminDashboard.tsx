@@ -138,6 +138,7 @@ const DetailSection = ({ title, children }: { title: string; children: React.Rea
 );
 
 export default function AdminDashboard() {
+  useSessionSecurity("/admin");
   const navigate = useNavigate();
   const { toast } = useToast();
   const [profiles, setProfiles] = useState<Profile[]>([]);
