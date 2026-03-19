@@ -73,10 +73,10 @@ const StepCard = ({ step, index }: {step: typeof steps[0];index: number;}) =>
           {step.step}
         </span>
       </div>
-      <h3 className="text-lg font-light mb-1" style={{ color: "hsl(345, 50%, 15%)", fontFamily: "'Playfair Display', Georgia, serif" }}>
+      <h3 className="text-lg font-light mb-1" style={{ color: "#000000", fontFamily: "'Playfair Display', Georgia, serif" }}>
         {step.title}
       </h3>
-      <span className="text-xs tracking-wider uppercase mb-2" style={{ color: "hsl(345, 30%, 45%)" }}>
+      <span className="text-xs tracking-wider uppercase mb-2" style={{ color: "#000000" }}>
         {step.sanskrit}
       </span>
       <p className="text-sm leading-relaxed" style={{ color: "hsl(0, 0%, 40%)" }}>
