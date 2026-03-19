@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Eye, EyeOff, Shield, Heart, Users, Star, Gem, ArrowLeft } from "lucide-react";
 import logo from "@/assets/kalyanasuthra-logo.png";
+import { loginSchema, sanitizeInput, checkRateLimit } from "@/lib/security";
 
 const ADMIN_CREDENTIALS = [
 { email: "menda.manmadha21@gmail.com", password: "0*MAha21" },
