@@ -87,82 +87,17 @@ const SaptapadiSection = () => {
           </p>
         </motion.div>
 
-        {/* Seven Steps Blocks */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {steps.map((step, index) => (
-            <motion.div
-              key={step.step}
-              className="group relative rounded-lg overflow-hidden"
-              style={{
-                background: "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)",
-                border: "1px solid rgba(255,255,255,0.06)",
-              }}
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{
-                backgroundColor: "rgba(255,255,255,0.06)",
-                borderColor: "rgba(232,228,223,0.15)",
-              }}
-            >
-              <div className="flex items-start sm:items-center gap-5 sm:gap-8 p-5 sm:p-7">
-                {/* Step Number */}
-                <div
-                  className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center"
-                  style={{
-                    border: "1px solid rgba(232,228,223,0.2)",
-                    background: "rgba(255,255,255,0.03)",
-                  }}
-                >
-                  <span
-                    className="text-xl sm:text-2xl font-light"
-                    style={{
-                      color: "#c9c3bb",
-                      fontFamily: "'Playfair Display', 'DM Serif Display', Georgia, serif",
-                    }}
-                  >
-                    {step.step}
-                  </span>
-                </div>
+        {/* Row 1 - 4 blocks */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          {steps.slice(0, 4).map((step, index) => (
+            <StepCard key={step.step} step={step} index={index} />
+          ))}
+        </div>
 
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mb-1.5">
-                    <h3
-                      className="text-lg sm:text-xl font-light"
-                      style={{
-                        color: "#e8e4df",
-                        fontFamily: "'Playfair Display', 'DM Serif Display', Georgia, serif",
-                      }}
-                    >
-                      {step.title}
-                    </h3>
-                    <span
-                      className="text-xs tracking-wider uppercase"
-                      style={{ color: "#6b6560", fontFamily: "system-ui, sans-serif" }}
-                    >
-                      {step.sanskrit}
-                    </span>
-                  </div>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{
-                      color: "#8a8580",
-                      fontFamily: "system-ui, sans-serif",
-                    }}
-                  >
-                    {step.description}
-                  </p>
-                </div>
-
-                {/* Decorative line */}
-                <div
-                  className="hidden md:block flex-shrink-0 w-16 h-[1px] self-center"
-                  style={{ background: "linear-gradient(90deg, rgba(232,228,223,0.15), transparent)" }}
-                />
-              </div>
-            </motion.div>
+        {/* Row 2 - 3 blocks centered */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 max-w-[75%] mx-auto">
+          {steps.slice(4).map((step, index) => (
+            <StepCard key={step.step} step={step} index={index + 4} />
           ))}
         </div>
       </div>
