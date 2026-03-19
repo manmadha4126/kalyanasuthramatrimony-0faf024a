@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Eye, EyeOff, Heart, Sparkles, MapPin, Users, Star, Shield, Phone, Headphones } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import logo from "@/assets/kalyanasuthra-logo.png";
+import { loginSchema, checkRateLimit } from "@/lib/security";
 
 export default function CustomerLogin() {
   const [loginMethod, setLoginMethod] = useState<"email" | "phone">("phone");
