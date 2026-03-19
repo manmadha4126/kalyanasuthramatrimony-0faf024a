@@ -45,6 +45,47 @@ const steps = [
   },
 ];
 
+const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => (
+  <motion.div
+    className="group relative rounded-lg overflow-hidden"
+    style={{
+      background: "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)",
+      border: "1px solid rgba(255,255,255,0.06)",
+    }}
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.5, delay: index * 0.1 }}
+    whileHover={{
+      backgroundColor: "rgba(255,255,255,0.06)",
+      borderColor: "rgba(232,228,223,0.15)",
+    }}
+  >
+    <div className="flex flex-col items-center text-center p-5 sm:p-6">
+      <div
+        className="w-12 h-12 rounded-full flex items-center justify-center mb-3"
+        style={{
+          border: "1px solid rgba(232,228,223,0.2)",
+          background: "rgba(255,255,255,0.03)",
+        }}
+      >
+        <span className="text-xl font-light" style={{ color: "#c9c3bb", fontFamily: "'Playfair Display', Georgia, serif" }}>
+          {step.step}
+        </span>
+      </div>
+      <h3 className="text-lg font-light mb-1" style={{ color: "#e8e4df", fontFamily: "'Playfair Display', Georgia, serif" }}>
+        {step.title}
+      </h3>
+      <span className="text-xs tracking-wider uppercase mb-2" style={{ color: "#6b6560" }}>
+        {step.sanskrit}
+      </span>
+      <p className="text-sm leading-relaxed" style={{ color: "#8a8580" }}>
+        {step.description}
+      </p>
+    </div>
+  </motion.div>
+);
+
 const SaptapadiSection = () => {
   return (
     <section className="py-20 relative overflow-hidden" style={{ background: "#2b2b2b" }}>
