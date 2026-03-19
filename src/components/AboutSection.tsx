@@ -104,10 +104,10 @@ const AboutSection = () => {
             <p className="text-sm italic mb-4" style={{ color: "hsla(40, 40%, 65%, 0.8)", fontFamily: "system-ui, sans-serif" }}>
               India's Most Trusted Matrimony Service
             </p>
-            <p className="text-base leading-relaxed mb-4" style={{ color: "hsla(30, 20%, 80%, 0.85)" }}>
-              Established in <strong style={{ color: "hsl(40, 60%, 65%)" }}>2020 at Tirupati</strong>, Kalyanasuthra Matrimony is a traditional marriage matching company dedicated to bringing families together with trust, values, and modern technology. We believe that marriage is a sacred bond, and finding the right life partner is one of the most important decisions in life.
+            <p className="text-base leading-relaxed mb-4" style={{ color: "hsl(0, 0%, 100%)" }}>
+              Established in <strong style={{ color: "hsl(0, 0%, 100%)" }}>2020 at Tirupati</strong>, Kalyanasuthra Matrimony is a traditional marriage matching company dedicated to bringing families together with trust, values, and modern technology. We believe that marriage is a sacred bond, and finding the right life partner is one of the most important decisions in life.
             </p>
-            <p className="text-base leading-relaxed mb-6" style={{ color: "hsla(30, 20%, 80%, 0.8)" }}>
+            <p className="text-base leading-relaxed mb-6" style={{ color: "hsl(0, 0%, 100%)" }}>
               Our team of experienced relationship managers works closely with families to understand their preferences, values, and aspirations to find the perfect match.
             </p>
             <div>
