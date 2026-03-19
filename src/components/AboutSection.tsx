@@ -128,15 +128,15 @@ const AboutSection = () => {
       </div>
     </section>
 
-    {/* Exclusive Service Section */}
-    <section style={{ background: "hsl(345, 50%, 8%)" }} className="pb-0 pt-0">
-      {/* Gold divider */}
-      <div className="h-px mx-8" style={{ background: "linear-gradient(90deg, transparent, hsla(40, 60%, 50%, 0.3), transparent)" }} />
+    {/* Exclusive Service - back to original light bg */}
+    <section className="bg-muted/40 pb-0 pt-0">
+      {/* Top divider line */}
+      <div className="h-px bg-border mx-8 opacity-50" />
 
       {/* Find Your Match CTA block */}
       <div className="relative overflow-hidden">
         <img src={findMatchBg} alt="Wedding venue with candles" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsla(345, 55%, 10%, 0.75) 0%, hsla(345, 50%, 8%, 0.85) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "hsla(0, 0%, 0%, 0.65)" }} />
         <div className="relative z-10 py-20">
           <motion.div
             className="container mx-auto px-4 text-center space-y-5"
@@ -149,9 +149,8 @@ const AboutSection = () => {
               className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight"
               style={{
                 fontFamily: "'DM Serif Display', serif",
-                background: "linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(40, 60%, 75%) 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                color: "hsl(0, 0%, 100%)",
+                textShadow: "2px 3px 8px hsla(0, 0%, 0%, 0.5)",
               }}
             >
               Find Your Match Today
@@ -159,7 +158,7 @@ const AboutSection = () => {
             <p
               className="text-base sm:text-lg md:text-xl max-w-xl mx-auto"
               style={{
-                color: "hsla(30, 20%, 85%, 0.9)",
+                color: "hsla(0, 0%, 100%, 0.9)",
                 fontFamily: "system-ui, sans-serif",
               }}
             >
@@ -168,11 +167,7 @@ const AboutSection = () => {
             <button
               onClick={() => navigate("/register")}
               className="inline-flex items-center gap-2 text-base font-bold px-8 py-3.5 rounded-full transition-all hover:scale-105 shadow-xl"
-              style={{
-                background: "linear-gradient(135deg, hsl(40, 65%, 50%) 0%, hsl(35, 70%, 42%) 100%)",
-                color: "hsl(345, 50%, 10%)",
-                boxShadow: "0 6px 20px hsla(40, 60%, 40%, 0.35)"
-              }}
+              style={{ background: "hsl(24, 90%, 55%)", color: "hsl(0, 0%, 100%)" }}
             >
               Register Now
               <Plus size={18} />
@@ -182,17 +177,11 @@ const AboutSection = () => {
       </div>
 
       {/* Three features */}
-      <div className="py-14" style={{ background: "linear-gradient(180deg, hsl(345, 50%, 8%) 0%, hsl(345, 55%, 12%) 100%)" }}>
+      <div className="bg-muted/40 py-14">
         <div className="container mx-auto px-4">
           <motion.h3
             className="text-center text-3xl md:text-4xl font-bold mb-12"
-            style={{
-              fontFamily: "'DM Serif Display', serif",
-              background: "linear-gradient(135deg, hsl(40, 65%, 60%) 0%, hsl(35, 70%, 50%) 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              letterSpacing: "1px"
-            }}
+            style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--primary))", letterSpacing: "1px" }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -203,25 +192,18 @@ const AboutSection = () => {
             {features.map((f, i) => (
               <motion.div
                 key={f.title}
-                className="relative flex flex-col items-center text-center pt-12 pb-6 px-5 rounded-[2rem] rounded-b-2xl overflow-hidden"
-                style={{
-                  background: f.gradient,
-                  boxShadow: "0 15px 40px -10px hsla(345, 60%, 8%, 0.5)",
-                  border: "1px solid hsla(0, 0%, 100%, 0.1)"
-                }}
+                className="relative flex flex-col items-center text-center pt-12 pb-6 px-5 rounded-[2rem] rounded-b-2xl shadow-xl overflow-hidden"
+                style={{ background: f.gradient }}
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15 }}
                 whileHover={{ scale: 1.04, y: -6 }}
               >
-                <div
-                  className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg mb-5 -mt-2"
-                  style={{ background: "hsla(0, 0%, 100%, 0.95)", boxShadow: "0 4px 15px hsla(0, 0%, 0%, 0.15)" }}
-                >
-                  <f.icon size={28} style={{ color: "hsl(345, 50%, 20%)" }} />
+                <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg mb-5 -mt-2" style={{ background: "white" }}>
+                  <f.icon size={28} style={{ color: "hsl(220, 30%, 30%)" }} />
                 </div>
-                <h4 className="text-base font-bold mb-2" style={{ color: "hsl(0, 0%, 100%)", fontFamily: "system-ui, sans-serif" }}>{f.title}</h4>
+                <h4 className="text-base font-bold text-white mb-2" style={{ fontFamily: "system-ui, sans-serif" }}>{f.title}</h4>
                 <p className="text-sm leading-relaxed mb-4" style={{ color: "hsla(0, 0%, 100%, 0.88)", fontFamily: "system-ui, sans-serif" }}>{f.desc}</p>
               </motion.div>
             ))}
