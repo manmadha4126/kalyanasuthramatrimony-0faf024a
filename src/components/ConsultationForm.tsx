@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Clock, User, Phone, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { consultationSchema, sanitizeInput, sanitizePhone, checkRateLimit } from "@/lib/security";
 
 interface ConsultationFormProps {
   open: boolean;
