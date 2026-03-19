@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { Bell, Heart, Search, Star, LogOut, Home, Users, Settings, ChevronRight, ChevronDown, X, BookHeart, CheckCircle, Edit, Eye, HelpCircle, Phone, User, ArrowLeft, MessageCircle, MapPin, Clock, Filter, XCircle, BellRing, Camera } from "lucide-react";
 import BackButton from "@/components/BackButton";
+import { useSessionSecurity } from "@/hooks/useSessionSecurity";
 
 type Profile = {
   id: string;full_name: string;gender: string;religion: string;caste: string | null;
