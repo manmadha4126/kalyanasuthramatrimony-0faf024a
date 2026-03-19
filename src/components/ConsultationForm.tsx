@@ -28,17 +28,32 @@ const ConsultationForm = ({ open, onClose }: ConsultationFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !phone.trim() || !date || !time) {
-      toast({ title: "Please fill all fields", variant: "destructive" });
+
+    if (!checkRateLimit("consultation_form", 3, 60000)) {
+      toast({ title: "Too many attempts", description: "Please wait a minute before trying again.", variant: "destructive" });
       return;
     }
+
+    const result = consultationSchema.safeParse({
+      name: name.trim(),
+      phone: phone.trim(),
+      preferred_date: date,
+      preferred_time: time,
+    });
+
+    if (!result.success) {
+      const firstError = result.error.errors[0]?.message || "Please fill all fields correctly";
+      toast({ title: firstError, variant: "destructive" });
+      return;
+    }
+
     setSaving(true);
     try {
       const { error } = await supabase.from("consultations").insert({
-        name: name.trim(),
-        phone: phone.trim(),
-        preferred_date: date,
-        preferred_time: time,
+        name: sanitizeInput(result.data.name),
+        phone: sanitizePhone(result.data.phone),
+        preferred_date: result.data.preferred_date,
+        preferred_time: result.data.preferred_time,
       });
       if (error) throw error;
       setSubmitted(true);
