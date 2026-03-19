@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Eye, EyeOff, Heart, Sparkles, MapPin, Users, Star, Shield, Phone, Headphones } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import logo from "@/assets/kalyanasuthra-logo.png";
+import { loginSchema, checkRateLimit } from "@/lib/security";
 
 export default function CustomerLogin() {
   const [loginMethod, setLoginMethod] = useState<"email" | "phone">("phone");
@@ -18,6 +19,18 @@ export default function CustomerLogin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!checkRateLimit("customer_login", 5, 300000)) {
+      setError("Too many login attempts. Please wait 5 minutes.");
+      return;
+    }
+
+    const validation = loginSchema.safeParse({ identifier, password });
+    if (!validation.success) {
+      setError(validation.error.errors[0]?.message || "Invalid input");
+      return;
+    }
+
     setLoading(true);
     setError("");
     try {

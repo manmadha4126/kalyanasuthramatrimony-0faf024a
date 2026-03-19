@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload, FileText, Heart, UserPlus, CreditCard } from "lucide-react";
 import adminLogo from "@/assets/kalyanasuthra-logo.png";
 import AdminAddProfile from "@/components/AdminAddProfile";
+import { useSessionSecurity } from "@/hooks/useSessionSecurity";
 
 // ---- Dropdown options (mirrored from Register page) ----
 const genderOptions = ["Male", "Female"];
@@ -137,6 +138,7 @@ const DetailSection = ({ title, children }: { title: string; children: React.Rea
 );
 
 export default function AdminDashboard() {
+  useSessionSecurity("/admin");
   const navigate = useNavigate();
   const { toast } = useToast();
   const [profiles, setProfiles] = useState<Profile[]>([]);

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Clock, Instagram, Map } from "lucide-react";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { contactSchema, sanitizeInput, sanitizePhone, checkRateLimit } from "@/lib/security";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -11,14 +12,33 @@ const ContactSection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!checkRateLimit("contact_form", 3, 60000)) {
+      toast({ title: "Too many attempts", description: "Please wait a minute before trying again.", variant: "destructive" });
+      return;
+    }
+
+    const result = contactSchema.safeParse({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim(),
+      message: form.message.trim(),
+    });
+
+    if (!result.success) {
+      const firstError = result.error.errors[0]?.message || "Please check your input";
+      toast({ title: firstError, variant: "destructive" });
+      return;
+    }
+
     setLoading(true);
     try {
       const { error } = await supabase.from("consultations").insert({
-        name: form.name,
-        phone: form.phone,
+        name: sanitizeInput(result.data.name),
+        phone: sanitizePhone(result.data.phone),
         preferred_date: new Date().toISOString().split("T")[0],
         preferred_time: "10:30 AM",
-        notes: `Email: ${form.email}\nMessage: ${form.message}`,
+        notes: `Email: ${sanitizeInput(result.data.email)}\nMessage: ${sanitizeInput(result.data.message || "")}`,
       });
       if (error) throw error;
       toast({ title: "Message Sent!", description: "Our relationship manager will contact you soon." });
