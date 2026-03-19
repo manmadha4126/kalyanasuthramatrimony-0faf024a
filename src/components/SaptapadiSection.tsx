@@ -47,39 +47,39 @@ const steps = [
 
 const StepCard = ({ step, index }: {step: typeof steps[0];index: number;}) =>
 <motion.div
-  className="group relative rounded-xl overflow-hidden"
+  className="group relative rounded-lg overflow-hidden"
   style={{
-    backgroundColor: "#ffffff",
-    border: "1px solid hsla(0, 0%, 75%, 0.4)",
-    boxShadow: "0 2px 8px hsla(0, 0%, 0%, 0.06)"
+    background: "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)",
+    border: "1px solid rgba(255,255,255,0.06)"
   }}
   initial={{ opacity: 0, y: 30 }}
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true }}
   transition={{ duration: 0.5, delay: index * 0.1 }}
   whileHover={{
-    boxShadow: "0 8px 30px -10px hsla(0, 0%, 0%, 0.18)"
+    backgroundColor: "rgba(255,255,255,0.06)",
+    borderColor: "rgba(232,228,223,0.15)"
   }}>
   
     <div className="flex flex-col items-center text-center p-5 sm:p-6">
       <div
       className="w-12 h-12 rounded-full flex items-center justify-center mb-3"
       style={{
-        border: "1px solid hsla(345, 50%, 30%, 0.2)",
-        background: "hsla(345, 50%, 15%, 0.05)"
+        border: "1px solid rgba(232,228,223,0.2)",
+        background: "rgba(255,255,255,0.03)"
       }}>
       
-        <span className="text-xl font-light" style={{ color: "hsl(345, 50%, 25%)", fontFamily: "'Playfair Display', Georgia, serif" }}>
+        <span className="text-xl font-light" style={{ color: "#c9c3bb", fontFamily: "'Playfair Display', Georgia, serif" }}>
           {step.step}
         </span>
       </div>
-      <h3 className="text-lg font-light mb-1" style={{ color: "hsl(345, 50%, 15%)", fontFamily: "'Playfair Display', Georgia, serif" }}>
+      <h3 className="mb-1 font-serif text-center text-black text-2xl font-semibold" style={{ color: "#e8e4df", fontFamily: "'Playfair Display', Georgia, serif" }}>
         {step.title}
       </h3>
-      <span className="text-xs tracking-wider uppercase mb-2" style={{ color: "hsl(345, 30%, 45%)" }}>
+      <span className="tracking-wider uppercase mb-2 text-sm text-black font-sans" style={{ color: "#6b6560" }}>
         {step.sanskrit}
       </span>
-      <p className="text-sm leading-relaxed" style={{ color: "hsl(0, 0%, 40%)" }}>
+      <p className="text-sm leading-relaxed" style={{ color: "#8a8580" }}>
         {step.description}
       </p>
     </div>
