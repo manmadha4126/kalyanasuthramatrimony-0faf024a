@@ -42,29 +42,18 @@ const AboutSection = () => {
   const navigate = useNavigate();
   return (
     <>
-    <section id="about" className="py-20 bg-muted/40 relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-32 h-32 md:w-48 md:h-48 opacity-20">
-        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="0" cy="0" r="150" stroke="hsl(var(--primary))" strokeWidth="1.5" />
-          <circle cx="0" cy="0" r="120" stroke="hsl(var(--primary))" strokeWidth="1" />
-          <circle cx="0" cy="0" r="90" stroke="hsl(var(--primary))" strokeWidth="0.8" />
-        </svg>
+    <section id="about" className="py-24 relative overflow-hidden" style={{ background: "linear-gradient(180deg, hsl(345, 55%, 12%) 0%, hsl(345, 50%, 8%) 100%)" }}>
+      {/* Gold shimmer accents */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+        <div className="absolute top-10 left-10 w-64 h-64 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(40, 70%, 60%) 0%, transparent 70%)" }} />
+        <div className="absolute bottom-10 right-10 w-80 h-80 rounded-full opacity-[0.05]" style={{ background: "radial-gradient(circle, hsl(40, 70%, 55%) 0%, transparent 70%)" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.03]" style={{ background: "radial-gradient(circle, hsl(40, 60%, 50%) 0%, transparent 60%)" }} />
       </div>
-      <div className="absolute bottom-0 left-0 w-24 h-24 md:w-40 md:h-40 opacity-15">
-        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 200 Q100 100 200 200" stroke="hsl(var(--primary))" strokeWidth="1.5" fill="none" />
-          <path d="M0 200 Q80 120 160 200" stroke="hsl(var(--primary))" strokeWidth="1" fill="none" />
-          <path d="M0 200 Q60 140 120 200" stroke="hsl(var(--primary))" strokeWidth="0.8" fill="none" />
-        </svg>
-      </div>
-      <div className="absolute bottom-0 right-0 w-32 h-32 md:w-48 md:h-48 opacity-15">
-        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="200" cy="200" r="150" stroke="hsl(var(--primary))" strokeWidth="1.5" />
-          <circle cx="200" cy="200" r="120" stroke="hsl(var(--primary))" strokeWidth="1" />
-          <circle cx="200" cy="200" r="90" stroke="hsl(var(--primary))" strokeWidth="0.8" />
-        </svg>
-      </div>
+      {/* Subtle pattern overlay */}
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{
+        backgroundImage: "radial-gradient(circle at 50% 50%, hsla(40, 60%, 60%, 0.3) 1px, transparent 1px)",
+        backgroundSize: "24px 24px"
+      }} />
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Top row: main image + text side by side */}
@@ -77,59 +66,77 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="rounded-2xl overflow-hidden shadow-2xl lg:-mr-8">
+            <div className="rounded-2xl overflow-hidden shadow-2xl lg:-mr-8 relative" style={{ boxShadow: "0 25px 60px -15px hsla(345, 60%, 10%, 0.6)" }}>
               <img
                 src={aboutMain}
                 alt="Happy wedding couple"
                 className="w-full h-[380px] lg:h-[460px] object-cover"
               />
+              {/* Gold border accent */}
+              <div className="absolute inset-0 rounded-2xl pointer-events-none" style={{ border: "1px solid hsla(40, 60%, 50%, 0.2)" }} />
             </div>
           </motion.div>
 
           {/* Text content - right side */}
           <motion.div
             className="lg:w-[58%] rounded-2xl shadow-lg p-8 md:p-10 lg:pl-14 flex flex-col justify-center relative z-0"
-            style={{ background: "hsl(140, 30%, 92%)" }}
+            style={{
+              background: "linear-gradient(135deg, hsla(345, 45%, 16%, 0.95) 0%, hsla(345, 50%, 12%, 0.98) 100%)",
+              border: "1px solid hsla(40, 50%, 45%, 0.15)",
+              boxShadow: "0 20px 50px -10px hsla(345, 60%, 8%, 0.5)"
+            }}
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary uppercase tracking-wider mb-2">
+            <h2
+              className="text-3xl md:text-4xl font-bold uppercase tracking-wider mb-2"
+              style={{
+                fontFamily: "'DM Serif Display', Georgia, serif",
+                background: "linear-gradient(135deg, hsl(40, 65%, 60%) 0%, hsl(35, 70%, 50%) 50%, hsl(40, 65%, 60%) 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent"
+              }}
+            >
               About Us
             </h2>
-            <p className="text-sm text-muted-foreground italic mb-4">
+            <p className="text-sm italic mb-4" style={{ color: "hsla(40, 40%, 65%, 0.8)", fontFamily: "system-ui, sans-serif" }}>
               India's Most Trusted Matrimony Service
             </p>
-            <p className="text-base leading-relaxed text-muted-foreground mb-4">
-              Established in <strong className="text-foreground">2020 at Tirupati</strong>, Kalyanasuthra Matrimony is a traditional marriage matching company dedicated to bringing families together with trust, values, and modern technology. We believe that marriage is a sacred bond, and finding the right life partner is one of the most important decisions in life.
+            <p className="text-base leading-relaxed mb-4" style={{ color: "hsla(30, 20%, 80%, 0.85)" }}>
+              Established in <strong style={{ color: "hsl(40, 60%, 65%)" }}>2020 at Tirupati</strong>, Kalyanasuthra Matrimony is a traditional marriage matching company dedicated to bringing families together with trust, values, and modern technology. We believe that marriage is a sacred bond, and finding the right life partner is one of the most important decisions in life.
             </p>
-            <p className="text-base leading-relaxed text-muted-foreground mb-6">
+            <p className="text-base leading-relaxed mb-6" style={{ color: "hsla(30, 20%, 80%, 0.8)" }}>
               Our team of experienced relationship managers works closely with families to understand their preferences, values, and aspirations to find the perfect match.
             </p>
             <div>
               <a
                 href="#contact"
-                className="btn-burgundy inline-block text-sm font-semibold px-7 py-3 rounded-lg"
+                className="inline-block text-sm font-semibold px-7 py-3 rounded-lg transition-all hover:scale-105"
+                style={{
+                  background: "linear-gradient(135deg, hsl(40, 65%, 50%) 0%, hsl(35, 70%, 42%) 100%)",
+                  color: "hsl(345, 50%, 10%)",
+                  boxShadow: "0 4px 15px hsla(40, 60%, 40%, 0.3)"
+                }}
               >
                 Read More
               </a>
             </div>
           </motion.div>
         </div>
-
       </div>
     </section>
 
-    {/* Exclusive Service - Separate Section — same bg-muted/40 continued */}
-    <section className="bg-muted/40 pb-0 pt-0">
-      {/* Top divider line */}
-      <div className="h-px bg-border mx-8 opacity-50" />
+    {/* Exclusive Service Section */}
+    <section style={{ background: "hsl(345, 50%, 8%)" }} className="pb-0 pt-0">
+      {/* Gold divider */}
+      <div className="h-px mx-8" style={{ background: "linear-gradient(90deg, transparent, hsla(40, 60%, 50%, 0.3), transparent)" }} />
 
       {/* Find Your Match CTA block */}
       <div className="relative overflow-hidden">
         <img src={findMatchBg} alt="Wedding venue with candles" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ background: "hsla(0, 0%, 0%, 0.65)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, hsla(345, 55%, 10%, 0.75) 0%, hsla(345, 50%, 8%, 0.85) 100%)" }} />
         <div className="relative z-10 py-20">
           <motion.div
             className="container mx-auto px-4 text-center space-y-5"
@@ -142,8 +149,9 @@ const AboutSection = () => {
               className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight"
               style={{
                 fontFamily: "'DM Serif Display', serif",
-                color: "hsl(0, 0%, 100%)",
-                textShadow: "2px 3px 8px hsla(0, 0%, 0%, 0.5)",
+                background: "linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(40, 60%, 75%) 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
               }}
             >
               Find Your Match Today
@@ -151,7 +159,7 @@ const AboutSection = () => {
             <p
               className="text-base sm:text-lg md:text-xl max-w-xl mx-auto"
               style={{
-                color: "hsla(0, 0%, 100%, 0.9)",
+                color: "hsla(30, 20%, 85%, 0.9)",
                 fontFamily: "system-ui, sans-serif",
               }}
             >
@@ -160,7 +168,11 @@ const AboutSection = () => {
             <button
               onClick={() => navigate("/register")}
               className="inline-flex items-center gap-2 text-base font-bold px-8 py-3.5 rounded-full transition-all hover:scale-105 shadow-xl"
-              style={{ background: "hsl(24, 90%, 55%)", color: "hsl(0, 0%, 100%)" }}
+              style={{
+                background: "linear-gradient(135deg, hsl(40, 65%, 50%) 0%, hsl(35, 70%, 42%) 100%)",
+                color: "hsl(345, 50%, 10%)",
+                boxShadow: "0 6px 20px hsla(40, 60%, 40%, 0.35)"
+              }}
             >
               Register Now
               <Plus size={18} />
@@ -169,12 +181,18 @@ const AboutSection = () => {
         </div>
       </div>
 
-      {/* Three features below Contact Us */}
-      <div className="bg-muted/40 py-14">
+      {/* Three features */}
+      <div className="py-14" style={{ background: "linear-gradient(180deg, hsl(345, 50%, 8%) 0%, hsl(345, 55%, 12%) 100%)" }}>
         <div className="container mx-auto px-4">
           <motion.h3
             className="text-center text-3xl md:text-4xl font-bold mb-12"
-            style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--primary))", letterSpacing: "1px" }}
+            style={{
+              fontFamily: "'DM Serif Display', serif",
+              background: "linear-gradient(135deg, hsl(40, 65%, 60%) 0%, hsl(35, 70%, 50%) 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              letterSpacing: "1px"
+            }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -185,20 +203,25 @@ const AboutSection = () => {
             {features.map((f, i) => (
               <motion.div
                 key={f.title}
-                className="relative flex flex-col items-center text-center pt-12 pb-6 px-5 rounded-[2rem] rounded-b-2xl shadow-xl overflow-hidden"
-                style={{ background: f.gradient }}
+                className="relative flex flex-col items-center text-center pt-12 pb-6 px-5 rounded-[2rem] rounded-b-2xl overflow-hidden"
+                style={{
+                  background: f.gradient,
+                  boxShadow: "0 15px 40px -10px hsla(345, 60%, 8%, 0.5)",
+                  border: "1px solid hsla(0, 0%, 100%, 0.1)"
+                }}
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15 }}
                 whileHover={{ scale: 1.04, y: -6 }}
               >
-                {/* Icon circle */}
-                <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg mb-5 -mt-2" style={{ background: "white" }}>
-                  <f.icon size={28} style={{ color: "hsl(220, 30%, 30%)" }} />
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg mb-5 -mt-2"
+                  style={{ background: "hsla(0, 0%, 100%, 0.95)", boxShadow: "0 4px 15px hsla(0, 0%, 0%, 0.15)" }}
+                >
+                  <f.icon size={28} style={{ color: "hsl(345, 50%, 20%)" }} />
                 </div>
-
-                <h4 className="text-base font-bold text-white mb-2" style={{ fontFamily: "system-ui, sans-serif" }}>{f.title}</h4>
+                <h4 className="text-base font-bold mb-2" style={{ color: "hsl(0, 0%, 100%)", fontFamily: "system-ui, sans-serif" }}>{f.title}</h4>
                 <p className="text-sm leading-relaxed mb-4" style={{ color: "hsla(0, 0%, 100%, 0.88)", fontFamily: "system-ui, sans-serif" }}>{f.desc}</p>
               </motion.div>
             ))}
@@ -207,7 +230,7 @@ const AboutSection = () => {
       </div>
     </section>
 
-    {/* Five wedding images - full screen width, 3:4 ratio, hover zoom */}
+    {/* Five wedding images */}
     <section>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-0">
         {[wedding1, wedding2, wedding3, wedding4, wedding5].map((img, i) => (
