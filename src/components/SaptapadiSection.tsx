@@ -49,16 +49,15 @@ const StepCard = ({ step, index }: {step: typeof steps[0];index: number;}) =>
 <motion.div
   className="group relative rounded-lg overflow-hidden"
   style={{
-    background: "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)",
-    border: "1px solid rgba(255,255,255,0.06)"
+    background: "hsl(0, 0%, 100%)",
+    border: "1px solid hsla(0, 0%, 0%, 0.08)"
   }}
   initial={{ opacity: 0, y: 30 }}
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true }}
   transition={{ duration: 0.5, delay: index * 0.1 }}
   whileHover={{
-    backgroundColor: "rgba(255,255,255,0.06)",
-    borderColor: "rgba(232,228,223,0.15)"
+    boxShadow: "0 8px 30px -10px hsla(0, 0%, 0%, 0.15)"
   }}>
   
     <div className="flex flex-col items-center text-center p-5 sm:p-6">
