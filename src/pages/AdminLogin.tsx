@@ -22,6 +22,18 @@ export default function AdminLogin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!checkRateLimit("admin_login", 5, 300000)) {
+      setError("Too many login attempts. Please wait 5 minutes.");
+      return;
+    }
+
+    const validation = loginSchema.safeParse({ identifier: email, password });
+    if (!validation.success) {
+      setError(validation.error.errors[0]?.message || "Invalid input");
+      return;
+    }
+
     setLoading(true);
     setError("");
     try {

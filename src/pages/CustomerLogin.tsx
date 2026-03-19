@@ -19,6 +19,18 @@ export default function CustomerLogin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!checkRateLimit("customer_login", 5, 300000)) {
+      setError("Too many login attempts. Please wait 5 minutes.");
+      return;
+    }
+
+    const validation = loginSchema.safeParse({ identifier, password });
+    if (!validation.success) {
+      setError(validation.error.errors[0]?.message || "Invalid input");
+      return;
+    }
+
     setLoading(true);
     setError("");
     try {
