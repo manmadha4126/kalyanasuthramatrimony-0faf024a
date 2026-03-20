@@ -30,10 +30,9 @@ const Header = () => {
         {/* Logo */}
         <a href="#home" className="flex items-center gap-2 ml-4 sm:ml-8">
           <img src={logo} alt="Kalyanasuthra Matrimony" className="h-14 w-auto object-contain" />
-          <span className="text-xl sm:text-2xl lg:text-[1.7rem] font-black italic tracking-wide leading-tight" style={{
-            fontFamily: "'Lato', sans-serif",
-            color: "hsl(25, 80%, 42%)",
-            letterSpacing: "0.04em",
+          <span className="text-lg sm:text-xl font-extrabold tracking-wide" style={{
+            fontFamily: "'Playfair Display', serif",
+            color: "hsl(348, 70%, 35%)",
           }}>
             Kalyanasuthra Matrimony
           </span>
