@@ -42,6 +42,7 @@ const Index = () => {
       <SaptapadiSection />
       <SuccessStories />
       <PaymentSection />
+      <FindMatchCTA />
       <ServicesSection />
       <ContactSection />
       <Footer />
