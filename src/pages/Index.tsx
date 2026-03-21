@@ -7,6 +7,7 @@ import FeaturedProfiles from "@/components/FeaturedProfiles";
 import SaptapadiSection from "@/components/SaptapadiSection";
 import SuccessStories from "@/components/SuccessStories";
 import PaymentSection from "@/components/PaymentSection";
+import FindMatchCTA from "@/components/FindMatchCTA";
 import ServicesSection from "@/components/ServicesSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
