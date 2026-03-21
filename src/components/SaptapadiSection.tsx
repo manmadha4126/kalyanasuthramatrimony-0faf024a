@@ -47,7 +47,7 @@ const steps = [
 
 const StepCard = ({ step, index }: {step: typeof steps[0];index: number;}) =>
 <motion.div
-  className="group relative rounded-xl overflow-hidden"
+  className="group relative rounded-xl overflow-hidden cursor-pointer"
   style={{
     backgroundColor: "#ffffff",
     border: "1px solid hsla(0, 0%, 75%, 0.4)",
@@ -58,10 +58,11 @@ const StepCard = ({ step, index }: {step: typeof steps[0];index: number;}) =>
   viewport={{ once: true }}
   transition={{ duration: 0.5, delay: index * 0.1 }}
   whileHover={{
-    boxShadow: "0 8px 30px -10px hsla(0, 0%, 0%, 0.18)"
+    scale: 1.08,
+    boxShadow: "0 12px 40px -10px hsla(0, 0%, 0%, 0.25)"
   }}>
   
-    <div className="flex flex-col items-center text-center p-5 sm:p-6">
+    <div className="flex flex-col items-center text-center p-5 sm:p-6 transition-transform duration-300 group-hover:scale-105">
       <div
       className="w-12 h-12 rounded-full flex items-center justify-center mb-3"
       style={{

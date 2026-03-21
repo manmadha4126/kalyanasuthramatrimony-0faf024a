@@ -91,7 +91,14 @@ const HeroSection = () => {
       <div className="w-full h-1.5" style={{ background: "linear-gradient(90deg, hsl(var(--burgundy-light)), hsl(var(--gold-accent)), hsl(var(--burgundy-light)))" }} />
 
       {/* Main Hero - Split Layout */}
-      <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(348, 45%, 12%) 0%, hsl(280, 40%, 15%) 50%, hsl(220, 50%, 12%) 100%)" }}>
+        <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(348, 45%, 12%) 0%, hsl(280, 40%, 15%) 50%, hsl(220, 50%, 12%) 100%)" }}>
+          {/* Left side decorative overlay */}
+          <div className="absolute top-0 left-0 w-1/2 h-full pointer-events-none z-[1]" style={{
+            background: "linear-gradient(160deg, hsla(30, 60%, 20%, 0.6) 0%, hsla(345, 50%, 18%, 0.4) 40%, transparent 80%)",
+          }} />
+          <div className="absolute top-0 left-0 w-1/2 h-full pointer-events-none z-[1] opacity-30" style={{
+            backgroundImage: "radial-gradient(ellipse at 20% 30%, hsla(40, 70%, 50%, 0.15) 0%, transparent 60%), radial-gradient(ellipse at 10% 80%, hsla(348, 50%, 30%, 0.2) 0%, transparent 50%)",
+          }} />
         
         {/* Decorative elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
