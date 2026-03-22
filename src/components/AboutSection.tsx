@@ -44,16 +44,6 @@ const AboutSection = () => {
     <>
     <section id="about" className="py-24 relative overflow-hidden" style={{ background: "hsl(0, 0%, 100%)" }}>
       {/* Gold shimmer accents */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-        <div className="absolute top-10 left-10 w-64 h-64 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(40, 70%, 60%) 0%, transparent 70%)" }} />
-        <div className="absolute bottom-10 right-10 w-80 h-80 rounded-full opacity-[0.05]" style={{ background: "radial-gradient(circle, hsl(40, 70%, 55%) 0%, transparent 70%)" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.03]" style={{ background: "radial-gradient(circle, hsl(40, 60%, 50%) 0%, transparent 60%)" }} />
-      </div>
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{
-        backgroundImage: "radial-gradient(circle at 50% 50%, hsla(40, 60%, 60%, 0.3) 1px, transparent 1px)",
-        backgroundSize: "24px 24px"
-      }} />
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Top row: main image + text side by side */}
