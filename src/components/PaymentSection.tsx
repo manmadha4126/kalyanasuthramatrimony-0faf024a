@@ -23,23 +23,22 @@ const PaymentSection = () => {
 
   return (
     <section className="py-20 relative overflow-hidden">
-      {/* Dynamic animated gradient background */}
+      {/* Deep teal gradient background */}
       <div className="absolute inset-0 pointer-events-none" style={{
         background: `
-          radial-gradient(ellipse 80% 50% at 20% 40%, hsla(280, 60%, 25%, 0.4) 0%, transparent 50%),
-          radial-gradient(ellipse 60% 40% at 80% 60%, hsla(200, 70%, 30%, 0.3) 0%, transparent 50%),
-          radial-gradient(ellipse 50% 30% at 50% 80%, hsla(45, 80%, 50%, 0.15) 0%, transparent 50%),
-          linear-gradient(135deg, hsl(220, 50%, 12%) 0%, hsl(260, 45%, 18%) 35%, hsl(280, 40%, 20%) 65%, hsl(220, 55%, 15%) 100%)
+          radial-gradient(ellipse 80% 60% at 30% 20%, hsla(195, 70%, 18%, 0.6) 0%, transparent 60%),
+          radial-gradient(ellipse 60% 50% at 70% 80%, hsla(190, 60%, 12%, 0.4) 0%, transparent 50%),
+          linear-gradient(160deg, hsl(195, 65%, 14%) 0%, hsl(192, 60%, 18%) 40%, hsl(190, 55%, 22%) 70%, hsl(195, 65%, 14%) 100%)
         `
       }} />
 
-      {/* Animated mesh overlay */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.08]" style={{
+      {/* Subtle mesh overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.06]" style={{
         backgroundImage: `
-          linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
-          linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px)
+          linear-gradient(90deg, hsla(0,0%,100%,0.08) 1px, transparent 1px),
+          linear-gradient(hsla(0,0%,100%,0.08) 1px, transparent 1px)
         `,
-        backgroundSize: "60px 60px"
+        backgroundSize: "50px 50px"
       }} />
 
       {/* Floating payment icons */}
@@ -47,19 +46,17 @@ const PaymentSection = () => {
       <FloatingIcon icon={Wallet} className="top-32 right-[15%]" delay={1.5} />
       <FloatingIcon icon={Banknote} className="bottom-24 left-[20%]" delay={3} />
       <FloatingIcon icon={CreditCard} className="bottom-16 right-[10%]" delay={2} />
-      <FloatingIcon icon={Wallet} className="top-1/2 left-[5%]" delay={4} />
-      <FloatingIcon icon={Banknote} className="top-20 right-[30%]" delay={2.5} />
 
       {/* Glowing orbs */}
       <motion.div
         className="absolute w-72 h-72 rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, hsla(45, 80%, 60%, 0.15) 0%, transparent 70%)", top: "10%", left: "60%" }}
+        style={{ background: "radial-gradient(circle, hsla(190, 70%, 40%, 0.12) 0%, transparent 70%)", top: "10%", left: "60%" }}
         animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute w-96 h-96 rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, hsla(200, 70%, 50%, 0.1) 0%, transparent 70%)", bottom: "-10%", left: "-10%" }}
+        style={{ background: "radial-gradient(circle, hsla(195, 60%, 30%, 0.1) 0%, transparent 70%)", bottom: "-10%", left: "-10%" }}
         animate={{ scale: [1.1, 1, 1.1], opacity: [0.2, 0.4, 0.2] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       />
