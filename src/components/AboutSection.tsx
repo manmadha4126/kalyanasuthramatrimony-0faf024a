@@ -42,7 +42,7 @@ const AboutSection = () => {
   const navigate = useNavigate();
   return (
     <>
-    <section id="about" className="py-24 relative overflow-hidden" style={{ background: "linear-gradient(180deg, hsl(345, 55%, 12%) 0%, hsl(345, 50%, 8%) 100%)" }}>
+    <section id="about" className="py-24 relative overflow-hidden" style={{ background: "hsl(0, 0%, 100%)" }}>
       {/* Gold shimmer accents */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
         <div className="absolute top-10 left-10 w-64 h-64 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(40, 70%, 60%) 0%, transparent 70%)" }} />
