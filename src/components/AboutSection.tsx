@@ -71,7 +71,7 @@ const AboutSection = () => {
           <motion.div
             className="lg:w-[58%] rounded-2xl shadow-lg p-8 md:p-10 lg:pl-14 flex flex-col justify-center relative z-0"
             style={{
-              background: "linear-gradient(135deg, hsla(345, 45%, 16%, 0.95) 0%, hsla(345, 50%, 12%, 0.98) 100%)",
+              background: "linear-gradient(135deg, hsl(345, 55%, 15%) 0%, hsl(345, 50%, 10%) 100%)",
               border: "1px solid hsla(40, 50%, 45%, 0.15)",
               boxShadow: "0 20px 50px -10px hsla(345, 60%, 8%, 0.5)"
             }}
