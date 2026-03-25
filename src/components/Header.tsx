@@ -24,7 +24,7 @@ const Header = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 ${
         scrolled ? "shadow-sm" : ""
       }`}
-      style={{ height: "80px" }}
+      style={{ height: "80px", background: "hsl(0, 0%, 0%)" }}
     >
       <div className="container mx-auto h-full flex items-center px-4 relative">
         {/* Logo */}
