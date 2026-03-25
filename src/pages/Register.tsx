@@ -520,9 +520,6 @@ export default function Register() {
           <p className="text-base sm:text-lg" style={{ color: "hsl(0, 0%, 45%)", fontFamily: "system-ui, sans-serif" }}>
             Complete your profile now to contact members you like and to receive interests
           </p>
-          <p className="text-xs mt-2" style={{ color: "hsl(0, 70%, 55%)" }}>
-            mandatory <span className="text-lg align-middle">*</span>
-          </p>
         </div>
 
         {/* Main content with sidebar */}
