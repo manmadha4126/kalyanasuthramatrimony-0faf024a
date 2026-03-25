@@ -153,11 +153,8 @@ const ServicesSection = () => {
         </div>
 
       </div>
-
-      </div>
-
-      <ConsultationForm open={showConsultation} onClose={() => setShowConsultation(false)} />
     </section>);
+
 
 };
 
