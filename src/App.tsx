@@ -14,6 +14,7 @@ import ResetPassword from "./pages/ResetPassword";
 import ProfileDetail from "./pages/ProfileDetail";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import MembershipPlans from "./pages/MembershipPlans";
 
 const queryClient = new QueryClient();
 
