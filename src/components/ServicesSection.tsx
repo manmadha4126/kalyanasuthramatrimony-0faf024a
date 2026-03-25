@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Phone, Mail, User, ChevronDown, ChevronUp } from "lucide-react";
-import ConsultationForm from "@/components/ConsultationForm";
+import { motion } from "framer-motion";
 
 type Duration = "3months" | "6months" | "1year" | "premium";
 
@@ -51,8 +49,6 @@ const owners = [
 
 const ServicesSection = () => {
   const [selected, setSelected] = useState<Duration | null>(null);
-  const [showConsultation, setShowConsultation] = useState(false);
-  const [showOwners, setShowOwners] = useState(false);
 
   return (
     <section
@@ -78,7 +74,7 @@ const ServicesSection = () => {
       <div className="container mx-auto px-4">
         <motion.div className="text-center mb-14" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <p className="text-sm uppercase tracking-[0.2em] font-semibold mb-2" style={{ color: "hsl(var(--gold-accent))", fontFamily: "'Lato', sans-serif" }}>✦ Premium Assisted Services ✦</p>
-          <h2 className="text-5xl md:text-6xl mb-3 lg:text-8xl text-primary-foreground" style={{ fontFamily: "'Alex Brush', cursive", color: "white", textShadow: "2px 3px 6px hsla(0, 0%, 0%, 0.3)", letterSpacing: "0.02em" }}>Exclusive Services from <span style={{ color: "white", fontSize: "1.15em" }}>Kalyanasuthra Matrimony</span></h2>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl mb-3 text-primary-foreground" style={{ fontFamily: "'Alex Brush', cursive", color: "white", textShadow: "2px 3px 6px hsla(0, 0%, 0%, 0.3)", letterSpacing: "0.02em" }}>Exclusive Services from <span style={{ color: "white" }}>Kalyanasuthra Matrimony</span></h2>
           <p className="max-w-xl mx-auto mb-3" style={{ color: "hsl(220, 20%, 75%)" }}>Our dedicated relationship managers provide profile handling, match filtering, feedback support, and direct communication management.</p>
           <div className="gold-divider" />
         </motion.div>
@@ -157,87 +153,8 @@ const ServicesSection = () => {
         </div>
 
       </div>
-
-      {/* CTA bridging with Contact Us owner details */}
-      <div className="relative z-20 px-4" style={{ marginBottom: "-40px", marginTop: "30px" }}>
-        <motion.div
-          className="max-w-3xl mx-auto text-center rounded-2xl py-8 px-8 shadow-2xl relative overflow-hidden"
-          style={{
-            background: "linear-gradient(135deg, hsl(220, 60%, 10%) 0%, hsl(240, 50%, 18%) 50%, hsl(210, 55%, 12%) 100%)",
-            border: "2px solid hsl(var(--gold-accent) / 0.5)",
-            boxShadow: "0 20px 60px -15px rgba(0,0,0,0.5)"
-          }}
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          
-          {/* Decorative marriage border line */}
-          <div className="absolute top-0 left-0 right-0 h-1" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold-accent)), transparent)" }} />
-          <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold-accent)), transparent)" }} />
-          {/* Small decorative dots */}
-          <div className="absolute top-3 left-6 w-2 h-2 rounded-full" style={{ background: "hsl(var(--gold-accent) / 0.5)" }} />
-          <div className="absolute top-3 right-6 w-2 h-2 rounded-full" style={{ background: "hsl(var(--gold-accent) / 0.5)" }} />
-
-          <h3 className="text-xl md:text-2xl font-bold mb-2" style={{ color: "white", fontFamily: "'DM Serif Display', serif" }}>Want to know more about Assisted Service?</h3>
-          {selected &&
-          <p className="text-sm mb-4" style={{ color: "hsl(40, 30%, 80%)" }}>
-              Selected: <span className="font-semibold" style={{ color: "hsl(var(--gold-accent))" }}>{durationOptions.find((d) => d.key === selected)?.label}</span> plan
-            </p>
-          }
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
-            <button
-              onClick={() => setShowConsultation(true)}
-              className="inline-flex items-center gap-2 px-8 py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105"
-              style={{ background: "hsl(var(--gold-accent))", color: "hsl(220, 60%, 10%)" }}>
-              
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-              </svg>
-              Get Free Consultation
-            </button>
-            <button
-              onClick={() => setShowOwners(!showOwners)}
-              className="inline-flex items-center gap-2 px-8 py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105 border"
-              style={{ borderColor: "hsl(var(--gold-accent) / 0.7)", color: "hsl(var(--gold-accent))", background: "transparent" }}>
-              
-              <Phone size={18} />
-              Contact Us
-              {showOwners ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            </button>
-          </div>
-
-          <AnimatePresence>
-            {showOwners &&
-            <motion.div
-              className="mt-6 grid sm:grid-cols-2 gap-4 max-w-lg mx-auto"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}>
-              
-                {owners.map((owner, i) =>
-              <div key={i} className="rounded-xl p-4 text-left" style={{ background: "hsla(0,0%,100%,0.1)", border: "1px solid hsl(var(--gold-accent) / 0.3)" }}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsl(var(--gold-accent))" }}>
-                        <User size={14} style={{ color: "hsl(348, 56%, 22%)" }} />
-                      </div>
-                      <span className="text-base font-bold text-white">{owner.name}</span>
-                    </div>
-                    <a href={`tel:${owner.phone}`} className="flex items-center gap-2 text-sm mb-1 transition-colors" style={{ color: "hsl(var(--gold-accent))" }}>
-                      <Phone size={14} /> {owner.phone}
-                    </a>
-                    <a href={`mailto:${owner.email}`} className="flex items-center gap-2 text-xs transition-colors" style={{ color: "hsl(40, 30%, 75%)" }}>
-                      <Mail size={12} /> {owner.email}
-                    </a>
-                  </div>
-              )}
-              </motion.div>
-            }
-          </AnimatePresence>
-        </motion.div>
-      </div>
-
-      <ConsultationForm open={showConsultation} onClose={() => setShowConsultation(false)} />
     </section>);
+
 
 };
 
