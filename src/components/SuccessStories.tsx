@@ -133,9 +133,9 @@ const SuccessStories = () => {
                 className="flex-shrink-0 rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105"
                 style={{
                   width: 240,
-                  background: "hsl(0, 0%, 100%)",
-                  boxShadow: "0 6px 24px hsla(220, 30%, 50%, 0.12)",
-                  border: "2px solid hsl(220, 40%, 88%)",
+                  background: "hsl(0, 0%, 14%)",
+                  boxShadow: "0 6px 24px hsla(0, 0%, 0%, 0.4)",
+                  border: "2px solid hsl(0, 0%, 22%)",
                 }}
               >
                 <div className="h-[160px] overflow-hidden">
