@@ -21,10 +21,10 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 bg-card transition-shadow duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 ${
         scrolled ? "shadow-sm" : ""
       }`}
-      style={{ height: "80px" }}
+      style={{ height: "80px", background: "hsl(0, 0%, 0%)" }}
     >
       <div className="container mx-auto h-full flex items-center px-4 relative">
         {/* Logo */}
@@ -45,7 +45,7 @@ const Header = () => {
               key={link.label}
               href={link.href}
               className="font-bold text-base px-4 py-2 rounded-lg transition-all duration-300 hover:bg-primary/10 hover:scale-105 hover:shadow-md"
-              style={{ color: "hsl(0, 0%, 0%)" }}
+              style={{ color: "hsl(0, 0%, 100%)" }}
             >
               {link.label}
             </a>
@@ -78,7 +78,7 @@ const Header = () => {
         </div>
 
         {/* Mobile */}
-        <button className="lg:hidden p-2 text-primary ml-auto" onClick={() => setMobileOpen(!mobileOpen)}>
+        <button className="lg:hidden p-2 text-white ml-auto" onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
