@@ -37,10 +37,10 @@ const Index = () => {
       <Header />
       <HeroSection />
       <AboutSection />
-      
-      <FeaturedProfiles />
       <SaptapadiSection />
+      <FeaturedProfiles />
       <SuccessStories />
+      <OurFeaturesSection />
       <PaymentSection />
       <FindMatchCTA />
       <ServicesSection />
