@@ -260,38 +260,73 @@ const SuccessStories = () => {
             </p>
           </motion.div>
 
-          {/* RIGHT - Cards */}
-          <div className="w-[65%] relative hidden lg:flex items-center justify-center" style={{ height: "clamp(400px, 45vw, 540px)" }} onClick={() => setIsPaused((p) => !p)}>
-            <AnimatePresence mode="popLayout">
-              {getVisibleCards().map(({ story, slot }) => {
-                const layout = cardLayout[slot];
-                const isHero = slot === 5;
-                const cardW = isHero ? 200 : 160;
-                const imgH = isHero ? 130 : 100;
-                return (
-                  <motion.div key={`${story.id}-${slot}`} className="absolute" style={{ zIndex: layout.z, width: cardW, left: "50%", marginLeft: -(cardW / 2), top: "50%", marginTop: -100 }}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: layout.opacity, x: layout.x, y: layout.y, scale: layout.scale, rotate: layout.rot }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}>
-                    <div className="rounded-xl overflow-hidden" style={{ background: "white", boxShadow: isHero ? "0 22px 60px rgba(0,0,0,0.32), 0 0 0 2px rgba(255,255,255,0.5)" : "0 8px 28px rgba(0,0,0,0.15)", border: "2.5px solid rgba(255,255,255,0.45)" }}>
-                      <div style={{ height: imgH }} className="overflow-hidden">
-                        <motion.img src={story.image_url || wedding1} alt={`${story.bride_name} & ${story.groom_name}`} className="w-full h-full object-cover" animate={{ scale: isHero ? 1.08 : 1 }} transition={{ duration: 1, ease: "easeInOut" }} />
-                      </div>
-                      <div className="px-3 py-2 text-center">
-                        <h4 className="font-bold leading-tight" style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--primary))", fontSize: isHero ? 13 : 11 }}>
-                          {story.bride_name} <span style={{ color: "#D94F6B" }}>♥</span> {story.groom_name}
-                        </h4>
-                        <p style={{ fontFamily: "'Lato', sans-serif", color: "hsl(var(--muted-foreground))", fontSize: isHero ? 10 : 9, marginTop: 2 }}>{story.city}</p>
-                        {isHero && (
-                          <p style={{ fontFamily: "'Lato', sans-serif", color: "#666", fontSize: 9, marginTop: 3, lineHeight: 1.4, fontStyle: "italic" }}>"{story.story}"</p>
-                        )}
-                      </div>
+          {/* RIGHT - Scrolling Cards */}
+          <div className="w-[65%] relative hidden lg:block overflow-hidden" style={{ height: "clamp(400px, 45vw, 540px)" }}>
+            <style>{`
+              @keyframes desktopMarquee {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+              }
+            `}</style>
+            <div className="flex items-center h-full">
+              <div
+                className="flex gap-5"
+                style={{
+                  animation: isPaused ? "none" : "desktopMarquee 25s linear infinite",
+                  width: "max-content",
+                }}
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+              >
+                {[...stories.slice(0, 8), ...stories.slice(0, 8)].map((story, idx) => (
+                  <div
+                    key={`desk-${story.id}-${idx}`}
+                    className="flex-shrink-0 rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105"
+                    style={{
+                      width: 220,
+                      background: "white",
+                      boxShadow: "0 10px 35px rgba(0,0,0,0.2)",
+                      border: "2px solid rgba(255,255,255,0.5)",
+                      borderImage: "linear-gradient(135deg, rgba(217,79,107,0.5), rgba(255,182,193,0.5), rgba(61,158,154,0.4)) 1",
+                      borderImageSlice: 1,
+                    }}
+                  >
+                    <div className="h-[140px] overflow-hidden">
+                      <img
+                        src={story.image_url || wedding1}
+                        alt={`${story.bride_name} & ${story.groom_name}`}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
+                    <div className="px-4 py-3 text-center">
+                      <h4
+                        className="font-bold leading-tight text-sm"
+                        style={{
+                          fontFamily: "'DM Serif Display', serif",
+                          color: "hsl(var(--primary))",
+                        }}
+                      >
+                        {story.bride_name}{" "}
+                        <span style={{ color: "#D94F6B" }}>♥</span>{" "}
+                        {story.groom_name}
+                      </h4>
+                      <p
+                        className="text-xs mt-1"
+                        style={{ color: "hsl(var(--muted-foreground))" }}
+                      >
+                        {story.city}
+                      </p>
+                      <p
+                        className="text-[11px] mt-2 leading-snug italic"
+                        style={{ color: "#666" }}
+                      >
+                        "{story.story}"
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -304,13 +339,13 @@ const SuccessStories = () => {
             100% { transform: translateX(-50%); }
           }
         `}</style>
-        <div className="flex gap-3" style={{ animation: "marqueeScroll 20s linear infinite", width: "max-content" }}>
+        <div className="flex gap-4" style={{ animation: "marqueeScroll 20s linear infinite", width: "max-content" }}>
           {[...stories.slice(0, 6), ...stories.slice(0, 6)].map((story, idx) => (
-            <div key={`mobile-${story.id}-${idx}`} className="flex-shrink-0 rounded-xl overflow-hidden" style={{ width: 160, background: "white", boxShadow: "0 6px 20px rgba(0,0,0,0.18)", border: "2px solid rgba(255,255,255,0.5)" }}>
-              <div className="h-[100px] overflow-hidden">
+            <div key={`mobile-${story.id}-${idx}`} className="flex-shrink-0 rounded-2xl overflow-hidden" style={{ width: 200, background: "white", boxShadow: "0 8px 24px rgba(0,0,0,0.2)", border: "2px solid rgba(217,79,107,0.3)" }}>
+              <div className="h-[110px] overflow-hidden">
                 <img src={story.image_url || wedding1} alt={`${story.bride_name} & ${story.groom_name}`} className="w-full h-full object-cover" />
               </div>
-              <div className="px-2 py-2 text-center">
+              <div className="px-3 py-2.5 text-center">
                 <h4 className="text-xs font-bold" style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--primary))" }}>
                   {story.bride_name} <span style={{ color: "#D94F6B" }}>♥</span> {story.groom_name}
                 </h4>

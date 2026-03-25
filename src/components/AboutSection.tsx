@@ -7,8 +7,9 @@ const steps = [
     icon: UserPlus,
     title: "Sign Up",
     description: "Register for free & create your Matrimony Profile with complete details",
-    gradient: "linear-gradient(135deg, hsl(348, 70%, 50%), hsl(348, 80%, 60%))",
-    shadow: "hsla(348, 70%, 50%, 0.4)",
+    gradient: "linear-gradient(135deg, hsl(28, 90%, 52%), hsl(32, 92%, 58%))",
+    shadow: "hsla(28, 90%, 52%, 0.4)",
+    accent: "hsl(28, 90%, 52%)",
   },
   {
     number: 2,
@@ -17,6 +18,7 @@ const steps = [
     description: "Browse & connect with verified matches that suit your preferences",
     gradient: "linear-gradient(135deg, hsl(280, 60%, 50%), hsl(280, 70%, 60%))",
     shadow: "hsla(280, 60%, 50%, 0.4)",
+    accent: "hsl(280, 60%, 50%)",
   },
   {
     number: 3,
@@ -25,6 +27,7 @@ const steps = [
     description: "Become a Premium Member & start meaningful conversations",
     gradient: "linear-gradient(135deg, hsl(174, 70%, 42%), hsl(174, 80%, 50%))",
     shadow: "hsla(174, 70%, 42%, 0.4)",
+    accent: "hsl(174, 70%, 42%)",
   },
 ];
 
@@ -33,7 +36,7 @@ const AboutSection = () => {
     <section
       id="about"
       className="py-16 md:py-20 relative overflow-hidden"
-      style={{ background: "hsl(0, 0%, 95%)" }}
+      style={{ background: "hsl(0, 0%, 100%)" }}
     >
       <div className="container mx-auto px-4">
         {/* Heading */}
@@ -48,7 +51,7 @@ const AboutSection = () => {
             className="text-3xl md:text-5xl font-bold"
             style={{
               fontFamily: "'DM Serif Display', Georgia, serif",
-              color: "hsl(348, 70%, 45%)",
+              color: "hsl(220, 25%, 20%)",
             }}
           >
             The Wedding Chapter Starts Here...
@@ -88,9 +91,9 @@ const AboutSection = () => {
                   className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
                   style={{
                     background: "hsl(0, 0%, 100%)",
-                    color: "hsl(348, 70%, 45%)",
+                    color: step.accent,
                     boxShadow: "0 3px 10px hsla(0, 0%, 0%, 0.12)",
-                    border: "2px solid hsl(348, 70%, 90%)",
+                    border: `2px solid ${step.accent}33`,
                   }}
                 >
                   {step.number}
@@ -102,7 +105,7 @@ const AboutSection = () => {
                 className="text-xl md:text-2xl font-bold mt-3 mb-2"
                 style={{
                   fontFamily: "'DM Serif Display', Georgia, serif",
-                  color: "hsl(348, 70%, 45%)",
+                  color: step.accent,
                 }}
               >
                 {step.title}
