@@ -12,7 +12,7 @@ type FeaturedProfile = {
   profile_photo_url: string | null;
 };
 
-const ACCENT = "hsl(220, 65%, 48%)";
+const HEADING_COLOR = "hsl(190, 85%, 45%)";
 
 const FeaturedProfiles = () => {
   const [profiles, setProfiles] = useState<FeaturedProfile[]>([]);
@@ -20,7 +20,7 @@ const FeaturedProfiles = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await supabase.from("featured_profiles" as any).select("*").order("created_at", { ascending: false });
+      const { data } = await supabase.from("featured_profiles").select("*").order("created_at", { ascending: false });
       if (data) setProfiles(data as any);
       setLoading(false);
     };
@@ -40,19 +40,18 @@ const FeaturedProfiles = () => {
     >
       <motion.div
         className="w-full aspect-square rounded-full overflow-hidden shadow-lg border-4"
-        style={{ borderColor: "hsl(220, 60%, 85%)" }}
-        whileHover={{ scale: 1.05, boxShadow: "0 8px 30px hsla(220, 65%, 48%, 0.25)" }}
+        style={{ borderColor: "hsl(190, 60%, 85%)" }}
+        whileHover={{ scale: 1.05, boxShadow: "0 8px 30px hsla(190, 85%, 45%, 0.25)" }}
         transition={{ duration: 0.3 }}
       >
         {profile.profile_photo_url ? (
           <img src={profile.profile_photo_url} alt={profile.name} className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center" style={{ background: "hsl(220, 30%, 92%)" }}>
-            <span className="text-4xl font-bold" style={{ color: ACCENT }}>{profile.name[0]}</span>
+          <div className="w-full h-full flex items-center justify-center" style={{ background: "hsl(190, 30%, 92%)" }}>
+            <span className="text-4xl font-bold" style={{ color: HEADING_COLOR }}>{profile.name[0]}</span>
           </div>
         )}
       </motion.div>
-      {/* Info below photo */}
       <div className="mt-3 text-center">
         <h4 className="text-base font-bold" style={{ color: "hsl(220, 30%, 18%)" }}>{profile.name}</h4>
         <p className="text-sm" style={{ color: "hsl(0, 0%, 50%)" }}>{profile.age} yrs • {profile.profession}</p>
@@ -71,11 +70,11 @@ const FeaturedProfiles = () => {
     >
       <div
         className="w-full aspect-square rounded-full overflow-hidden shadow-md border-4 flex items-center justify-center"
-        style={{ background: "hsl(220, 30%, 95%)", borderColor: "hsl(220, 40%, 88%)" }}
+        style={{ background: "hsl(190, 30%, 95%)", borderColor: "hsl(190, 40%, 88%)" }}
       >
         <div className="text-center">
-          <div className="w-12 h-12 rounded-full mx-auto mb-2" style={{ background: "hsl(220, 25%, 88%)" }} />
-          <p className="text-xs font-semibold" style={{ color: ACCENT }}>Coming Soon</p>
+          <div className="w-12 h-12 rounded-full mx-auto mb-2" style={{ background: "hsl(190, 25%, 88%)" }} />
+          <p className="text-xs font-semibold" style={{ color: HEADING_COLOR }}>Coming Soon</p>
         </div>
       </div>
     </motion.div>
@@ -84,41 +83,44 @@ const FeaturedProfiles = () => {
   return (
     <section className="py-20 relative overflow-hidden" style={{ background: "hsl(0, 0%, 100%)" }}>
       <div className="container mx-auto px-4 relative z-10">
-        <motion.div className="text-center mb-14" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "hsl(220, 30%, 18%)" }}>
-            Featured <span style={{ color: ACCENT }}>Profiles</span>
+        <motion.div className="text-center mb-4" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: HEADING_COLOR }}>
+            Featured Profiles
           </h2>
-          <div className="h-[3px] w-16 mx-auto rounded-full" style={{ background: ACCENT }} />
+          <div className="h-[3px] w-16 mx-auto rounded-full mb-3" style={{ background: HEADING_COLOR }} />
+          <p className="text-base md:text-lg font-medium" style={{ color: "hsl(220, 15%, 40%)" }}>
+            Over Lakhs of Premium Members Looking for Partner
+          </p>
         </motion.div>
 
         {/* Groom Profiles */}
-        <div className="mb-14">
-          <h3 className="text-xl font-semibold mb-6 text-center" style={{ color: ACCENT, fontFamily: "'DM Serif Display', Georgia, serif" }}>
+        <div className="mb-14 mt-10">
+          <h3 className="text-xl font-semibold mb-6 text-center" style={{ color: HEADING_COLOR, fontFamily: "'DM Serif Display', Georgia, serif" }}>
             Groom Profiles
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {grooms.length > 0
-              ? grooms.map((p, i) => <ProfileCard key={p.id} profile={p} index={i} />)
-              : Array.from({ length: 5 }).map((_, i) => <PlaceholderCard key={`gp${i}`} index={i} />)
+              ? grooms.slice(0, 4).map((p, i) => <ProfileCard key={p.id} profile={p} index={i} />)
+              : Array.from({ length: 4 }).map((_, i) => <PlaceholderCard key={`gp${i}`} index={i} />)
             }
           </div>
         </div>
 
         {/* Bride Profiles */}
         <div>
-          <h3 className="text-xl font-semibold mb-6 text-center" style={{ color: ACCENT, fontFamily: "'DM Serif Display', Georgia, serif" }}>
+          <h3 className="text-xl font-semibold mb-6 text-center" style={{ color: HEADING_COLOR, fontFamily: "'DM Serif Display', Georgia, serif" }}>
             Bride Profiles
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {brides.length > 0
-              ? brides.map((p, i) => <ProfileCard key={p.id} profile={p} index={i} />)
-              : Array.from({ length: 5 }).map((_, i) => <PlaceholderCard key={`bp${i}`} index={i} />)
+              ? brides.slice(0, 4).map((p, i) => <ProfileCard key={p.id} profile={p} index={i} />)
+              : Array.from({ length: 4 }).map((_, i) => <PlaceholderCard key={`bp${i}`} index={i} />)
             }
           </div>
         </div>
 
         {/* Contact strip */}
-        <div className="mt-12 py-4 px-6 text-center rounded-2xl border" style={{ background: "hsl(220, 60%, 97%)", borderColor: "hsl(220, 50%, 80%)" }}>
+        <div className="mt-12 py-4 px-6 text-center rounded-2xl border" style={{ background: "hsl(190, 60%, 97%)", borderColor: "hsl(190, 50%, 80%)" }}>
           <p className="text-sm font-medium" style={{ color: "hsl(220, 30%, 30%)" }}>
             Contact for more profiles: <span className="font-bold">📞 9553306667</span> | <span className="font-bold">📞 9866288767</span>
           </p>
