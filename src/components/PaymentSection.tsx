@@ -12,7 +12,7 @@ const PaymentSection = () => {
   const [showContacts, setShowContacts] = useState(false);
 
   return (
-    <section className="py-20 px-4 relative" style={{ background: "hsl(195, 45%, 16%)" }}>
+    <section className="py-20 px-4 relative" style={{ background: "hsl(0, 0%, 5%)" }}>
       <div className="container mx-auto max-w-5xl">
         {/* Rounded teal card background */}
         <div

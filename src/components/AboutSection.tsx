@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { UserPlus, Users, MessageCircleHeart } from "lucide-react";
 
 const steps = [
@@ -31,7 +32,20 @@ const steps = [
   },
 ];
 
+const ACCENT = "hsl(220, 65%, 48%)";
+
+const categories: Record<string, string[]> = {
+  "Mother Tongue": ["Telugu", "Hindi", "Tamil", "Kannada", "Malayalam", "Marathi", "Bengali", "Gujarati", "Punjabi", "Oriya", "Rajasthani", "Urdu"],
+  "Caste": ["Brahmin", "Reddy", "Kamma", "Kapu", "Naidu", "Velama", "Vysya", "Yadav", "Mudaliar", "Chettiar"],
+  "Religion": ["Hindu", "Muslim", "Christian", "Sikh", "Jain", "Buddhist", "Parsi"],
+  "City": ["Hyderabad", "Bangalore", "Chennai", "Mumbai", "Delhi", "Pune", "Kolkata", "Vizag", "Vijayawada", "Tirupati"],
+  "Occupation": ["Software Engineer", "Doctor", "Business", "Government", "Teacher", "Lawyer", "CA", "Manager"],
+  "State": ["Telangana", "Andhra Pradesh", "Karnataka", "Tamil Nadu", "Maharashtra", "Kerala", "Delhi", "Gujarat"],
+};
+
 const AboutSection = () => {
+  const [activeTab, setActiveTab] = useState("Mother Tongue");
+
   return (
     <section
       id="about"
@@ -75,7 +89,6 @@ const AboutSection = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.2, duration: 0.6 }}
             >
-              {/* Circle icon */}
               <motion.div
                 className="relative w-28 h-28 md:w-32 md:h-32 rounded-full flex items-center justify-center mb-4"
                 style={{
@@ -86,7 +99,6 @@ const AboutSection = () => {
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <step.icon size={44} color="white" strokeWidth={1.8} />
-                {/* Number badge */}
                 <span
                   className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
                   style={{
@@ -100,7 +112,6 @@ const AboutSection = () => {
                 </span>
               </motion.div>
 
-              {/* Title */}
               <h3
                 className="text-xl md:text-2xl font-bold mt-3 mb-2"
                 style={{
@@ -111,7 +122,6 @@ const AboutSection = () => {
                 {step.title}
               </h3>
 
-              {/* Description */}
               <p
                 className="text-sm md:text-base leading-relaxed max-w-[260px]"
                 style={{ color: "hsl(220, 15%, 35%)" }}
@@ -120,6 +130,58 @@ const AboutSection = () => {
               </p>
             </motion.div>
           ))}
+        </div>
+
+        {/* Browse Matrimonial Profiles By - moved here */}
+        <div className="mt-20">
+          <motion.div
+            className="text-center mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-xs tracking-[0.25em] uppercase font-semibold mb-2" style={{ color: ACCENT }}>
+              Browse
+            </p>
+            <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "hsl(220, 30%, 18%)" }}>
+              <span style={{ color: ACCENT }}>Matrimonial</span> Profiles by
+            </h2>
+          </motion.div>
+
+          {/* Category Tabs */}
+          <div className="flex flex-wrap justify-center gap-2 mb-8">
+            {Object.keys(categories).map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveTab(cat)}
+                className="px-4 py-2 rounded-md text-sm font-medium transition-all duration-200"
+                style={{
+                  background: activeTab === cat ? ACCENT : "hsl(220, 20%, 92%)",
+                  color: activeTab === cat ? "white" : "hsl(220, 20%, 40%)",
+                }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Tags */}
+          <motion.div
+            key={activeTab}
+            className="flex flex-wrap justify-center gap-x-1 gap-y-2 max-w-4xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            {categories[activeTab].map((item, i) => (
+              <span key={item} className="text-sm" style={{ color: "hsl(220, 20%, 35%)" }}>
+                {item}
+                {i < categories[activeTab].length - 1 && (
+                  <span className="mx-2" style={{ color: "hsl(0, 0%, 75%)" }}>|</span>
+                )}
+              </span>
+            ))}
+          </motion.div>
         </div>
       </div>
     </section>

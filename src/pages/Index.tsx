@@ -39,7 +39,6 @@ const Index = () => {
       <HeroSection />
       <AboutSection />
       <SaptapadiSection />
-      <BrowseProfilesSection />
       <FeaturedProfiles />
       <SuccessStories />
       <OurFeaturesSection />
