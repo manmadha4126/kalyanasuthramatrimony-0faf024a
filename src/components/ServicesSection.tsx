@@ -96,7 +96,7 @@ const ServicesSection = () => {
             viewport={{ once: true }}
             whileHover={{ y: -6, transition: { duration: 0.3 } }}
           >
-            <div className="px-8 py-5" style={{ background: "linear-gradient(135deg, hsl(210, 70%, 50%), hsl(210, 80%, 60%))" }}>
+            <div className="px-8 py-5" style={{ background: "linear-gradient(135deg, hsl(348, 56%, 35%), hsl(348, 60%, 45%))" }}>
               <div className="flex items-center gap-3">
                 <Sparkles size={24} className="text-white" />
                 <h3 className="text-2xl font-bold text-white" style={{ fontFamily: "'DM Serif Display', serif" }}>
