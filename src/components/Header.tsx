@@ -21,7 +21,7 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 bg-card transition-shadow duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 ${
         scrolled ? "shadow-sm" : ""
       }`}
       style={{ height: "80px" }}
