@@ -60,7 +60,7 @@ const SuccessStories = () => {
   }, []);
 
   return (
-    <section id="stories" className="py-20 relative overflow-hidden" style={{ background: "hsl(0, 0%, 94%)" }}>
+    <section id="stories" className="py-20 relative overflow-hidden" style={{ background: "hsl(0, 0%, 8%)" }}>
       <div className="container mx-auto px-4">
         {/* Heading */}
         <motion.div
@@ -69,12 +69,12 @@ const SuccessStories = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "hsl(220, 30%, 18%)" }}>
+          <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "hsl(0, 0%, 95%)" }}>
             Success Stories by{" "}
-            <span style={{ color: "hsl(220, 65%, 48%)" }}>Kalyanasuthra</span>
+            <span style={{ color: "hsl(40, 85%, 55%)" }}>Kalyanasuthra</span>
           </h2>
-          <div className="h-[3px] w-16 mx-auto rounded-full mb-3" style={{ background: "hsl(220, 65%, 48%)" }} />
-          <p className="text-base" style={{ color: "hsl(220, 15%, 45%)" }}>
+          <div className="h-[3px] w-16 mx-auto rounded-full mb-3" style={{ background: "hsl(40, 85%, 55%)" }} />
+          <p className="text-base" style={{ color: "hsl(0, 0%, 60%)" }}>
             Celebrating the beautiful unions made possible through Kalyanasuthra Matrimony
           </p>
         </motion.div>
@@ -92,19 +92,19 @@ const SuccessStories = () => {
               key={stat.label}
               className="flex items-center gap-3 rounded-xl px-5 py-3"
               style={{
-                background: "hsl(0, 0%, 100%)",
-                boxShadow: "0 4px 16px hsla(220, 30%, 50%, 0.08)",
-                border: "1px solid hsl(220, 30%, 90%)",
+                background: "hsl(0, 0%, 15%)",
+                boxShadow: "0 4px 16px hsla(0, 0%, 0%, 0.3)",
+                border: "1px solid hsl(0, 0%, 22%)",
               }}
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
             >
-              <stat.icon size={24} style={{ color: "hsl(220, 65%, 48%)" }} />
+              <stat.icon size={24} style={{ color: "hsl(40, 85%, 55%)" }} />
               <div>
-                <p className="text-lg font-extrabold leading-tight" style={{ color: "hsl(220, 30%, 18%)" }}>{stat.value}</p>
-                <p className="text-xs font-medium" style={{ color: "hsl(220, 15%, 50%)" }}>{stat.label}</p>
+                <p className="text-lg font-extrabold leading-tight" style={{ color: "hsl(0, 0%, 95%)" }}>{stat.value}</p>
+                <p className="text-xs font-medium" style={{ color: "hsl(0, 0%, 60%)" }}>{stat.label}</p>
               </div>
             </motion.div>
           ))}
@@ -133,9 +133,9 @@ const SuccessStories = () => {
                 className="flex-shrink-0 rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105"
                 style={{
                   width: 240,
-                  background: "hsl(0, 0%, 100%)",
-                  boxShadow: "0 6px 24px hsla(220, 30%, 50%, 0.12)",
-                  border: "2px solid hsl(220, 40%, 88%)",
+                  background: "hsl(0, 0%, 14%)",
+                  boxShadow: "0 6px 24px hsla(0, 0%, 0%, 0.4)",
+                  border: "2px solid hsl(0, 0%, 22%)",
                 }}
               >
                 <div className="h-[160px] overflow-hidden">
@@ -148,14 +148,14 @@ const SuccessStories = () => {
                 <div className="px-4 py-3 text-center">
                   <h4
                     className="font-bold leading-tight text-sm"
-                    style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(220, 30%, 18%)" }}
+                    style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(0, 0%, 92%)" }}
                   >
                     {story.bride_name}{" "}
-                    <span style={{ color: "hsl(220, 65%, 48%)" }}>♥</span>{" "}
+                    <span style={{ color: "hsl(40, 85%, 55%)" }}>♥</span>{" "}
                     {story.groom_name}
                   </h4>
-                  <p className="text-xs mt-1" style={{ color: "hsl(220, 15%, 50%)" }}>{story.city}</p>
-                  <p className="text-[11px] mt-2 leading-snug italic" style={{ color: "hsl(0, 0%, 45%)" }}>
+                  <p className="text-xs mt-1" style={{ color: "hsl(0, 0%, 55%)" }}>{story.city}</p>
+                  <p className="text-[11px] mt-2 leading-snug italic" style={{ color: "hsl(0, 0%, 50%)" }}>
                     "{story.story}"
                   </p>
                 </div>
