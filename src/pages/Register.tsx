@@ -466,31 +466,27 @@ export default function Register() {
         <div className="absolute top-0 right-[25%] w-[1px] h-full opacity-[0.03] -rotate-12" style={{ background: `hsl(${THEME.accent})` }} />
       </div>
 
-      {/* Top Header Bar - like reference image */}
+      {/* Top Header Bar - full width */}
       <div className="relative z-10 mb-5 sm:mb-7">
         <div
-          className="max-w-5xl mx-auto flex items-center justify-between overflow-hidden"
+          className="w-full flex items-center justify-between px-6 sm:px-12"
           style={{
-            background: "linear-gradient(135deg, hsl(260, 35%, 22%) 0%, hsl(330, 30%, 28%) 50%, hsl(280, 25%, 20%) 100%)",
-            borderRadius: "12px",
+            background: "hsl(240, 30%, 15%)",
+            height: "80px",
           }}
         >
-          {/* Brand name on white background block */}
-          <a
-            href="/"
-            className="inline-flex items-center gap-3 px-6 sm:px-8 py-4 sm:py-5"
-            style={{ background: "white" }}
-          >
-            <img src={logo} alt="Kalyanasuthra" className="h-8 sm:h-10 w-auto object-contain" />
+          {/* Brand name */}
+          <a href="/" className="inline-flex items-center gap-3">
+            <img src={logo} alt="Kalyanasuthra" className="h-10 sm:h-12 w-auto object-contain" />
             <span
-              className="text-lg sm:text-xl font-bold tracking-wide"
-              style={{ color: "hsl(348, 70%, 35%)", fontFamily: "'Georgia', serif" }}
+              className="text-2xl sm:text-3xl font-bold"
+              style={{ color: "hsl(0, 0%, 100%)", fontFamily: "'Great Vibes', cursive" }}
             >
               Kalyanasuthra Matrimony
             </span>
           </a>
           {/* Contact info on right */}
-          <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-4 text-white text-xs sm:text-sm pr-6 sm:pr-8">
+          <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-4 text-white text-xs sm:text-sm">
             <a href="mailto:info@kalyanasuthra.com" className="hover:underline opacity-90">info@kalyanasuthra.com</a>
             <a href="tel:+919553306667" className="hover:underline opacity-90">+91 9553306667</a>
           </div>
