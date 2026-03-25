@@ -228,7 +228,7 @@ const SuccessStories = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex items-center py-10 lg:py-0 lg:absolute lg:inset-0">
+      <div className="relative z-10 flex items-center py-14 lg:py-0 lg:absolute lg:inset-0">
         <div className="w-full flex flex-col lg:flex-row items-center lg:items-center" style={{ padding: "0 4%" }}>
           {/* LEFT - Heading */}
           <motion.div className="w-full lg:w-[35%] flex-shrink-0 pr-0 lg:pr-[2%] text-center lg:text-left mb-6 lg:mb-0" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
