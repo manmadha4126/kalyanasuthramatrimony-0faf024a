@@ -261,7 +261,7 @@ const SuccessStories = () => {
           </motion.div>
 
           {/* RIGHT - Cards */}
-          <div className="w-[65%] relative hidden lg:flex items-center justify-center" style={{ height: "clamp(320px, 38vw, 440px)" }} onClick={() => setIsPaused((p) => !p)}>
+          <div className="w-[65%] relative hidden lg:flex items-center justify-center" style={{ height: "clamp(400px, 45vw, 540px)" }} onClick={() => setIsPaused((p) => !p)}>
             <AnimatePresence mode="popLayout">
               {getVisibleCards().map(({ story, slot }) => {
                 const layout = cardLayout[slot];
