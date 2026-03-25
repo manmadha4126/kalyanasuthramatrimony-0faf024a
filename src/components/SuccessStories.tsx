@@ -69,12 +69,12 @@ const SuccessStories = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "hsl(220, 30%, 18%)" }}>
+          <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "hsl(0, 0%, 95%)" }}>
             Success Stories by{" "}
-            <span style={{ color: "hsl(220, 65%, 48%)" }}>Kalyanasuthra</span>
+            <span style={{ color: "hsl(40, 85%, 55%)" }}>Kalyanasuthra</span>
           </h2>
-          <div className="h-[3px] w-16 mx-auto rounded-full mb-3" style={{ background: "hsl(220, 65%, 48%)" }} />
-          <p className="text-base" style={{ color: "hsl(220, 15%, 45%)" }}>
+          <div className="h-[3px] w-16 mx-auto rounded-full mb-3" style={{ background: "hsl(40, 85%, 55%)" }} />
+          <p className="text-base" style={{ color: "hsl(0, 0%, 60%)" }}>
             Celebrating the beautiful unions made possible through Kalyanasuthra Matrimony
           </p>
         </motion.div>
