@@ -466,12 +466,21 @@ export default function Register() {
         <div className="absolute top-0 right-[25%] w-[1px] h-full opacity-[0.03] -rotate-12" style={{ background: `hsl(${THEME.accent})` }} />
       </div>
 
-      {/* Logo + Back button - left-aligned, stacked */}
-      <div className="mb-5 sm:mb-7 flex flex-col items-start relative z-10 max-w-4xl mx-auto">
-        <a href="/" className="inline-flex items-center gap-2">
-          <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 sm:h-24 w-auto object-contain" />
-        </a>
-        <div className="mt-2">
+      {/* Top Header Bar */}
+      <div className="relative z-10 mb-5 sm:mb-7">
+        <div
+          className="rounded-xl max-w-4xl mx-auto px-4 sm:px-8 py-4 flex items-center justify-between"
+          style={{ background: "hsla(220, 40%, 20%, 0.75)", backdropFilter: "blur(10px)" }}
+        >
+          <a href="/" className="inline-flex items-center gap-2">
+            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-12 sm:h-16 w-auto object-contain" />
+          </a>
+          <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-4 text-white text-xs sm:text-sm">
+            <a href="mailto:info@kalyanasuthra.com" className="hover:underline opacity-90">info@kalyanasuthra.com</a>
+            <a href="tel:+919553306667" className="hover:underline opacity-90">+91 9553306667</a>
+          </div>
+        </div>
+        <div className="max-w-4xl mx-auto mt-2">
           <BackButton to="/" label="Home" />
         </div>
       </div>

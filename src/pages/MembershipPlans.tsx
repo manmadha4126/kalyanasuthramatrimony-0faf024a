@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Check, ArrowLeft, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ConsultationForm from "@/components/ConsultationForm";
 
 const packages = [
   {
@@ -41,6 +43,7 @@ const packages = [
 
 const MembershipPlans = () => {
   const navigate = useNavigate();
+  const [showConsultation, setShowConsultation] = useState(false);
 
   return (
     <div className="min-h-screen" style={{ background: "linear-gradient(160deg, hsl(140, 30%, 85%) 0%, hsl(180, 25%, 88%) 50%, hsl(50, 40%, 90%) 100%)" }}>
@@ -124,7 +127,7 @@ const MembershipPlans = () => {
 
               <div className="px-6 pb-6">
                 <button
-                  onClick={() => navigate("/#services")}
+                  onClick={() => setShowConsultation(true)}
                   className="w-full py-3 rounded-full text-sm font-bold transition-all hover:scale-105"
                   style={
                     pi === 0
@@ -132,7 +135,7 @@ const MembershipPlans = () => {
                       : { background: "transparent", border: "2px solid hsl(350, 70%, 55%)", color: "hsl(350, 70%, 55%)" }
                   }
                 >
-                  Buy Now
+                  Get Consultation
                 </button>
               </div>
             </motion.div>
@@ -156,6 +159,8 @@ const MembershipPlans = () => {
           </a>
         </motion.div>
       </div>
+
+      <ConsultationForm open={showConsultation} onClose={() => setShowConsultation(false)} />
     </div>
   );
 };

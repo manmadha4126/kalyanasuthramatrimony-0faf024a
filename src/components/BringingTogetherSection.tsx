@@ -21,7 +21,7 @@ const features = [
 
 const BringingTogetherSection = () => {
   return (
-    <section className="py-16" style={{ background: "hsl(0, 0%, 97%)" }}>
+    <section className="py-16" style={{ background: "hsl(178, 40%, 90%)" }}>
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
