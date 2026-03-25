@@ -23,16 +23,16 @@ type Story = {
 };
 
 const fallbackStories: Story[] = [
-  { id: "1", bride_name: "Ananya", groom_name: "Raghav", city: "Hyderabad", story: "From a simple profile match to a beautiful wedding, our journey began here.", image_url: wedding1 },
-  { id: "2", bride_name: "Divya", groom_name: "Karthik", city: "Tirupati", story: "Our families connected instantly and today we are happily married.", image_url: wedding2 },
-  { id: "3", bride_name: "Meghana", groom_name: "Arjun", city: "Bangalore", story: "Kalyanasuthra made our search easy and trustworthy.", image_url: wedding3 },
-  { id: "4", bride_name: "Sravani", groom_name: "Nikhil", city: "Chennai", story: "A perfect blend of tradition and compatibility.", image_url: wedding4 },
-  { id: "5", bride_name: "Lakshmi", groom_name: "Harsha", city: "Vijayawada", story: "Grateful for the guidance and genuine profiles.", image_url: wedding5 },
-  { id: "6", bride_name: "Priya", groom_name: "Vikram", city: "Mumbai", story: "We found each other through trust and transparency.", image_url: wedding6 },
-  { id: "7", bride_name: "Sneha", groom_name: "Ravi", city: "Pune", story: "A beautiful match that our families loved instantly.", image_url: wedding7 },
-  { id: "8", bride_name: "Kavya", groom_name: "Suresh", city: "Delhi", story: "Our love story started with a simple hello here.", image_url: wedding8 },
-  { id: "9", bride_name: "Swathi", groom_name: "Pranav", city: "Vizag", story: "The perfect platform for finding your soulmate.", image_url: wedding9 },
-  { id: "10", bride_name: "Rani", groom_name: "Deepak", city: "Warangal", story: "Blessed to have found my life partner here.", image_url: wedding10 },
+  { id: "1", bride_name: "Ananya", groom_name: "Raghav", city: "Hyderabad", story: "From a simple profile match to a beautiful wedding, our journey began here. We are grateful forever!", image_url: wedding1 },
+  { id: "2", bride_name: "Divya", groom_name: "Karthik", city: "Tirupati", story: "Our families connected instantly and today we are happily married with two beautiful kids.", image_url: wedding2 },
+  { id: "3", bride_name: "Meghana", groom_name: "Arjun", city: "Bangalore", story: "Kalyanasuthra made our search easy and trustworthy. Best decision we ever made!", image_url: wedding3 },
+  { id: "4", bride_name: "Sravani", groom_name: "Nikhil", city: "Chennai", story: "A perfect blend of tradition and compatibility. Our parents are so happy with this match.", image_url: wedding4 },
+  { id: "5", bride_name: "Lakshmi", groom_name: "Harsha", city: "Vijayawada", story: "Grateful for the genuine profiles and personal guidance from the relationship managers.", image_url: wedding5 },
+  { id: "6", bride_name: "Priya", groom_name: "Vikram", city: "Mumbai", story: "We found each other through trust and transparency. Celebrating 3 years of togetherness!", image_url: wedding6 },
+  { id: "7", bride_name: "Sneha", groom_name: "Ravi", city: "Pune", story: "A beautiful match that our families loved instantly. The team was very supportive throughout.", image_url: wedding7 },
+  { id: "8", bride_name: "Kavya", groom_name: "Suresh", city: "Delhi", story: "Our love story started with a simple hello here. Now we can't imagine life without each other.", image_url: wedding8 },
+  { id: "9", bride_name: "Swathi", groom_name: "Pranav", city: "Vizag", story: "The perfect platform for finding your soulmate. Highly recommend to everyone!", image_url: wedding9 },
+  { id: "10", bride_name: "Rani", groom_name: "Deepak", city: "Warangal", story: "Blessed to have found my life partner here. The process was smooth and professional.", image_url: wedding10 },
 ];
 
 const cardLayout = [
