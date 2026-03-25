@@ -60,7 +60,7 @@ const SuccessStories = () => {
   }, []);
 
   return (
-    <section id="stories" className="py-20 relative overflow-hidden" style={{ background: "hsl(0, 0%, 94%)" }}>
+    <section id="stories" className="py-20 relative overflow-hidden" style={{ background: "hsl(0, 0%, 8%)" }}>
       <div className="container mx-auto px-4">
         {/* Heading */}
         <motion.div
