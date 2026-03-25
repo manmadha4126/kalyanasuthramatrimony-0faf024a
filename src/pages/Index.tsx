@@ -36,7 +36,6 @@ const Index = () => {
   return (
     <div className="scroll-smooth">
       <Header />
-      <div style={{ height: "80px", background: "hsl(0, 0%, 0%)" }} />
       <HeroSection />
       <AboutSection />
       <SaptapadiSection />
