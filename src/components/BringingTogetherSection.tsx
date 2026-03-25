@@ -21,14 +21,14 @@ const features = [
 
 const BringingTogetherSection = () => {
   return (
-    <section className="py-16" style={{ background: "hsl(178, 40%, 90%)" }}>
+    <section className="py-16" style={{ background: "hsl(0, 0%, 97%)" }}>
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="max-w-5xl mx-auto rounded-3xl p-10 md:p-14"
-          style={{ background: "hsl(0, 0%, 100%)", boxShadow: "0 8px 40px hsla(0, 0%, 0%, 0.06)" }}
+          style={{ background: "hsl(178, 40%, 90%)", boxShadow: "0 8px 40px hsla(0, 0%, 0%, 0.06)" }}
         >
           <p className="text-sm font-semibold tracking-widest uppercase mb-2" style={{ color: "hsl(0, 0%, 50%)" }}>
             MORE THAN 25 YEARS OF
