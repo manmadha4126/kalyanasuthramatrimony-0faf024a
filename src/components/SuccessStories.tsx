@@ -101,10 +101,10 @@ const SuccessStories = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
             >
-              <stat.icon size={24} style={{ color: "hsl(220, 65%, 48%)" }} />
+              <stat.icon size={24} style={{ color: "hsl(40, 85%, 55%)" }} />
               <div>
-                <p className="text-lg font-extrabold leading-tight" style={{ color: "hsl(220, 30%, 18%)" }}>{stat.value}</p>
-                <p className="text-xs font-medium" style={{ color: "hsl(220, 15%, 50%)" }}>{stat.label}</p>
+                <p className="text-lg font-extrabold leading-tight" style={{ color: "hsl(0, 0%, 95%)" }}>{stat.value}</p>
+                <p className="text-xs font-medium" style={{ color: "hsl(0, 0%, 60%)" }}>{stat.label}</p>
               </div>
             </motion.div>
           ))}
