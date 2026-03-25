@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import SaptapadiSection from "@/components/SaptapadiSection";
+import BringingTogetherSection from "@/components/BringingTogetherSection";
 import FeaturedProfiles from "@/components/FeaturedProfiles";
 import SuccessStories from "@/components/SuccessStories";
 import OurFeaturesSection from "@/components/OurFeaturesSection";
