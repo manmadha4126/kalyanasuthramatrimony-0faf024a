@@ -485,352 +485,394 @@ export default function Register() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto relative z-10">
-
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden" style={{ boxShadow: `0 20px 60px hsl(${THEME.primary} / 0.1)` }}>
-          <div className="h-1.5 bg-gray-100 relative">
-            <motion.div className="absolute top-0 left-0 h-full rounded-full" style={{ background: `linear-gradient(90deg, hsl(${THEME.primary}), hsl(${THEME.accent}))` }} animate={{ width: `${progress + (100 / TOTAL_STEPS)}%` }} transition={{ duration: 0.4 }} />
+      <div className="max-w-5xl mx-auto relative z-10">
+        {/* Tab Navigation - like reference image */}
+        <div className="bg-white rounded-t-2xl shadow-sm border-b" style={{ borderColor: "hsl(0, 0%, 88%)" }}>
+          <div className="flex overflow-x-auto">
+            {stepTitles.map((title, i) => (
+              <button
+                key={i}
+                onClick={() => { if (i + 1 < step) setStep(i + 1); }}
+                className="flex-1 min-w-[100px] px-3 py-4 text-center text-xs sm:text-sm font-semibold whitespace-nowrap transition-all relative"
+                style={{
+                  color: i + 1 === step ? "hsl(210, 55%, 45%)" : i + 1 < step ? "hsl(168, 45%, 45%)" : "hsl(0, 0%, 60%)",
+                  cursor: i + 1 < step ? "pointer" : "default",
+                }}
+              >
+                {title}
+                {i + 1 === step && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute bottom-0 left-0 right-0 h-[3px] rounded-t-full"
+                    style={{ background: "hsl(210, 55%, 45%)" }}
+                  />
+                )}
+                {i + 1 < step && (
+                  <div className="absolute bottom-0 left-0 right-0 h-[3px] rounded-t-full" style={{ background: "hsl(168, 45%, 45%)" }} />
+                )}
+              </button>
+            ))}
           </div>
+        </div>
 
-          <div className="px-4 sm:px-8 pt-4 sm:pt-6 pb-0 overflow-x-auto">
-            <div className="flex items-center justify-between min-w-[320px]">
-              {stepTitles.map((title, i) => (
-                <div key={i} className="flex flex-col items-center gap-1">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all" style={
-                    i + 1 < step ? { background: `hsl(${THEME.accent})`, color: "white" }
-                    : i + 1 === step ? { background: `hsl(${THEME.primary})`, color: "white", boxShadow: `0 0 0 3px hsl(${THEME.primary} / 0.2)` }
-                    : { background: "#f0f0f0", color: "#aaa" }
-                  }>
-                    {i + 1 < step ? <Check size={12} /> : i + 1}
-                  </div>
-                  <span className="text-[9px] sm:text-[10px] whitespace-nowrap font-medium" style={{ color: i + 1 === step ? `hsl(${THEME.primary})` : "#aaa" }}>{title}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* Subtitle */}
+        <div className="bg-white px-6 py-5 text-center border-b" style={{ borderColor: "hsl(0, 0%, 92%)" }}>
+          <p className="text-base sm:text-lg" style={{ color: "hsl(0, 0%, 45%)", fontFamily: "system-ui, sans-serif" }}>
+            Complete your profile now to contact members you like and to receive interests
+          </p>
+          <p className="text-xs mt-2" style={{ color: "hsl(0, 70%, 55%)" }}>
+            mandatory <span className="text-lg align-middle">*</span>
+          </p>
+        </div>
 
-          <div className="px-4 sm:px-8 py-5 sm:py-7">
-            <h2 className="text-xl sm:text-2xl font-bold mb-1" style={{ color: `hsl(${THEME.primaryDeep})`, fontFamily: "system-ui, sans-serif" }}>
-              Step {step}: {stepTitles[step - 1]}
-            </h2>
-            <p className="text-sm mb-5 sm:mb-7" style={{ color: "#999" }}>Fill in accurate details for the best matches</p>
+        {/* Main content with sidebar */}
+        <div className="flex gap-0">
+          {/* Form area */}
+          <div className="flex-1 bg-white rounded-bl-2xl shadow-xl overflow-hidden" style={{ boxShadow: `0 20px 60px hsl(${THEME.primary} / 0.1)` }}>
+            <div className="px-4 sm:px-8 py-5 sm:py-7">
+              <h2 className="text-xl sm:text-2xl font-bold mb-1" style={{ color: `hsl(${THEME.primaryDeep})`, fontFamily: "system-ui, sans-serif" }}>
+                Step {step}: {stepTitles[step - 1]}
+              </h2>
+              <p className="text-sm mb-5 sm:mb-7" style={{ color: "#999" }}>Fill in accurate details for the best matches</p>
 
-            <AnimatePresence mode="wait">
-              <motion.div key={step} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }}>
+              <AnimatePresence mode="wait">
+                <motion.div key={step} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }}>
 
-                {step === 1 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div className="sm:col-span-2">
-                      <TextField label="Full Name" value={form.name} onChange={v => set("name", v)} required />
-                      {errors.name && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{errors.name}</p>}
-                    </div>
-                    <SelectField label="Profile For" value={form.profileFor} onChange={v => set("profileFor", v)} options={profileForOptions} required />
-                    <SelectField label="Gender" value={form.gender} onChange={v => set("gender", v)} options={genderOptions} required />
-                    <div className="sm:col-span-2">
-                      <TextField label="Email" value={form.email} onChange={v => set("email", v)} type="email" required />
-                      {errors.email && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{errors.email}</p>}
-                    </div>
-                    <div>
-                      <TextField label="Phone Number" value={form.phone} onChange={v => set("phone", v)} type="tel" required />
-                      {errors.phone && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{errors.phone}</p>}
-                    </div>
-                    <div className="sm:col-span-2 relative">
-                      <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Password <span style={{ color: "hsl(0, 70%, 55%)" }}>*</span></label>
-                      <div className="relative">
-                        <input type={showPass ? "text" : "password"} value={form.password} onChange={e => set("password", e.target.value)} placeholder="Min. 8 characters" className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 pr-10" style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, fontSize: "0.9rem" }} />
-                        <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" onClick={() => setShowPass(!showPass)}>{showPass ? <EyeOff size={16} /> : <Eye size={16} />}</button>
+                  {step === 1 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="sm:col-span-2">
+                        <TextField label="Full Name" value={form.name} onChange={v => set("name", v)} required />
+                        {errors.name && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{errors.name}</p>}
                       </div>
-                      {errors.password && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{errors.password}</p>}
-                    </div>
-                    <div className="sm:col-span-2 relative">
-                      <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Confirm Password <span style={{ color: "hsl(0, 70%, 55%)" }}>*</span></label>
-                      <div className="relative">
-                        <input type={showConfirm ? "text" : "password"} value={form.confirmPassword} onChange={e => set("confirmPassword", e.target.value)} placeholder="Re-enter password" className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 pr-10" style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, fontSize: "0.9rem" }} />
-                        <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" onClick={() => setShowConfirm(!showConfirm)}>{showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}</button>
+                      <SelectField label="Profile For" value={form.profileFor} onChange={v => set("profileFor", v)} options={profileForOptions} required />
+                      <SelectField label="Gender" value={form.gender} onChange={v => set("gender", v)} options={genderOptions} required />
+                      <div className="sm:col-span-2">
+                        <TextField label="Email" value={form.email} onChange={v => set("email", v)} type="email" required />
+                        {errors.email && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{errors.email}</p>}
                       </div>
-                      {errors.confirmPassword && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{errors.confirmPassword}</p>}
+                      <div>
+                        <TextField label="Phone Number" value={form.phone} onChange={v => set("phone", v)} type="tel" required />
+                        {errors.phone && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{errors.phone}</p>}
+                      </div>
+                      <div className="sm:col-span-2 relative">
+                        <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Password <span style={{ color: "hsl(0, 70%, 55%)" }}>*</span></label>
+                        <div className="relative">
+                          <input type={showPass ? "text" : "password"} value={form.password} onChange={e => set("password", e.target.value)} placeholder="Min. 8 characters" className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 pr-10" style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, fontSize: "0.9rem" }} />
+                          <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" onClick={() => setShowPass(!showPass)}>{showPass ? <EyeOff size={16} /> : <Eye size={16} />}</button>
+                        </div>
+                        {errors.password && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{errors.password}</p>}
+                      </div>
+                      <div className="sm:col-span-2 relative">
+                        <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Confirm Password <span style={{ color: "hsl(0, 70%, 55%)" }}>*</span></label>
+                        <div className="relative">
+                          <input type={showConfirm ? "text" : "password"} value={form.confirmPassword} onChange={e => set("confirmPassword", e.target.value)} placeholder="Re-enter password" className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 pr-10" style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, fontSize: "0.9rem" }} />
+                          <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" onClick={() => setShowConfirm(!showConfirm)}>{showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}</button>
+                        </div>
+                        {errors.confirmPassword && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{errors.confirmPassword}</p>}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {step === 2 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                      <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Date of Birth</label>
-                      <input type="date" value={form.dob} onChange={e => set("dob", e.target.value)} className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2" style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, fontSize: "0.9rem" }} />
+                  {step === 2 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div>
+                        <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Date of Birth</label>
+                        <input type="date" value={form.dob} onChange={e => set("dob", e.target.value)} className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2" style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, fontSize: "0.9rem" }} />
+                      </div>
+                      <SelectField label="Mother Tongue" value={form.motherTongue} onChange={v => set("motherTongue", v)} options={motherTongueOptions} />
+                      <SelectField label="Height" value={form.height} onChange={v => set("height", v)} options={heightOptions} />
+                      <SelectField label="Marital Status" value={form.maritalStatus} onChange={v => set("maritalStatus", v)} options={maritalStatusOptions} />
+                      <SelectField label="Religion" value={form.religion} onChange={handleReligionChange} options={religionOptions} />
+                      <SelectField label="Caste" value={form.caste} onChange={v => set("caste", v)} options={casteOptions} />
+                      <TextField label="Sub Caste" value={form.subCaste} onChange={v => set("subCaste", v)} />
+                      <SelectField label="Country" value={form.country} onChange={v => set("country", v)} options={countryOptions} />
+                      <SelectField label="State" value={form.state} onChange={v => set("state", v)} options={indianStates} />
+                      <TextField label="City" value={form.city} onChange={v => set("city", v)} />
+                      <TextField label="Village / Native Place" value={form.village} onChange={v => set("village", v)} />
+                      
+                      <div className="sm:col-span-2"><p className="text-sm font-bold mt-2" style={{ color: `hsl(${THEME.primary})` }}>10th Standard Details</p></div>
+                      <SelectField label="10th Board" value={form.edu10Board} onChange={v => set("edu10Board", v)} options={board10Options} />
+                      <TextField label="10th Percentage (%)" value={form.edu10Percentage} onChange={v => set("edu10Percentage", v)} placeholder="e.g. 85" />
+                      <div className="sm:col-span-2">
+                        <TextField label="10th School Name" value={form.edu10School} onChange={v => set("edu10School", v)} placeholder="Enter school name" />
+                      </div>
+
+                      <div className="sm:col-span-2"><p className="text-sm font-bold mt-2" style={{ color: `hsl(${THEME.primary})` }}>12th / Intermediate Details</p></div>
+                      <SelectField label="12th Board" value={form.edu12Board} onChange={v => set("edu12Board", v)} options={board12Options} />
+                      <TextField label="12th Percentage (%)" value={form.edu12Percentage} onChange={v => set("edu12Percentage", v)} placeholder="e.g. 90" />
+                      <div className="sm:col-span-2">
+                        <TextField label="12th College Name" value={form.edu12College} onChange={v => set("edu12College", v)} placeholder="Enter college name" />
+                      </div>
+
+                      <SelectField label="Education / Graduation" value={form.education} onChange={v => set("education", v)} options={educationOptions} />
+                      {(form.education === "Bachelor's Degree" || form.education === "Master's Degree" || form.education === "PhD" || form.education === "Professional Degree (CA/CS/ICWA)") && (
+                        <SelectField label="Graduation Details" value={form.graduationDetail} onChange={v => set("graduationDetail", v)} options={graduationDetailsOptions} />
+                      )}
+                      <SelectField label="Employment Type" value={form.employmentType} onChange={v => set("employmentType", v)} options={employmentOptions} />
+                      <TextField label="Occupation" value={form.occupation} onChange={v => set("occupation", v)} />
+                      <TextField label="Company Name" value={form.companyName} onChange={v => set("companyName", v)} />
+                      <SelectField label="Currency Type" value={form.currencyType} onChange={v => { set("currencyType", v); set("annualIncome", ""); }} options={currencyOptions} />
+                      <SelectField label="Annual Income" value={form.annualIncome} onChange={v => set("annualIncome", v)} options={incomeByCountry[form.currencyType] || ["Enter manually"]} />
+                      <SelectField label="Citizenship" value={form.citizenship} onChange={v => set("citizenship", v)} options={citizenshipOptions} />
+                      <SelectField label="Residence Type" value={form.residenceType} onChange={v => set("residenceType", v)} options={residenceOptions} />
+                      <SelectField label="Visa Type" value={form.visaType} onChange={v => set("visaType", v)} options={visaOptions} />
                     </div>
-                    <SelectField label="Mother Tongue" value={form.motherTongue} onChange={v => set("motherTongue", v)} options={motherTongueOptions} />
-                    <SelectField label="Height" value={form.height} onChange={v => set("height", v)} options={heightOptions} />
-                    <SelectField label="Marital Status" value={form.maritalStatus} onChange={v => set("maritalStatus", v)} options={maritalStatusOptions} />
-                    <SelectField label="Religion" value={form.religion} onChange={handleReligionChange} options={religionOptions} />
-                    <SelectField label="Caste" value={form.caste} onChange={v => set("caste", v)} options={casteOptions} />
-                    <TextField label="Sub Caste" value={form.subCaste} onChange={v => set("subCaste", v)} />
-                    <SelectField label="Country" value={form.country} onChange={v => set("country", v)} options={countryOptions} />
-                    <SelectField label="State" value={form.state} onChange={v => set("state", v)} options={indianStates} />
-                    <TextField label="City" value={form.city} onChange={v => set("city", v)} />
-                    <TextField label="Village / Native Place" value={form.village} onChange={v => set("village", v)} />
-                    
-                    {/* 10th Education */}
-                    <div className="sm:col-span-2"><p className="text-sm font-bold mt-2" style={{ color: `hsl(${THEME.primary})` }}>10th Standard Details</p></div>
-                    <SelectField label="10th Board" value={form.edu10Board} onChange={v => set("edu10Board", v)} options={board10Options} />
-                    <TextField label="10th Percentage (%)" value={form.edu10Percentage} onChange={v => set("edu10Percentage", v)} placeholder="e.g. 85" />
-                    <div className="sm:col-span-2">
-                      <TextField label="10th School Name" value={form.edu10School} onChange={v => set("edu10School", v)} placeholder="Enter school name" />
+                  )}
+
+                  {step === 3 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <SelectField label="Family Status" value={form.familyStatus} onChange={v => set("familyStatus", v)} options={familyStatusOptions} />
+                      <SelectField label="Family Type" value={form.familyType} onChange={v => set("familyType", v)} options={familyTypeOptions} />
+                      <TextField label="Father's Name" value={form.fatherName} onChange={v => set("fatherName", v)} />
+                      <TextField label="Father's Occupation" value={form.fatherOccupation} onChange={v => set("fatherOccupation", v)} />
+                      <TextField label="Mother's Name" value={form.motherName} onChange={v => set("motherName", v)} />
+                      <TextField label="Mother's Occupation" value={form.motherOccupation} onChange={v => set("motherOccupation", v)} />
+                      <SelectField label="Siblings" value={form.siblings} onChange={v => set("siblings", v)} options={siblingsOptions} />
+                      <TextField label="Sibling Details" value={form.siblingDetails} onChange={v => set("siblingDetails", v)} placeholder="e.g. 1 brother (married)" />
                     </div>
+                  )}
 
-                    {/* 12th Education */}
-                    <div className="sm:col-span-2"><p className="text-sm font-bold mt-2" style={{ color: `hsl(${THEME.primary})` }}>12th / Intermediate Details</p></div>
-                    <SelectField label="12th Board" value={form.edu12Board} onChange={v => set("edu12Board", v)} options={board12Options} />
-                    <TextField label="12th Percentage (%)" value={form.edu12Percentage} onChange={v => set("edu12Percentage", v)} placeholder="e.g. 90" />
-                    <div className="sm:col-span-2">
-                      <TextField label="12th College Name" value={form.edu12College} onChange={v => set("edu12College", v)} placeholder="Enter college name" />
+                  {step === 4 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <SelectField label="Gothram" value={form.gothram} onChange={v => set("gothram", v)} options={gothramOptions} />
+                      <SelectField label="Rashi (Zodiac Sign)" value={form.raashi} onChange={v => set("raashi", v)} options={raashiOptions} />
+                      <SelectField label="Star (Nakshatram)" value={form.star} onChange={v => set("star", v)} options={starOptions} />
+                      <SelectField label="Dosham" value={form.dosham} onChange={v => set("dosham", v)} options={doshamOptions} />
+                      <TextField label="Time of Birth (HH:MM:SS)" value={form.timeOfBirth} onChange={v => set("timeOfBirth", v)} placeholder="08:30:00" />
+                      <SelectField label="Country of Birth" value={form.countryOfBirth} onChange={v => set("countryOfBirth", v)} options={countryOptions} />
+                      <SelectField label="State of Birth" value={form.stateOfBirth} onChange={v => set("stateOfBirth", v)} options={indianStates} />
+                      <TextField label="Birth Place" value={form.birthPlace} onChange={v => set("birthPlace", v)} />
+                      <SelectField label="Language" value={form.language} onChange={v => set("language", v)} options={languageOptions} />
+                      <SelectField label="Chart Style" value={form.chartStyle} onChange={v => set("chartStyle", v)} options={chartStyleOptions} />
+                      <div className="sm:col-span-2">
+                        <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Upload Horoscope (PDF/Image)</label>
+                        <label className="flex items-center gap-3 border-2 border-dashed rounded-lg p-5 cursor-pointer transition-colors hover:bg-gray-50" style={{ borderColor: `hsl(${THEME.primaryLight})` }}>
+                          <Upload size={20} style={{ color: `hsl(${THEME.primary})` }} />
+                          <span className="text-sm" style={{ color: "#666" }}>{form.horoscopeFile ? "Upload a different file" : "Click to upload horoscope file"}</span>
+                          <input type="file" className="hidden" accept="*/*" onChange={e => set("horoscopeFile", e.target.files?.[0] || null)} />
+                        </label>
+                        {form.horoscopeFile && (
+                          <div className="mt-3 flex items-center gap-3 rounded-lg p-3" style={{ background: `hsl(${THEME.accentLight})`, border: `1px solid hsl(${THEME.accent} / 0.3)` }}>
+                            <FileText size={20} style={{ color: `hsl(${THEME.accent})` }} />
+                            <span className="text-sm font-medium flex-1 truncate" style={{ color: `hsl(${THEME.primaryDeep})` }}>{form.horoscopeFile.name}</span>
+                            <button type="button" onClick={() => set("horoscopeFile", null)} className="flex items-center gap-1 px-3 py-1 rounded-md text-xs font-semibold text-white transition-colors hover:opacity-80" style={{ background: "hsl(0, 60%, 55%)" }}>
+                              <X size={12} /> Remove
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
+                  )}
 
-                    <SelectField label="Education / Graduation" value={form.education} onChange={v => set("education", v)} options={educationOptions} />
-                    {(form.education === "Bachelor's Degree" || form.education === "Master's Degree" || form.education === "PhD" || form.education === "Professional Degree (CA/CS/ICWA)") && (
-                      <SelectField label="Graduation Details" value={form.graduationDetail} onChange={v => set("graduationDetail", v)} options={graduationDetailsOptions} />
-                    )}
-                    <SelectField label="Employment Type" value={form.employmentType} onChange={v => set("employmentType", v)} options={employmentOptions} />
-                    <TextField label="Occupation" value={form.occupation} onChange={v => set("occupation", v)} />
-                    <TextField label="Company Name" value={form.companyName} onChange={v => set("companyName", v)} />
-                    <SelectField label="Currency Type" value={form.currencyType} onChange={v => { set("currencyType", v); set("annualIncome", ""); }} options={currencyOptions} />
-                    <SelectField label="Annual Income" value={form.annualIncome} onChange={v => set("annualIncome", v)} options={incomeByCountry[form.currencyType] || ["Enter manually"]} />
-                    <SelectField label="Citizenship" value={form.citizenship} onChange={v => set("citizenship", v)} options={citizenshipOptions} />
-                    <SelectField label="Residence Type" value={form.residenceType} onChange={v => set("residenceType", v)} options={residenceOptions} />
-                    <SelectField label="Visa Type" value={form.visaType} onChange={v => set("visaType", v)} options={visaOptions} />
-                    <SelectField label="Visa Type" value={form.visaType} onChange={v => set("visaType", v)} options={visaOptions} />
-                  </div>
-                )}
-
-                {step === 3 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <SelectField label="Family Status" value={form.familyStatus} onChange={v => set("familyStatus", v)} options={familyStatusOptions} />
-                    <SelectField label="Family Type" value={form.familyType} onChange={v => set("familyType", v)} options={familyTypeOptions} />
-                    <TextField label="Father's Name" value={form.fatherName} onChange={v => set("fatherName", v)} />
-                    <TextField label="Father's Occupation" value={form.fatherOccupation} onChange={v => set("fatherOccupation", v)} />
-                    <TextField label="Mother's Name" value={form.motherName} onChange={v => set("motherName", v)} />
-                    <TextField label="Mother's Occupation" value={form.motherOccupation} onChange={v => set("motherOccupation", v)} />
-                    <SelectField label="Siblings" value={form.siblings} onChange={v => set("siblings", v)} options={siblingsOptions} />
-                    <TextField label="Sibling Details" value={form.siblingDetails} onChange={v => set("siblingDetails", v)} placeholder="e.g. 1 brother (married)" />
-                  </div>
-                )}
-
-                {step === 4 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <SelectField label="Gothram" value={form.gothram} onChange={v => set("gothram", v)} options={gothramOptions} />
-                    <SelectField label="Rashi (Zodiac Sign)" value={form.raashi} onChange={v => set("raashi", v)} options={raashiOptions} />
-                    <SelectField label="Star (Nakshatram)" value={form.star} onChange={v => set("star", v)} options={starOptions} />
-                    <SelectField label="Dosham" value={form.dosham} onChange={v => set("dosham", v)} options={doshamOptions} />
-                    <TextField label="Time of Birth (HH:MM:SS)" value={form.timeOfBirth} onChange={v => set("timeOfBirth", v)} placeholder="08:30:00" />
-                    <SelectField label="Country of Birth" value={form.countryOfBirth} onChange={v => set("countryOfBirth", v)} options={countryOptions} />
-                    <SelectField label="State of Birth" value={form.stateOfBirth} onChange={v => set("stateOfBirth", v)} options={indianStates} />
-                    <TextField label="Birth Place" value={form.birthPlace} onChange={v => set("birthPlace", v)} />
-                    <SelectField label="Language" value={form.language} onChange={v => set("language", v)} options={languageOptions} />
-                    <SelectField label="Chart Style" value={form.chartStyle} onChange={v => set("chartStyle", v)} options={chartStyleOptions} />
-                    <div className="sm:col-span-2">
-                      <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Upload Horoscope (PDF/Image)</label>
-                      <label className="flex items-center gap-3 border-2 border-dashed rounded-lg p-5 cursor-pointer transition-colors hover:bg-gray-50" style={{ borderColor: `hsl(${THEME.primaryLight})` }}>
-                        <Upload size={20} style={{ color: `hsl(${THEME.primary})` }} />
-                        <span className="text-sm" style={{ color: "#666" }}>{form.horoscopeFile ? "Upload a different file" : "Click to upload horoscope file"}</span>
-                        <input type="file" className="hidden" accept="*/*" onChange={e => set("horoscopeFile", e.target.files?.[0] || null)} />
-                      </label>
-                      {form.horoscopeFile && (
-                        <div className="mt-3 flex items-center gap-3 rounded-lg p-3" style={{ background: `hsl(${THEME.accentLight})`, border: `1px solid hsl(${THEME.accent} / 0.3)` }}>
-                          <FileText size={20} style={{ color: `hsl(${THEME.accent})` }} />
-                          <span className="text-sm font-medium flex-1 truncate" style={{ color: `hsl(${THEME.primaryDeep})` }}>{form.horoscopeFile.name}</span>
-                          <button type="button" onClick={() => set("horoscopeFile", null)} className="flex items-center gap-1 px-3 py-1 rounded-md text-xs font-semibold text-white transition-colors hover:opacity-80" style={{ background: "hsl(0, 60%, 55%)" }}>
-                            <X size={12} /> Remove
-                          </button>
+                  {step === 5 && (
+                    <div className="space-y-6">
+                      <div>
+                        <label className="block text-sm font-semibold mb-2" style={{ color: `hsl(${THEME.primaryDeep})` }}>Upload Photos (Max 5, each below 25MB)</label>
+                        <label className="flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 sm:p-10 cursor-pointer transition-colors" style={{ borderColor: `hsl(${THEME.primaryLight})` }}>
+                          <Upload size={32} style={{ color: `hsl(${THEME.primary})` }} className="mb-3" />
+                          <span className="text-base font-medium" style={{ color: `hsl(${THEME.primaryDeep})` }}>Click to upload photos</span>
+                          <span className="text-sm mt-1" style={{ color: "#999" }}>{form.photos.length}/5 uploaded</span>
+                          <input type="file" className="hidden" accept="image/*" multiple onChange={e => handlePhotoUpload(e.target.files)} />
+                        </label>
+                      </div>
+                      {form.photos.length > 0 && (
+                        <div>
+                          <p className="text-sm font-semibold mb-3" style={{ color: `hsl(${THEME.primaryDeep})` }}>Select Primary Photo <Star size={14} className="inline" style={{ color: `hsl(${THEME.accent})` }} /></p>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            {form.photos.map((photo, i) => (
+                              <div key={i} className="relative cursor-pointer rounded-xl overflow-hidden" style={{ border: i === form.primaryPhotoIndex ? `3px solid hsl(${THEME.primary})` : "2px solid #eee" }} onClick={() => set("primaryPhotoIndex", i)}>
+                                <img src={URL.createObjectURL(photo)} alt="" className="w-full aspect-[3/4] object-cover" />
+                                {i === form.primaryPhotoIndex && (
+                                  <div className="absolute inset-0 flex items-center justify-center" style={{ background: `hsl(${THEME.primary} / 0.3)` }}>
+                                    <Star size={28} className="text-white fill-white" />
+                                  </div>
+                                )}
+                                <button onClick={e => { e.stopPropagation(); const p = form.photos.filter((_, j) => j !== i); set("photos", p); if (form.primaryPhotoIndex >= p.length) set("primaryPhotoIndex", 0); }} className="absolute -top-1 -right-1 w-6 h-6 text-white rounded-full text-xs flex items-center justify-center" style={{ background: "hsl(0, 60%, 55%)" }}>×</button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {step === 5 && (
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-semibold mb-2" style={{ color: `hsl(${THEME.primaryDeep})` }}>Upload Photos (Max 5, each below 25MB)</label>
-                      <label className="flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 sm:p-10 cursor-pointer transition-colors" style={{ borderColor: `hsl(${THEME.primaryLight})` }}>
-                        <Upload size={32} style={{ color: `hsl(${THEME.primary})` }} className="mb-3" />
-                        <span className="text-base font-medium" style={{ color: `hsl(${THEME.primaryDeep})` }}>Click to upload photos</span>
-                        <span className="text-sm mt-1" style={{ color: "#999" }}>{form.photos.length}/5 uploaded</span>
-                        <input type="file" className="hidden" accept="image/*" multiple onChange={e => handlePhotoUpload(e.target.files)} />
-                      </label>
-                    </div>
-                    {form.photos.length > 0 && (
+                  {step === 6 && (
+                    <div className="space-y-6">
                       <div>
-                        <p className="text-sm font-semibold mb-3" style={{ color: `hsl(${THEME.primaryDeep})` }}>Select Primary Photo <Star size={14} className="inline" style={{ color: `hsl(${THEME.accent})` }} /></p>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                          {form.photos.map((photo, i) => (
-                            <div key={i} className="relative cursor-pointer rounded-xl overflow-hidden" style={{ border: i === form.primaryPhotoIndex ? `3px solid hsl(${THEME.primary})` : "2px solid #eee" }} onClick={() => set("primaryPhotoIndex", i)}>
-                              <img src={URL.createObjectURL(photo)} alt="" className="w-full aspect-[3/4] object-cover" />
-                              {i === form.primaryPhotoIndex && (
-                                <div className="absolute inset-0 flex items-center justify-center" style={{ background: `hsl(${THEME.primary} / 0.3)` }}>
-                                  <Star size={28} className="text-white fill-white" />
-                                </div>
-                              )}
-                              <button onClick={e => { e.stopPropagation(); const p = form.photos.filter((_, j) => j !== i); set("photos", p); if (form.primaryPhotoIndex >= p.length) set("primaryPhotoIndex", 0); }} className="absolute -top-1 -right-1 w-6 h-6 text-white rounded-full text-xs flex items-center justify-center" style={{ background: "hsl(0, 60%, 55%)" }}>×</button>
-                            </div>
-                          ))}
-                        </div>
+                        <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>About Me</label>
+                        <textarea
+                          value={form.aboutMe}
+                          onChange={e => set("aboutMe", e.target.value)}
+                          placeholder="Write about yourself – your personality, hobbies, interests, lifestyle, values, etc."
+                          rows={5}
+                          maxLength={1000}
+                          className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 bg-white resize-none"
+                          style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, color: "#333", fontSize: "0.9rem" }}
+                        />
+                        <p className="text-xs mt-1 text-right" style={{ color: "#aaa" }}>{form.aboutMe.length}/1000 characters</p>
                       </div>
-                    )}
-                  </div>
-                )}
-
-                {step === 6 && (
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>About Me</label>
-                      <textarea
-                        value={form.aboutMe}
-                        onChange={e => set("aboutMe", e.target.value)}
-                        placeholder="Write about yourself – your personality, hobbies, interests, lifestyle, values, etc."
-                        rows={5}
-                        maxLength={1000}
-                        className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 bg-white resize-none"
-                        style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, color: "#333", fontSize: "0.9rem" }}
-                      />
-                      <p className="text-xs mt-1 text-right" style={{ color: "#aaa" }}>{form.aboutMe.length}/1000 characters</p>
+                      <div>
+                        <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Partner Expectations</label>
+                        <textarea
+                          value={form.partnerExpectations}
+                          onChange={e => set("partnerExpectations", e.target.value)}
+                          placeholder="Describe your ideal partner – preferred age, education, profession, family values, lifestyle expectations, etc."
+                          rows={5}
+                          maxLength={1000}
+                          className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 bg-white resize-none"
+                          style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, color: "#333", fontSize: "0.9rem" }}
+                        />
+                        <p className="text-xs mt-1 text-right" style={{ color: "#aaa" }}>{form.partnerExpectations.length}/1000 characters</p>
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Partner Expectations</label>
-                      <textarea
-                        value={form.partnerExpectations}
-                        onChange={e => set("partnerExpectations", e.target.value)}
-                        placeholder="Describe your ideal partner – preferred age, education, profession, family values, lifestyle expectations, etc."
-                        rows={5}
-                        maxLength={1000}
-                        className="w-full rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 bg-white resize-none"
-                        style={{ border: `1.5px solid hsl(${THEME.primaryLight})`, color: "#333", fontSize: "0.9rem" }}
-                      />
-                      <p className="text-xs mt-1 text-right" style={{ color: "#aaa" }}>{form.partnerExpectations.length}/1000 characters</p>
-                    </div>
-                  </div>
-                )}
+                  )}
 
-                {step === 7 && (
-                  <motion.div 
-                    className="space-y-5 max-h-[70vh] overflow-y-auto pr-1"
-                    initial={{ scale: 0.95, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    <div className="text-center mb-6">
-                      <h3 className="text-2xl font-bold mb-1" style={{ color: `hsl(${THEME.primaryDeep})`, fontFamily: "system-ui, sans-serif" }}>Review Your Profile Details</h3>
-                      <p className="text-base" style={{ color: "#888" }}>Please verify all information before submitting</p>
-                    </div>
+                  {step === 7 && (
+                    <motion.div 
+                      className="space-y-5 max-h-[70vh] overflow-y-auto pr-1"
+                      initial={{ scale: 0.95, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.4 }}
+                    >
+                      <div className="text-center mb-6">
+                        <h3 className="text-2xl font-bold mb-1" style={{ color: `hsl(${THEME.primaryDeep})`, fontFamily: "system-ui, sans-serif" }}>Review Your Profile Details</h3>
+                        <p className="text-base" style={{ color: "#888" }}>Please verify all information before submitting</p>
+                      </div>
 
-                    {/* Photo preview at top */}
-                    {form.photos.length > 0 && (
-                      <motion.div className="mb-6" initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ delay: 0.1 }}>
-                        <h4 className="text-lg font-bold mb-4 px-5 py-3 rounded-xl" style={{ background: `hsl(${THEME.primaryLight})`, color: `hsl(${THEME.primaryDeep})` }}>📷 Your Photo</h4>
-                        <div className="flex justify-center">
-                          <div className="w-52 sm:w-60 rounded-2xl overflow-hidden shadow-xl" style={{ border: `3px solid hsl(${THEME.primary})` }}>
-                            <img src={URL.createObjectURL(form.photos[form.primaryPhotoIndex])} alt="Profile" className="w-full aspect-[3/4] object-cover" />
+                      {form.photos.length > 0 && (
+                        <motion.div className="mb-6" initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ delay: 0.1 }}>
+                          <h4 className="text-lg font-bold mb-4 px-5 py-3 rounded-xl" style={{ background: `hsl(${THEME.primaryLight})`, color: `hsl(${THEME.primaryDeep})` }}>📷 Your Photo</h4>
+                          <div className="flex justify-center">
+                            <div className="w-52 sm:w-60 rounded-2xl overflow-hidden shadow-xl" style={{ border: `3px solid hsl(${THEME.primary})` }}>
+                              <img src={URL.createObjectURL(form.photos[form.primaryPhotoIndex])} alt="Profile" className="w-full aspect-[3/4] object-cover" />
+                            </div>
                           </div>
-                        </div>
-                        {form.photos.length > 1 && (
-                          <div className="flex justify-center gap-3 mt-4">
-                            {form.photos.map((photo, i) => (
-                              <img key={i} src={URL.createObjectURL(photo)} alt="" className="w-14 h-14 rounded-xl object-cover" style={{ border: i === form.primaryPhotoIndex ? `2px solid hsl(${THEME.primary})` : "1px solid #ddd", opacity: i === form.primaryPhotoIndex ? 1 : 0.6 }} />
-                            ))}
-                          </div>
-                        )}
-                      </motion.div>
-                    )}
+                          {form.photos.length > 1 && (
+                            <div className="flex justify-center gap-3 mt-4">
+                              {form.photos.map((photo, i) => (
+                                <img key={i} src={URL.createObjectURL(photo)} alt="" className="w-14 h-14 rounded-xl object-cover" style={{ border: i === form.primaryPhotoIndex ? `2px solid hsl(${THEME.primary})` : "1px solid #ddd", opacity: i === form.primaryPhotoIndex ? 1 : 0.6 }} />
+                              ))}
+                            </div>
+                          )}
+                        </motion.div>
+                      )}
 
-                    <SummarySection title="📋 Basic Information">
-                      <SummaryRow label="Full Name" value={form.name} />
-                      <SummaryRow label="Profile Created For" value={form.profileFor} />
-                      <SummaryRow label="Gender" value={form.gender} />
-                      <SummaryRow label="Email" value={form.email} />
-                      <SummaryRow label="Phone" value={form.phone} />
-                    </SummarySection>
-                    <SummarySection title="👤 Personal Details">
-                      <SummaryRow label="Date of Birth" value={form.dob} />
-                      <SummaryRow label="Mother Tongue" value={form.motherTongue} />
-                      <SummaryRow label="Height" value={form.height} />
-                      <SummaryRow label="Marital Status" value={form.maritalStatus} />
-                      <SummaryRow label="Religion" value={form.religion} />
-                      <SummaryRow label="Caste" value={form.caste} />
-                      <SummaryRow label="Sub Caste" value={form.subCaste} />
-                      <SummaryRow label="Country" value={form.country} />
-                      <SummaryRow label="State" value={form.state} />
-                      <SummaryRow label="City" value={form.city} />
-                      <SummaryRow label="Village / Native" value={form.village} />
-                    </SummarySection>
-                    <SummarySection title="🎓 Education & Career">
-                      <SummaryRow label="10th Board" value={form.edu10Board} />
-                      <SummaryRow label="10th Percentage" value={form.edu10Percentage ? `${form.edu10Percentage}%` : ""} />
-                      <SummaryRow label="10th School" value={form.edu10School} />
-                      <SummaryRow label="12th Board" value={form.edu12Board} />
-                      <SummaryRow label="12th Percentage" value={form.edu12Percentage ? `${form.edu12Percentage}%` : ""} />
-                      <SummaryRow label="12th College" value={form.edu12College} />
-                      <SummaryRow label="Education" value={form.education} />
-                      <SummaryRow label="Graduation Details" value={form.graduationDetail} />
-                      <SummaryRow label="Employment Type" value={form.employmentType} />
-                      <SummaryRow label="Occupation" value={form.occupation} />
-                      <SummaryRow label="Company Name" value={form.companyName} />
-                      <SummaryRow label="Currency Type" value={form.currencyType} />
-                      <SummaryRow label="Annual Income" value={form.annualIncome} />
-                      <SummaryRow label="Citizenship" value={form.citizenship} />
-                      <SummaryRow label="Residence Type" value={form.residenceType} />
-                      <SummaryRow label="Visa Type" value={form.visaType} />
-                    </SummarySection>
-                    <SummarySection title="👨‍👩‍👧‍👦 Family Details">
-                      <SummaryRow label="Family Status" value={form.familyStatus} />
-                      <SummaryRow label="Family Type" value={form.familyType} />
-                      <SummaryRow label="Father's Name" value={form.fatherName} />
-                      <SummaryRow label="Father's Occupation" value={form.fatherOccupation} />
-                      <SummaryRow label="Mother's Name" value={form.motherName} />
-                      <SummaryRow label="Mother's Occupation" value={form.motherOccupation} />
-                      <SummaryRow label="Siblings" value={form.siblings} />
-                      <SummaryRow label="Sibling Details" value={form.siblingDetails} />
-                    </SummarySection>
-                    <SummarySection title="🔮 Horoscope Details">
-                      <SummaryRow label="Gothram" value={form.gothram} />
-                      <SummaryRow label="Rashi" value={form.raashi} />
-                      <SummaryRow label="Star" value={form.star} />
-                      <SummaryRow label="Dosham" value={form.dosham} />
-                      <SummaryRow label="Time of Birth" value={form.timeOfBirth} />
-                      <SummaryRow label="Country of Birth" value={form.countryOfBirth} />
-                      <SummaryRow label="State of Birth" value={form.stateOfBirth} />
-                      <SummaryRow label="Birth Place" value={form.birthPlace} />
-                      <SummaryRow label="Language" value={form.language} />
-                      <SummaryRow label="Chart Style" value={form.chartStyle} />
-                      <SummaryRow label="Horoscope File" value={form.horoscopeFile?.name || "Not uploaded"} />
-                    </SummarySection>
-                    <SummarySection title="💬 About Me & Partner Expectations">
-                      <SummaryRow label="About Me" value={form.aboutMe} />
-                      <SummaryRow label="Partner Expectations" value={form.partnerExpectations} />
-                    </SummarySection>
-                  </motion.div>
+                      <SummarySection title="📋 Basic Information">
+                        <SummaryRow label="Full Name" value={form.name} />
+                        <SummaryRow label="Profile Created For" value={form.profileFor} />
+                        <SummaryRow label="Gender" value={form.gender} />
+                        <SummaryRow label="Email" value={form.email} />
+                        <SummaryRow label="Phone" value={form.phone} />
+                      </SummarySection>
+                      <SummarySection title="👤 Personal Details">
+                        <SummaryRow label="Date of Birth" value={form.dob} />
+                        <SummaryRow label="Mother Tongue" value={form.motherTongue} />
+                        <SummaryRow label="Height" value={form.height} />
+                        <SummaryRow label="Marital Status" value={form.maritalStatus} />
+                        <SummaryRow label="Religion" value={form.religion} />
+                        <SummaryRow label="Caste" value={form.caste} />
+                        <SummaryRow label="Sub Caste" value={form.subCaste} />
+                        <SummaryRow label="Country" value={form.country} />
+                        <SummaryRow label="State" value={form.state} />
+                        <SummaryRow label="City" value={form.city} />
+                        <SummaryRow label="Village / Native" value={form.village} />
+                      </SummarySection>
+                      <SummarySection title="🎓 Education & Career">
+                        <SummaryRow label="10th Board" value={form.edu10Board} />
+                        <SummaryRow label="10th Percentage" value={form.edu10Percentage ? `${form.edu10Percentage}%` : ""} />
+                        <SummaryRow label="10th School" value={form.edu10School} />
+                        <SummaryRow label="12th Board" value={form.edu12Board} />
+                        <SummaryRow label="12th Percentage" value={form.edu12Percentage ? `${form.edu12Percentage}%` : ""} />
+                        <SummaryRow label="12th College" value={form.edu12College} />
+                        <SummaryRow label="Education" value={form.education} />
+                        <SummaryRow label="Graduation Details" value={form.graduationDetail} />
+                        <SummaryRow label="Employment Type" value={form.employmentType} />
+                        <SummaryRow label="Occupation" value={form.occupation} />
+                        <SummaryRow label="Company Name" value={form.companyName} />
+                        <SummaryRow label="Currency Type" value={form.currencyType} />
+                        <SummaryRow label="Annual Income" value={form.annualIncome} />
+                        <SummaryRow label="Citizenship" value={form.citizenship} />
+                        <SummaryRow label="Residence Type" value={form.residenceType} />
+                        <SummaryRow label="Visa Type" value={form.visaType} />
+                      </SummarySection>
+                      <SummarySection title="👨‍👩‍👧‍👦 Family Details">
+                        <SummaryRow label="Family Status" value={form.familyStatus} />
+                        <SummaryRow label="Family Type" value={form.familyType} />
+                        <SummaryRow label="Father's Name" value={form.fatherName} />
+                        <SummaryRow label="Father's Occupation" value={form.fatherOccupation} />
+                        <SummaryRow label="Mother's Name" value={form.motherName} />
+                        <SummaryRow label="Mother's Occupation" value={form.motherOccupation} />
+                        <SummaryRow label="Siblings" value={form.siblings} />
+                        <SummaryRow label="Sibling Details" value={form.siblingDetails} />
+                      </SummarySection>
+                      <SummarySection title="🔮 Horoscope Details">
+                        <SummaryRow label="Gothram" value={form.gothram} />
+                        <SummaryRow label="Rashi" value={form.raashi} />
+                        <SummaryRow label="Star" value={form.star} />
+                        <SummaryRow label="Dosham" value={form.dosham} />
+                        <SummaryRow label="Time of Birth" value={form.timeOfBirth} />
+                        <SummaryRow label="Country of Birth" value={form.countryOfBirth} />
+                        <SummaryRow label="State of Birth" value={form.stateOfBirth} />
+                        <SummaryRow label="Birth Place" value={form.birthPlace} />
+                        <SummaryRow label="Language" value={form.language} />
+                        <SummaryRow label="Chart Style" value={form.chartStyle} />
+                        <SummaryRow label="Horoscope File" value={form.horoscopeFile?.name || "Not uploaded"} />
+                      </SummarySection>
+                      <SummarySection title="💬 About Me & Partner Expectations">
+                        <SummaryRow label="About Me" value={form.aboutMe} />
+                        <SummaryRow label="Partner Expectations" value={form.partnerExpectations} />
+                      </SummarySection>
+                    </motion.div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+
+              <div className="flex gap-3 mt-7 sm:mt-9">
+                {step > 1 && (
+                  <button onClick={back} className="flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg text-sm font-semibold border text-gray-600 hover:bg-gray-50 transition-colors" style={{ borderColor: `hsl(${THEME.primaryLight})` }}>
+                    <ChevronLeft size={16} /> Back
+                  </button>
                 )}
-              </motion.div>
-            </AnimatePresence>
+                {step < TOTAL_STEPS ? (
+                  <button onClick={next} className="ml-auto flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90" style={{ background: `linear-gradient(135deg, hsl(${THEME.primary}), hsl(${THEME.accent}))` }}>
+                    Next <ChevronRight size={16} />
+                  </button>
+                ) : (
+                  <button onClick={handleSave} disabled={saving} className="ml-auto flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-60" style={{ background: `linear-gradient(135deg, hsl(${THEME.primary}), hsl(${THEME.accent}))` }}>
+                    {saving ? "Saving..." : "Submit Registration"} <Check size={16} />
+                  </button>
+                )}
+              </div>
 
-            <div className="flex gap-3 mt-7 sm:mt-9">
-              {step > 1 && (
-                <button onClick={back} className="flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg text-sm font-semibold border text-gray-600 hover:bg-gray-50 transition-colors" style={{ borderColor: `hsl(${THEME.primaryLight})` }}>
-                  <ChevronLeft size={16} /> Back
-                </button>
-              )}
-              {step < TOTAL_STEPS ? (
-                <button onClick={next} className="ml-auto flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90" style={{ background: `linear-gradient(135deg, hsl(${THEME.primary}), hsl(${THEME.accent}))` }}>
-                  Next <ChevronRight size={16} />
-                </button>
-              ) : (
-                <button onClick={handleSave} disabled={saving} className="ml-auto flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-60" style={{ background: `linear-gradient(135deg, hsl(${THEME.primary}), hsl(${THEME.accent}))` }}>
-                  {saving ? "Saving..." : "Submit Registration"} <Check size={16} />
-                </button>
-              )}
+              <p className="text-center text-sm mt-5" style={{ color: "#999" }}>
+                Already registered? <a href="/login" className="font-semibold" style={{ color: `hsl(${THEME.primary})` }}>Login here</a>
+              </p>
             </div>
+          </div>
 
-            <p className="text-center text-sm mt-5" style={{ color: "#999" }}>
-              Already registered? <a href="/login" className="font-semibold" style={{ color: `hsl(${THEME.primary})` }}>Login here</a>
-            </p>
+          {/* WHY REGISTER Sidebar */}
+          <div className="hidden lg:block w-[220px] flex-shrink-0 bg-white rounded-br-2xl border-l px-5 py-8" style={{ borderColor: "hsl(0, 0%, 90%)" }}>
+            <h3 className="text-sm font-extrabold tracking-wider mb-8 text-center" style={{ color: "hsl(0, 0%, 25%)", letterSpacing: "1px" }}>
+              WHY REGISTER
+            </h3>
+            <div className="h-px mb-8" style={{ background: "hsl(0, 0%, 85%)" }} />
+
+            {[
+              { icon: <Users size={36} strokeWidth={1.2} />, label: "Lakhs of Genuine Profiles" },
+              { icon: <UserCheck size={36} strokeWidth={1.2} />, label: "Many Verified by Personal Visit" },
+              { icon: <ShieldCheck size={36} strokeWidth={1.2} />, label: "Secure & Family Friendly" },
+              { icon: <Lock size={36} strokeWidth={1.2} />, label: "Control over Privacy" },
+              { icon: <Sparkles size={36} strokeWidth={1.2} />, label: "Dedicated Relationship Manager" },
+            ].map((item, i) => (
+              <div key={i} className="flex flex-col items-center text-center mb-8">
+                <div className="mb-3" style={{ color: "hsl(0, 0%, 55%)" }}>
+                  {item.icon}
+                </div>
+                <p className="text-xs font-semibold leading-tight" style={{ color: "hsl(210, 55%, 45%)" }}>
+                  {item.label}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
