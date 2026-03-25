@@ -174,7 +174,7 @@ const AboutSection = () => {
             transition={{ duration: 0.3 }}
           >
             {categories[activeTab].map((item, i) => (
-              <span key={item} className="text-sm" style={{ color: "hsl(220, 20%, 35%)" }}>
+              <span key={item} className="text-sm text-popover-foreground" style={{ color: "hsl(220, 20%, 35%)" }}>
                 {item}
                 {i < categories[activeTab].length - 1 && (
                   <span className="mx-2" style={{ color: "hsl(0, 0%, 75%)" }}>|</span>
