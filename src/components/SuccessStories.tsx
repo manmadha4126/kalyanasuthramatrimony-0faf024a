@@ -64,7 +64,7 @@ const SuccessStories = () => {
       <div className="container mx-auto px-4">
         {/* Heading */}
         <motion.div
-          className="text-center mb-14"
+          className="text-center mb-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -79,93 +79,88 @@ const SuccessStories = () => {
           </p>
         </motion.div>
 
-        <div className="flex flex-col lg:flex-row gap-10 items-center">
-          {/* LEFT - Stats & Data */}
-          <motion.div
-            className="w-full lg:w-[30%] flex-shrink-0"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="grid grid-cols-2 gap-4">
-              {stats.map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  className="rounded-2xl p-5 text-center"
-                  style={{
-                    background: "hsl(0, 0%, 100%)",
-                    boxShadow: "0 4px 20px hsla(220, 30%, 50%, 0.08)",
-                    border: "1px solid hsl(220, 30%, 90%)",
-                  }}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                >
-                  <stat.icon size={28} style={{ color: "hsl(220, 65%, 48%)" }} className="mx-auto mb-2" />
-                  <p className="text-xl font-extrabold" style={{ color: "hsl(220, 30%, 18%)" }}>{stat.value}</p>
-                  <p className="text-xs font-medium mt-1" style={{ color: "hsl(220, 15%, 50%)" }}>{stat.label}</p>
-                </motion.div>
-              ))}
-            </div>
-            <div className="mt-6 p-4 rounded-xl text-center" style={{ background: "hsl(220, 65%, 48%)" }}>
-              <p className="text-white text-sm font-semibold">📞 Contact: 9553306667 | 9866288767</p>
-            </div>
-          </motion.div>
-
-          {/* RIGHT - Scrolling Cards */}
-          <div className="w-full lg:w-[70%] overflow-hidden">
-            <style>{`
-              @keyframes storiesMarquee {
-                0% { transform: translateX(0); }
-                100% { transform: translateX(-50%); }
-              }
-            `}</style>
-            <div
-              className="flex gap-5"
+        {/* Stats - Horizontal after heading */}
+        <motion.div
+          className="flex flex-wrap justify-center gap-4 md:gap-8 mb-12"
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+        >
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              className="flex items-center gap-3 rounded-xl px-5 py-3"
               style={{
-                animation: isPaused ? "none" : "storiesMarquee 30s linear infinite",
-                width: "max-content",
+                background: "hsl(0, 0%, 100%)",
+                boxShadow: "0 4px 16px hsla(220, 30%, 50%, 0.08)",
+                border: "1px solid hsl(220, 30%, 90%)",
               }}
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
             >
-              {[...stories.slice(0, 8), ...stories.slice(0, 8)].map((story, idx) => (
-                <div
-                  key={`story-${story.id}-${idx}`}
-                  className="flex-shrink-0 rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105"
-                  style={{
-                    width: 230,
-                    background: "hsl(0, 0%, 100%)",
-                    boxShadow: "0 6px 24px hsla(220, 30%, 50%, 0.12)",
-                    border: "2px solid hsl(220, 40%, 88%)",
-                  }}
-                >
-                  <div className="h-[150px] overflow-hidden">
-                    <img
-                      src={story.image_url || wedding1}
-                      alt={`${story.bride_name} & ${story.groom_name}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="px-4 py-3 text-center">
-                    <h4
-                      className="font-bold leading-tight text-sm"
-                      style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(220, 30%, 18%)" }}
-                    >
-                      {story.bride_name}{" "}
-                      <span style={{ color: "hsl(220, 65%, 48%)" }}>♥</span>{" "}
-                      {story.groom_name}
-                    </h4>
-                    <p className="text-xs mt-1" style={{ color: "hsl(220, 15%, 50%)" }}>{story.city}</p>
-                    <p className="text-[11px] mt-2 leading-snug italic" style={{ color: "hsl(0, 0%, 45%)" }}>
-                      "{story.story}"
-                    </p>
-                  </div>
+              <stat.icon size={24} style={{ color: "hsl(220, 65%, 48%)" }} />
+              <div>
+                <p className="text-lg font-extrabold leading-tight" style={{ color: "hsl(220, 30%, 18%)" }}>{stat.value}</p>
+                <p className="text-xs font-medium" style={{ color: "hsl(220, 15%, 50%)" }}>{stat.label}</p>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Scrolling Cards - Full Width */}
+        <div className="w-full overflow-hidden">
+          <style>{`
+            @keyframes storiesMarquee {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+          `}</style>
+          <div
+            className="flex gap-5"
+            style={{
+              animation: isPaused ? "none" : "storiesMarquee 35s linear infinite",
+              width: "max-content",
+            }}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            {[...stories.slice(0, 8), ...stories.slice(0, 8)].map((story, idx) => (
+              <div
+                key={`story-${story.id}-${idx}`}
+                className="flex-shrink-0 rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-105"
+                style={{
+                  width: 240,
+                  background: "hsl(0, 0%, 100%)",
+                  boxShadow: "0 6px 24px hsla(220, 30%, 50%, 0.12)",
+                  border: "2px solid hsl(220, 40%, 88%)",
+                }}
+              >
+                <div className="h-[160px] overflow-hidden">
+                  <img
+                    src={story.image_url || wedding1}
+                    alt={`${story.bride_name} & ${story.groom_name}`}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              ))}
-            </div>
+                <div className="px-4 py-3 text-center">
+                  <h4
+                    className="font-bold leading-tight text-sm"
+                    style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(220, 30%, 18%)" }}
+                  >
+                    {story.bride_name}{" "}
+                    <span style={{ color: "hsl(220, 65%, 48%)" }}>♥</span>{" "}
+                    {story.groom_name}
+                  </h4>
+                  <p className="text-xs mt-1" style={{ color: "hsl(220, 15%, 50%)" }}>{story.city}</p>
+                  <p className="text-[11px] mt-2 leading-snug italic" style={{ color: "hsl(0, 0%, 45%)" }}>
+                    "{story.story}"
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
