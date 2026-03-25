@@ -140,11 +140,11 @@ const AboutSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <p className="text-xs tracking-[0.25em] uppercase font-semibold mb-2" style={{ color: ACCENT }}>
+            <p className="tracking-[0.25em] uppercase font-semibold mb-2 text-lg text-accent">
               Browse
             </p>
             <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "hsl(220, 30%, 18%)" }}>
-              <span style={{ color: ACCENT }}>Matrimonial</span> Profiles by
+              <span className="text-accent-foreground">Matrimonial</span> Profiles by
             </h2>
           </motion.div>
 
