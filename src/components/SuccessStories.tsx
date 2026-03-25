@@ -339,13 +339,13 @@ const SuccessStories = () => {
             100% { transform: translateX(-50%); }
           }
         `}</style>
-        <div className="flex gap-3" style={{ animation: "marqueeScroll 20s linear infinite", width: "max-content" }}>
+        <div className="flex gap-4" style={{ animation: "marqueeScroll 20s linear infinite", width: "max-content" }}>
           {[...stories.slice(0, 6), ...stories.slice(0, 6)].map((story, idx) => (
-            <div key={`mobile-${story.id}-${idx}`} className="flex-shrink-0 rounded-xl overflow-hidden" style={{ width: 160, background: "white", boxShadow: "0 6px 20px rgba(0,0,0,0.18)", border: "2px solid rgba(255,255,255,0.5)" }}>
-              <div className="h-[100px] overflow-hidden">
+            <div key={`mobile-${story.id}-${idx}`} className="flex-shrink-0 rounded-2xl overflow-hidden" style={{ width: 200, background: "white", boxShadow: "0 8px 24px rgba(0,0,0,0.2)", border: "2px solid rgba(217,79,107,0.3)" }}>
+              <div className="h-[110px] overflow-hidden">
                 <img src={story.image_url || wedding1} alt={`${story.bride_name} & ${story.groom_name}`} className="w-full h-full object-cover" />
               </div>
-              <div className="px-2 py-2 text-center">
+              <div className="px-3 py-2.5 text-center">
                 <h4 className="text-xs font-bold" style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--primary))" }}>
                   {story.bride_name} <span style={{ color: "#D94F6B" }}>♥</span> {story.groom_name}
                 </h4>
