@@ -466,21 +466,36 @@ export default function Register() {
         <div className="absolute top-0 right-[25%] w-[1px] h-full opacity-[0.03] -rotate-12" style={{ background: `hsl(${THEME.accent})` }} />
       </div>
 
-      {/* Top Header Bar */}
+      {/* Top Header Bar - like reference image */}
       <div className="relative z-10 mb-5 sm:mb-7">
         <div
-          className="rounded-xl max-w-4xl mx-auto px-4 sm:px-8 py-4 flex items-center justify-between"
-          style={{ background: "hsla(220, 40%, 20%, 0.75)", backdropFilter: "blur(10px)" }}
+          className="max-w-5xl mx-auto flex items-center justify-between overflow-hidden"
+          style={{
+            background: "linear-gradient(135deg, hsl(260, 35%, 22%) 0%, hsl(330, 30%, 28%) 50%, hsl(280, 25%, 20%) 100%)",
+            borderRadius: "12px",
+          }}
         >
-          <a href="/" className="inline-flex items-center gap-2">
-            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-12 sm:h-16 w-auto object-contain" />
+          {/* Brand name on white background block */}
+          <a
+            href="/"
+            className="inline-flex items-center gap-3 px-6 sm:px-8 py-4 sm:py-5"
+            style={{ background: "white" }}
+          >
+            <img src={logo} alt="Kalyanasuthra" className="h-8 sm:h-10 w-auto object-contain" />
+            <span
+              className="text-lg sm:text-xl font-bold tracking-wide"
+              style={{ color: "hsl(348, 70%, 35%)", fontFamily: "'Georgia', serif" }}
+            >
+              Kalyanasuthra Matrimony
+            </span>
           </a>
-          <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-4 text-white text-xs sm:text-sm">
+          {/* Contact info on right */}
+          <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-4 text-white text-xs sm:text-sm pr-6 sm:pr-8">
             <a href="mailto:info@kalyanasuthra.com" className="hover:underline opacity-90">info@kalyanasuthra.com</a>
             <a href="tel:+919553306667" className="hover:underline opacity-90">+91 9553306667</a>
           </div>
         </div>
-        <div className="max-w-4xl mx-auto mt-2">
+        <div className="max-w-5xl mx-auto mt-2">
           <BackButton to="/" label="Home" />
         </div>
       </div>
