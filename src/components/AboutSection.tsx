@@ -51,7 +51,7 @@ const AboutSection = () => {
               color: "hsl(348, 70%, 45%)",
             }}
           >
-            Find your Special Someone
+            The Wedding Chapter Starts Here...
           </h2>
           <p
             className="mt-3 text-base md:text-lg max-w-xl mx-auto"
