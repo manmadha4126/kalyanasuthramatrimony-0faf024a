@@ -87,8 +87,6 @@ const HeroSection = () => {
 
   return (
     <section id="home" className="relative w-full" style={{ marginTop: "80px" }}>
-      {/* Decorative top border */}
-      <div className="w-full h-1.5" style={{ background: "linear-gradient(90deg, hsl(var(--burgundy-light)), hsl(var(--gold-accent)), hsl(var(--burgundy-light)))" }} />
 
       {/* Main Hero - Split Layout */}
         <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(348, 45%, 12%) 0%, hsl(280, 40%, 15%) 50%, hsl(220, 50%, 12%) 100%)" }}>
