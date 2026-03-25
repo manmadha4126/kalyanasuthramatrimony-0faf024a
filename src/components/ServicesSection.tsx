@@ -49,8 +49,6 @@ const owners = [
 
 const ServicesSection = () => {
   const [selected, setSelected] = useState<Duration | null>(null);
-  const [showConsultation, setShowConsultation] = useState(false);
-  const [showOwners, setShowOwners] = useState(false);
 
   return (
     <section
