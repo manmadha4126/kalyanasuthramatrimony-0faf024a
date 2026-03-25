@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Phone, Mail, User, ChevronDown, ChevronUp } from "lucide-react";
-import ConsultationForm from "@/components/ConsultationForm";
+import { motion } from "framer-motion";
 
 type Duration = "3months" | "6months" | "1year" | "premium";
 
