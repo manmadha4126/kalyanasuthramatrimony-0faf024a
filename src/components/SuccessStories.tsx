@@ -92,9 +92,9 @@ const SuccessStories = () => {
               key={stat.label}
               className="flex items-center gap-3 rounded-xl px-5 py-3"
               style={{
-                background: "hsl(0, 0%, 100%)",
-                boxShadow: "0 4px 16px hsla(220, 30%, 50%, 0.08)",
-                border: "1px solid hsl(220, 30%, 90%)",
+                background: "hsl(0, 0%, 15%)",
+                boxShadow: "0 4px 16px hsla(0, 0%, 0%, 0.3)",
+                border: "1px solid hsl(0, 0%, 22%)",
               }}
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
