@@ -67,8 +67,8 @@ const FindMatchCTA = () => {
           <div
             className="max-w-3xl mx-auto text-center rounded-2xl py-8 px-8 relative overflow-hidden"
             style={{
-              background: "linear-gradient(135deg, hsl(220, 60%, 10%) 0%, hsl(240, 50%, 18%) 50%, hsl(210, 55%, 12%) 100%)",
-              border: "2px solid hsla(40, 60%, 50%, 0.5)",
+              background: "linear-gradient(135deg, hsl(30, 50%, 90%) 0%, hsl(35, 60%, 85%) 50%, hsl(25, 45%, 88%) 100%)",
+              border: "2px solid hsla(30, 40%, 70%, 0.6)",
               boxShadow: "0 20px 60px -15px hsla(0, 0%, 0%, 0.5)",
             }}
           >
