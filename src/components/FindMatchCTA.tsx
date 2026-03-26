@@ -93,7 +93,7 @@ const FindMatchCTA = () => {
               <button
                 onClick={() => setShowOwners(!showOwners)}
                 className="inline-flex items-center gap-2 px-8 py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105 border"
-                style={{ borderColor: "hsla(40, 60%, 50%, 0.7)", color: "hsl(40, 60%, 50%)", background: "transparent" }}
+                style={{ borderColor: "hsla(348, 56%, 30%, 0.7)", color: "hsl(348, 56%, 30%)", background: "transparent" }}
               >
                 <Phone size={18} />
                 Contact Us
