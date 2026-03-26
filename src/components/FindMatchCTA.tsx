@@ -75,7 +75,7 @@ const FindMatchCTA = () => {
             <div className="absolute top-0 left-0 right-0 h-1" style={{ background: "linear-gradient(90deg, transparent, hsl(30, 40%, 70%), transparent)" }} />
             <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: "linear-gradient(90deg, transparent, hsl(30, 40%, 70%), transparent)" }} />
 
-            <h3 className="text-xl md:text-2xl font-bold mb-2" style={{ color: "hsl(0, 0%, 100%)", fontFamily: "'DM Serif Display', serif" }}>
+            <h3 className="text-xl md:text-2xl font-bold mb-2" style={{ color: "hsl(220, 30%, 18%)", fontFamily: "'DM Serif Display', serif" }}>
               Want to know more about Assisted Service?
             </h3>
 
