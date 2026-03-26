@@ -18,7 +18,7 @@ const FindMatchCTA = () => {
   return (
     <div className="relative overflow-hidden">
       <img src={findMatchBg} alt="Wedding venue with candles" className="absolute inset-0 w-full h-full object-cover" />
-      <div className="absolute inset-0" style={{ background: "hsla(0, 0%, 0%, 0.75)" }} />
+      <div className="absolute inset-0" style={{ background: "hsla(0, 0%, 0%, 0.45)" }} />
       <div className="relative z-10 py-20">
         <motion.div
           className="container mx-auto px-4 text-center space-y-5"
