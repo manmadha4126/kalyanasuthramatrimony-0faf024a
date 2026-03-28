@@ -295,6 +295,26 @@ export default function AdminDashboard() {
     }
   };
 
+  const changeStaffPassword = async (staffEmail: string) => {
+    if (!staffNewPassword || staffNewPassword.length < 6) {
+      toast({ title: "Password must be at least 6 characters", variant: "destructive" });
+      return;
+    }
+    setChangingPassword(true);
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const { data: fnData, error: fnError } = await supabase.functions.invoke("update-staff-password", {
+        body: { email: staffEmail, newPassword: staffNewPassword }
+      });
+      if (fnError) throw fnError;
+      toast({ title: "Password updated successfully!" });
+      setStaffNewPassword("");
+    } catch (err: any) {
+      toast({ title: "Error updating password", description: err.message, variant: "destructive" });
+    }
+    setChangingPassword(false);
+  
+
   const addSuccessStory = async () => {
     if (!storyForm.bride_name || !storyForm.groom_name || !storyForm.city || !storyForm.story) {
       toast({ title: "Please fill all fields", variant: "destructive" });
