@@ -440,30 +440,50 @@ export default function Register() {
 
   return (
     <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4 relative overflow-hidden" style={{ background: `linear-gradient(160deg, hsl(270, 60%, 55%) 0%, hsl(280, 55%, 45%) 30%, hsl(290, 50%, 60%) 60%, hsl(275, 55%, 70%) 85%, hsl(270, 50%, 75%) 100%)` }}>
-      {/* Background decorative elements */}
+      {/* Background decorative elements - floating hearts & shapes */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-10 left-10 w-72 h-72 rounded-full opacity-[0.06]" style={{ background: `hsl(${THEME.primary})` }} />
-        <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-[0.05]" style={{ background: `hsl(${THEME.accent})` }} />
-        <div className="absolute top-1/3 right-1/4 w-48 h-48 rounded-full opacity-[0.04]" style={{ background: `hsl(${THEME.primary})` }} />
-        <div className="absolute top-[60%] left-[5%] w-64 h-64 rounded-full opacity-[0.04]" style={{ background: `hsl(${THEME.accent})` }} />
-        <div className="absolute top-[15%] left-[50%] w-40 h-40 rounded-full opacity-[0.05]" style={{ background: `hsl(${THEME.primary})` }} />
-        <div className="absolute bottom-[10%] left-[40%] w-80 h-80 rounded-full opacity-[0.03]" style={{ background: `hsl(${THEME.accent})` }} />
-        {/* Floating hearts */}
-        <Heart className="absolute top-20 right-20 opacity-[0.06]" size={40} style={{ color: `hsl(${THEME.primary})` }} />
-        <Heart className="absolute bottom-40 left-20 opacity-[0.05]" size={30} style={{ color: `hsl(${THEME.accent})` }} />
-        <Heart className="absolute top-1/2 right-10 opacity-[0.04]" size={25} style={{ color: `hsl(${THEME.primary})` }} />
-        <Heart className="absolute top-[70%] left-[15%] opacity-[0.05]" size={35} style={{ color: `hsl(${THEME.primary})` }} />
-        <Heart className="absolute top-[25%] left-[8%] opacity-[0.04]" size={20} style={{ color: `hsl(${THEME.accent})` }} />
-        <Star className="absolute top-[10%] right-[30%] opacity-[0.04]" size={28} style={{ color: `hsl(${THEME.accent})` }} />
-        <Star className="absolute bottom-[25%] right-[15%] opacity-[0.05]" size={22} style={{ color: `hsl(${THEME.primary})` }} />
-        <Star className="absolute top-[45%] left-[3%] opacity-[0.04]" size={18} style={{ color: `hsl(${THEME.accent})` }} />
+        {/* Large soft glowing circles */}
+        <div className="absolute top-10 left-10 w-72 h-72 rounded-full opacity-[0.08]" style={{ background: `radial-gradient(circle, hsl(280, 60%, 70%), transparent)` }} />
+        <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-[0.07]" style={{ background: `radial-gradient(circle, hsl(300, 50%, 65%), transparent)` }} />
+        <div className="absolute top-[40%] left-[50%] w-80 h-80 rounded-full opacity-[0.06]" style={{ background: `radial-gradient(circle, hsl(270, 55%, 60%), transparent)` }} />
+
+        {/* Floating hearts - various sizes and opacities */}
+        <motion.div animate={{ y: [0, -15, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
+          <Heart className="absolute top-[8%] left-[3%] fill-current opacity-[0.12]" size={55} style={{ color: `hsl(320, 50%, 75%)` }} />
+        </motion.div>
+        <motion.div animate={{ y: [0, 12, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}>
+          <Heart className="absolute top-[15%] right-[6%] fill-current opacity-[0.10]" size={45} style={{ color: `hsl(280, 55%, 70%)` }} />
+        </motion.div>
+        <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}>
+          <Heart className="absolute top-[30%] left-[1%] fill-current opacity-[0.08]" size={35} style={{ color: `hsl(300, 45%, 80%)` }} />
+        </motion.div>
+        <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}>
+          <Heart className="absolute top-[50%] right-[2%] fill-current opacity-[0.10]" size={40} style={{ color: `hsl(310, 50%, 72%)` }} />
+        </motion.div>
+        <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}>
+          <Heart className="absolute top-[65%] left-[5%] fill-current opacity-[0.12]" size={50} style={{ color: `hsl(285, 50%, 68%)` }} />
+        </motion.div>
+        <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}>
+          <Heart className="absolute top-[80%] right-[8%] fill-current opacity-[0.09]" size={30} style={{ color: `hsl(295, 55%, 75%)` }} />
+        </motion.div>
+        <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}>
+          <Heart className="absolute top-[45%] left-[8%] fill-current opacity-[0.07]" size={25} style={{ color: `hsl(270, 50%, 78%)` }} />
+        </motion.div>
+        <motion.div animate={{ y: [0, 14, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}>
+          <Heart className="absolute bottom-[10%] left-[45%] fill-current opacity-[0.08]" size={38} style={{ color: `hsl(305, 45%, 72%)` }} />
+        </motion.div>
+        <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}>
+          <Heart className="absolute top-[20%] left-[45%] fill-current opacity-[0.06]" size={28} style={{ color: `hsl(275, 50%, 80%)` }} />
+        </motion.div>
+        <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut", delay: 0.9 }}>
+          <Heart className="absolute top-[75%] right-[40%] fill-current opacity-[0.07]" size={32} style={{ color: `hsl(290, 50%, 74%)` }} />
+        </motion.div>
+
         {/* Decorative rings */}
-        <div className="absolute top-[5%] right-[8%] w-32 h-32 rounded-full border-2 opacity-[0.06]" style={{ borderColor: `hsl(${THEME.primary})` }} />
-        <div className="absolute bottom-[15%] left-[10%] w-24 h-24 rounded-full border-2 opacity-[0.05]" style={{ borderColor: `hsl(${THEME.accent})` }} />
-        <div className="absolute top-[50%] right-[5%] w-20 h-20 rounded-full border opacity-[0.04]" style={{ borderColor: `hsl(${THEME.primary})` }} />
-        {/* Diagonal lines */}
-        <div className="absolute top-0 left-[20%] w-[1px] h-full opacity-[0.03] rotate-12" style={{ background: `hsl(${THEME.primary})` }} />
-        <div className="absolute top-0 right-[25%] w-[1px] h-full opacity-[0.03] -rotate-12" style={{ background: `hsl(${THEME.accent})` }} />
+        <div className="absolute top-[5%] right-[12%] w-36 h-36 rounded-full border-2 opacity-[0.08]" style={{ borderColor: `hsl(280, 50%, 70%)` }} />
+        <div className="absolute bottom-[15%] left-[8%] w-28 h-28 rounded-full border-2 opacity-[0.07]" style={{ borderColor: `hsl(300, 45%, 72%)` }} />
+        <div className="absolute top-[55%] right-[3%] w-20 h-20 rounded-full border opacity-[0.06]" style={{ borderColor: `hsl(270, 55%, 75%)` }} />
+        <div className="absolute top-[35%] left-[48%] w-16 h-16 rounded-full border opacity-[0.05]" style={{ borderColor: `hsl(290, 45%, 78%)` }} />
       </div>
 
       {/* Top Header Bar - full width */}
