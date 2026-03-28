@@ -204,18 +204,18 @@ export default function ProfileDetail() {
               </div>
 
               {/* Interest Button */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-2">
+              <div className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 space-y-2">
                 {interestSent ? (
-                  <div className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm" style={{ background: themeLight, color: themeDark }}>
-                    <Heart size={15} className="fill-current" /> Interest Sent ✓
+                  <div className="flex items-center justify-center gap-2 w-full py-2 rounded-xl font-semibold text-xs" style={{ background: themeLight, color: themeDark }}>
+                    <Heart size={13} className="fill-current" /> Interest Sent ✓
                   </div>
                 ) : (
-                  <button onClick={sendInterest} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.01]" style={{ background: "hsl(348, 60%, 45%)" }}>
-                    <Heart size={15} /> Express Interest
+                  <button onClick={sendInterest} className="flex items-center justify-center gap-2 w-full py-2 rounded-xl font-semibold text-xs text-white transition-all hover:scale-[1.01]" style={{ background: "hsl(348, 60%, 45%)" }}>
+                    <Heart size={13} /> Express Interest
                   </button>
                 )}
-                <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hi, I'm interested in the profile of ${profile.full_name} (${profile.profile_id || ""}). Please share more details.`)}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all" style={{ background: themeLight, color: themeDark }}>
-                  <Phone size={15} /> Contact via WhatsApp
+                <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hi, I'm interested in the profile of ${profile.full_name} (${profile.profile_id || ""}). Please share more details.`)}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-2 rounded-xl font-semibold text-xs transition-all" style={{ background: themeLight, color: themeDark }}>
+                  <Phone size={13} /> Contact via WhatsApp
                 </a>
               </div>
             </div>
