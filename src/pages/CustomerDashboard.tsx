@@ -346,7 +346,7 @@ export default function CustomerDashboard() {
       })}
       </nav>
 
-      <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowUpgradePage(true)} className="mt-4 w-full rounded-xl p-3 text-left" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
+      <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowUpgradePage(true)} className="mt-4 w-full rounded-xl p-3 text-left" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(190, 45%, 30%))` }}>
         <div className="flex items-center gap-2 mb-1">
           <Star size={13} className="text-yellow-300 fill-yellow-300" />
           <span className="text-white text-[11px] font-bold uppercase tracking-wide">Upgrade</span>
