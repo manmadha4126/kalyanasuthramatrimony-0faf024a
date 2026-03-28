@@ -166,18 +166,18 @@ export default function ProfileDetail() {
 
           {/* LEFT COLUMN - Photo + Actions */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="lg:col-span-4">
-            <div className="lg:sticky lg:top-20 space-y-4">
+            <div className="lg:sticky lg:top-20 space-y-3">
               {/* Photo Gallery */}
               <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
                 {allPhotos.length > 0 ? (
                   <>
-                    <div className="aspect-[3/4] relative">
+                    <div className="aspect-[4/3] relative">
                       <img src={allPhotos[activePhoto]} alt={profile.full_name} className="w-full h-full object-cover" />
                     </div>
                     {allPhotos.length > 1 && (
-                      <div className="flex gap-1.5 p-3 overflow-x-auto">
+                      <div className="flex gap-1.5 p-2 overflow-x-auto">
                         {allPhotos.map((url, i) => (
-                          <button key={i} onClick={() => setActivePhoto(i)} className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all" style={{ borderColor: i === activePhoto ? themeAccent : "transparent" }}>
+                          <button key={i} onClick={() => setActivePhoto(i)} className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all" style={{ borderColor: i === activePhoto ? themeAccent : "transparent" }}>
                             <img src={url} alt="" className="w-full h-full object-cover" />
                           </button>
                         ))}
@@ -185,8 +185,8 @@ export default function ProfileDetail() {
                     )}
                   </>
                 ) : (
-                  <div className="aspect-[3/4] flex items-center justify-center" style={{ background: themeLight }}>
-                    <span className="text-6xl font-bold" style={{ color: themeAccent }}>{profile.full_name[0]}</span>
+                  <div className="aspect-[4/3] flex items-center justify-center" style={{ background: themeLight }}>
+                    <span className="text-5xl font-bold" style={{ color: themeAccent }}>{profile.full_name[0]}</span>
                   </div>
                 )}
               </div>
