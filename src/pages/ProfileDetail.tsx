@@ -343,7 +343,7 @@ export default function ProfileDetail() {
             {/* Education & Professional Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <SectionHeading icon={GraduationCap} label="Education & Professional Details" bgColor="hsl(160, 40%, 90%)" textColor="hsl(160, 40%, 28%)" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+              <div>
                 <InfoRow label="Education" value={profile.education} />
                 <InfoRow label="Education Details" value={profile.education_detail} />
                 <InfoRow label="Occupation" value={profile.occupation} />
