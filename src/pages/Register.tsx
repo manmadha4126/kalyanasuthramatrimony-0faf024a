@@ -9,12 +9,12 @@ import logo from "@/assets/kalyanasuthra-logo.png";
 
 const TOTAL_STEPS = 7;
 const THEME = {
-  primary: "275, 55%, 50%",
-  primaryDeep: "280, 60%, 35%",
-  primaryLight: "280, 60%, 75%",
-  accent: "300, 50%, 60%",
-  accentLight: "290, 50%, 80%",
-  warm: "270, 60%, 85%",
+  primary: "185, 45%, 35%",
+  primaryDeep: "190, 50%, 25%",
+  primaryLight: "180, 40%, 75%",
+  accent: "175, 40%, 45%",
+  accentLight: "180, 35%, 80%",
+  warm: "180, 30%, 85%",
 };
 
 const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative"];
