@@ -233,7 +233,7 @@ export default function ProfileDetail() {
             {/* Personal Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <SectionHeading icon={User} label="Personal Details" bgColor="hsl(260, 45%, 92%)" textColor="hsl(260, 45%, 35%)" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+              <div>
                 <InfoRow label="Full Name" value={profile.full_name} />
                 <InfoRow label="Date of Birth" value={profile.date_of_birth} />
                 <InfoRow label="Age" value={`${getAge(profile.date_of_birth)} years`} />
