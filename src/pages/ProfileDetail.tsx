@@ -166,18 +166,18 @@ export default function ProfileDetail() {
 
           {/* LEFT COLUMN - Photo + Actions */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="lg:col-span-4">
-            <div className="lg:sticky lg:top-20 space-y-4">
+            <div className="lg:sticky lg:top-20 space-y-3">
               {/* Photo Gallery */}
               <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
                 {allPhotos.length > 0 ? (
                   <>
-                    <div className="aspect-[3/4] relative">
+                    <div className="aspect-[4/3] relative">
                       <img src={allPhotos[activePhoto]} alt={profile.full_name} className="w-full h-full object-cover" />
                     </div>
                     {allPhotos.length > 1 && (
-                      <div className="flex gap-1.5 p-3 overflow-x-auto">
+                      <div className="flex gap-1.5 p-2 overflow-x-auto">
                         {allPhotos.map((url, i) => (
-                          <button key={i} onClick={() => setActivePhoto(i)} className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all" style={{ borderColor: i === activePhoto ? themeAccent : "transparent" }}>
+                          <button key={i} onClick={() => setActivePhoto(i)} className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all" style={{ borderColor: i === activePhoto ? themeAccent : "transparent" }}>
                             <img src={url} alt="" className="w-full h-full object-cover" />
                           </button>
                         ))}
@@ -185,36 +185,37 @@ export default function ProfileDetail() {
                     )}
                   </>
                 ) : (
-                  <div className="aspect-[3/4] flex items-center justify-center" style={{ background: themeLight }}>
-                    <span className="text-6xl font-bold" style={{ color: themeAccent }}>{profile.full_name[0]}</span>
+                  <div className="aspect-[4/3] flex items-center justify-center" style={{ background: themeLight }}>
+                    <span className="text-5xl font-bold" style={{ color: themeAccent }}>{profile.full_name[0]}</span>
                   </div>
                 )}
               </div>
 
               {/* Expert Talk - Phone Call */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                <h3 className="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
-                  <MessageCircle size={16} style={{ color: themeAccent }} /> Expert Talk
-                </h3>
-                <p className="text-xs text-gray-500 mb-3">Talk to our relationship expert about this profile</p>
-                <a href="tel:+919553306667" className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.01]" style={{ background: themeAccent }}>
-                  <Phone size={15} /> Call Expert
+              <div className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-bold text-gray-800 text-xs flex items-center gap-1.5">
+                    <MessageCircle size={14} style={{ color: themeAccent }} /> Expert Talk
+                  </h3>
+                </div>
+                <a href="tel:+919553306667" className="flex items-center justify-center gap-2 w-full py-2 rounded-xl font-semibold text-xs text-white transition-all hover:scale-[1.01]" style={{ background: themeAccent }}>
+                  <Phone size={13} /> Call Expert
                 </a>
               </div>
 
               {/* Interest Button */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-2">
+              <div className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 space-y-2">
                 {interestSent ? (
-                  <div className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm" style={{ background: themeLight, color: themeDark }}>
-                    <Heart size={15} className="fill-current" /> Interest Sent ✓
+                  <div className="flex items-center justify-center gap-2 w-full py-2 rounded-xl font-semibold text-xs" style={{ background: themeLight, color: themeDark }}>
+                    <Heart size={13} className="fill-current" /> Interest Sent ✓
                   </div>
                 ) : (
-                  <button onClick={sendInterest} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.01]" style={{ background: "hsl(348, 60%, 45%)" }}>
-                    <Heart size={15} /> Express Interest
+                  <button onClick={sendInterest} className="flex items-center justify-center gap-2 w-full py-2 rounded-xl font-semibold text-xs text-white transition-all hover:scale-[1.01]" style={{ background: "hsl(348, 60%, 45%)" }}>
+                    <Heart size={13} /> Express Interest
                   </button>
                 )}
-                <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hi, I'm interested in the profile of ${profile.full_name} (${profile.profile_id || ""}). Please share more details.`)}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all" style={{ background: themeLight, color: themeDark }}>
-                  <Phone size={15} /> Contact via WhatsApp
+                <a href={`https://wa.me/919553306667?text=${encodeURIComponent(`Hi, I'm interested in the profile of ${profile.full_name} (${profile.profile_id || ""}). Please share more details.`)}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-2 rounded-xl font-semibold text-xs transition-all" style={{ background: themeLight, color: themeDark }}>
+                  <Phone size={13} /> Contact via WhatsApp
                 </a>
               </div>
             </div>
@@ -232,7 +233,7 @@ export default function ProfileDetail() {
             {/* Personal Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <SectionHeading icon={User} label="Personal Details" bgColor="hsl(260, 45%, 92%)" textColor="hsl(260, 45%, 35%)" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+              <div>
                 <InfoRow label="Full Name" value={profile.full_name} />
                 <InfoRow label="Date of Birth" value={profile.date_of_birth} />
                 <InfoRow label="Age" value={`${getAge(profile.date_of_birth)} years`} />
@@ -274,7 +275,7 @@ export default function ProfileDetail() {
                 )}
               </div>
               {userSubscription === "assisted" && contactRevealed ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                <div>
                   <InfoRow label="Phone" value={profile.phone} />
                   <InfoRow label="Email" value={profile.email} />
                   <InfoRow label="WhatsApp" value={profile.whatsapp} />
@@ -315,7 +316,7 @@ export default function ProfileDetail() {
                 )}
               </div>
               {userSubscription === "assisted" && horoscopeRevealed ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                <div>
                   <InfoRow label="Gothram" value={profile.gothra} />
                   <InfoRow label="Rashi" value={profile.raasi} />
                   <InfoRow label="Star" value={profile.star} />
@@ -342,7 +343,7 @@ export default function ProfileDetail() {
             {/* Education & Professional Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <SectionHeading icon={GraduationCap} label="Education & Professional Details" bgColor="hsl(160, 40%, 90%)" textColor="hsl(160, 40%, 28%)" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+              <div>
                 <InfoRow label="Education" value={profile.education} />
                 <InfoRow label="Education Details" value={profile.education_detail} />
                 <InfoRow label="Occupation" value={profile.occupation} />
@@ -355,7 +356,7 @@ export default function ProfileDetail() {
             {/* Family Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <SectionHeading icon={Users} label="Family Details" bgColor="hsl(20, 60%, 92%)" textColor="hsl(20, 50%, 32%)" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+              <div>
                 <InfoRow label="Family Status" value={profile.family_status} />
                 <InfoRow label="Family Type" value={profile.family_type} />
                 <InfoRow label="Father's Name" value={profile.father_name} />
