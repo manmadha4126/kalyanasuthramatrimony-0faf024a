@@ -178,6 +178,9 @@ export default function AdminDashboard() {
   const [showStaffForm, setShowStaffForm] = useState(false);
   const [staffForm, setStaffForm] = useState({ full_name: "", email: "", phone: "", password: "" });
   const [savingStaff, setSavingStaff] = useState(false);
+  const [expandedStaffId, setExpandedStaffId] = useState<string | null>(null);
+  const [staffNewPassword, setStaffNewPassword] = useState("");
+  const [changingPassword, setChangingPassword] = useState(false);
   useEffect(() => {
     const auth = sessionStorage.getItem("admin_auth");
     if (!auth) { navigate("/admin"); return; }
