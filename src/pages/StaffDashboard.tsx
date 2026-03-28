@@ -809,7 +809,7 @@ const { error } = await supabase.from("profile_interests").update({ interest_typ
                           )}
                           <div className="flex gap-2">
                             <button onClick={async () => {
-                              const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" } as any).eq("id", interest.id);
+const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" }).eq("id", interest.id);
                               if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); setSelectedInterest({ ...interest, interest_type: "completed" }); toast({ title: "Marked as completed!" }); }
                             }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 42%)" }}>Completed</button>
                             <button onClick={async () => {
