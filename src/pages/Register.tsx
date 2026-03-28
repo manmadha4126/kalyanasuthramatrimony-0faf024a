@@ -447,13 +447,13 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4 relative overflow-hidden" style={{ background: `linear-gradient(160deg, hsl(270, 60%, 55%) 0%, hsl(280, 55%, 45%) 30%, hsl(290, 50%, 60%) 60%, hsl(275, 55%, 70%) 85%, hsl(270, 50%, 75%) 100%)` }}>
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4 relative overflow-hidden" style={{ background: `linear-gradient(160deg, hsl(185, 45%, 40%) 0%, hsl(190, 50%, 30%) 30%, hsl(180, 40%, 45%) 60%, hsl(175, 35%, 55%) 85%, hsl(180, 30%, 60%) 100%)` }}>
       {/* Background decorative elements - floating hearts & shapes */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Large soft glowing circles */}
-        <div className="absolute top-10 left-10 w-72 h-72 rounded-full opacity-[0.08]" style={{ background: `radial-gradient(circle, hsl(280, 60%, 70%), transparent)` }} />
-        <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-[0.07]" style={{ background: `radial-gradient(circle, hsl(300, 50%, 65%), transparent)` }} />
-        <div className="absolute top-[40%] left-[50%] w-80 h-80 rounded-full opacity-[0.06]" style={{ background: `radial-gradient(circle, hsl(270, 55%, 60%), transparent)` }} />
+        <div className="absolute top-10 left-10 w-72 h-72 rounded-full opacity-[0.08]" style={{ background: `radial-gradient(circle, hsl(180, 40%, 55%), transparent)` }} />
+        <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-[0.07]" style={{ background: `radial-gradient(circle, hsl(175, 35%, 50%), transparent)` }} />
+        <div className="absolute top-[40%] left-[50%] w-80 h-80 rounded-full opacity-[0.06]" style={{ background: `radial-gradient(circle, hsl(185, 40%, 45%), transparent)` }} />
 
         {/* Floating hearts - various sizes and opacities */}
         <motion.div animate={{ y: [0, -15, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
