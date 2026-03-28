@@ -225,7 +225,7 @@ export default function CustomerDashboard() {
   const themeAccent = "hsl(185, 45%, 35%)";
   const themeDark = "hsl(190, 50%, 20%)";
   const themeLight = "hsl(180, 40%, 94%)";
-  const themeMid = "hsl(160, 30%, 50%)";
+  const themeMid = "hsl(185, 35%, 45%)";
 
   const profileId = userProfile?.profile_id || userProfile?.id?.slice(0, 8).toUpperCase() || "—";
 
@@ -468,7 +468,7 @@ export default function CustomerDashboard() {
                           </div>
                         ) : (
                           notifications.map((n) => (
-                            <button key={n.id} onClick={() => markNotifRead(n.id)} className="w-full text-left px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors flex gap-3" style={{ background: n.is_read ? "transparent" : "hsl(160, 40%, 97%)" }}>
+                            <button key={n.id} onClick={() => markNotifRead(n.id)} className="w-full text-left px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors flex gap-3" style={{ background: n.is_read ? "transparent" : "hsl(185, 40%, 97%)" }}>
                               <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: n.type === "admin_contact" ? "hsl(134, 60%, 93%)" : n.type === "admin_whatsapp" ? "hsl(134, 60%, 90%)" : themeLight }}>
                                 {n.type === "admin_contact" || n.type === "admin_whatsapp" ? <MessageCircle size={14} style={{ color: "hsl(134, 60%, 35%)" }} /> : <Bell size={14} style={{ color: themeAccent }} />}
                               </div>
@@ -608,20 +608,20 @@ export default function CustomerDashboard() {
 
               {/* Subscription Details or Upgrade CTA */}
               {userProfile?.subscription_type === "assisted" ? (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-6 rounded-2xl overflow-hidden" style={{ border: "2px solid hsl(160, 35%, 38%)" }}>
-                  <div className="p-4 sm:p-5" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-6 rounded-2xl overflow-hidden" style={{ border: "2px solid hsl(185, 45%, 35%)" }}>
+                  <div className="p-4 sm:p-5" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(190, 45%, 30%))` }}>
                     <div className="flex items-center gap-2 mb-1">
                       <Star size={16} className="text-yellow-300 fill-yellow-300" />
                       <span className="text-yellow-200 text-xs font-bold uppercase tracking-wider">Active Subscription</span>
                     </div>
                     <h3 className="text-white font-bold text-base sm:text-lg">Assisted Matrimony Service</h3>
                   </div>
-                  <div className="p-4 sm:p-5 space-y-3" style={{ background: "hsl(160, 30%, 97%)" }}>
-                    <div className="flex items-center justify-between py-2 border-b" style={{ borderColor: "hsl(160, 20%, 88%)" }}>
+                  <div className="p-4 sm:p-5 space-y-3" style={{ background: "hsl(185, 30%, 97%)" }}>
+                    <div className="flex items-center justify-between py-2 border-b" style={{ borderColor: "hsl(185, 20%, 88%)" }}>
                       <span className="text-sm font-medium" style={{ color: "hsl(0, 0%, 45%)" }}>Plan Status</span>
                       <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: "hsl(145, 55%, 90%)", color: "hsl(145, 55%, 28%)" }}>Active</span>
                     </div>
-                    <div className="flex items-center justify-between py-2 border-b" style={{ borderColor: "hsl(160, 20%, 88%)" }}>
+                    <div className="flex items-center justify-between py-2 border-b" style={{ borderColor: "hsl(185, 20%, 88%)" }}>
                       <span className="text-sm font-medium" style={{ color: "hsl(0, 0%, 45%)" }}>Access Type</span>
                       <span className="text-sm font-bold" style={{ color: themeDark }}>Assisted Access</span>
                     </div>
@@ -636,7 +636,7 @@ export default function CustomerDashboard() {
                   </div>
                 </motion.div>
               ) : (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} onClick={() => setShowUpgradePage(true)} className="mb-6 rounded-2xl p-4 sm:p-5 cursor-pointer hover:scale-[1.01] transition-transform" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} onClick={() => setShowUpgradePage(true)} className="mb-6 rounded-2xl p-4 sm:p-5 cursor-pointer hover:scale-[1.01] transition-transform" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(190, 45%, 30%))` }}>
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
