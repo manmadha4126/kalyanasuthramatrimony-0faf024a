@@ -255,7 +255,7 @@ export default function StaffDashboard() {
     <div className="mb-3">
       <label className="block text-sm font-semibold text-gray-500 mb-1">{label}</label>
       <input type={type} value={(editForm as any)[field] || ""} onChange={e => setEditField(field, e.target.value)}
-        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2" style={{ focusRingColor: THEME.accent }} />
+        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
     </div>
   );
 
