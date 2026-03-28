@@ -247,13 +247,17 @@ export default function AdminDashboard() {
     }
     setSavingStaff(true);
     try {
-      const { error: signUpError } = await supabase.auth.signUp({
-        email: staffForm.email,
-        password: staffForm.password,
-        options: { data: { full_name: staffForm.full_name, role: "staff" } }
+      // Use edge function to create staff user (auto-confirms email)
+      const { data: fnData, error: fnError } = await supabase.functions.invoke("create-staff-user", {
+        body: { email: staffForm.email, password: staffForm.password, full_name: staffForm.full_name }
       });
-      if (signUpError && !signUpError.message.includes("already registered")) {
-        toast({ title: "Error creating account", description: signUpError.message, variant: "destructive" });
+      if (fnError) {
+        toast({ title: "Error creating account", description: fnError.message, variant: "destructive" });
+        setSavingStaff(false);
+        return;
+      }
+      if (fnData?.error) {
+        toast({ title: "Error creating account", description: fnData.error, variant: "destructive" });
         setSavingStaff(false);
         return;
       }
@@ -875,8 +879,8 @@ export default function AdminDashboard() {
           </div>
 
           <div className="border-t border-white/10 pt-4">
-            <p className="text-white/40 text-[10px] px-1 mb-1 truncate">{adminEmail}</p>
-            <button onClick={logout} className="flex items-center gap-2 text-white/60 hover:text-white text-xs px-1 py-1 transition-colors">
+            <p className="text-[10px] px-1 mb-1 truncate font-semibold" style={{ color: "hsl(0, 0%, 90%)" }}>{adminEmail}</p>
+            <button onClick={logout} className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg transition-all font-semibold" style={{ background: "hsl(0, 55%, 50%)", color: "white" }}>
               <LogOut size={14} /> Sign Out
             </button>
           </div>
@@ -912,8 +916,8 @@ export default function AdminDashboard() {
             <p className="text-sm text-gray-400">Kalyanasuthra Matrimony Management</p>
           </div>
           <div className="ml-auto flex items-center gap-3">
-            <span className="text-sm text-gray-500">{adminEmail}</span>
-            <button onClick={logout} className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-red-500 transition-colors border border-gray-200 px-4 py-2 rounded-xl">
+            <span className="text-sm font-semibold" style={{ color: "hsl(0, 0%, 10%)" }}>{adminEmail}</span>
+            <button onClick={logout} className="flex items-center gap-1.5 text-sm font-semibold transition-all px-4 py-2 rounded-xl" style={{ background: "hsl(0, 55%, 50%)", color: "white" }}>
               <LogOut size={14} /> Logout
             </button>
           </div>
