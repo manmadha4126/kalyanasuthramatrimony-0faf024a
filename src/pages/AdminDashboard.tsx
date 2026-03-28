@@ -313,7 +313,7 @@ export default function AdminDashboard() {
       toast({ title: "Error updating password", description: err.message, variant: "destructive" });
     }
     setChangingPassword(false);
-  
+  };
 
   const addSuccessStory = async () => {
     if (!storyForm.bride_name || !storyForm.groom_name || !storyForm.city || !storyForm.story) {
