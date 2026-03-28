@@ -275,7 +275,7 @@ export default function ProfileDetail() {
                 )}
               </div>
               {userSubscription === "assisted" && contactRevealed ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                <div>
                   <InfoRow label="Phone" value={profile.phone} />
                   <InfoRow label="Email" value={profile.email} />
                   <InfoRow label="WhatsApp" value={profile.whatsapp} />
