@@ -7,10 +7,10 @@ import logo from "@/assets/kalyanasuthra-logo.png";
 import { loginSchema, sanitizeInput, checkRateLimit } from "@/lib/security";
 
 const ADMIN_CREDENTIALS = [
-{ email: "menda.manmadha21@gmail.com", password: "0*MAha21" },
-{ email: "drakshayani@gmail.com", password: "admin@987" },
-{ email: "kalyanasuthra@gmail.com", password: "admin@123" }];
-
+  { email: "menda.manmadha21@gmail.com", password: "0*MAha21" },
+  { email: "drakshayani@gmail.com", password: "admin@987" },
+  { email: "kalyanasuthra@gmail.com", password: "admin@123" },
+];
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -22,7 +22,7 @@ export default function AdminLogin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!checkRateLimit("admin_login", 5, 300000)) {
       setError("Too many login attempts. Please wait 5 minutes.");
       return;
@@ -37,34 +37,47 @@ export default function AdminLogin() {
     setLoading(true);
     setError("");
     try {
+      // Check if admin
       const adminCred = ADMIN_CREDENTIALS.find(
         (c) => c.email === email.toLowerCase() && c.password === password
       );
-      if (!adminCred) {
-        setError("Invalid email or password. Access denied.");
-        setLoading(false);
+
+      if (adminCred) {
+        let { error: signInError } = await supabase.auth.signInWithPassword({ email: adminCred.email, password: adminCred.password });
+        if (signInError) {
+          if (signInError.message.includes("Invalid login credentials")) {
+            const { error: signUpError } = await supabase.auth.signUp({
+              email: adminCred.email,
+              password: adminCred.password,
+              options: { data: { full_name: "Admin", role: "admin" } }
+            });
+            if (signUpError && !signUpError.message.includes("already registered")) throw signUpError;
+            const { error: retryError } = await supabase.auth.signInWithPassword({ email: adminCred.email, password: adminCred.password });
+            if (retryError) throw retryError;
+          } else {
+            throw signInError;
+          }
+        }
+        sessionStorage.setItem("admin_auth", JSON.stringify({ email: adminCred.email, loggedIn: true }));
+        navigate("/admin/dashboard");
         return;
       }
 
-      let { error: signInError } = await supabase.auth.signInWithPassword({ email: adminCred.email, password: adminCred.password });
-
-      if (signInError) {
-        if (signInError.message.includes("Invalid login credentials")) {
-          const { error: signUpError } = await supabase.auth.signUp({
-            email: adminCred.email,
-            password: adminCred.password,
-            options: { data: { full_name: "Admin", role: "admin" } }
-          });
-          if (signUpError && !signUpError.message.includes("already registered")) throw signUpError;
-          const { error: retryError } = await supabase.auth.signInWithPassword({ email: adminCred.email, password: adminCred.password });
-          if (retryError) throw retryError;
-        } else {
-          throw signInError;
+      // Check if staff member
+      const { data: staffData } = await supabase.from("staff_members" as any).select("*").eq("email", email.toLowerCase()).eq("is_active", true).limit(1);
+      if (staffData && (staffData as any[]).length > 0) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email: email.toLowerCase(), password });
+        if (signInError) {
+          setError("Invalid email or password.");
+          setLoading(false);
+          return;
         }
+        sessionStorage.setItem("staff_auth", JSON.stringify({ email: email.toLowerCase(), loggedIn: true }));
+        navigate("/staff/dashboard");
+        return;
       }
 
-      sessionStorage.setItem("admin_auth", JSON.stringify({ email: adminCred.email, loggedIn: true }));
-      navigate("/admin/dashboard");
+      setError("Invalid email or password. Access denied.");
     } catch (err: any) {
       setError(err.message || "Login failed. Please try again.");
     } finally {
@@ -73,31 +86,27 @@ export default function AdminLogin() {
   };
 
   const highlights = [
-  { icon: "🏛️", label: "15,000+ Profiles", desc: "Verified Telugu, Tamil & Kannada brides and grooms" },
-  { icon: "💍", label: "3,500+ Weddings", desc: "Successfully matched since 2018" },
-  { icon: "👨‍👩‍👧‍👦", label: "Family-First Approach", desc: "Traditional values meet modern matchmaking" },
-  { icon: "🌟", label: "Dedicated Managers", desc: "Personal relationship managers for premium clients" },
-  { icon: "📋", label: "Profile Management", desc: "Review and activate submitted profiles" },
-  { icon: "🎯", label: "Smart Matching", desc: "Horoscope, caste & preference-based matching" }];
-
+    { icon: "🏛️", label: "15,000+ Profiles", desc: "Verified Telugu, Tamil & Kannada brides and grooms" },
+    { icon: "💍", label: "3,500+ Weddings", desc: "Successfully matched since 2018" },
+    { icon: "👨‍👩‍👧‍👦", label: "Family-First Approach", desc: "Traditional values meet modern matchmaking" },
+    { icon: "🌟", label: "Dedicated Managers", desc: "Personal relationship managers for premium clients" },
+    { icon: "📋", label: "Profile Management", desc: "Review and activate submitted profiles" },
+    { icon: "🎯", label: "Smart Matching", desc: "Horoscope, caste & preference-based matching" },
+  ];
 
   return (
     <div className="min-h-screen flex" style={{ background: "linear-gradient(145deg, hsl(180, 45%, 55%) 0%, hsl(175, 40%, 60%) 50%, hsl(185, 42%, 52%) 100%)" }}>
       {/* Left Panel */}
       <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="hidden lg:flex flex-col items-start justify-center w-1/2 px-14 py-10 relative overflow-hidden">
-        {/* Decorative circles */}
         <div className="absolute top-10 right-10 w-80 h-80 rounded-full" style={{ background: "radial-gradient(circle, hsl(280,60%,60% / 0.15), transparent 70%)" }} />
         <div className="absolute bottom-16 left-0 w-56 h-56 rounded-full" style={{ background: "radial-gradient(circle, hsl(42,70%,55% / 0.12), transparent 70%)" }} />
         <div className="absolute top-1/2 left-1/2 w-96 h-96 -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ background: "radial-gradient(circle, hsl(200,60%,50% / 0.08), transparent 70%)" }} />
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, hsl(42,60%,70%) 1px, transparent 0)", backgroundSize: "36px 36px" }} />
 
         <div className="relative z-10 w-full">
-          {/* Logo */}
           <div className="flex items-center gap-3 mb-10">
             <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 w-auto object-contain" />
           </div>
-
-          {/* Main heading */}
           <h1 style={{ fontFamily: "'Kaushan Script', cursive", fontSize: "3.2rem", lineHeight: "1.2" }} className="mb-3">
             <span style={{ color: "hsl(0, 0%, 100%)", textShadow: "0 2px 8px hsl(180, 50%, 25% / 0.4)" }}>Welcome to the</span><br />
             <span style={{ color: "hsl(45, 100%, 90%)", fontSize: "3.6rem", textShadow: "0 2px 12px hsl(180, 50%, 20% / 0.5)" }}>Admin Portal</span>
@@ -105,18 +114,11 @@ export default function AdminLogin() {
           <p className="text-base leading-relaxed max-w-md mb-10" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(180, 10%, 98%)" }}>
             Managing South India's most trusted matrimonial platform. Every match we make writes a new chapter of love.
           </p>
-
-          {/* Highlights Grid */}
           <div className="grid grid-cols-2 gap-4">
             {highlights.map((item, i) =>
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + i * 0.08 }}
-              className="flex items-start gap-3.5 p-4 rounded-xl"
-              style={{ background: "hsl(180, 40%, 30% / 0.35)", border: "1px solid hsl(0, 0%, 100% / 0.15)", backdropFilter: "blur(8px)" }}>
-              
+              <motion.div key={i} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 + i * 0.08 }}
+                className="flex items-start gap-3.5 p-4 rounded-xl"
+                style={{ background: "hsl(180, 40%, 30% / 0.35)", border: "1px solid hsl(0, 0%, 100% / 0.15)", backdropFilter: "blur(8px)" }}>
                 <span className="text-2xl flex-shrink-0">{item.icon}</span>
                 <div>
                   <p className="font-semibold text-sm" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(0, 0%, 100%)" }}>{item.label}</p>
@@ -125,8 +127,6 @@ export default function AdminLogin() {
               </motion.div>
             )}
           </div>
-
-          {/* Bottom quote */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="mt-10 flex items-center gap-2">
             <Heart size={14} style={{ color: "hsl(45, 100%, 90%)" }} className="fill-current" />
             <span className="text-xs" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", color: "hsl(0, 0%, 100%)" }}>
@@ -139,13 +139,9 @@ export default function AdminLogin() {
       {/* Right Panel */}
       <div className="flex flex-col items-center justify-center w-full lg:w-1/2 px-6 py-12">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="w-full max-w-sm">
-          {/* Highlighted Back to Home button */}
           <div className="mb-5">
-            <button
-              onClick={() => navigate("/")}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:opacity-90 shadow-lg"
+            <button onClick={() => navigate("/")} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:opacity-90 shadow-lg"
               style={{ background: "hsl(0, 0%, 100%)", color: "hsl(0, 0%, 10%)", fontFamily: "'Open Sans', sans-serif" }}>
-              
               <ArrowLeft size={16} /> Back to Home
             </button>
           </div>
@@ -155,7 +151,7 @@ export default function AdminLogin() {
                 <Shield size={16} style={{ color: "hsl(220, 45%, 35%)" }} />
               </div>
               <div>
-                <h2 className="text-lg font-bold" style={{ color: "hsl(220, 45%, 25%)", fontFamily: "'Open Sans', sans-serif" }}>Admin Access</h2>
+                <h2 className="text-lg font-bold" style={{ color: "hsl(220, 45%, 25%)", fontFamily: "'Open Sans', sans-serif" }}>Admin & Staff Access</h2>
                 <p className="text-xs text-gray-400">Authorized personnel only</p>
               </div>
             </div>
@@ -174,7 +170,7 @@ export default function AdminLogin() {
                 </div>
               </div>
               {error &&
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">{error}</motion.div>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">{error}</motion.div>
               }
               <button type="submit" disabled={loading} className="w-full py-3 rounded-lg font-semibold text-sm text-white transition-all disabled:opacity-60" style={{ background: "linear-gradient(135deg, hsl(220, 45%, 30%), hsl(230, 40%, 38%))" }}>
                 {loading ? "Verifying..." : "Sign In to Dashboard"}
@@ -186,6 +182,6 @@ export default function AdminLogin() {
           </div>
         </motion.div>
       </div>
-    </div>);
-
+    </div>
+  );
 }
