@@ -755,7 +755,7 @@ export default function StaffDashboard() {
                                     <span className="px-3 py-1.5 rounded-lg text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 38%)" }}>✓ Completed</span>
                                   ) : (
                                     <button onClick={async () => {
-                                      const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" } as any).eq("id", interest.id);
+const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" }).eq("id", interest.id);
                                       if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); toast({ title: "Marked as completed!" }); }
                                     }} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: "hsl(145, 65%, 88%)", color: "hsl(145, 65%, 25%)" }}>Completed</button>
                                   )}
