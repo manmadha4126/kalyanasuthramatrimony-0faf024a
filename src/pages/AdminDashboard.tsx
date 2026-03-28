@@ -121,7 +121,7 @@ type FeaturedProfileEntry = {
   gender: string; profile_photo_url: string | null; created_at: string;
 };
 
-const TABS = ["Dashboard", "Profile Requests", "All Profiles", "Subscription Access", "Consultations", "Featured Profiles", "Success Stories", "Add Profiles", "Interests"];
+const TABS = ["Dashboard", "Profile Requests", "All Profiles", "Subscription Access", "Consultations", "Featured Profiles", "Success Stories", "Add Profiles", "Interests", "Staff"];
 
 const DetailRow = ({ label, value }: { label: string; value: string | null | undefined }) => (
   <div className="flex justify-between py-3 border-b border-gray-100 last:border-0">
@@ -172,6 +172,12 @@ export default function AdminDashboard() {
   const [interestNoteText, setInterestNoteText] = useState("");
   const [savingInterestNote, setSavingInterestNote] = useState(false);
   const [selectedInterest, setSelectedInterest] = useState<any>(null);
+
+  // Staff management
+  const [staffMembers, setStaffMembers] = useState<any[]>([]);
+  const [showStaffForm, setShowStaffForm] = useState(false);
+  const [staffForm, setStaffForm] = useState({ full_name: "", email: "", phone: "", password: "" });
+  const [savingStaff, setSavingStaff] = useState(false);
   useEffect(() => {
     const auth = sessionStorage.getItem("admin_auth");
     if (!auth) { navigate("/admin"); return; }
@@ -189,6 +195,7 @@ export default function AdminDashboard() {
     fetchSuccessStories();
     fetchFeaturedProfiles();
     fetchInterests();
+    fetchStaffMembers();
   };
 
   const fetchProfiles = async () => {
@@ -222,6 +229,66 @@ export default function AdminDashboard() {
       const fromMap: Record<string, { full_name: string; phone: string | null }> = {};
       (fromProfiles || []).forEach((p: any) => { if (p.user_id) fromMap[p.user_id] = { full_name: p.full_name, phone: p.phone }; });
       setInterests(data.map((d: any) => ({ ...d, from_profile: fromMap[d.from_user_id] || null })));
+    }
+  };
+
+  const fetchStaffMembers = async () => {
+    const { data } = await supabase.from("staff_members" as any).select("*").order("created_at", { ascending: false });
+    if (data) setStaffMembers(data as any[]);
+  };
+
+  const addStaffMember = async () => {
+    if (!staffForm.full_name || !staffForm.email || !staffForm.password) {
+      toast({ title: "Please fill name, email and password", variant: "destructive" });
+      return;
+    }
+    setSavingStaff(true);
+    try {
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: staffForm.email,
+        password: staffForm.password,
+        options: { data: { full_name: staffForm.full_name, role: "staff" } }
+      });
+      if (signUpError && !signUpError.message.includes("already registered")) {
+        toast({ title: "Error creating account", description: signUpError.message, variant: "destructive" });
+        setSavingStaff(false);
+        return;
+      }
+      const { data: { user } } = await supabase.auth.getUser();
+      const { error } = await supabase.from("staff_members" as any).insert({
+        full_name: staffForm.full_name,
+        email: staffForm.email.toLowerCase(),
+        phone: staffForm.phone || null,
+        created_by: user?.id || null,
+      } as any);
+      if (!error) {
+        toast({ title: "Staff member added successfully!" });
+        setStaffForm({ full_name: "", email: "", phone: "", password: "" });
+        setShowStaffForm(false);
+        fetchStaffMembers();
+      } else {
+        toast({ title: "Error saving staff", description: error.message, variant: "destructive" });
+      }
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    }
+    setSavingStaff(false);
+  };
+
+  const toggleStaffActive = async (id: string, currentActive: boolean) => {
+    const { error } = await supabase.from("staff_members" as any).update({ is_active: !currentActive } as any).eq("id", id);
+    if (!error) {
+      setStaffMembers(prev => prev.map(s => s.id === id ? { ...s, is_active: !currentActive } : s));
+      toast({ title: !currentActive ? "Staff activated" : "Staff deactivated" });
+    }
+  };
+
+  const deleteStaffMember = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this staff member?")) return;
+    const { error } = await supabase.from("staff_members" as any).delete().eq("id", id);
+    if (!error) {
+      setStaffMembers(prev => prev.filter(s => s.id !== id));
+      toast({ title: "Staff member removed" });
     }
   };
 
@@ -1619,6 +1686,88 @@ export default function AdminDashboard() {
             </div>
             );
           })()}
+
+          {/* Staff Management */}
+          {tab === "Staff" && (
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                <h3 className="text-lg font-bold text-gray-800">Staff Members ({staffMembers.length})</h3>
+                <button onClick={() => setShowStaffForm(!showStaffForm)} className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all" style={{ background: "hsl(200, 70%, 45%)" }}>
+                  <Plus size={16} /> Add Staff
+                </button>
+              </div>
+
+              {showStaffForm && (
+                <div className="p-6 border-b border-gray-100" style={{ background: "hsl(200, 40%, 97%)" }}>
+                  <h4 className="text-base font-bold text-gray-800 mb-4">Add New Staff Member</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-600 mb-1">Full Name *</label>
+                      <input type="text" value={staffForm.full_name} onChange={e => setStaffForm(p => ({ ...p, full_name: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="Staff member name" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-600 mb-1">Email (Login ID) *</label>
+                      <input type="email" value={staffForm.email} onChange={e => setStaffForm(p => ({ ...p, email: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="staff@example.com" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-600 mb-1">Phone</label>
+                      <input type="tel" value={staffForm.phone} onChange={e => setStaffForm(p => ({ ...p, phone: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="Phone number" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-600 mb-1">Password (Login) *</label>
+                      <input type="text" value={staffForm.password} onChange={e => setStaffForm(p => ({ ...p, password: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="Set login password" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-3">⚠️ The email and password above will be the staff member's login credentials on the Admin Login page.</p>
+                  <div className="flex gap-3 mt-4">
+                    <button onClick={addStaffMember} disabled={savingStaff} className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-60" style={{ background: "hsl(145, 65%, 42%)" }}>
+                      {savingStaff ? "Creating..." : "Create Staff Account"}
+                    </button>
+                    <button onClick={() => setShowStaffForm(false)} className="px-4 py-2.5 rounded-xl text-sm font-semibold border border-gray-200 text-gray-600 hover:bg-gray-50">Cancel</button>
+                  </div>
+                </div>
+              )}
+
+              <div className="p-4">
+                {staffMembers.length === 0 ? (
+                  <div className="text-center py-10 text-gray-400">No staff members yet. Add staff to help manage the platform.</div>
+                ) : (
+                  <div className="space-y-3">
+                    {staffMembers.map((s: any) => (
+                      <div key={s.id} className="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-4 hover:shadow-md transition-all"
+                        style={{ borderLeft: `4px solid ${s.is_active ? "hsl(200, 70%, 50%)" : "hsl(0, 0%, 75%)"}` }}>
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: s.is_active ? "hsl(200, 70%, 93%)" : "hsl(0, 0%, 93%)" }}>
+                          <UserPlus size={20} style={{ color: s.is_active ? "hsl(200, 70%, 40%)" : "hsl(0, 0%, 55%)" }} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-bold text-gray-800 text-base">{s.full_name}</h4>
+                          <p className="text-sm text-gray-500">{s.email}</p>
+                          {s.phone && <p className="text-xs text-gray-400">{s.phone}</p>}
+                        </div>
+                        <span className="px-3 py-1 rounded-full text-xs font-bold" style={{
+                          background: s.is_active ? "hsl(145, 65%, 93%)" : "hsl(0, 60%, 93%)",
+                          color: s.is_active ? "hsl(145, 65%, 30%)" : "hsl(0, 60%, 40%)"
+                        }}>
+                          {s.is_active ? "Active" : "Inactive"}
+                        </span>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <button onClick={() => toggleStaffActive(s.id, s.is_active)} className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all" style={{
+                            background: s.is_active ? "hsl(38, 90%, 93%)" : "hsl(145, 65%, 93%)",
+                            color: s.is_active ? "hsl(38, 90%, 35%)" : "hsl(145, 65%, 30%)"
+                          }}>
+                            {s.is_active ? "Deactivate" : "Activate"}
+                          </button>
+                          <button onClick={() => deleteStaffMember(s.id)} className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}>
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
