@@ -89,13 +89,13 @@ const HeroSection = () => {
     <section id="home" className="relative w-full" style={{ marginTop: "80px" }}>
 
       {/* Main Hero - Split Layout */}
-        <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(348, 45%, 12%) 0%, hsl(280, 40%, 15%) 50%, hsl(220, 50%, 12%) 100%)" }}>
+        <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(170, 45%, 25%) 0%, hsl(175, 40%, 30%) 40%, hsl(165, 35%, 22%) 100%)" }}>
           {/* Left side decorative overlay */}
           <div className="absolute top-0 left-0 w-1/2 h-full pointer-events-none z-[1]" style={{
-            background: "linear-gradient(160deg, hsla(30, 60%, 20%, 0.6) 0%, hsla(345, 50%, 18%, 0.4) 40%, transparent 80%)",
+            background: "linear-gradient(160deg, hsla(170, 50%, 18%, 0.6) 0%, hsla(175, 40%, 22%, 0.4) 40%, transparent 80%)",
           }} />
           <div className="absolute top-0 left-0 w-1/2 h-full pointer-events-none z-[1] opacity-30" style={{
-            backgroundImage: "radial-gradient(ellipse at 20% 30%, hsla(40, 70%, 50%, 0.15) 0%, transparent 60%), radial-gradient(ellipse at 10% 80%, hsla(348, 50%, 30%, 0.2) 0%, transparent 50%)",
+            backgroundImage: "radial-gradient(ellipse at 20% 30%, hsla(165, 60%, 40%, 0.15) 0%, transparent 60%), radial-gradient(ellipse at 10% 80%, hsla(175, 50%, 30%, 0.2) 0%, transparent 50%)",
           }} />
         
         {/* Decorative elements */}
@@ -189,24 +189,6 @@ const HeroSection = () => {
               <p className="text-sm md:text-base lg:text-lg mb-8 leading-relaxed max-w-md mx-auto lg:mx-0" style={{ color: "hsl(0, 0%, 75%)" }}>
                 Trusted matchmaking with traditional values and a modern approach. Your perfect match awaits — find your soulmate today.
               </p>
-
-              {/* Stats */}
-              <div className="flex items-center justify-center lg:justify-start gap-6 mb-8">
-                <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-bold" style={{ color: "hsl(var(--gold-accent))" }}>10K+</p>
-                  <p className="text-xs" style={{ color: "hsl(0, 0%, 60%)" }}>Marriages</p>
-                </div>
-                <div className="w-px h-10" style={{ background: "hsl(0, 0%, 30%)" }} />
-                <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-bold" style={{ color: "hsl(var(--gold-accent))" }}>50K+</p>
-                  <p className="text-xs" style={{ color: "hsl(0, 0%, 60%)" }}>Profiles</p>
-                </div>
-                <div className="w-px h-10" style={{ background: "hsl(0, 0%, 30%)" }} />
-                <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-bold" style={{ color: "hsl(var(--gold-accent))" }}>15+</p>
-                  <p className="text-xs" style={{ color: "hsl(0, 0%, 60%)" }}>Years</p>
-                </div>
-              </div>
 
               {/* CTA Buttons */}
               <div className="flex items-center justify-center lg:justify-start gap-4">
