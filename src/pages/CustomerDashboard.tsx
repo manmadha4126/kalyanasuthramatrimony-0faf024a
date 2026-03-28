@@ -222,9 +222,9 @@ export default function CustomerDashboard() {
 
   const filteredMatches = getFilteredMatches();
 
-  const themeAccent = "hsl(160, 35%, 38%)";
-  const themeDark = "hsl(160, 30%, 25%)";
-  const themeLight = "hsl(160, 40%, 94%)";
+  const themeAccent = "hsl(185, 45%, 35%)";
+  const themeDark = "hsl(190, 50%, 20%)";
+  const themeLight = "hsl(180, 40%, 94%)";
   const themeMid = "hsl(160, 30%, 50%)";
 
   const profileId = userProfile?.profile_id || userProfile?.id?.slice(0, 8).toUpperCase() || "—";
