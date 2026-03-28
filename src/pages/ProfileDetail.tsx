@@ -356,7 +356,7 @@ export default function ProfileDetail() {
             {/* Family Details */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100">
               <SectionHeading icon={Users} label="Family Details" bgColor="hsl(20, 60%, 92%)" textColor="hsl(20, 50%, 32%)" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+              <div>
                 <InfoRow label="Family Status" value={profile.family_status} />
                 <InfoRow label="Family Type" value={profile.family_type} />
                 <InfoRow label="Father's Name" value={profile.father_name} />
