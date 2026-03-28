@@ -413,7 +413,7 @@ export default function CustomerDashboard() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(160, 15%, 97%)" }}>
+    <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(185, 15%, 97%)" }}>
       {renderSidebar()}
 
       {/* Main */}
