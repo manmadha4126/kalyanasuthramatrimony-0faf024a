@@ -265,10 +265,18 @@ export default function Register() {
 
   const next = () => {
     if (step === 1 && !validateStep1()) return;
-    if (step < TOTAL_STEPS) setStep(s => s + 1);
+    if (step < TOTAL_STEPS) {
+      setStep(s => s + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
-  const back = () => { if (step > 1) setStep(s => s - 1); };
+  const back = () => {
+    if (step > 1) {
+      setStep(s => s - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const handlePhotoUpload = (files: FileList | null) => {
     if (!files) return;
