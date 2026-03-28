@@ -823,7 +823,7 @@ const { error } = await supabase.from("profile_interests").update({ interest_typ
                               className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
                             <button disabled={savingInterestNote} onClick={async () => {
                               setSavingInterestNote(true);
-                              const { error } = await supabase.from("profile_interests").update({ admin_notes: interestNoteText } as any).eq("id", interest.id);
+                              const { error } = await supabase.from("profile_interests").update({ admin_notes: interestNoteText }).eq("id", interest.id);
                               if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, admin_notes: interestNoteText } : i)); toast({ title: "Note saved!" }); }
                               setSavingInterestNote(false);
                             }} className="mt-2 px-5 py-2 rounded-xl text-xs font-bold text-white disabled:opacity-60" style={{ background: THEME.accent }}>
