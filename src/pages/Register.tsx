@@ -866,17 +866,17 @@ export default function Register() {
             <div className="h-px mb-8" style={{ background: "hsl(0, 0%, 85%)" }} />
 
             {[
-              { icon: <Users size={36} strokeWidth={1.2} />, label: "Lakhs of Genuine Profiles" },
-              { icon: <UserCheck size={36} strokeWidth={1.2} />, label: "Many Verified by Personal Visit" },
-              { icon: <ShieldCheck size={36} strokeWidth={1.2} />, label: "Secure & Family Friendly" },
-              { icon: <Lock size={36} strokeWidth={1.2} />, label: "Control over Privacy" },
-              { icon: <Sparkles size={36} strokeWidth={1.2} />, label: "Dedicated Relationship Manager" },
+              { icon: <Users size={36} strokeWidth={1.2} />, label: "Lakhs of Genuine Profiles", color: "hsl(25, 70%, 50%)" },
+              { icon: <UserCheck size={36} strokeWidth={1.2} />, label: "Many Verified by Personal Visit", color: "hsl(270, 55%, 50%)" },
+              { icon: <ShieldCheck size={36} strokeWidth={1.2} />, label: "Secure & Family Friendly", color: "hsl(145, 55%, 40%)" },
+              { icon: <Lock size={36} strokeWidth={1.2} />, label: "Control over Privacy", color: "hsl(210, 60%, 45%)" },
+              { icon: <Sparkles size={36} strokeWidth={1.2} />, label: "Dedicated Relationship Manager", color: "hsl(348, 56%, 35%)" },
             ].map((item, i) => (
               <div key={i} className="flex flex-col items-center text-center mb-8">
-                <div className="mb-3" style={{ color: "hsl(0, 0%, 55%)" }}>
+                <div className="mb-3" style={{ color: item.color }}>
                   {item.icon}
                 </div>
-                <p className="text-xs font-semibold leading-tight" style={{ color: "hsl(210, 55%, 45%)" }}>
+                <p className="text-xs font-semibold leading-tight" style={{ color: item.color }}>
                   {item.label}
                 </p>
               </div>
