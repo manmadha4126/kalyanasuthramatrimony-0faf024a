@@ -316,7 +316,7 @@ export default function ProfileDetail() {
                 )}
               </div>
               {userSubscription === "assisted" && horoscopeRevealed ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                <div>
                   <InfoRow label="Gothram" value={profile.gothra} />
                   <InfoRow label="Rashi" value={profile.raasi} />
                   <InfoRow label="Star" value={profile.star} />
