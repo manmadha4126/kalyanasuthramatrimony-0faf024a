@@ -89,7 +89,7 @@ const HeroSection = () => {
     <section id="home" className="relative w-full" style={{ marginTop: "80px" }}>
 
       {/* Main Hero - Split Layout */}
-        <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(348, 45%, 12%) 0%, hsl(280, 40%, 15%) 50%, hsl(220, 50%, 12%) 100%)" }}>
+        <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(170, 45%, 25%) 0%, hsl(175, 40%, 30%) 40%, hsl(165, 35%, 22%) 100%)" }}>
           {/* Left side decorative overlay */}
           <div className="absolute top-0 left-0 w-1/2 h-full pointer-events-none z-[1]" style={{
             background: "linear-gradient(160deg, hsla(30, 60%, 20%, 0.6) 0%, hsla(345, 50%, 18%, 0.4) 40%, transparent 80%)",
