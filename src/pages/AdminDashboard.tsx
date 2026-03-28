@@ -232,6 +232,66 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchStaffMembers = async () => {
+    const { data } = await supabase.from("staff_members" as any).select("*").order("created_at", { ascending: false });
+    if (data) setStaffMembers(data as any[]);
+  };
+
+  const addStaffMember = async () => {
+    if (!staffForm.full_name || !staffForm.email || !staffForm.password) {
+      toast({ title: "Please fill name, email and password", variant: "destructive" });
+      return;
+    }
+    setSavingStaff(true);
+    try {
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: staffForm.email,
+        password: staffForm.password,
+        options: { data: { full_name: staffForm.full_name, role: "staff" } }
+      });
+      if (signUpError && !signUpError.message.includes("already registered")) {
+        toast({ title: "Error creating account", description: signUpError.message, variant: "destructive" });
+        setSavingStaff(false);
+        return;
+      }
+      const { data: { user } } = await supabase.auth.getUser();
+      const { error } = await supabase.from("staff_members" as any).insert({
+        full_name: staffForm.full_name,
+        email: staffForm.email.toLowerCase(),
+        phone: staffForm.phone || null,
+        created_by: user?.id || null,
+      } as any);
+      if (!error) {
+        toast({ title: "Staff member added successfully!" });
+        setStaffForm({ full_name: "", email: "", phone: "", password: "" });
+        setShowStaffForm(false);
+        fetchStaffMembers();
+      } else {
+        toast({ title: "Error saving staff", description: error.message, variant: "destructive" });
+      }
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    }
+    setSavingStaff(false);
+  };
+
+  const toggleStaffActive = async (id: string, currentActive: boolean) => {
+    const { error } = await supabase.from("staff_members" as any).update({ is_active: !currentActive } as any).eq("id", id);
+    if (!error) {
+      setStaffMembers(prev => prev.map(s => s.id === id ? { ...s, is_active: !currentActive } : s));
+      toast({ title: !currentActive ? "Staff activated" : "Staff deactivated" });
+    }
+  };
+
+  const deleteStaffMember = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this staff member?")) return;
+    const { error } = await supabase.from("staff_members" as any).delete().eq("id", id);
+    if (!error) {
+      setStaffMembers(prev => prev.filter(s => s.id !== id));
+      toast({ title: "Staff member removed" });
+    }
+  };
+
   const addSuccessStory = async () => {
     if (!storyForm.bride_name || !storyForm.groom_name || !storyForm.city || !storyForm.story) {
       toast({ title: "Please fill all fields", variant: "destructive" });
