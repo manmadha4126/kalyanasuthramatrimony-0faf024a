@@ -89,17 +89,14 @@ const HeroSection = () => {
     <section id="home" className="relative w-full" style={{ marginTop: "80px" }}>
 
       {/* Main Hero - Split Layout */}
-      <div className="relative w-full overflow-hidden" style={{ backgroundImage: "url('/images/hero-bg.png')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}>
-          {/* Left side decorative overlay */}
-          <div className="absolute top-0 left-0 w-1/2 h-full pointer-events-none z-[1]" style={{
-            background: "linear-gradient(160deg, hsla(240, 40%, 12%, 0.7) 0%, hsla(260, 30%, 18%, 0.5) 40%, transparent 80%)",
-          }} />
-          <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-[1] opacity-40" style={{
-            backgroundImage: "radial-gradient(ellipse at 70% 60%, hsla(30, 60%, 45%, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 20% 30%, hsla(260, 50%, 30%, 0.2) 0%, transparent 50%), radial-gradient(circle at 80% 20%, hsla(40, 70%, 50%, 0.15) 0%, transparent 30%), radial-gradient(circle at 60% 80%, hsla(25, 55%, 40%, 0.2) 0%, transparent 40%)",
+      <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(230, 40%, 22%) 0%, hsl(250, 35%, 30%) 20%, hsl(270, 30%, 35%) 40%, hsl(25, 45%, 40%) 65%, hsl(35, 50%, 45%) 80%, hsl(220, 35%, 30%) 100%)" }}>
+          {/* Warm glow overlay */}
+          <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-[1]" style={{
+            backgroundImage: "radial-gradient(ellipse at 65% 70%, hsla(30, 60%, 50%, 0.25) 0%, transparent 55%), radial-gradient(ellipse at 30% 40%, hsla(250, 40%, 35%, 0.2) 0%, transparent 50%), radial-gradient(ellipse at 80% 30%, hsla(40, 65%, 55%, 0.15) 0%, transparent 40%)",
           }} />
           {/* Bokeh light dots */}
-          <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-[1] opacity-50" style={{
-            backgroundImage: "radial-gradient(circle 3px at 15% 20%, hsla(40, 80%, 70%, 0.6), transparent), radial-gradient(circle 2px at 25% 45%, hsla(35, 75%, 65%, 0.5), transparent), radial-gradient(circle 4px at 70% 15%, hsla(40, 85%, 75%, 0.4), transparent), radial-gradient(circle 2px at 85% 35%, hsla(30, 70%, 60%, 0.5), transparent), radial-gradient(circle 3px at 45% 75%, hsla(35, 80%, 70%, 0.4), transparent), radial-gradient(circle 2px at 55% 25%, hsla(40, 75%, 65%, 0.3), transparent), radial-gradient(circle 3px at 90% 70%, hsla(30, 80%, 65%, 0.4), transparent), radial-gradient(circle 2px at 35% 85%, hsla(40, 70%, 60%, 0.35), transparent)",
+          <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-[1] opacity-60" style={{
+            backgroundImage: "radial-gradient(circle 4px at 10% 25%, hsla(40, 80%, 75%, 0.7), transparent), radial-gradient(circle 3px at 25% 50%, hsla(35, 75%, 70%, 0.5), transparent), radial-gradient(circle 5px at 75% 20%, hsla(40, 85%, 80%, 0.4), transparent), radial-gradient(circle 3px at 85% 40%, hsla(30, 70%, 65%, 0.5), transparent), radial-gradient(circle 4px at 50% 80%, hsla(35, 80%, 75%, 0.4), transparent), radial-gradient(circle 3px at 60% 30%, hsla(40, 75%, 70%, 0.35), transparent), radial-gradient(circle 4px at 92% 65%, hsla(30, 80%, 70%, 0.45), transparent), radial-gradient(circle 3px at 40% 90%, hsla(40, 70%, 65%, 0.35), transparent), radial-gradient(circle 2px at 18% 70%, hsla(45, 85%, 80%, 0.5), transparent), radial-gradient(circle 3px at 55% 15%, hsla(38, 78%, 72%, 0.4), transparent)",
           }} />
         
         {/* Decorative elements */}
