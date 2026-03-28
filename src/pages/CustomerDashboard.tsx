@@ -359,7 +359,7 @@ export default function CustomerDashboard() {
   // If upgrade page is shown, render full page
   if (showUpgradePage) {
     return (
-      <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(160, 15%, 97%)" }}>
+      <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(185, 15%, 97%)" }}>
         {renderSidebar()}
         <div className="flex-1 lg:ml-64 overflow-auto">
           <div className="fixed top-0 right-0 left-0 lg:left-64 z-20 bg-white/90 backdrop-blur-sm border-b border-gray-100 px-6 py-4">
