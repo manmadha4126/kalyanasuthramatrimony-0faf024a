@@ -499,7 +499,7 @@ export default function Register() {
         <div
           className="w-full flex items-center justify-between px-6 sm:px-12"
           style={{
-            background: "linear-gradient(135deg, hsl(220, 45%, 18%), hsl(240, 40%, 25%))",
+            background: "hsl(0, 0%, 0%)",
             height: "80px",
           }}
         >
