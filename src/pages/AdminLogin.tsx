@@ -121,18 +121,12 @@ export default function AdminLogin() {
                 style={{ background: "hsl(180, 40%, 30% / 0.35)", border: "1px solid hsl(0, 0%, 100% / 0.15)", backdropFilter: "blur(8px)" }}>
                 <span className="text-2xl flex-shrink-0">{item.icon}</span>
                 <div>
-                  <p className="font-semibold text-sm" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(0, 0%, 100%)" }}>{item.label}</p>
-                  <p className="mt-1 leading-snug text-xs font-normal" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(180, 15%, 90%)" }}>{item.desc}</p>
+                 <p className="font-bold text-base" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(0, 0%, 100%)" }}>{item.label}</p>
+                  <p className="mt-1 leading-snug text-sm font-normal" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(180, 15%, 90%)" }}>{item.desc}</p>
                 </div>
               </motion.div>
             )}
           </div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="mt-10 flex items-center gap-2">
-            <Heart size={14} style={{ color: "hsl(45, 100%, 90%)" }} className="fill-current" />
-            <span className="text-xs" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", color: "hsl(0, 0%, 100%)" }}>
-              "Where tradition meets technology in every match"
-            </span>
-          </motion.div>
         </div>
       </motion.div>
 
