@@ -195,6 +195,7 @@ export default function AdminDashboard() {
     fetchSuccessStories();
     fetchFeaturedProfiles();
     fetchInterests();
+    fetchStaffMembers();
   };
 
   const fetchProfiles = async () => {
