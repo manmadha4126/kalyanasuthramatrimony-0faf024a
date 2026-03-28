@@ -89,13 +89,17 @@ const HeroSection = () => {
     <section id="home" className="relative w-full" style={{ marginTop: "80px" }}>
 
       {/* Main Hero - Split Layout */}
-        <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(170, 45%, 25%) 0%, hsl(175, 40%, 30%) 40%, hsl(165, 35%, 22%) 100%)" }}>
+      <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(240, 35%, 15%) 0%, hsl(260, 30%, 22%) 25%, hsl(280, 25%, 20%) 45%, hsl(25, 50%, 30%) 70%, hsl(30, 55%, 35%) 100%)" }}>
           {/* Left side decorative overlay */}
           <div className="absolute top-0 left-0 w-1/2 h-full pointer-events-none z-[1]" style={{
-            background: "linear-gradient(160deg, hsla(170, 50%, 18%, 0.6) 0%, hsla(175, 40%, 22%, 0.4) 40%, transparent 80%)",
+            background: "linear-gradient(160deg, hsla(240, 40%, 12%, 0.7) 0%, hsla(260, 30%, 18%, 0.5) 40%, transparent 80%)",
           }} />
-          <div className="absolute top-0 left-0 w-1/2 h-full pointer-events-none z-[1] opacity-30" style={{
-            backgroundImage: "radial-gradient(ellipse at 20% 30%, hsla(165, 60%, 40%, 0.15) 0%, transparent 60%), radial-gradient(ellipse at 10% 80%, hsla(175, 50%, 30%, 0.2) 0%, transparent 50%)",
+          <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-[1] opacity-40" style={{
+            backgroundImage: "radial-gradient(ellipse at 70% 60%, hsla(30, 60%, 45%, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 20% 30%, hsla(260, 50%, 30%, 0.2) 0%, transparent 50%), radial-gradient(circle at 80% 20%, hsla(40, 70%, 50%, 0.15) 0%, transparent 30%), radial-gradient(circle at 60% 80%, hsla(25, 55%, 40%, 0.2) 0%, transparent 40%)",
+          }} />
+          {/* Bokeh light dots */}
+          <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-[1] opacity-50" style={{
+            backgroundImage: "radial-gradient(circle 3px at 15% 20%, hsla(40, 80%, 70%, 0.6), transparent), radial-gradient(circle 2px at 25% 45%, hsla(35, 75%, 65%, 0.5), transparent), radial-gradient(circle 4px at 70% 15%, hsla(40, 85%, 75%, 0.4), transparent), radial-gradient(circle 2px at 85% 35%, hsla(30, 70%, 60%, 0.5), transparent), radial-gradient(circle 3px at 45% 75%, hsla(35, 80%, 70%, 0.4), transparent), radial-gradient(circle 2px at 55% 25%, hsla(40, 75%, 65%, 0.3), transparent), radial-gradient(circle 3px at 90% 70%, hsla(30, 80%, 65%, 0.4), transparent), radial-gradient(circle 2px at 35% 85%, hsla(40, 70%, 60%, 0.35), transparent)",
           }} />
         
         {/* Decorative elements */}
