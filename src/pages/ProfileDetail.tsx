@@ -192,13 +192,14 @@ export default function ProfileDetail() {
               </div>
 
               {/* Expert Talk - Phone Call */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                <h3 className="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
-                  <MessageCircle size={16} style={{ color: themeAccent }} /> Expert Talk
-                </h3>
-                <p className="text-xs text-gray-500 mb-3">Talk to our relationship expert about this profile</p>
-                <a href="tel:+919553306667" className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.01]" style={{ background: themeAccent }}>
-                  <Phone size={15} /> Call Expert
+              <div className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-bold text-gray-800 text-xs flex items-center gap-1.5">
+                    <MessageCircle size={14} style={{ color: themeAccent }} /> Expert Talk
+                  </h3>
+                </div>
+                <a href="tel:+919553306667" className="flex items-center justify-center gap-2 w-full py-2 rounded-xl font-semibold text-xs text-white transition-all hover:scale-[1.01]" style={{ background: themeAccent }}>
+                  <Phone size={13} /> Call Expert
                 </a>
               </div>
 
