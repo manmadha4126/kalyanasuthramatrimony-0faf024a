@@ -248,7 +248,7 @@ export default function CustomerDashboard() {
 
   const renderProfileCard = (profile: Profile, i: number) =>
   <motion.div key={profile.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1 group">
-      <div className="relative aspect-[3/4] bg-gray-100">
+      <div className="relative aspect-[4/5] bg-gray-100">
         {profile.profile_photo_url ?
       <img src={profile.profile_photo_url} alt={profile.full_name} className="w-full h-full object-contain" /> :
 
@@ -266,7 +266,7 @@ export default function CustomerDashboard() {
         </button>
       </div>
       <div className="p-4">
-        <h3 className="font-bold text-gray-800 text-sm">{profile.full_name}</h3>
+        <h3 className="font-bold text-gray-800 text-sm" style={{ fontFamily: "'DM Serif Display', serif" }}>{profile.full_name}</h3>
         <p className="text-xs text-gray-500 mt-0.5">{getAge(profile.date_of_birth)} yrs • {profile.religion}{profile.caste ? ` • ${profile.caste}` : ""}</p>
         <div className="mt-2 space-y-0.5">
           {profile.occupation && <p className="text-xs text-gray-600">💼 {profile.occupation}</p>}
@@ -688,7 +688,7 @@ export default function CustomerDashboard() {
                 }
                   </div> :
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {filteredMatches.slice(0, 5).map((profile, i) => renderProfileCard(profile, i))}
                   </div>
               }
@@ -733,7 +733,7 @@ export default function CustomerDashboard() {
                   {prefApplied && <p className="text-sm mt-1">Try adjusting your preferences</p>}
                 </div> :
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                   {filteredMatches.map((profile, i) => renderProfileCard(profile, i))}
                 </div>
             }
