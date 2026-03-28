@@ -532,9 +532,9 @@ export default function StaffDashboard() {
             <p className="text-sm text-gray-400">Kalyanasuthra Matrimony — Staff Access</p>
           </div>
           <div className="ml-auto flex items-center gap-3">
-            <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: THEME.accentBg, color: THEME.accentText }}>Staff</span>
-            <span className="text-sm text-gray-500">{staffEmail}</span>
-            <button onClick={logout} className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-red-500 transition-colors border border-gray-200 px-4 py-2 rounded-xl">
+            <span className="px-4 py-1.5 rounded-full text-sm font-bold" style={{ background: THEME.accentBg, color: THEME.accentText }}>Staff</span>
+            <span className="text-sm font-medium" style={{ color: "hsl(0, 0%, 10%)" }}>{staffEmail}</span>
+            <button onClick={logout} className="flex items-center gap-1.5 text-sm font-semibold text-white transition-colors px-4 py-2 rounded-xl" style={{ background: "hsl(0, 55%, 50%)" }}>
               <LogOut size={14} /> Logout
             </button>
           </div>
@@ -751,13 +751,17 @@ export default function StaffDashboard() {
                                     style={{ background: "hsl(142, 70%, 93%)", color: "hsl(142, 70%, 30%)" }}>📱 {fromPhone}</a>
                                 ) : <span className="text-xs text-gray-400">No phone</span>}
                                 <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
-                                  {!isCompleted && (
+                                  {isCompleted ? (
+                                    <span className="px-3 py-1.5 rounded-lg text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 38%)" }}>✓ Completed</span>
+                                  ) : (
                                     <button onClick={async () => {
                                       const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" } as any).eq("id", interest.id);
                                       if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); toast({ title: "Marked as completed!" }); }
                                     }} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: "hsl(145, 65%, 88%)", color: "hsl(145, 65%, 25%)" }}>Completed</button>
                                   )}
-                                  {!isNotCompleted && (
+                                  {isNotCompleted ? (
+                                    <span className="px-3 py-1.5 rounded-lg text-xs font-bold text-white" style={{ background: "hsl(0, 55%, 50%)" }}>✗ Not Completed</span>
+                                  ) : !isCompleted && (
                                     <button onClick={async () => {
                                       const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" } as any).eq("id", interest.id);
                                       if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); toast({ title: "Marked as not completed!" }); }
