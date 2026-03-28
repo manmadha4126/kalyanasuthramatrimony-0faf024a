@@ -104,8 +104,9 @@ export default function AdminLogin() {
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, hsl(42,60%,70%) 1px, transparent 0)", backgroundSize: "36px 36px" }} />
 
         <div className="relative z-10 w-full">
-          <div className="flex items-center gap-3 mb-10">
+          <div className="flex items-center gap-4 mb-10">
             <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 w-auto object-contain" />
+            <span style={{ fontFamily: "'Great Vibes', cursive", fontSize: "2rem", color: "hsl(0, 0%, 100%)" }}>Kalyanasuthra Matrimony</span>
           </div>
           <h1 style={{ fontFamily: "'Kaushan Script', cursive", fontSize: "3.2rem", lineHeight: "1.2" }} className="mb-3">
             <span style={{ color: "hsl(0, 0%, 100%)", textShadow: "0 2px 8px hsl(180, 50%, 25% / 0.4)" }}>Welcome to the</span><br />
