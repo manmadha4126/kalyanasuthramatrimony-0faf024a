@@ -92,10 +92,10 @@ const HeroSection = () => {
         <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(170, 45%, 25%) 0%, hsl(175, 40%, 30%) 40%, hsl(165, 35%, 22%) 100%)" }}>
           {/* Left side decorative overlay */}
           <div className="absolute top-0 left-0 w-1/2 h-full pointer-events-none z-[1]" style={{
-            background: "linear-gradient(160deg, hsla(30, 60%, 20%, 0.6) 0%, hsla(345, 50%, 18%, 0.4) 40%, transparent 80%)",
+            background: "linear-gradient(160deg, hsla(170, 50%, 18%, 0.6) 0%, hsla(175, 40%, 22%, 0.4) 40%, transparent 80%)",
           }} />
           <div className="absolute top-0 left-0 w-1/2 h-full pointer-events-none z-[1] opacity-30" style={{
-            backgroundImage: "radial-gradient(ellipse at 20% 30%, hsla(40, 70%, 50%, 0.15) 0%, transparent 60%), radial-gradient(ellipse at 10% 80%, hsla(348, 50%, 30%, 0.2) 0%, transparent 50%)",
+            backgroundImage: "radial-gradient(ellipse at 20% 30%, hsla(165, 60%, 40%, 0.15) 0%, transparent 60%), radial-gradient(ellipse at 10% 80%, hsla(175, 50%, 30%, 0.2) 0%, transparent 50%)",
           }} />
         
         {/* Decorative elements */}
