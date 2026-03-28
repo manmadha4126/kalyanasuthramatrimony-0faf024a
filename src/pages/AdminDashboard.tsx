@@ -912,8 +912,8 @@ export default function AdminDashboard() {
             <p className="text-sm text-gray-400">Kalyanasuthra Matrimony Management</p>
           </div>
           <div className="ml-auto flex items-center gap-3">
-            <span className="text-sm text-gray-500">{adminEmail}</span>
-            <button onClick={logout} className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-red-500 transition-colors border border-gray-200 px-4 py-2 rounded-xl">
+            <span className="text-sm font-semibold" style={{ color: "hsl(0, 0%, 10%)" }}>{adminEmail}</span>
+            <button onClick={logout} className="flex items-center gap-1.5 text-sm font-semibold transition-all px-4 py-2 rounded-xl" style={{ background: "hsl(0, 55%, 50%)", color: "white" }}>
               <LogOut size={14} /> Logout
             </button>
           </div>
