@@ -247,13 +247,17 @@ export default function AdminDashboard() {
     }
     setSavingStaff(true);
     try {
-      const { error: signUpError } = await supabase.auth.signUp({
-        email: staffForm.email,
-        password: staffForm.password,
-        options: { data: { full_name: staffForm.full_name, role: "staff" } }
+      // Use edge function to create staff user (auto-confirms email)
+      const { data: fnData, error: fnError } = await supabase.functions.invoke("create-staff-user", {
+        body: { email: staffForm.email, password: staffForm.password, full_name: staffForm.full_name }
       });
-      if (signUpError && !signUpError.message.includes("already registered")) {
-        toast({ title: "Error creating account", description: signUpError.message, variant: "destructive" });
+      if (fnError) {
+        toast({ title: "Error creating account", description: fnError.message, variant: "destructive" });
+        setSavingStaff(false);
+        return;
+      }
+      if (fnData?.error) {
+        toast({ title: "Error creating account", description: fnData.error, variant: "destructive" });
         setSavingStaff(false);
         return;
       }
