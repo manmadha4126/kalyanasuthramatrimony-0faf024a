@@ -827,7 +827,7 @@ export default function AdminDashboard() {
         animate={{ width: sidebarOpen ? 240 : 0 }}
         transition={{ duration: 0.3 }}
         className="overflow-hidden flex-shrink-0 hidden lg:block h-screen sticky top-0"
-        style={{ background: "hsl(220, 30%, 18%)" }}
+        style={{ background: "linear-gradient(180deg, hsl(270, 55%, 45%) 0%, hsl(280, 50%, 38%) 50%, hsl(270, 45%, 32%) 100%)" }}
       >
         <div className="w-[240px] h-full flex flex-col py-6 px-4 overflow-y-auto">
           <div className="flex items-center gap-2 mb-8 px-1">
@@ -842,10 +842,10 @@ export default function AdminDashboard() {
                 whileHover={{ scale: 1.02, x: 3 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className="w-full text-left px-4 py-3 rounded-xl text-sm transition-all"
+                className="w-full text-left px-4 py-3 rounded-none text-sm transition-all"
                 style={tab === t
-                  ? { background: "hsl(42, 55%, 55% / 0.15)", color: "hsl(42, 60%, 70%)", fontWeight: 700, borderLeft: "3px solid hsl(42, 60%, 55%)" }
-                  : { color: "hsl(220, 15%, 60%)" }
+                  ? { background: "hsl(42, 70%, 50% / 0.18)", color: "hsl(42, 80%, 70%)", fontWeight: 700, borderLeft: "3px solid hsl(42, 70%, 55%)", borderRight: "3px solid hsl(42, 70%, 55%)" }
+                  : { color: "hsl(0, 0%, 85%)" }
                 }
               >
                 {t}
