@@ -447,7 +447,7 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4 relative overflow-hidden" style={{ background: `linear-gradient(160deg, hsl(185, 45%, 40%) 0%, hsl(190, 50%, 30%) 30%, hsl(180, 40%, 45%) 60%, hsl(175, 35%, 55%) 85%, hsl(180, 30%, 60%) 100%)` }}>
+    <div className="min-h-screen relative overflow-hidden" style={{ background: `linear-gradient(160deg, hsl(185, 45%, 40%) 0%, hsl(190, 50%, 30%) 30%, hsl(180, 40%, 45%) 60%, hsl(175, 35%, 55%) 85%, hsl(180, 30%, 60%) 100%)` }}>
       {/* Background decorative elements - floating hearts & shapes */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Large soft glowing circles */}
@@ -494,12 +494,12 @@ export default function Register() {
         <div className="absolute top-[35%] left-[48%] w-16 h-16 rounded-full border opacity-[0.05]" style={{ borderColor: `hsl(180, 38%, 62%)` }} />
       </div>
 
-      {/* Top Header Bar - full width */}
+      {/* Top Header Bar - full width, edge to edge */}
       <div className="relative z-10 mb-5 sm:mb-7">
         <div
           className="w-full flex items-center justify-between px-6 sm:px-12"
           style={{
-            background: "linear-gradient(135deg, hsl(190, 50%, 25%), hsl(185, 45%, 35%))",
+            background: "linear-gradient(135deg, hsl(220, 45%, 18%), hsl(240, 40%, 25%))",
             height: "80px",
           }}
         >
@@ -513,16 +513,18 @@ export default function Register() {
               Kalyanasuthra Matrimony
             </span>
           </a>
-          {/* Contact info on right */}
-          <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-4 text-white text-xs sm:text-sm">
-            <a href="mailto:info@kalyanasuthra.com" className="hover:underline opacity-90">info@kalyanasuthra.com</a>
-            <a href="tel:+919553306667" className="hover:underline opacity-90">+91 9553306667</a>
+          {/* Right side: Home button + Contact info */}
+          <div className="flex items-center gap-4 sm:gap-6">
+            <BackButton to="/" label="Home" className="px-4 py-2 rounded-lg text-sm font-semibold bg-[hsl(42,42%,57%)] text-white" />
+            <div className="hidden sm:flex flex-col items-end gap-0.5 text-white text-xs sm:text-sm">
+              <a href="mailto:info@kalyanasuthra.com" className="hover:underline opacity-90">info@kalyanasuthra.com</a>
+              <a href="tel:+919553306667" className="hover:underline opacity-90">+91 9553306667</a>
+            </div>
           </div>
         </div>
-        <div className="max-w-5xl mx-auto mt-2">
-          <BackButton to="/" label="Home" className="bg-white px-4 py-2 rounded-lg shadow-sm" />
-        </div>
       </div>
+      
+      <div className="px-3 sm:px-4 pb-6 sm:pb-8">
 
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Tab Navigation - like reference image */}
@@ -912,6 +914,7 @@ export default function Register() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
