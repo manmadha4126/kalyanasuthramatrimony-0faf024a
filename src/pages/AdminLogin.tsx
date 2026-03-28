@@ -95,7 +95,7 @@ export default function AdminLogin() {
   ];
 
   return (
-    <div className="min-h-screen flex" style={{ background: "hsl(0, 0%, 0%)" }}>
+    <div className="min-h-screen flex" style={{ background: "linear-gradient(160deg, hsl(270, 60%, 45%) 0%, hsl(280, 55%, 35%) 40%, hsl(260, 50%, 28%) 100%)" }}>
       {/* Left Panel - Desktop only */}
       <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="hidden lg:flex flex-col items-start justify-center w-1/2 px-14 py-10 relative overflow-hidden">
         <div className="absolute top-10 right-10 w-80 h-80 rounded-full" style={{ background: "radial-gradient(circle, hsl(280,60%,60% / 0.15), transparent 70%)" }} />
