@@ -532,9 +532,9 @@ export default function StaffDashboard() {
             <p className="text-sm text-gray-400">Kalyanasuthra Matrimony — Staff Access</p>
           </div>
           <div className="ml-auto flex items-center gap-3">
-            <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: THEME.accentBg, color: THEME.accentText }}>Staff</span>
-            <span className="text-sm text-gray-500">{staffEmail}</span>
-            <button onClick={logout} className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-red-500 transition-colors border border-gray-200 px-4 py-2 rounded-xl">
+            <span className="px-4 py-1.5 rounded-full text-sm font-bold" style={{ background: THEME.accentBg, color: THEME.accentText }}>Staff</span>
+            <span className="text-sm font-medium" style={{ color: "hsl(0, 0%, 10%)" }}>{staffEmail}</span>
+            <button onClick={logout} className="flex items-center gap-1.5 text-sm font-semibold text-white transition-colors px-4 py-2 rounded-xl" style={{ background: "hsl(0, 55%, 50%)" }}>
               <LogOut size={14} /> Logout
             </button>
           </div>
