@@ -755,7 +755,7 @@ export default function StaffDashboard() {
                                     <span className="px-3 py-1.5 rounded-lg text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 38%)" }}>✓ Completed</span>
                                   ) : (
                                     <button onClick={async () => {
-                                      const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" } as any).eq("id", interest.id);
+const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" }).eq("id", interest.id);
                                       if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); toast({ title: "Marked as completed!" }); }
                                     }} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: "hsl(145, 65%, 88%)", color: "hsl(145, 65%, 25%)" }}>Completed</button>
                                   )}
@@ -763,7 +763,7 @@ export default function StaffDashboard() {
                                     <span className="px-3 py-1.5 rounded-lg text-xs font-bold text-white" style={{ background: "hsl(0, 55%, 50%)" }}>✗ Not Completed</span>
                                   ) : !isCompleted && (
                                     <button onClick={async () => {
-                                      const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" } as any).eq("id", interest.id);
+const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" }).eq("id", interest.id);
                                       if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); toast({ title: "Marked as not completed!" }); }
                                     }} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: "hsl(0, 65%, 90%)", color: "hsl(0, 65%, 30%)" }}>Not Completed</button>
                                   )}
@@ -809,11 +809,11 @@ export default function StaffDashboard() {
                           )}
                           <div className="flex gap-2">
                             <button onClick={async () => {
-                              const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" } as any).eq("id", interest.id);
+const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" }).eq("id", interest.id);
                               if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); setSelectedInterest({ ...interest, interest_type: "completed" }); toast({ title: "Marked as completed!" }); }
                             }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 42%)" }}>Completed</button>
                             <button onClick={async () => {
-                              const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" } as any).eq("id", interest.id);
+const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" }).eq("id", interest.id);
                               if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); setSelectedInterest({ ...interest, interest_type: "not_completed" }); toast({ title: "Marked as not completed!" }); }
                             }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(0, 55%, 50%)" }}>Not Completed</button>
                           </div>
@@ -823,7 +823,7 @@ export default function StaffDashboard() {
                               className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
                             <button disabled={savingInterestNote} onClick={async () => {
                               setSavingInterestNote(true);
-                              const { error } = await supabase.from("profile_interests").update({ admin_notes: interestNoteText } as any).eq("id", interest.id);
+                              const { error } = await supabase.from("profile_interests").update({ admin_notes: interestNoteText }).eq("id", interest.id);
                               if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, admin_notes: interestNoteText } : i)); toast({ title: "Note saved!" }); }
                               setSavingInterestNote(false);
                             }} className="mt-2 px-5 py-2 rounded-xl text-xs font-bold text-white disabled:opacity-60" style={{ background: THEME.accent }}>
