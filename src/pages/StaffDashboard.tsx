@@ -813,7 +813,7 @@ const { error } = await supabase.from("profile_interests").update({ interest_typ
                               if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); setSelectedInterest({ ...interest, interest_type: "completed" }); toast({ title: "Marked as completed!" }); }
                             }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 42%)" }}>Completed</button>
                             <button onClick={async () => {
-                              const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" } as any).eq("id", interest.id);
+const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" }).eq("id", interest.id);
                               if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); setSelectedInterest({ ...interest, interest_type: "not_completed" }); toast({ title: "Marked as not completed!" }); }
                             }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(0, 55%, 50%)" }}>Not Completed</button>
                           </div>
