@@ -222,10 +222,10 @@ export default function CustomerDashboard() {
 
   const filteredMatches = getFilteredMatches();
 
-  const themeAccent = "hsl(160, 35%, 38%)";
-  const themeDark = "hsl(160, 30%, 25%)";
-  const themeLight = "hsl(160, 40%, 94%)";
-  const themeMid = "hsl(160, 30%, 50%)";
+  const themeAccent = "hsl(185, 45%, 35%)";
+  const themeDark = "hsl(190, 50%, 20%)";
+  const themeLight = "hsl(180, 40%, 94%)";
+  const themeMid = "hsl(185, 35%, 45%)";
 
   const profileId = userProfile?.profile_id || userProfile?.id?.slice(0, 8).toUpperCase() || "—";
 
@@ -287,9 +287,9 @@ export default function CustomerDashboard() {
 
   // Sidebar component (reused in upgrade page)
   const renderSidebar = () =>
-  <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 py-5 px-4 fixed top-0 left-0 h-screen overflow-hidden z-30" style={{ background: "linear-gradient(180deg, hsl(160, 25%, 93%) 0%, hsl(155, 20%, 95%) 100%)", borderRight: "1px solid hsl(160, 20%, 88%)" }}>
+  <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 py-5 px-4 fixed top-0 left-0 h-screen overflow-hidden z-30" style={{ background: "linear-gradient(180deg, hsl(185, 25%, 93%) 0%, hsl(180, 20%, 95%) 100%)", borderRight: "1px solid hsl(185, 20%, 88%)" }}>
       {/* Profile Photo 3.5x3.5 size + Name + ID */}
-      <div className="flex flex-col items-center gap-2 mb-5 px-2 py-4 rounded-xl" style={{ background: "hsl(160, 20%, 90%)" }}>
+      <div className="flex flex-col items-center gap-2 mb-5 px-2 py-4 rounded-xl" style={{ background: "hsl(185, 20%, 90%)" }}>
         <div className="w-[140px] h-[140px] rounded-xl overflow-hidden flex-shrink-0 border-2" style={{ borderColor: themeAccent }}>
           {userProfile?.profile_photo_url ?
         <img src={userProfile.profile_photo_url} alt="" className="w-full h-full object-cover" /> :
@@ -336,7 +336,7 @@ export default function CustomerDashboard() {
 
         }
         return (
-          <motion.button key={label} whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(160, 35%, 38% / 0.3)` } : { color: themeDark, background: "transparent" }}>
+          <motion.button key={label} whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setActiveNav(label)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all" style={activeNav === label ? { background: themeAccent, color: "white", boxShadow: `0 4px 12px hsl(185, 45%, 35% / 0.3)` } : { color: themeDark, background: "transparent" }}>
               <Icon size={16} /> {label}
               {label === "Preferences" && prefApplied &&
             <span className="ml-auto w-2 h-2 rounded-full" style={{ background: "hsl(38, 90%, 50%)" }} />
@@ -346,7 +346,7 @@ export default function CustomerDashboard() {
       })}
       </nav>
 
-      <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowUpgradePage(true)} className="mt-4 w-full rounded-xl p-3 text-left" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
+      <motion.button whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} onClick={() => setShowUpgradePage(true)} className="mt-4 w-full rounded-xl p-3 text-left" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(190, 45%, 30%))` }}>
         <div className="flex items-center gap-2 mb-1">
           <Star size={13} className="text-yellow-300 fill-yellow-300" />
           <span className="text-white text-[11px] font-bold uppercase tracking-wide">Upgrade</span>
@@ -359,7 +359,7 @@ export default function CustomerDashboard() {
   // If upgrade page is shown, render full page
   if (showUpgradePage) {
     return (
-      <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(160, 15%, 97%)" }}>
+      <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(185, 15%, 97%)" }}>
         {renderSidebar()}
         <div className="flex-1 lg:ml-64 overflow-auto">
           <div className="fixed top-0 right-0 left-0 lg:left-64 z-20 bg-white/90 backdrop-blur-sm border-b border-gray-100 px-6 py-4">
@@ -413,7 +413,7 @@ export default function CustomerDashboard() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(160, 15%, 97%)" }}>
+    <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "hsl(185, 15%, 97%)" }}>
       {renderSidebar()}
 
       {/* Main */}
@@ -468,7 +468,7 @@ export default function CustomerDashboard() {
                           </div>
                         ) : (
                           notifications.map((n) => (
-                            <button key={n.id} onClick={() => markNotifRead(n.id)} className="w-full text-left px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors flex gap-3" style={{ background: n.is_read ? "transparent" : "hsl(160, 40%, 97%)" }}>
+                            <button key={n.id} onClick={() => markNotifRead(n.id)} className="w-full text-left px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors flex gap-3" style={{ background: n.is_read ? "transparent" : "hsl(185, 40%, 97%)" }}>
                               <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: n.type === "admin_contact" ? "hsl(134, 60%, 93%)" : n.type === "admin_whatsapp" ? "hsl(134, 60%, 90%)" : themeLight }}>
                                 {n.type === "admin_contact" || n.type === "admin_whatsapp" ? <MessageCircle size={14} style={{ color: "hsl(134, 60%, 35%)" }} /> : <Bell size={14} style={{ color: themeAccent }} />}
                               </div>
@@ -608,20 +608,20 @@ export default function CustomerDashboard() {
 
               {/* Subscription Details or Upgrade CTA */}
               {userProfile?.subscription_type === "assisted" ? (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-6 rounded-2xl overflow-hidden" style={{ border: "2px solid hsl(160, 35%, 38%)" }}>
-                  <div className="p-4 sm:p-5" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-6 rounded-2xl overflow-hidden" style={{ border: "2px solid hsl(185, 45%, 35%)" }}>
+                  <div className="p-4 sm:p-5" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(190, 45%, 30%))` }}>
                     <div className="flex items-center gap-2 mb-1">
                       <Star size={16} className="text-yellow-300 fill-yellow-300" />
                       <span className="text-yellow-200 text-xs font-bold uppercase tracking-wider">Active Subscription</span>
                     </div>
                     <h3 className="text-white font-bold text-base sm:text-lg">Assisted Matrimony Service</h3>
                   </div>
-                  <div className="p-4 sm:p-5 space-y-3" style={{ background: "hsl(160, 30%, 97%)" }}>
-                    <div className="flex items-center justify-between py-2 border-b" style={{ borderColor: "hsl(160, 20%, 88%)" }}>
+                  <div className="p-4 sm:p-5 space-y-3" style={{ background: "hsl(185, 30%, 97%)" }}>
+                    <div className="flex items-center justify-between py-2 border-b" style={{ borderColor: "hsl(185, 20%, 88%)" }}>
                       <span className="text-sm font-medium" style={{ color: "hsl(0, 0%, 45%)" }}>Plan Status</span>
                       <span className="px-3 py-1 rounded-full text-xs font-bold" style={{ background: "hsl(145, 55%, 90%)", color: "hsl(145, 55%, 28%)" }}>Active</span>
                     </div>
-                    <div className="flex items-center justify-between py-2 border-b" style={{ borderColor: "hsl(160, 20%, 88%)" }}>
+                    <div className="flex items-center justify-between py-2 border-b" style={{ borderColor: "hsl(185, 20%, 88%)" }}>
                       <span className="text-sm font-medium" style={{ color: "hsl(0, 0%, 45%)" }}>Access Type</span>
                       <span className="text-sm font-bold" style={{ color: themeDark }}>Assisted Access</span>
                     </div>
@@ -636,7 +636,7 @@ export default function CustomerDashboard() {
                   </div>
                 </motion.div>
               ) : (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} onClick={() => setShowUpgradePage(true)} className="mb-6 rounded-2xl p-4 sm:p-5 cursor-pointer hover:scale-[1.01] transition-transform" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(170, 40%, 35%))` }}>
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} onClick={() => setShowUpgradePage(true)} className="mb-6 rounded-2xl p-4 sm:p-5 cursor-pointer hover:scale-[1.01] transition-transform" style={{ background: `linear-gradient(135deg, ${themeAccent}, hsl(190, 45%, 30%))` }}>
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
