@@ -1757,33 +1757,83 @@ export default function AdminDashboard() {
                 ) : (
                   <div className="space-y-3">
                     {staffMembers.map((s: any) => (
-                      <div key={s.id} className="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-4 hover:shadow-md transition-all"
+                      <div key={s.id} className="rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md"
                         style={{ borderLeft: `4px solid ${s.is_active ? "hsl(200, 70%, 50%)" : "hsl(0, 0%, 75%)"}` }}>
-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: s.is_active ? "hsl(200, 70%, 93%)" : "hsl(0, 0%, 93%)" }}>
-                          <UserPlus size={20} style={{ color: s.is_active ? "hsl(200, 70%, 40%)" : "hsl(0, 0%, 55%)" }} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-gray-800 text-base">{s.full_name}</h4>
-                          <p className="text-sm text-gray-500">{s.email}</p>
-                          {s.phone && <p className="text-xs text-gray-400">{s.phone}</p>}
-                        </div>
-                        <span className="px-3 py-1 rounded-full text-xs font-bold" style={{
-                          background: s.is_active ? "hsl(145, 65%, 93%)" : "hsl(0, 60%, 93%)",
-                          color: s.is_active ? "hsl(145, 65%, 30%)" : "hsl(0, 60%, 40%)"
-                        }}>
-                          {s.is_active ? "Active" : "Inactive"}
-                        </span>
-                        <div className="flex items-center gap-2 flex-shrink-0">
-                          <button onClick={() => toggleStaffActive(s.id, s.is_active)} className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all" style={{
-                            background: s.is_active ? "hsl(38, 90%, 93%)" : "hsl(145, 65%, 93%)",
-                            color: s.is_active ? "hsl(38, 90%, 35%)" : "hsl(145, 65%, 30%)"
+                        <div className="bg-white p-4 flex items-center gap-4 cursor-pointer" onClick={() => setExpandedStaffId(expandedStaffId === s.id ? null : s.id)}>
+                          <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: s.is_active ? "hsl(200, 70%, 93%)" : "hsl(0, 0%, 93%)" }}>
+                            <UserPlus size={20} style={{ color: s.is_active ? "hsl(200, 70%, 40%)" : "hsl(0, 0%, 55%)" }} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-gray-800 text-base">{s.full_name}</h4>
+                            <p className="text-sm text-gray-500">{s.email}</p>
+                          </div>
+                          <span className="px-3 py-1 rounded-full text-xs font-bold" style={{
+                            background: s.is_active ? "hsl(145, 65%, 93%)" : "hsl(0, 60%, 93%)",
+                            color: s.is_active ? "hsl(145, 65%, 30%)" : "hsl(0, 60%, 40%)"
                           }}>
-                            {s.is_active ? "Deactivate" : "Activate"}
-                          </button>
-                          <button onClick={() => deleteStaffMember(s.id)} className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}>
-                            <Trash2 size={12} />
-                          </button>
+                            {s.is_active ? "Active" : "Inactive"}
+                          </span>
+                          <ChevronLeft size={18} className={`text-gray-400 transition-transform ${expandedStaffId === s.id ? "-rotate-90" : ""}`} />
                         </div>
+                        
+                        {expandedStaffId === s.id && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="border-t border-gray-100" style={{ background: "hsl(210, 30%, 97%)" }}>
+                            <div className="p-5 space-y-4">
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                  <p className="text-xs font-semibold text-gray-400 mb-1">Full Name</p>
+                                  <p className="text-sm font-bold text-gray-800">{s.full_name}</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs font-semibold text-gray-400 mb-1">Email (Login ID)</p>
+                                  <p className="text-sm font-bold text-gray-800">{s.email}</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs font-semibold text-gray-400 mb-1">Phone</p>
+                                  <p className="text-sm font-bold text-gray-800">{s.phone || "—"}</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs font-semibold text-gray-400 mb-1">Status</p>
+                                  <p className="text-sm font-bold" style={{ color: s.is_active ? "hsl(145, 65%, 30%)" : "hsl(0, 60%, 40%)" }}>{s.is_active ? "Active" : "Inactive"}</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs font-semibold text-gray-400 mb-1">Role</p>
+                                  <p className="text-sm font-bold text-gray-800 capitalize">{s.role || "staff"}</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs font-semibold text-gray-400 mb-1">Created</p>
+                                  <p className="text-sm font-bold text-gray-800">{new Date(s.created_at).toLocaleDateString()}</p>
+                                </div>
+                              </div>
+
+                              {/* Change Password */}
+                              <div className="pt-3 border-t border-gray-200">
+                                <p className="text-sm font-bold text-gray-700 mb-2">Change Password</p>
+                                <div className="flex gap-3 items-end">
+                                  <div className="flex-1">
+                                    <input type="text" value={staffNewPassword} onChange={e => setStaffNewPassword(e.target.value)} placeholder="Enter new password (min 6 chars)" className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                                  </div>
+                                  <button onClick={() => changeStaffPassword(s.email)} disabled={changingPassword} className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-60" style={{ background: "hsl(220, 45%, 35%)" }}>
+                                    {changingPassword ? "Updating..." : "Update Password"}
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* Actions */}
+                              <div className="flex gap-3 pt-2">
+                                <button onClick={() => toggleStaffActive(s.id, s.is_active)} className="px-4 py-2 rounded-xl text-sm font-bold transition-all" style={{
+                                  background: s.is_active ? "hsl(38, 90%, 93%)" : "hsl(145, 65%, 93%)",
+                                  color: s.is_active ? "hsl(38, 90%, 35%)" : "hsl(145, 65%, 30%)"
+                                }}>
+                                  {s.is_active ? "Deactivate" : "Activate"}
+                                </button>
+                                <button onClick={() => deleteStaffMember(s.id)} className="px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}>
+                                  <Trash2 size={14} /> Delete
+                                </button>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
                       </div>
                     ))}
                   </div>
