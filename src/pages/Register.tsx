@@ -447,7 +447,7 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4 relative overflow-hidden" style={{ background: `linear-gradient(160deg, hsl(185, 45%, 40%) 0%, hsl(190, 50%, 30%) 30%, hsl(180, 40%, 45%) 60%, hsl(175, 35%, 55%) 85%, hsl(180, 30%, 60%) 100%)` }}>
+    <div className="min-h-screen relative overflow-hidden" style={{ background: `linear-gradient(160deg, hsl(185, 45%, 40%) 0%, hsl(190, 50%, 30%) 30%, hsl(180, 40%, 45%) 60%, hsl(175, 35%, 55%) 85%, hsl(180, 30%, 60%) 100%)` }}>
       {/* Background decorative elements - floating hearts & shapes */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Large soft glowing circles */}
