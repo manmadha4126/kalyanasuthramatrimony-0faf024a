@@ -452,7 +452,7 @@ export default function StaffDashboard() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "#F5F8FA" }}>
+    <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: "#FFFFFF" }}>
       {/* Sidebar - teal/ocean theme */}
       <motion.aside
         animate={{ width: sidebarOpen ? 240 : 0 }}
