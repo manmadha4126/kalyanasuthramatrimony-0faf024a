@@ -190,24 +190,6 @@ const HeroSection = () => {
                 Trusted matchmaking with traditional values and a modern approach. Your perfect match awaits — find your soulmate today.
               </p>
 
-              {/* Stats */}
-              <div className="flex items-center justify-center lg:justify-start gap-6 mb-8">
-                <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-bold" style={{ color: "hsl(var(--gold-accent))" }}>10K+</p>
-                  <p className="text-xs" style={{ color: "hsl(0, 0%, 60%)" }}>Marriages</p>
-                </div>
-                <div className="w-px h-10" style={{ background: "hsl(0, 0%, 30%)" }} />
-                <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-bold" style={{ color: "hsl(var(--gold-accent))" }}>50K+</p>
-                  <p className="text-xs" style={{ color: "hsl(0, 0%, 60%)" }}>Profiles</p>
-                </div>
-                <div className="w-px h-10" style={{ background: "hsl(0, 0%, 30%)" }} />
-                <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-bold" style={{ color: "hsl(var(--gold-accent))" }}>15+</p>
-                  <p className="text-xs" style={{ color: "hsl(0, 0%, 60%)" }}>Years</p>
-                </div>
-              </div>
-
               {/* CTA Buttons */}
               <div className="flex items-center justify-center lg:justify-start gap-4">
                 <a

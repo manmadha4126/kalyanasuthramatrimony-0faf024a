@@ -287,7 +287,7 @@ export default function CustomerDashboard() {
 
   // Sidebar component (reused in upgrade page)
   const renderSidebar = () =>
-  <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 py-5 px-4 fixed top-0 left-0 h-screen overflow-hidden z-30" style={{ background: "linear-gradient(180deg, hsl(185, 25%, 93%) 0%, hsl(180, 20%, 95%) 100%)", borderRight: "1px solid hsl(185, 20%, 88%)" }}>
+  <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 pt-8 pb-5 px-4 fixed top-0 left-0 h-screen overflow-hidden z-30" style={{ background: "linear-gradient(180deg, hsl(185, 25%, 93%) 0%, hsl(180, 20%, 95%) 100%)", borderRight: "1px solid hsl(185, 20%, 88%)" }}>
       {/* Profile Photo 3.5x3.5 size + Name + ID */}
       <div className="flex flex-col items-center gap-2 mb-5 px-2 py-4 rounded-xl" style={{ background: "hsl(185, 20%, 90%)" }}>
         <div className="w-[140px] h-[140px] rounded-xl overflow-hidden flex-shrink-0 border-2" style={{ borderColor: themeAccent }}>
