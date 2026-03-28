@@ -384,7 +384,7 @@ export default function Register() {
 
   if (done) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 py-8" style={{ background: `linear-gradient(135deg, hsl(${THEME.warm}), hsl(${THEME.primaryLight}), hsl(${THEME.accentLight}))` }}>
+      <div className="min-h-screen flex items-center justify-center px-4 py-8" style={{ background: `linear-gradient(160deg, hsl(270, 60%, 55%) 0%, hsl(280, 55%, 45%) 30%, hsl(290, 50%, 60%) 60%, hsl(275, 55%, 70%) 85%, hsl(270, 50%, 75%) 100%)` }}>
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-lg w-full">
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div className="h-2" style={{ background: `linear-gradient(90deg, hsl(${THEME.accent}), hsl(${THEME.primary}))` }} />
