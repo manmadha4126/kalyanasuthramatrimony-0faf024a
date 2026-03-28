@@ -520,7 +520,7 @@ export default function Register() {
           </div>
         </div>
         <div className="max-w-5xl mx-auto mt-2">
-          <BackButton to="/" label="Home" />
+          <BackButton to="/" label="Home" className="bg-white px-4 py-2 rounded-lg shadow-sm" />
         </div>
       </div>
 
