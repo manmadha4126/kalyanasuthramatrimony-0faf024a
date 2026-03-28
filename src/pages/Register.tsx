@@ -457,41 +457,41 @@ export default function Register() {
 
         {/* Floating hearts - various sizes and opacities */}
         <motion.div animate={{ y: [0, -15, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
-          <Heart className="absolute top-[8%] left-[3%] fill-current opacity-[0.12]" size={55} style={{ color: `hsl(320, 50%, 75%)` }} />
+          <Heart className="absolute top-[8%] left-[3%] fill-current opacity-[0.12]" size={55} style={{ color: `hsl(175, 40%, 60%)` }} />
         </motion.div>
         <motion.div animate={{ y: [0, 12, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}>
-          <Heart className="absolute top-[15%] right-[6%] fill-current opacity-[0.10]" size={45} style={{ color: `hsl(280, 55%, 70%)` }} />
+          <Heart className="absolute top-[15%] right-[6%] fill-current opacity-[0.10]" size={45} style={{ color: `hsl(180, 45%, 55%)` }} />
         </motion.div>
         <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}>
-          <Heart className="absolute top-[30%] left-[1%] fill-current opacity-[0.08]" size={35} style={{ color: `hsl(300, 45%, 80%)` }} />
+          <Heart className="absolute top-[30%] left-[1%] fill-current opacity-[0.08]" size={35} style={{ color: `hsl(185, 35%, 65%)` }} />
         </motion.div>
         <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}>
-          <Heart className="absolute top-[50%] right-[2%] fill-current opacity-[0.10]" size={40} style={{ color: `hsl(310, 50%, 72%)` }} />
+          <Heart className="absolute top-[50%] right-[2%] fill-current opacity-[0.10]" size={40} style={{ color: `hsl(178, 40%, 58%)` }} />
         </motion.div>
         <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}>
-          <Heart className="absolute top-[65%] left-[5%] fill-current opacity-[0.12]" size={50} style={{ color: `hsl(285, 50%, 68%)` }} />
+          <Heart className="absolute top-[65%] left-[5%] fill-current opacity-[0.12]" size={50} style={{ color: `hsl(182, 40%, 52%)` }} />
         </motion.div>
         <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}>
-          <Heart className="absolute top-[80%] right-[8%] fill-current opacity-[0.09]" size={30} style={{ color: `hsl(295, 55%, 75%)` }} />
+          <Heart className="absolute top-[80%] right-[8%] fill-current opacity-[0.09]" size={30} style={{ color: `hsl(176, 45%, 60%)` }} />
         </motion.div>
         <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}>
-          <Heart className="absolute top-[45%] left-[8%] fill-current opacity-[0.07]" size={25} style={{ color: `hsl(270, 50%, 78%)` }} />
+          <Heart className="absolute top-[45%] left-[8%] fill-current opacity-[0.07]" size={25} style={{ color: `hsl(188, 40%, 62%)` }} />
         </motion.div>
         <motion.div animate={{ y: [0, 14, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}>
-          <Heart className="absolute bottom-[10%] left-[45%] fill-current opacity-[0.08]" size={38} style={{ color: `hsl(305, 45%, 72%)` }} />
+          <Heart className="absolute bottom-[10%] left-[45%] fill-current opacity-[0.08]" size={38} style={{ color: `hsl(180, 38%, 56%)` }} />
         </motion.div>
         <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}>
-          <Heart className="absolute top-[20%] left-[45%] fill-current opacity-[0.06]" size={28} style={{ color: `hsl(275, 50%, 80%)` }} />
+          <Heart className="absolute top-[20%] left-[45%] fill-current opacity-[0.06]" size={28} style={{ color: `hsl(185, 40%, 64%)` }} />
         </motion.div>
         <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut", delay: 0.9 }}>
-          <Heart className="absolute top-[75%] right-[40%] fill-current opacity-[0.07]" size={32} style={{ color: `hsl(290, 50%, 74%)` }} />
+          <Heart className="absolute top-[75%] right-[40%] fill-current opacity-[0.07]" size={32} style={{ color: `hsl(180, 42%, 58%)` }} />
         </motion.div>
 
         {/* Decorative rings */}
-        <div className="absolute top-[5%] right-[12%] w-36 h-36 rounded-full border-2 opacity-[0.08]" style={{ borderColor: `hsl(280, 50%, 70%)` }} />
-        <div className="absolute bottom-[15%] left-[8%] w-28 h-28 rounded-full border-2 opacity-[0.07]" style={{ borderColor: `hsl(300, 45%, 72%)` }} />
-        <div className="absolute top-[55%] right-[3%] w-20 h-20 rounded-full border opacity-[0.06]" style={{ borderColor: `hsl(270, 55%, 75%)` }} />
-        <div className="absolute top-[35%] left-[48%] w-16 h-16 rounded-full border opacity-[0.05]" style={{ borderColor: `hsl(290, 45%, 78%)` }} />
+        <div className="absolute top-[5%] right-[12%] w-36 h-36 rounded-full border-2 opacity-[0.08]" style={{ borderColor: `hsl(180, 40%, 55%)` }} />
+        <div className="absolute bottom-[15%] left-[8%] w-28 h-28 rounded-full border-2 opacity-[0.07]" style={{ borderColor: `hsl(175, 35%, 56%)` }} />
+        <div className="absolute top-[55%] right-[3%] w-20 h-20 rounded-full border opacity-[0.06]" style={{ borderColor: `hsl(185, 45%, 60%)` }} />
+        <div className="absolute top-[35%] left-[48%] w-16 h-16 rounded-full border opacity-[0.05]" style={{ borderColor: `hsl(180, 38%, 62%)` }} />
       </div>
 
       {/* Top Header Bar - full width */}
