@@ -9,12 +9,12 @@ import logo from "@/assets/kalyanasuthra-logo.png";
 
 const TOTAL_STEPS = 7;
 const THEME = {
-  primary: "210, 55%, 45%",
-  primaryDeep: "210, 60%, 35%",
-  primaryLight: "210, 40%, 94%",
-  accent: "168, 45%, 45%",
-  accentLight: "168, 35%, 93%",
-  warm: "35, 55%, 95%",
+  primary: "275, 55%, 50%",
+  primaryDeep: "280, 60%, 35%",
+  primaryLight: "280, 60%, 75%",
+  accent: "300, 50%, 60%",
+  accentLight: "290, 50%, 80%",
+  warm: "270, 60%, 85%",
 };
 
 const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative"];
@@ -384,7 +384,7 @@ export default function Register() {
 
   if (done) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 py-8" style={{ background: `linear-gradient(135deg, hsl(${THEME.warm}), hsl(${THEME.primaryLight}), hsl(${THEME.accentLight}))` }}>
+      <div className="min-h-screen flex items-center justify-center px-4 py-8" style={{ background: `linear-gradient(160deg, hsl(270, 60%, 55%) 0%, hsl(280, 55%, 45%) 30%, hsl(290, 50%, 60%) 60%, hsl(275, 55%, 70%) 85%, hsl(270, 50%, 75%) 100%)` }}>
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-lg w-full">
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div className="h-2" style={{ background: `linear-gradient(90deg, hsl(${THEME.accent}), hsl(${THEME.primary}))` }} />
@@ -439,7 +439,7 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4 relative overflow-hidden" style={{ background: `linear-gradient(160deg, hsl(${THEME.warm}) 0%, hsl(${THEME.primaryLight}) 40%, hsl(${THEME.accentLight}) 70%, hsl(${THEME.warm}) 100%)` }}>
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4 relative overflow-hidden" style={{ background: `linear-gradient(160deg, hsl(270, 60%, 55%) 0%, hsl(280, 55%, 45%) 30%, hsl(290, 50%, 60%) 60%, hsl(275, 55%, 70%) 85%, hsl(270, 50%, 75%) 100%)` }}>
       {/* Background decorative elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-10 left-10 w-72 h-72 rounded-full opacity-[0.06]" style={{ background: `hsl(${THEME.primary})` }} />
