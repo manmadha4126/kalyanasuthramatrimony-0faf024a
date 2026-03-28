@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import CustomerLogin from "./pages/CustomerLogin";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import ResetPassword from "./pages/ResetPassword";
+import StaffDashboard from "./pages/StaffDashboard";
 import ProfileDetail from "./pages/ProfileDetail";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
