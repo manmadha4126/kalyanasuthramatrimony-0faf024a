@@ -96,7 +96,7 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex" style={{ background: "hsl(0, 0%, 0%)" }}>
-      {/* Left Panel */}
+      {/* Left Panel - Desktop only */}
       <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="hidden lg:flex flex-col items-start justify-center w-1/2 px-14 py-10 relative overflow-hidden">
         <div className="absolute top-10 right-10 w-80 h-80 rounded-full" style={{ background: "radial-gradient(circle, hsl(280,60%,60% / 0.15), transparent 70%)" }} />
         <div className="absolute bottom-16 left-0 w-56 h-56 rounded-full" style={{ background: "radial-gradient(circle, hsl(42,70%,55% / 0.12), transparent 70%)" }} />
@@ -131,8 +131,72 @@ export default function AdminLogin() {
         </div>
       </motion.div>
 
-      {/* Right Panel */}
-      <div className="flex flex-col items-center justify-center w-full lg:w-1/2 px-6 py-12">
+      {/* Mobile Layout */}
+      <div className="flex lg:hidden flex-col items-center w-full min-h-screen relative overflow-hidden" style={{ background: "linear-gradient(160deg, hsl(270, 60%, 45%) 0%, hsl(280, 55%, 35%) 40%, hsl(260, 50%, 28%) 100%)" }}>
+        <div className="absolute top-0 right-0 w-64 h-64 rounded-full opacity-30" style={{ background: "radial-gradient(circle, hsl(40, 80%, 60%), transparent 70%)" }} />
+        <div className="absolute bottom-20 left-0 w-48 h-48 rounded-full opacity-20" style={{ background: "radial-gradient(circle, hsl(280, 70%, 70%), transparent 70%)" }} />
+        
+        <div className="relative z-10 w-full px-6 py-8 flex flex-col items-center">
+          {/* Logo */}
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-2">
+            <img src={logo} alt="Kalyanasuthra Matrimony" className="h-16 w-auto object-contain" />
+          </motion.div>
+          <span style={{ fontFamily: "'Great Vibes', cursive", fontSize: "1.4rem", color: "hsl(0, 0%, 100%)" }} className="mb-5">Kalyanasuthra Matrimony</span>
+
+          {/* Heading */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-center mb-3">
+            <h1 style={{ fontFamily: "'Kaushan Script', cursive", fontSize: "2rem", lineHeight: "1.3" }}>
+              <span style={{ color: "hsl(0, 0%, 100%)" }}>Welcome to the</span><br />
+              <span style={{ color: "hsl(45, 100%, 88%)", fontSize: "2.3rem" }}>Admin Portal</span>
+            </h1>
+          </motion.div>
+          <p className="text-center text-sm leading-relaxed mb-6 max-w-xs" style={{ fontFamily: "'Open Sans', sans-serif", color: "hsl(270, 20%, 90%)" }}>
+            Managing South India's most trusted matrimonial platform. Every match we make writes a new chapter of love.
+          </p>
+
+          {/* Login Card */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="w-full max-w-sm">
+            <div className="rounded-2xl p-6 shadow-2xl" style={{ background: "hsl(0, 0%, 100% / 0.12)", backdropFilter: "blur(20px)", border: "1px solid hsl(0, 0%, 100% / 0.2)" }}>
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "hsl(0, 0%, 100% / 0.2)" }}>
+                  <Shield size={16} style={{ color: "hsl(0, 0%, 100%)" }} />
+                </div>
+                <div>
+                  <h2 className="text-base font-bold" style={{ color: "hsl(0, 0%, 100%)", fontFamily: "'Open Sans', sans-serif" }}>Admin Access</h2>
+                  <p className="text-xs" style={{ color: "hsl(270, 20%, 80%)" }}>Authorized personnel only</p>
+                </div>
+              </div>
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold mb-1" style={{ color: "hsl(270, 20%, 85%)" }}>Email Address</label>
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@example.com" required className="w-full rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300" style={{ background: "hsl(0, 0%, 100% / 0.15)", border: "1px solid hsl(0, 0%, 100% / 0.2)", color: "hsl(0, 0%, 100%)" }} />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold mb-1" style={{ color: "hsl(270, 20%, 85%)" }}>Password</label>
+                  <div className="relative">
+                    <input type={showPass ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" required className="w-full rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300 pr-10" style={{ background: "hsl(0, 0%, 100% / 0.15)", border: "1px solid hsl(0, 0%, 100% / 0.2)", color: "hsl(0, 0%, 100%)" }} />
+                    <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: "hsl(270, 20%, 75%)" }}>
+                      {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                    </button>
+                  </div>
+                </div>
+                {error &&
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs rounded-lg px-3 py-2" style={{ background: "hsl(0, 60%, 50% / 0.3)", color: "hsl(0, 80%, 85%)", border: "1px solid hsl(0, 60%, 50% / 0.4)" }}>{error}</motion.div>
+                }
+                <button type="submit" disabled={loading} className="w-full py-3 rounded-lg font-semibold text-sm text-white transition-all disabled:opacity-60" style={{ background: "linear-gradient(135deg, hsl(270, 55%, 50%), hsl(280, 60%, 40%))" }}>
+                  {loading ? "Verifying..." : "Sign In to Dashboard"}
+                </button>
+              </form>
+              <div className="mt-5 pt-3 border-t text-center" style={{ borderColor: "hsl(0, 0%, 100% / 0.15)" }}>
+                <a href="/" className="text-xs transition-colors" style={{ color: "hsl(270, 20%, 75%)" }}>← Back to Website</a>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Desktop Right Panel */}
+      <div className="hidden lg:flex flex-col items-center justify-center w-1/2 px-6 py-12">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="w-full max-w-sm">
           <div className="mb-5">
             <button onClick={() => navigate("/")} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:opacity-90 shadow-lg"
