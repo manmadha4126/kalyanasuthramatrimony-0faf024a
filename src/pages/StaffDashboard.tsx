@@ -81,7 +81,7 @@ const THEME = {
   accent: "hsl(187, 70%, 42%)",
   accentBg: "hsl(187, 80%, 96%)",
   accentText: "hsl(187, 80%, 30%)",
-  chipActive: "hsl(187, 90%, 45%)",
+  chipActive: "hsl(187, 70%, 35%)",
   chipActiveText: "hsl(45, 60%, 78%)",
   chipInactive: "hsl(185, 25%, 92%)",
   chipInactiveText: "hsl(185, 32%, 35%)",
