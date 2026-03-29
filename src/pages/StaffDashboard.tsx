@@ -75,13 +75,13 @@ type Consultation = {
 
 // Staff-specific theme colors
 const THEME = {
-  sidebar: "hsl(185, 100%, 20%)",
-  sidebarActive: "hsl(185, 80%, 55% / 0.25)",
-  sidebarActiveText: "hsl(185, 80%, 85%)",
-  accent: "hsl(185, 70%, 45%)",
-  accentBg: "hsl(185, 70%, 96%)",
-  accentText: "hsl(185, 70%, 30%)",
-  chipActive: "hsl(185, 70%, 30%)",
+  sidebar: "hsl(187, 90%, 55%)",
+  sidebarActive: "hsl(187, 90%, 65% / 0.3)",
+  sidebarActiveText: "hsl(0, 0%, 100%)",
+  accent: "hsl(187, 90%, 55%)",
+  accentBg: "hsl(187, 80%, 96%)",
+  accentText: "hsl(187, 80%, 30%)",
+  chipActive: "hsl(187, 90%, 45%)",
   chipActiveText: "hsl(45, 60%, 78%)",
   chipInactive: "hsl(185, 25%, 92%)",
   chipInactiveText: "hsl(185, 32%, 35%)",
@@ -478,8 +478,8 @@ export default function StaffDashboard() {
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
                 className="w-full text-left px-4 py-3 rounded-xl text-sm transition-all"
                 style={tab === t
-                  ? { background: THEME.sidebarActive, color: THEME.sidebarActiveText, fontWeight: 600 }
-                  : { color: "hsl(0, 0%, 70%)" }
+                  ? { background: "hsl(0, 0%, 100% / 0.3)", color: "hsl(0, 0%, 100%)", fontWeight: 700 }
+                  : { color: "hsl(187, 90%, 15%)", fontWeight: 500 }
                 }
               >
                 {t}
@@ -487,16 +487,16 @@ export default function StaffDashboard() {
             ))}
           </nav>
 
-          <div className="space-y-1 border-t border-white/10 pt-4 mb-2">
+          <div className="space-y-1 border-t pt-4 mb-2" style={{ borderColor: "hsl(187, 80%, 40%)" }}>
             <motion.button onClick={() => navigate("/")} whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-2 text-white/60 hover:text-white text-xs px-3 py-2 w-full transition-colors rounded-lg hover:bg-white/5">
+              className="flex items-center gap-2 text-xs px-3 py-2 w-full transition-colors rounded-lg" style={{ color: "hsl(187, 90%, 15%)" }}>
               <Home size={14} /> Back to Home
             </motion.button>
           </div>
 
-          <div className="border-t border-white/10 pt-4">
-            <p className="text-white/40 text-[10px] px-1 mb-1 truncate">{staffEmail}</p>
-            <button onClick={logout} className="flex items-center gap-2 text-white/60 hover:text-white text-xs px-1 py-1 transition-colors">
+          <div className="pt-4 border-t" style={{ borderColor: "hsl(187, 80%, 40%)" }}>
+            <p className="text-[10px] px-1 mb-1 truncate" style={{ color: "hsl(187, 90%, 20%)" }}>{staffEmail}</p>
+            <button onClick={logout} className="flex items-center gap-2 text-xs px-1 py-1 transition-colors" style={{ color: "hsl(187, 90%, 15%)" }}>
               <LogOut size={14} /> Sign Out
             </button>
           </div>
