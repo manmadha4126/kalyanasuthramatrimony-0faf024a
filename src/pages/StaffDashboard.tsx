@@ -722,16 +722,14 @@ export default function StaffDashboard() {
                           const fromPhone = interest.from_profile?.phone || "";
                           const toName = interest.profiles?.full_name || "Unknown";
                           const isCompleted = interest.interest_type === "completed";
-                          const isNotCompleted = interest.interest_type === "not_completed";
-                          const cardBg = isCompleted ? "hsl(145, 55%, 90%)" : isNotCompleted ? "hsl(0, 55%, 92%)" : "hsl(0, 0%, 100%)";
-                          const cardBorder = isCompleted ? "hsl(145, 50%, 70%)" : isNotCompleted ? "hsl(0, 50%, 75%)" : "hsl(0, 0%, 85%)";
+                          const cardBg = isCompleted ? "hsl(145, 55%, 90%)" : "hsl(0, 0%, 100%)";
+                          const cardBorder = isCompleted ? "hsl(145, 50%, 70%)" : "hsl(0, 0%, 85%)";
                           return (
                             <motion.div key={interest.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
                               className="rounded-xl border cursor-pointer hover:shadow-md transition-all"
                               style={{ background: cardBg, borderColor: cardBorder }}
                               onClick={() => { setSelectedInterest(interest); setInterestNoteText(interest.admin_notes || ""); }}>
                               <div className="flex items-start gap-3 px-4 py-3">
-                                {/* Left: Photo + Info */}
                                 <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0 mt-0.5">
                                   {interest.profiles?.profile_photo_url ? <img src={interest.profiles.profile_photo_url} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-sm font-bold text-gray-400">{interest.profiles?.full_name?.[0] || "?"}</div>}
                                 </div>
@@ -749,11 +747,11 @@ export default function StaffDashboard() {
                                       background: interest.interest_type === "shortlist" ? "hsl(38, 90%, 93%)" : "hsl(340, 65%, 93%)",
                                       color: interest.interest_type === "shortlist" ? "hsl(38, 90%, 35%)" : "hsl(340, 65%, 40%)"
                                     }}>
-                                      {interest.interest_type === "shortlist" ? "Shortlisted" : isCompleted || isNotCompleted ? "" : "Interested"}
+                                      {interest.interest_type === "shortlist" ? "Shortlisted" : isCompleted ? "" : "Interested"}
                                     </span>
                                   </div>
                                 </div>
-                                {/* Right: Action buttons */}
+                                {/* Right: Complete button */}
                                 <div className="flex flex-col gap-1.5 flex-shrink-0 ml-2" onClick={e => e.stopPropagation()}>
                                   {isCompleted ? (
                                     <span className="px-3 py-1.5 rounded-lg text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 38%)" }}>✓ Completed</span>
@@ -762,14 +760,6 @@ export default function StaffDashboard() {
                                       const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" }).eq("id", interest.id);
                                       if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); toast({ title: "Marked as completed!" }); }
                                     }} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: "hsl(145, 65%, 88%)", color: "hsl(145, 65%, 25%)" }}>Complete</button>
-                                  )}
-                                  {isNotCompleted ? (
-                                    <span className="px-3 py-1.5 rounded-lg text-xs font-bold text-white" style={{ background: "hsl(0, 55%, 50%)" }}>✗ Not Completed</span>
-                                  ) : !isCompleted && (
-                                    <button onClick={async () => {
-                                      const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" }).eq("id", interest.id);
-                                      if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); toast({ title: "Marked as not completed!" }); }
-                                    }} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: "hsl(0, 65%, 90%)", color: "hsl(0, 65%, 30%)" }}>Incomplete</button>
                                   )}
                                 </div>
                               </div>
@@ -816,10 +806,6 @@ export default function StaffDashboard() {
 const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" }).eq("id", interest.id);
                               if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); setSelectedInterest({ ...interest, interest_type: "completed" }); toast({ title: "Marked as completed!" }); }
                             }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 42%)" }}>Completed</button>
-                            <button onClick={async () => {
-const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" }).eq("id", interest.id);
-                              if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); setSelectedInterest({ ...interest, interest_type: "not_completed" }); toast({ title: "Marked as not completed!" }); }
-                            }} className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white" style={{ background: "hsl(0, 55%, 50%)" }}>Not Completed</button>
                           </div>
                           <div>
                             <label className="block text-sm font-semibold text-gray-600 mb-1.5">📝 Admin Note</label>
