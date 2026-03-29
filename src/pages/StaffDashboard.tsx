@@ -75,7 +75,7 @@ type Consultation = {
 
 // Staff-specific theme colors
 const THEME = {
-  sidebar: "hsl(185, 70%, 30%)",
+  sidebar: "hsl(185, 100%, 20%)",
   sidebarActive: "hsl(185, 80%, 55% / 0.25)",
   sidebarActiveText: "hsl(185, 80%, 85%)",
   accent: "hsl(185, 70%, 45%)",
