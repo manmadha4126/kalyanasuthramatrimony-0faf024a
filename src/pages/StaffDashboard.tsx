@@ -528,7 +528,7 @@ export default function StaffDashboard() {
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
           <div>
-            <h1 className="text-lg font-normal" style={{ color: "hsl(0, 0%, 0%)", fontFamily: "'Lato', sans-serif" }}>Staff Dashboard</h1>
+            <h1 className="text-lg font-bold" style={{ color: "hsl(0, 0%, 0%)" }}>Staff Dashboard</h1>
             <p className="text-sm text-gray-400">Kalyanasuthra Matrimony — Staff Access</p>
           </div>
           <div className="ml-auto flex items-center gap-3">
