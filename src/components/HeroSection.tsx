@@ -196,19 +196,19 @@ const HeroSection = () => {
                 <a
                   href="/register"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
-                  style={{ background: "hsl(348, 60%, 45%)" }}>
+                  style={{ background: "hsl(262, 55%, 48%)" }}>
                   Get Started
                 </a>
                 <a
                   href="#about"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 hover:scale-105 border-2"
-                  style={{ borderColor: "hsl(var(--gold-accent))", color: "hsl(var(--gold-accent))" }}>
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                  style={{ background: "hsl(38, 75%, 50%)" }}>
                   Learn More
                 </a>
                 <a
                   href="#contact"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
-                  style={{ background: "hsl(200, 55%, 40%)" }}>
+                  style={{ background: "hsl(170, 55%, 38%)" }}>
                   Let's Connect to Us
                 </a>
               </div>
