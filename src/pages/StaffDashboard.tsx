@@ -487,16 +487,16 @@ export default function StaffDashboard() {
             ))}
           </nav>
 
-          <div className="space-y-1 border-t border-white/10 pt-4 mb-2">
+          <div className="space-y-1 border-t pt-4 mb-2" style={{ borderColor: "hsl(187, 80%, 40%)" }}>
             <motion.button onClick={() => navigate("/")} whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-2 text-white/60 hover:text-white text-xs px-3 py-2 w-full transition-colors rounded-lg hover:bg-white/5">
+              className="flex items-center gap-2 text-xs px-3 py-2 w-full transition-colors rounded-lg" style={{ color: "hsl(187, 90%, 15%)" }}>
               <Home size={14} /> Back to Home
             </motion.button>
           </div>
 
-          <div className="border-t border-white/10 pt-4">
-            <p className="text-white/40 text-[10px] px-1 mb-1 truncate">{staffEmail}</p>
-            <button onClick={logout} className="flex items-center gap-2 text-white/60 hover:text-white text-xs px-1 py-1 transition-colors">
+          <div className="pt-4 border-t" style={{ borderColor: "hsl(187, 80%, 40%)" }}>
+            <p className="text-[10px] px-1 mb-1 truncate" style={{ color: "hsl(187, 90%, 20%)" }}>{staffEmail}</p>
+            <button onClick={logout} className="flex items-center gap-2 text-xs px-1 py-1 transition-colors" style={{ color: "hsl(187, 90%, 15%)" }}>
               <LogOut size={14} /> Sign Out
             </button>
           </div>
