@@ -752,13 +752,21 @@ export default function StaffDashboard() {
                                   </div>
                                 </div>
                                 {/* Right: Complete button */}
-                                <div className="flex flex-col gap-1.5 flex-shrink-0 ml-2" onClick={e => e.stopPropagation()}>
+                                <div className="flex flex-col gap-1.5 flex-shrink-0 ml-2">
                                   {isCompleted ? (
                                     <span className="px-3 py-1.5 rounded-lg text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 38%)" }}>✓ Completed</span>
                                   ) : (
-                                    <button onClick={async () => {
+                                    <button onClick={async (e) => {
+                                      e.stopPropagation();
+                                      e.preventDefault();
                                       const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" }).eq("id", interest.id);
-                                      if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); toast({ title: "Marked as completed!" }); }
+                                      if (!error) {
+                                        setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i));
+                                        toast({ title: "Marked as completed!" });
+                                      } else {
+                                        console.error("Update error:", error);
+                                        toast({ title: "Error updating", description: error.message, variant: "destructive" });
+                                      }
                                     }} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: "hsl(145, 65%, 88%)", color: "hsl(145, 65%, 25%)" }}>Complete</button>
                                   )}
                                 </div>
