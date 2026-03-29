@@ -75,18 +75,18 @@ type Consultation = {
 
 // Staff-specific theme colors
 const THEME = {
-  sidebar: "hsl(200, 40%, 28%)",
-  sidebarActive: "hsl(200, 70%, 55% / 0.25)",
-  sidebarActiveText: "hsl(200, 70%, 80%)",
-  accent: "hsl(200, 70%, 50%)",
-  accentBg: "hsl(200, 70%, 96%)",
-  accentText: "hsl(200, 70%, 35%)",
-  chipActive: "hsl(200, 40%, 28%)",
+  sidebar: "hsl(185, 70%, 30%)",
+  sidebarActive: "hsl(185, 80%, 55% / 0.25)",
+  sidebarActiveText: "hsl(185, 80%, 85%)",
+  accent: "hsl(185, 70%, 45%)",
+  accentBg: "hsl(185, 70%, 96%)",
+  accentText: "hsl(185, 70%, 30%)",
+  chipActive: "hsl(185, 70%, 30%)",
   chipActiveText: "hsl(45, 60%, 78%)",
-  chipInactive: "hsl(200, 25%, 92%)",
-  chipInactiveText: "hsl(200, 32%, 35%)",
+  chipInactive: "hsl(185, 25%, 92%)",
+  chipInactiveText: "hsl(185, 32%, 35%)",
   headerBadge: "hsl(45, 55%, 55%)",
-  headerBadgeText: "hsl(200, 40%, 12%)",
+  headerBadgeText: "hsl(185, 40%, 12%)",
 };
 
 const STAFF_TABS = ["Profile Requests", "All Profiles", "Consultations", "Add Profiles", "Interests"];
