@@ -171,8 +171,8 @@ export default function ProfileDetail() {
               <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
                 {allPhotos.length > 0 ? (
                   <>
-                    <div className="aspect-[4/3] relative">
-                      <img src={allPhotos[activePhoto]} alt={profile.full_name} className="w-full h-full object-cover" />
+                    <div className="aspect-[3/4] relative">
+                      <img src={allPhotos[activePhoto]} alt={profile.full_name} className="w-full h-full object-contain bg-gray-50" />
                     </div>
                     {allPhotos.length > 1 && (
                       <div className="flex gap-1.5 p-2 overflow-x-auto">
@@ -185,7 +185,7 @@ export default function ProfileDetail() {
                     )}
                   </>
                 ) : (
-                  <div className="aspect-[4/3] flex items-center justify-center" style={{ background: themeLight }}>
+                  <div className="aspect-[3/4] flex items-center justify-center" style={{ background: themeLight }}>
                     <span className="text-5xl font-bold" style={{ color: themeAccent }}>{profile.full_name[0]}</span>
                   </div>
                 )}
