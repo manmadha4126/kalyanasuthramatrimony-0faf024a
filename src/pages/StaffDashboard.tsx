@@ -75,13 +75,13 @@ type Consultation = {
 
 // Staff-specific theme colors
 const THEME = {
-  sidebar: "hsl(187, 90%, 55%)",
-  sidebarActive: "hsl(187, 90%, 65% / 0.3)",
+  sidebar: "hsl(187, 70%, 42%)",
+  sidebarActive: "hsl(187, 70%, 52% / 0.3)",
   sidebarActiveText: "hsl(0, 0%, 100%)",
-  accent: "hsl(187, 90%, 55%)",
+  accent: "hsl(187, 70%, 42%)",
   accentBg: "hsl(187, 80%, 96%)",
   accentText: "hsl(187, 80%, 30%)",
-  chipActive: "hsl(187, 90%, 45%)",
+  chipActive: "hsl(187, 70%, 35%)",
   chipActiveText: "hsl(45, 60%, 78%)",
   chipInactive: "hsl(185, 25%, 92%)",
   chipInactiveText: "hsl(185, 32%, 35%)",
@@ -528,7 +528,7 @@ export default function StaffDashboard() {
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
           <div>
-            <h1 className="text-lg font-bold" style={{ color: THEME.sidebar }}>Staff Dashboard</h1>
+            <h1 className="text-lg font-normal" style={{ color: "hsl(0, 0%, 0%)", fontFamily: "'Lato', sans-serif" }}>Staff Dashboard</h1>
             <p className="text-sm text-gray-400">Kalyanasuthra Matrimony — Staff Access</p>
           </div>
           <div className="ml-auto flex items-center gap-3">
