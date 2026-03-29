@@ -1,0 +1,2 @@
+ALTER TABLE public.profile_interests DROP CONSTRAINT profile_interests_interest_type_check;
+ALTER TABLE public.profile_interests ADD CONSTRAINT profile_interests_interest_type_check CHECK (interest_type = ANY (ARRAY['shortlist'::text, 'interest_sent'::text, 'accepted'::text, 'declined'::text, 'completed'::text]));
