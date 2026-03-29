@@ -63,17 +63,35 @@ export default function AdminLogin() {
         return;
       }
 
-      // Check if staff member
-      const { data: staffData } = await supabase.from("staff_members" as any).select("*").eq("email", email.toLowerCase()).eq("is_active", true).limit(1);
-      if (staffData && (staffData as any[]).length > 0) {
-        const { error: signInError } = await supabase.auth.signInWithPassword({ email: email.toLowerCase(), password });
-        if (signInError) {
-          setError("Invalid email or password.");
-          setLoading(false);
+      // Staff must sign in first because staff_members is only readable by authenticated users
+      const { data: staffSignInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email: email.toLowerCase(),
+        password,
+      });
+
+      if (!signInError) {
+        const { data: staffData, error: staffError } = await supabase
+          .from("staff_members" as any)
+          .select("email, is_active")
+          .eq("email", email.toLowerCase())
+          .eq("is_active", true)
+          .limit(1);
+
+        if (!staffError && staffData && (staffData as any[]).length > 0) {
+          sessionStorage.setItem("staff_auth", JSON.stringify({ email: email.toLowerCase(), loggedIn: true }));
+          navigate("/staff/dashboard");
           return;
         }
-        sessionStorage.setItem("staff_auth", JSON.stringify({ email: email.toLowerCase(), loggedIn: true }));
-        navigate("/staff/dashboard");
+
+        await supabase.auth.signOut();
+        setError("Access denied. This account is not an active staff account.");
+        setLoading(false);
+        return;
+      }
+
+      if (signInError.message.includes("Invalid login credentials")) {
+        setError("Invalid email or password.");
+        setLoading(false);
         return;
       }
 
