@@ -478,8 +478,8 @@ export default function StaffDashboard() {
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
                 className="w-full text-left px-4 py-3 rounded-xl text-sm transition-all"
                 style={tab === t
-                  ? { background: THEME.sidebarActive, color: THEME.sidebarActiveText, fontWeight: 600 }
-                  : { color: "hsl(0, 0%, 70%)" }
+                  ? { background: "hsl(0, 0%, 100% / 0.3)", color: "hsl(0, 0%, 100%)", fontWeight: 700 }
+                  : { color: "hsl(187, 90%, 15%)", fontWeight: 500 }
                 }
               >
                 {t}
