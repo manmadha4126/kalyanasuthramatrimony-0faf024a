@@ -1571,16 +1571,16 @@ export default function AdminDashboard() {
                         const fromPhone = interest.from_profile?.phone || "";
                         const toName = interest.profiles?.full_name || "Unknown";
                         const isCompleted = interest.interest_type === "completed";
-                        const isNotCompleted = interest.interest_type === "not_completed";
+                        const cardBg = isCompleted ? "hsl(145, 55%, 90%)" : "hsl(0, 0%, 100%)";
+                        const cardBorder = isCompleted ? "hsl(145, 50%, 70%)" : "hsl(0, 0%, 85%)";
                         return (
                           <motion.div key={interest.id}
                             initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
-                            className="rounded-xl border border-gray-200 cursor-pointer hover:shadow-md transition-all"
-                            style={{ background: isCompleted ? "hsl(145, 55%, 90%)" : isNotCompleted ? "hsl(0, 55%, 92%)" : "hsl(0, 0%, 100%)" }}
-                            onClick={() => { setSelectedInterest(interest); setInterestNoteText(interest.admin_notes || ""); }}
-                          >
-                            <div className="flex items-center gap-3 px-4 py-3">
-                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                            className="rounded-xl border cursor-pointer hover:shadow-md transition-all"
+                            style={{ background: cardBg, borderColor: cardBorder }}
+                            onClick={() => { setSelectedInterest(interest); setInterestNoteText(interest.admin_notes || ""); }}>
+                            <div className="flex items-start gap-3 px-4 py-3">
+                              <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0 mt-0.5">
                                 {interest.profiles?.profile_photo_url ? (
                                   <img src={interest.profiles.profile_photo_url} alt="" className="w-full h-full object-cover" />
                                 ) : (
@@ -1590,45 +1590,42 @@ export default function AdminDashboard() {
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-bold text-gray-800 truncate">{fromName} → {toName}</p>
                                 <p className="text-xs text-gray-500">{new Date(interest.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</p>
+                                <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                                  {fromPhone ? (
+                                    <a href={`https://wa.me/${fromPhone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi ${fromName}, you shortlisted the profile of ${toName}. Would you like more details? - Kalyanasuthra Matrimony`)}`}
+                                      target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}
+                                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold"
+                                      style={{ background: "hsl(142, 70%, 93%)", color: "hsl(142, 70%, 30%)" }}>📱 {fromPhone}</a>
+                                  ) : <span className="text-xs text-gray-400">No phone</span>}
+                                  <span className="px-2 py-0.5 rounded-full text-xs font-bold" style={{
+                                    background: interest.interest_type === "shortlist" ? "hsl(38, 90%, 93%)" : "hsl(340, 65%, 93%)",
+                                    color: interest.interest_type === "shortlist" ? "hsl(38, 90%, 35%)" : "hsl(340, 65%, 40%)"
+                                  }}>
+                                    {interest.interest_type === "shortlist" ? "Shortlisted" : isCompleted ? "" : "Interested"}
+                                  </span>
+                                  {interest.admin_notes && (
+                                    <span className="text-xs text-gray-400 italic max-w-[120px] truncate" title={interest.admin_notes}>📝 {interest.admin_notes}</span>
+                                  )}
+                                </div>
                               </div>
-                              <span className="px-2 py-1 rounded-full text-xs font-bold flex-shrink-0" style={{
-                                background: isCompleted ? "hsl(145, 60%, 90%)" : isNotCompleted ? "hsl(0, 60%, 90%)" : interest.interest_type === "shortlist" ? "hsl(38, 90%, 93%)" : "hsl(340, 65%, 93%)",
-                                color: isCompleted ? "hsl(145, 60%, 25%)" : isNotCompleted ? "hsl(0, 60%, 25%)" : interest.interest_type === "shortlist" ? "hsl(38, 90%, 35%)" : "hsl(340, 65%, 40%)"
-                              }}>
-                                {isCompleted ? "Completed" : isNotCompleted ? "Not Completed" : interest.interest_type === "shortlist" ? "Shortlisted" : "Interested"}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2 px-4 pb-3 flex-wrap">
-                              {fromPhone ? (
-                                <a href={`https://wa.me/${fromPhone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi ${fromName}, you shortlisted the profile of ${toName}. Would you like more details about this profile? We can help you connect. - Kalyanasuthra Matrimony`)}`}
-                                  target="_blank" rel="noopener noreferrer"
-                                  onClick={e => e.stopPropagation()}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold"
-                                  style={{ background: "hsl(142, 70%, 93%)", color: "hsl(142, 70%, 30%)" }}>
-                                  📱 {fromPhone}
-                                </a>
-                              ) : <span className="text-xs text-gray-400">No phone</span>}
-                              <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
-                                {!isCompleted && (
-                                  <button onClick={async () => {
+                              {/* Right: Complete button */}
+                              <div className="flex flex-col gap-1.5 flex-shrink-0 ml-2">
+                                {isCompleted ? (
+                                  <span className="px-3 py-1.5 rounded-lg text-xs font-bold text-white" style={{ background: "hsl(145, 65%, 38%)" }}>✓ Completed</span>
+                                ) : (
+                                  <button onClick={async (e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
                                     const { error } = await supabase.from("profile_interests").update({ interest_type: "completed" } as any).eq("id", interest.id);
-                                    if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i)); toast({ title: "Marked as completed!" }); }
-                                  }} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: "hsl(145, 65%, 88%)", color: "hsl(145, 65%, 25%)" }}>
-                                    Completed
-                                  </button>
-                                )}
-                                {!isNotCompleted && (
-                                  <button onClick={async () => {
-                                    const { error } = await supabase.from("profile_interests").update({ interest_type: "not_completed" } as any).eq("id", interest.id);
-                                    if (!error) { setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "not_completed" } : i)); toast({ title: "Marked as not completed!" }); }
-                                  }} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: "hsl(0, 65%, 90%)", color: "hsl(0, 65%, 30%)" }}>
-                                    Not Completed
-                                  </button>
+                                    if (!error) {
+                                      setInterests(prev => prev.map(i => i.id === interest.id ? { ...i, interest_type: "completed" } : i));
+                                      toast({ title: "Marked as completed!" });
+                                    } else {
+                                      toast({ title: "Error updating", description: error.message, variant: "destructive" });
+                                    }
+                                  }} className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: "hsl(145, 65%, 88%)", color: "hsl(145, 65%, 25%)" }}>Complete</button>
                                 )}
                               </div>
-                              {interest.admin_notes && (
-                                <span className="text-xs text-gray-400 italic max-w-[120px] truncate" title={interest.admin_notes}>📝 {interest.admin_notes}</span>
-                              )}
                             </div>
                           </motion.div>
                         );
