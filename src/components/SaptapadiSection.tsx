@@ -87,14 +87,14 @@ const SaptapadiSection = () => {
             వివాహ వేడుక
           </h2>
           <p
-            className="tracking-widest uppercase text-sm"
+            className="tracking-widest text-sm"
             style={{
               color: "#8a8580",
-              fontFamily: "system-ui, sans-serif",
+              fontFamily: "'Noto Sans Telugu', sans-serif",
               letterSpacing: "0.15em",
             }}
           >
-            Indian Wedding Matrimony
+            భారతీయ వివాహ మాట్రిమోనీ
           </p>
         </motion.div>
 
