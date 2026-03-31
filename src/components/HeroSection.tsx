@@ -208,7 +208,7 @@ const HeroSection = () => {
 
             {/* Right - Slider */}
             <motion.div
-              className="relative order-1 lg:order-2 z-10 lg:mr-16 xl:mr-24"
+              className="relative order-2 lg:order-2 z-10 lg:mr-16 xl:mr-24"
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}>
