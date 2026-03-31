@@ -141,7 +141,7 @@ export default function CustomerLogin() {
             <h1 className="text-3xl font-bold italic mt-0.5" style={{ fontFamily: "'Kaushan Script', cursive", color: "hsl(42, 60%, 80%)" }}>
               Kalyanasuthra Matrimony
             </h1>
-            <p className="text-sm text-white/80 italic mt-2" style={{ fontFamily: "'Kaushan Script', cursive" }}>
+            <p className="text-sm text-white/80 italic mt-2 font-serif" style={{ fontFamily: "'Kaushan Script', cursive" }}>
               The Wedding Chapter Starts Here…
             </p>
           </div>
