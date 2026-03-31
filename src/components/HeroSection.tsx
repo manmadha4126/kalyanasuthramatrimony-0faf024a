@@ -177,9 +177,9 @@ const HeroSection = () => {
                 Kalyanasuthra
               </h1>
 
-              <div className="w-20 h-1 mx-auto lg:mx-0 mb-5 rounded-full" style={{ background: "linear-gradient(90deg, hsl(var(--gold-accent)), hsl(348, 60%, 50%))" }} />
+              <div className="w-16 lg:w-20 h-1 mx-auto lg:mx-0 mb-2 lg:mb-5 rounded-full" style={{ background: "linear-gradient(90deg, hsl(var(--gold-accent)), hsl(348, 60%, 50%))" }} />
 
-              <p className="text-sm md:text-base lg:text-lg mb-8 leading-relaxed max-w-md mx-auto lg:mx-0" style={{ color: "hsl(0, 0%, 75%)" }}>
+              <p className="text-xs md:text-base lg:text-lg mb-3 lg:mb-8 leading-relaxed max-w-md mx-auto lg:mx-0 hidden lg:block" style={{ color: "hsl(0, 0%, 75%)" }}>
                 Trusted matchmaking with traditional values and a modern approach. Your perfect match awaits — find your soulmate today.
               </p>
 
