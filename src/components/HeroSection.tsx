@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Heart, Volume2, VolumeX, Play, Pause } from "lucide-react";
 
 import wedding1 from "@/assets/wedding-1.jpeg";
@@ -17,7 +17,6 @@ const images = [wedding1, wedding2, wedding3, wedding4, wedding5, wedding6, wedd
 
 const HeroSection = () => {
   const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -51,12 +50,10 @@ const HeroSection = () => {
   };
 
   const goNext = useCallback(() => {
-    setDirection(1);
     setCurrent((prev) => (prev + 1) % images.length);
   }, []);
 
   const goPrev = useCallback(() => {
-    setDirection(-1);
     setCurrent((prev) => (prev - 1 + images.length) % images.length);
   }, []);
 
@@ -79,11 +76,6 @@ const HeroSection = () => {
     }
   };
 
-  const variants = {
-    enter: () => ({ opacity: 0, scale: 1.03 }),
-    center: { opacity: 1, scale: 1 },
-    exit: () => ({ opacity: 0, scale: 1 })
-  };
 
   return (
     <section id="home" className="relative w-full" style={{ marginTop: "80px" }}>
@@ -253,24 +245,17 @@ const HeroSection = () => {
 
               <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] max-w-[240px] sm:max-w-xs lg:max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
 
-                {/* Main image with sequential fade */}
-                <AnimatePresence mode="popLayout">
-                  <motion.div
-                    key={current}
-                    variants={variants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{ duration: 1, ease: "easeInOut" }}
-                    className="absolute inset-0">
-                    
+                {/* Main image with soft fade */}
+                <div className="absolute inset-0">
+                  {images.map((img, i) => (
                     <img
-                      src={images[current]}
-                      alt={`Wedding ${current + 1}`}
-                      className="w-full h-full object-cover" />
-                    
-                  </motion.div>
-                </AnimatePresence>
+                      key={`main-${i}`}
+                      src={img}
+                      alt={`Wedding ${i + 1}`}
+                      className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${i === current ? "opacity-100" : "opacity-0"}`}
+                    />
+                  ))}
+                </div>
 
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 z-10 pointer-events-none" style={{
@@ -304,7 +289,7 @@ const HeroSection = () => {
                   {images.map((_, i) =>
                   <button
                     key={i}
-                    onClick={() => {setDirection(i > current ? 1 : -1);setCurrent(i);}}
+                    onClick={() => setCurrent(i)}
                     className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300"
                     style={{
                       width: i === current ? "24px" : "8px",
