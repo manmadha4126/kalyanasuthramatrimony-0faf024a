@@ -150,7 +150,7 @@ export default function CustomerLogin() {
             <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 w-auto object-contain" />
           </div>
 
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+          <div className="bg-white rounded-2xl shadow-xl p-5 lg:p-8 border border-gray-100">
             {!forgotMode ? (
               <>
                 {/* Highlighted Member Login badge */}
