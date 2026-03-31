@@ -191,8 +191,8 @@ const HeroSection = () => {
                 Trusted matchmaking with traditional values and a modern approach. Your perfect match awaits — find your soulmate today.
               </p>
 
-              {/* CTA Buttons */}
-              <div className="flex items-center justify-center lg:justify-start gap-3 flex-wrap">
+              {/* CTA Buttons - visible only on desktop */}
+              <div className="hidden lg:flex items-center justify-start gap-3 flex-wrap">
                 <a
                   href="/register"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
