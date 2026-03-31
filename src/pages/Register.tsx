@@ -507,8 +507,8 @@ export default function Register() {
           <a href="/" className="inline-flex items-center gap-3">
             <img src={logo} alt="Kalyanasuthra" className="h-10 sm:h-12 w-auto object-contain" />
             <span
-              className="text-2xl sm:text-3xl font-bold"
-              style={{ color: "hsl(0, 0%, 100%)", fontFamily: "'Great Vibes', cursive" }}
+              className="text-lg sm:text-xl font-bold whitespace-nowrap"
+              style={{ color: "hsl(0, 0%, 100%)", fontFamily: "'Playfair Display', serif" }}
             >
               Kalyanasuthra Matrimony
             </span>
