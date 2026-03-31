@@ -161,7 +161,7 @@ const HeroSection = () => {
             
             {/* Left - Content */}
             <motion.div
-              className="text-center lg:text-left order-2 lg:order-1 z-10"
+              className="text-center lg:text-left order-1 z-10"
               initial={{ opacity: 0, x: -40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}>
