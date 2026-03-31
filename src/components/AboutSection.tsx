@@ -35,7 +35,7 @@ const steps = [
 const ACCENT = "hsl(220, 65%, 48%)";
 
 const categories: Record<string, string[]> = {
-  "Mother Tongue": ["Telugu", "Hindi", "Tamil", "Kannada", "Malayalam", "Marathi", "Bengali", "Gujarati", "Punjabi", "Oriya", "Rajasthani", "Urdu"],
+  "Mother Tongue": ["Telugu", "Hindi", "Tamil", "English", "Kannada", "Malayalam", "Marathi", "Bengali", "Gujarati", "Punjabi", "Oriya", "Rajasthani", "Urdu"],
   "Caste": ["Brahmin", "Reddy", "Kamma", "Kapu", "Naidu", "Velama", "Vysya", "Yadav", "Mudaliar", "Chettiar"],
   "Religion": ["Hindu", "Muslim", "Christian", "Sikh", "Jain", "Buddhist", "Parsi"],
   "City": ["Hyderabad", "Bangalore", "Chennai", "Mumbai", "Delhi", "Pune", "Kolkata", "Vizag", "Vijayawada", "Tirupati"],
