@@ -153,7 +153,7 @@ const HeroSection = () => {
             
             {/* Left - Content */}
             <motion.div
-              className="text-center lg:text-left order-2 lg:order-1 z-10"
+              className="text-center lg:text-left order-1 lg:order-1 z-10"
               initial={{ opacity: 0, x: -40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}>
@@ -208,7 +208,7 @@ const HeroSection = () => {
 
             {/* Right - Slider */}
             <motion.div
-              className="relative order-1 lg:order-2 z-10 lg:mr-16 xl:mr-24"
+              className="relative order-2 lg:order-2 z-10 lg:mr-16 xl:mr-24"
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}>
@@ -233,7 +233,7 @@ const HeroSection = () => {
                 {/* Slideshow pause/play button on background */}
                 <button
                   onClick={toggleSlideshow}
-                  className="absolute bottom-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                  className="absolute bottom-3 right-10 lg:right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
                   style={{ background: "hsl(var(--gold-accent) / 0.8)" }}
                   aria-label={isMuted ? "Play music" : "Pause music"}>
                   {isMuted ?
