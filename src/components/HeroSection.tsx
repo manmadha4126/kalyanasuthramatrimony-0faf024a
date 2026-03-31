@@ -76,11 +76,6 @@ const HeroSection = () => {
     }
   };
 
-  const variants = {
-    enter: () => ({ opacity: 0, scale: 1.03 }),
-    center: { opacity: 1, scale: 1 },
-    exit: () => ({ opacity: 0, scale: 1 })
-  };
 
   return (
     <section id="home" className="relative w-full" style={{ marginTop: "80px" }}>
