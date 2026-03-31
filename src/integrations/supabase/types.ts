@@ -77,6 +77,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "detail_views_viewed_profile_id_fkey"
+            columns: ["viewed_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       featured_profiles: {
@@ -175,6 +182,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "profile_interests_to_profile_id_fkey"
+            columns: ["to_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       profile_views: {
@@ -202,6 +216,13 @@ export type Database = {
             columns: ["viewed_profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profile_views_viewed_profile_id_fkey"
+            columns: ["viewed_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_public"
             referencedColumns: ["id"]
           },
         ]
@@ -451,7 +472,165 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      profiles_public: {
+        Row: {
+          about_me: string | null
+          additional_photos: string[] | null
+          annual_income: string | null
+          blood_group: string | null
+          caste: string | null
+          citizenship: string | null
+          city: string | null
+          company_name: string | null
+          complexion: string | null
+          country: string | null
+          created_at: string | null
+          date_of_birth: string | null
+          district: string | null
+          dosham: string | null
+          education: string | null
+          education_detail: string | null
+          family_status: string | null
+          family_type: string | null
+          father_name: string | null
+          father_occupation: string | null
+          full_name: string | null
+          gender: string | null
+          gothra: string | null
+          height_cm: number | null
+          horoscope_url: string | null
+          id: string | null
+          is_featured: boolean | null
+          marital_status: string | null
+          mother_name: string | null
+          mother_occupation: string | null
+          mother_tongue: string | null
+          native_place: string | null
+          occupation: string | null
+          partner_expectations: string | null
+          profile_created_by: string | null
+          profile_id: string | null
+          profile_photo_url: string | null
+          profile_status: string | null
+          raasi: string | null
+          religion: string | null
+          residence_type: string | null
+          siblings: string | null
+          star: string | null
+          state: string | null
+          sub_caste: string | null
+          subscription_type: string | null
+          updated_at: string | null
+          visa_type: string | null
+          weight_kg: number | null
+          working_city: string | null
+        }
+        Insert: {
+          about_me?: string | null
+          additional_photos?: string[] | null
+          annual_income?: string | null
+          blood_group?: string | null
+          caste?: string | null
+          citizenship?: string | null
+          city?: string | null
+          company_name?: string | null
+          complexion?: string | null
+          country?: string | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          district?: string | null
+          dosham?: string | null
+          education?: string | null
+          education_detail?: string | null
+          family_status?: string | null
+          family_type?: string | null
+          father_name?: string | null
+          father_occupation?: string | null
+          full_name?: string | null
+          gender?: string | null
+          gothra?: string | null
+          height_cm?: number | null
+          horoscope_url?: string | null
+          id?: string | null
+          is_featured?: boolean | null
+          marital_status?: string | null
+          mother_name?: string | null
+          mother_occupation?: string | null
+          mother_tongue?: string | null
+          native_place?: string | null
+          occupation?: string | null
+          partner_expectations?: string | null
+          profile_created_by?: string | null
+          profile_id?: string | null
+          profile_photo_url?: string | null
+          profile_status?: string | null
+          raasi?: string | null
+          religion?: string | null
+          residence_type?: string | null
+          siblings?: string | null
+          star?: string | null
+          state?: string | null
+          sub_caste?: string | null
+          subscription_type?: string | null
+          updated_at?: string | null
+          visa_type?: string | null
+          weight_kg?: number | null
+          working_city?: string | null
+        }
+        Update: {
+          about_me?: string | null
+          additional_photos?: string[] | null
+          annual_income?: string | null
+          blood_group?: string | null
+          caste?: string | null
+          citizenship?: string | null
+          city?: string | null
+          company_name?: string | null
+          complexion?: string | null
+          country?: string | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          district?: string | null
+          dosham?: string | null
+          education?: string | null
+          education_detail?: string | null
+          family_status?: string | null
+          family_type?: string | null
+          father_name?: string | null
+          father_occupation?: string | null
+          full_name?: string | null
+          gender?: string | null
+          gothra?: string | null
+          height_cm?: number | null
+          horoscope_url?: string | null
+          id?: string | null
+          is_featured?: boolean | null
+          marital_status?: string | null
+          mother_name?: string | null
+          mother_occupation?: string | null
+          mother_tongue?: string | null
+          native_place?: string | null
+          occupation?: string | null
+          partner_expectations?: string | null
+          profile_created_by?: string | null
+          profile_id?: string | null
+          profile_photo_url?: string | null
+          profile_status?: string | null
+          raasi?: string | null
+          religion?: string | null
+          residence_type?: string | null
+          siblings?: string | null
+          star?: string | null
+          state?: string | null
+          sub_caste?: string | null
+          subscription_type?: string | null
+          updated_at?: string | null
+          visa_type?: string | null
+          weight_kg?: number | null
+          working_city?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       create_profile_on_register:
@@ -538,6 +717,7 @@ export type Database = {
             }
             Returns: string
           }
+      is_staff_or_admin: { Args: { check_user_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
