@@ -45,7 +45,7 @@ const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => 
           {step.step}
         </span>
       </div>
-      <h3 className="text-xl font-bold mb-1 text-white" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+      <h3 className="text-xl font-bold mb-1 text-white" style={{ fontFamily: "'Noto Sans Telugu', sans-serif" }}>
         {step.title}
       </h3>
       <span className="text-xs tracking-wider uppercase mb-3" style={{ color: "hsla(0, 0%, 100%, 0.8)" }}>
