@@ -68,7 +68,7 @@ const OurFeaturesSection = () => {
       </section>
 
       <section>
-        <div className="grid grid-cols-5 gap-0">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-0">
           {[wedding1, wedding2, wedding3, wedding4, wedding5].map((img, i) => (
             <motion.div
               key={i}
