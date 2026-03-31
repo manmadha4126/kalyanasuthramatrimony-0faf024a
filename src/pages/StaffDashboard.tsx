@@ -511,7 +511,7 @@ export default function StaffDashboard() {
             <img src={adminLogo} alt="Kalyanasuthra" className="h-9 w-auto object-contain" />
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold leading-tight" style={{ color: THEME.chipActiveText }}>Staff Panel</p>
-              <p className="text-[10px] truncate" style={{ color: "hsl(0,0%,60%)" }}>{staffEmail}</p>
+              <p className="text-[10px] truncate" style={{ color: "hsl(0,0%,0%)" }}>{staffEmail}</p>
             </div>
             <button onClick={() => navigate("/")} className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all" style={{ background: THEME.headerBadge, color: THEME.headerBadgeText }}>
               <Home size={12} /> Home
