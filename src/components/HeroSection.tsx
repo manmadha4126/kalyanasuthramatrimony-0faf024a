@@ -184,7 +184,7 @@ const HeroSection = () => {
               </p>
 
               {/* CTA Buttons */}
-              <div className="flex items-center justify-center lg:justify-start gap-3 flex-wrap">
+              <div className="flex items-center justify-center lg:justify-start gap-2 lg:gap-3 flex-wrap">
                 <a
                   href="/register"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
