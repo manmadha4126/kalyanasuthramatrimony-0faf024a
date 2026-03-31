@@ -908,56 +908,6 @@ export default function CustomerDashboard() {
         </div>
       }
 
-      {/* Success Story Modal */}
-      {showStoryForm &&
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "hsl(0, 0%, 0% / 0.5)" }}>
-          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-2xl max-w-md w-full overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="font-bold text-gray-800">Share Your Success Story</h2>
-              <button onClick={() => setShowStoryForm(false)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><X size={16} className="text-gray-500" /></button>
-            </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1">Bride Name</label>
-                <input value={storyForm.bride_name} onChange={(e) => setStoryForm((p) => ({ ...p, bride_name: e.target.value }))} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" required />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1">Groom Name</label>
-                <input value={storyForm.groom_name} onChange={(e) => setStoryForm((p) => ({ ...p, groom_name: e.target.value }))} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" required />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1">City</label>
-                <input value={storyForm.city} onChange={(e) => setStoryForm((p) => ({ ...p, city: e.target.value }))} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-teal-300" required />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1">Your Story</label>
-                <textarea value={storyForm.story} onChange={(e) => setStoryForm((p) => ({ ...p, story: e.target.value }))} rows={3} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none resize-none focus:ring-2 focus:ring-teal-300" required />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1">Upload Photo (Optional)</label>
-                <div className="relative">
-                  {storyPhotoPreview ? (
-                    <div className="relative w-full h-40 rounded-lg overflow-hidden border border-gray-200">
-                      <img src={storyPhotoPreview} alt="Preview" className="w-full h-full object-cover" />
-                      <button onClick={() => { setStoryPhoto(null); setStoryPhotoPreview(null); }} className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center hover:bg-white"><X size={12} className="text-gray-600" /></button>
-                    </div>
-                  ) : (
-                    <label className="flex flex-col items-center justify-center w-full h-28 rounded-lg border-2 border-dashed border-gray-200 cursor-pointer hover:border-teal-300 transition-colors">
-                      <Camera size={20} className="text-gray-400 mb-1" />
-                      <span className="text-xs text-gray-400">Click to upload your wedding photo</span>
-                      <input type="file" accept="image/*" onChange={handleStoryPhotoChange} className="hidden" />
-                    </label>
-                  )}
-                </div>
-              </div>
-              <button onClick={submitStory} disabled={storyLoading} className="w-full py-2.5 rounded-lg text-sm font-bold text-white transition-all disabled:opacity-60" style={{ background: themeAccent }}>
-                {storyLoading ? "Submitting..." : "Submit Story"}
-              </button>
-              <p className="text-[10px] text-gray-400 text-center">Your story will be reviewed before publishing.</p>
-            </div>
-          </motion.div>
-        </div>
-      }
       {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-30 border-t border-gray-800 flex items-center justify-around py-2 px-1 safe-area-bottom" style={{ background: "linear-gradient(135deg, #1a1a2e, #16213e)" }}>
         {NAV.filter(n => n.label !== "Settings").map(({ icon: Icon, label }) => (
