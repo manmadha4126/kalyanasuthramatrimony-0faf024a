@@ -193,7 +193,7 @@ const HeroSection = () => {
                 </a>
                 <a
                   href="#about"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                  className="inline-flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl text-xs lg:text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
                   style={{ background: "hsl(38, 75%, 50%)" }}>
                   Learn More
                 </a>
