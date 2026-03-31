@@ -245,24 +245,17 @@ const HeroSection = () => {
 
               <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] max-w-[240px] sm:max-w-xs lg:max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
 
-                {/* Main image with sequential fade */}
-                <AnimatePresence mode="popLayout">
-                  <motion.div
-                    key={current}
-                    variants={variants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{ duration: 1, ease: "easeInOut" }}
-                    className="absolute inset-0">
-                    
+                {/* Main image with soft fade */}
+                <div className="absolute inset-0">
+                  {images.map((img, i) => (
                     <img
-                      src={images[current]}
-                      alt={`Wedding ${current + 1}`}
-                      className="w-full h-full object-cover" />
-                    
-                  </motion.div>
-                </AnimatePresence>
+                      key={`main-${i}`}
+                      src={img}
+                      alt={`Wedding ${i + 1}`}
+                      className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${i === current ? "opacity-100" : "opacity-0"}`}
+                    />
+                  ))}
+                </div>
 
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 z-10 pointer-events-none" style={{
