@@ -93,7 +93,14 @@ const Header = () => {
           >
             <nav className="flex flex-col items-center py-4 gap-3">
               {navLinks.map((link) => (
-                <a key={link.label} href={link.href} className="nav-link-premium" onClick={() => setMobileOpen(false)}>
+                <a key={link.label} href={link.href} className="nav-link-premium" onClick={(e) => {
+                  e.preventDefault();
+                  setMobileOpen(false);
+                  setTimeout(() => {
+                    const el = document.querySelector(link.href);
+                    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }, 300);
+                }}>
                   {link.label}
                 </a>
               ))}
