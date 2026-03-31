@@ -134,9 +134,16 @@ export default function CustomerLogin() {
             <BackButton to="/" label="Back to Home" />
           </div>
           {/* Brand name & tagline on mobile */}
-          <div className="flex flex-col items-center mb-3 lg:hidden">
-            <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "'Carattere', cursive" }}>Kalyanasuthra Matrimony</h1>
-            <p className="text-xs text-white/70 italic mt-0.5">The Wedding Chapter Starts Here…</p>
+          <div className="flex flex-col items-center mb-4 lg:hidden text-center">
+            <h1 className="text-2xl text-white font-bold italic" style={{ fontFamily: "'Kaushan Script', cursive" }}>
+              Welcome to the
+            </h1>
+            <h1 className="text-3xl font-bold italic mt-0.5" style={{ fontFamily: "'Kaushan Script', cursive", color: "hsl(42, 60%, 80%)" }}>
+              Kalyanasuthra Matrimony
+            </h1>
+            <p className="text-sm text-white/80 italic mt-2" style={{ fontFamily: "'Kaushan Script', cursive" }}>
+              The Wedding Chapter Starts Here…
+            </p>
           </div>
           {/* Logo on desktop */}
           <div className="hidden lg:flex items-center justify-center mb-6">
