@@ -203,6 +203,16 @@ const HeroSection = () => {
                   style={{ background: "hsl(170, 55%, 38%)" }}>
                   Let's Connect to Us
                 </a>
+                <button
+                  onClick={toggleMusic}
+                  className="inline-flex items-center justify-center w-9 h-9 lg:w-10 lg:h-10 rounded-full transition-all duration-300 hover:scale-110"
+                  style={{ background: "linear-gradient(135deg, hsl(348, 60%, 45%), hsl(348, 55%, 35%))", border: "2px solid hsl(var(--gold-accent) / 0.5)" }}
+                  aria-label={isMuted ? "Play music" : "Mute music"}>
+                  {isMuted ?
+                    <VolumeX className="w-4 h-4 text-white" /> :
+                    <Volume2 className="w-4 h-4 text-white" />
+                  }
+                </button>
               </div>
             </motion.div>
 
