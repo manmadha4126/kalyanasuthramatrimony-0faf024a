@@ -234,7 +234,6 @@ export default function CustomerDashboard() {
   { icon: Eye, label: "View Profile", action: () => navigate(`/profile/${userProfile?.id}`) },
   { icon: HelpCircle, label: "Help Us", action: () => window.location.href = "tel:+919553306667" },
   { icon: Phone, label: "Contact Us", action: () => setShowContactModal(true) },
-  { icon: BookHeart, label: "Add Success Story", action: () => setShowStoryForm(true) },
   { icon: LogOut, label: "Logout", action: logout }];
 
 
