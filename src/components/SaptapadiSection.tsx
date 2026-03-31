@@ -78,13 +78,13 @@ const SaptapadiSection = () => {
             className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-4"
             style={{
               color: "#e8e4df",
-              fontFamily: "'Playfair Display', 'DM Serif Display', Georgia, serif",
+              fontFamily: "'Noto Sans Telugu', sans-serif",
               letterSpacing: "0.01em",
             }}
           >
-            Saptapadi – Seven Steps | Indian
+            సప్తపది – ఏడు అడుగులు | భారతీయ
             <br />
-            Wedding Ceremony
+            వివాహ వేడుక
           </h2>
           <p
             className="tracking-widest uppercase text-sm"
