@@ -128,7 +128,7 @@ export default function CustomerLogin() {
       </motion.div>
 
       {/* Right Panel */}
-      <div className="flex flex-col items-center justify-start pt-6 lg:justify-center lg:pt-0 w-full lg:w-1/2 px-6 overflow-y-auto">
+      <div className="flex flex-col items-center justify-start pt-6 lg:justify-center lg:pt-0 w-full lg:w-1/2 px-6 overflow-y-auto lg:bg-white">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="w-full max-w-sm">
           <div className="mb-2">
             <BackButton to="/" label="Back to Home" />
