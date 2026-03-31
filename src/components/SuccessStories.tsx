@@ -146,16 +146,7 @@ const SuccessStories = () => {
                   />
                 </div>
                 <div className="px-4 py-3 text-center">
-                  <h4
-                    className="font-bold leading-tight text-sm"
-                    style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(0, 0%, 92%)" }}
-                  >
-                    {story.bride_name}{" "}
-                    <span style={{ color: "hsl(40, 85%, 55%)" }}>♥</span>{" "}
-                    {story.groom_name}
-                  </h4>
-                  <p className="text-xs mt-1" style={{ color: "hsl(0, 0%, 55%)" }}>{story.city}</p>
-                  <p className="text-[11px] mt-2 leading-snug italic" style={{ color: "hsl(0, 0%, 50%)" }}>
+                  <p className="text-[11px] mt-1 leading-snug italic" style={{ color: "hsl(0, 0%, 50%)" }}>
                     "{story.story}"
                   </p>
                 </div>
