@@ -11,13 +11,13 @@ const cardColors = [
 ];
 
 const steps = [
-  { step: 1, title: "Nourishment", sanskrit: "First Step", description: "Together we will provide for and support each other, sharing food and sustenance throughout life." },
-  { step: 2, title: "Strength", sanskrit: "Second Step", description: "Together we will grow strong in body, mind and spirit, developing physical, mental and spiritual powers." },
-  { step: 3, title: "Prosperity", sanskrit: "Third Step", description: "Together we will prosper and share our worldly possessions, preserving our wealth through righteous means." },
-  { step: 4, title: "Happiness", sanskrit: "Fourth Step", description: "Together we will acquire knowledge, happiness and harmony through mutual love, respect and trust." },
-  { step: 5, title: "Progeny", sanskrit: "Fifth Step", description: "Together we will be blessed with strong, virtuous and heroic children who carry forward our legacy." },
-  { step: 6, title: "Longevity", sanskrit: "Sixth Step", description: "Together we will live a long, healthy life filled with love, enjoying every season of existence." },
-  { step: 7, title: "Unity", sanskrit: "Seventh Step", description: "Together we will remain lifelong companions, committed to each other with unwavering loyalty and devotion." },
+  { step: 1, title: "పోషణ", sanskrit: "మొదటి అడుగు", description: "మనం ఒకరికొకరు ఆహారం మరియు జీవనోపాధిని పంచుకుంటూ, జీవితాంతం ఒకరినొకరు పోషించుకుంటాము." },
+  { step: 2, title: "బలం", sanskrit: "రెండవ అడుగు", description: "మనం శరీరంలో, మనసులో మరియు ఆత్మలో బలంగా ఎదుగుతాము, శారీరక, మానసిక మరియు ఆధ్యాత్మిక శక్తులను పెంపొందించుకుంటాము." },
+  { step: 3, title: "సంపద", sanskrit: "మూడవ అడుగు", description: "మనం ధర్మబద్ధంగా సంపదను సంరక్షిస్తూ, ప్రాపంచిక ఆస్తులను పంచుకుంటూ అభివృద్ధి చెందుతాము." },
+  { step: 4, title: "ఆనందం", sanskrit: "నాలుగవ అడుగు", description: "మనం పరస్పర ప్రేమ, గౌరవం మరియు నమ్మకం ద్వారా జ్ఞానం, ఆనందం మరియు సామరస్యాన్ని పొందుతాము." },
+  { step: 5, title: "సంతానం", sanskrit: "ఐదవ అడుగు", description: "మనం బలమైన, సద్గుణ సంపన్నమైన మరియు వీరోచిత సంతానంతో ఆశీర్వదించబడతాము." },
+  { step: 6, title: "దీర్ఘాయువు", sanskrit: "ఆరవ అడుగు", description: "మనం ప్రేమతో నిండిన సుదీర్ఘ, ఆరోగ్యకరమైన జీవితాన్ని గడుపుతాము." },
+  { step: 7, title: "ఐక్యత", sanskrit: "ఏడవ అడుగు", description: "మనం జీవితాంతం సహచరులుగా ఉంటూ, అచంచలమైన విధేయత మరియు భక్తితో ఒకరికొకరు అంకితమవుతాము." },
 ];
 
 const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => (
@@ -41,17 +41,17 @@ const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => 
         className="w-14 h-14 rounded-full flex items-center justify-center mb-4"
         style={{ background: "hsla(0, 0%, 100%, 0.25)" }}
       >
-        <span className="text-xl font-bold text-white" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+        <span className="text-xl font-bold text-white" style={{ fontFamily: "'Noto Sans Telugu', sans-serif" }}>
           {step.step}
         </span>
       </div>
-      <h3 className="text-xl font-bold mb-1 text-white" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+      <h3 className="text-xl font-bold mb-1 text-white" style={{ fontFamily: "'Noto Sans Telugu', sans-serif" }}>
         {step.title}
       </h3>
-      <span className="text-xs tracking-wider uppercase mb-3" style={{ color: "hsla(0, 0%, 100%, 0.8)" }}>
+      <span className="text-sm tracking-wider mb-3" style={{ color: "hsla(0, 0%, 100%, 0.8)", fontFamily: "'Noto Sans Telugu', sans-serif" }}>
         {step.sanskrit}
       </span>
-      <p className="text-sm leading-relaxed" style={{ color: "hsla(0, 0%, 100%, 0.85)" }}>
+      <p className="text-sm leading-relaxed" style={{ color: "hsla(0, 0%, 100%, 0.85)", fontFamily: "'Noto Sans Telugu', sans-serif" }}>
         {step.description}
       </p>
     </div>
@@ -78,23 +78,23 @@ const SaptapadiSection = () => {
             className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-4"
             style={{
               color: "#e8e4df",
-              fontFamily: "'Playfair Display', 'DM Serif Display', Georgia, serif",
+              fontFamily: "'Noto Sans Telugu', sans-serif",
               letterSpacing: "0.01em",
             }}
           >
-            Saptapadi – Seven Steps | Indian
+            సప్తపది – ఏడు అడుగులు | భారతీయ
             <br />
-            Wedding Ceremony
+            వివాహ వేడుక
           </h2>
           <p
-            className="tracking-widest uppercase text-sm"
+            className="tracking-widest text-sm"
             style={{
               color: "#8a8580",
-              fontFamily: "system-ui, sans-serif",
+              fontFamily: "'Noto Sans Telugu', sans-serif",
               letterSpacing: "0.15em",
             }}
           >
-            Indian Wedding Matrimony
+            భారతీయ వివాహ మాట్రిమోనీ
           </p>
         </motion.div>
 
