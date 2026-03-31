@@ -233,7 +233,7 @@ const HeroSection = () => {
                 {/* Slideshow pause/play button on background */}
                 <button
                   onClick={toggleSlideshow}
-                  className="absolute bottom-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                  className="absolute bottom-3 right-10 lg:right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
                   style={{ background: "hsl(var(--gold-accent) / 0.8)" }}
                   aria-label={isMuted ? "Play music" : "Pause music"}>
                   {isMuted ?
