@@ -51,7 +51,7 @@ const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => 
       <span className="text-sm tracking-wider mb-3" style={{ color: "hsla(0, 0%, 100%, 0.8)", fontFamily: "'Noto Sans Telugu', sans-serif" }}>
         {step.sanskrit}
       </span>
-      <p className="text-sm leading-relaxed" style={{ color: "hsla(0, 0%, 100%, 0.85)" }}>
+      <p className="text-sm leading-relaxed" style={{ color: "hsla(0, 0%, 100%, 0.85)", fontFamily: "'Noto Sans Telugu', sans-serif" }}>
         {step.description}
       </p>
     </div>
