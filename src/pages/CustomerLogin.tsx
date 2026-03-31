@@ -67,7 +67,7 @@ export default function CustomerLogin() {
   ];
 
   return (
-    <div className="h-screen flex overflow-hidden" style={{ background: "linear-gradient(155deg, hsl(160, 30%, 28%) 0%, hsl(155, 35%, 38%) 40%, hsl(165, 28%, 32%) 100%)" }}>
+    <div className="h-screen flex overflow-hidden bg-[linear-gradient(155deg,hsl(160,30%,28%)_0%,hsl(155,35%,38%)_40%,hsl(165,28%,32%)_100%)] lg:bg-[hsl(30,33%,97%)]">
       {/* Left Panel - No logo, same theme */}
       <motion.div
         initial={{ opacity: 0, x: -50 }}
