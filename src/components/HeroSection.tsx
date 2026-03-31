@@ -171,7 +171,7 @@ const HeroSection = () => {
               </div>
 
               <h1
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+                className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 lg:mb-4"
                 style={{ fontFamily: "'Playfair Display', serif", color: "white" }}>
                 
                 Kalyanasuthra
