@@ -684,17 +684,6 @@ export default function CustomerDashboard() {
               }
               </motion.div>
 
-              {/* Submit Success Story Button */}
-              <motion.button
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              onClick={() => setShowStoryForm(true)}
-              className="mb-6 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-[1.02]"
-              style={{ background: "hsl(170, 45%, 92%)", color: "hsl(170, 50%, 30%)", border: "1px solid hsl(170, 40%, 80%)" }}>
-              
-                <BookHeart size={16} /> Share Your Success Story
-              </motion.button>
             </>
           }
 
