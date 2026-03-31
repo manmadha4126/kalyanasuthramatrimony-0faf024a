@@ -717,6 +717,7 @@ export type Database = {
             }
             Returns: string
           }
+      is_staff_or_admin: { Args: { check_user_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
