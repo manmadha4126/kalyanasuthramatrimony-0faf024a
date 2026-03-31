@@ -240,7 +240,7 @@ export default function CustomerDashboard() {
   const headerMenuItems = [
   { icon: Edit, label: "Edit Profile", action: () => navigate(`/profile/${userProfile?.id}`) },
   { icon: Eye, label: "View Profile", action: () => navigate(`/profile/${userProfile?.id}`) },
-  { icon: BookHeart, label: "Add Success Story", action: () => setShowStoryForm(true) },
+  
   { icon: Search, label: "Preferences", action: () => setActiveNav("Preferences") },
   { icon: LogOut, label: "Logout", action: logout }];
 
