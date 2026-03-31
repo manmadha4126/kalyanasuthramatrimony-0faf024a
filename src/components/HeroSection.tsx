@@ -148,8 +148,8 @@ const HeroSection = () => {
           })}
         </div>
 
-        <div className="container mx-auto px-4 py-10 md:py-16 lg:py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="container mx-auto px-4 py-4 md:py-16 lg:py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-12 items-center">
             
             {/* Left - Content */}
             <motion.div
@@ -159,10 +159,10 @@ const HeroSection = () => {
               transition={{ duration: 0.7, delay: 0.2 }}>
               
               {/* Decorative line */}
-              <div className="flex items-center gap-3 justify-center lg:justify-start mb-4">
+              <div className="flex items-center gap-2 justify-center lg:justify-start mb-2 lg:mb-4">
                 <div className="w-10 h-px" style={{ background: "hsl(var(--gold-accent))" }} />
                 <p
-                  className="text-base md:text-lg italic"
+                  className="text-xs md:text-lg italic"
                   style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--gold-accent))" }}>
                   
                   The Wedding Chapter Starts Here.....  
@@ -171,35 +171,35 @@ const HeroSection = () => {
               </div>
 
               <h1
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+                className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 lg:mb-4"
                 style={{ fontFamily: "'Playfair Display', serif", color: "white" }}>
                 
                 Kalyanasuthra
               </h1>
 
-              <div className="w-20 h-1 mx-auto lg:mx-0 mb-5 rounded-full" style={{ background: "linear-gradient(90deg, hsl(var(--gold-accent)), hsl(348, 60%, 50%))" }} />
+              <div className="w-16 lg:w-20 h-1 mx-auto lg:mx-0 mb-2 lg:mb-5 rounded-full" style={{ background: "linear-gradient(90deg, hsl(var(--gold-accent)), hsl(348, 60%, 50%))" }} />
 
-              <p className="text-sm md:text-base lg:text-lg mb-8 leading-relaxed max-w-md mx-auto lg:mx-0" style={{ color: "hsl(0, 0%, 75%)" }}>
+              <p className="text-xs md:text-base lg:text-lg mb-3 lg:mb-8 leading-relaxed max-w-md mx-auto lg:mx-0 hidden lg:block" style={{ color: "hsl(0, 0%, 75%)" }}>
                 Trusted matchmaking with traditional values and a modern approach. Your perfect match awaits — find your soulmate today.
               </p>
 
               {/* CTA Buttons */}
-              <div className="flex items-center justify-center lg:justify-start gap-3 flex-wrap">
+              <div className="flex items-center justify-center lg:justify-start gap-2 lg:gap-3 flex-wrap">
                 <a
                   href="/register"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                  className="inline-flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl text-xs lg:text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
                   style={{ background: "hsl(262, 55%, 48%)" }}>
                   Get Started
                 </a>
                 <a
                   href="#about"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                  className="inline-flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl text-xs lg:text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
                   style={{ background: "hsl(38, 75%, 50%)" }}>
                   Learn More
                 </a>
                 <a
                   href="#contact"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                  className="inline-flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-xl text-xs lg:text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
                   style={{ background: "hsl(170, 55%, 38%)" }}>
                   Let's Connect to Us
                 </a>
