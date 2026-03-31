@@ -11,13 +11,13 @@ const cardColors = [
 ];
 
 const steps = [
-  { step: 1, title: "Nourishment", sanskrit: "First Step", description: "Together we will provide for and support each other, sharing food and sustenance throughout life." },
-  { step: 2, title: "Strength", sanskrit: "Second Step", description: "Together we will grow strong in body, mind and spirit, developing physical, mental and spiritual powers." },
-  { step: 3, title: "Prosperity", sanskrit: "Third Step", description: "Together we will prosper and share our worldly possessions, preserving our wealth through righteous means." },
-  { step: 4, title: "Happiness", sanskrit: "Fourth Step", description: "Together we will acquire knowledge, happiness and harmony through mutual love, respect and trust." },
-  { step: 5, title: "Progeny", sanskrit: "Fifth Step", description: "Together we will be blessed with strong, virtuous and heroic children who carry forward our legacy." },
-  { step: 6, title: "Longevity", sanskrit: "Sixth Step", description: "Together we will live a long, healthy life filled with love, enjoying every season of existence." },
-  { step: 7, title: "Unity", sanskrit: "Seventh Step", description: "Together we will remain lifelong companions, committed to each other with unwavering loyalty and devotion." },
+  { step: 1, title: "పోషణ", sanskrit: "మొదటి అడుగు", description: "మనం ఒకరికొకరు ఆహారం మరియు జీవనోపాధిని పంచుకుంటూ, జీవితాంతం ఒకరినొకరు పోషించుకుంటాము." },
+  { step: 2, title: "బలం", sanskrit: "రెండవ అడుగు", description: "మనం శరీరంలో, మనసులో మరియు ఆత్మలో బలంగా ఎదుగుతాము, శారీరక, మానసిక మరియు ఆధ్యాత్మిక శక్తులను పెంపొందించుకుంటాము." },
+  { step: 3, title: "సంపద", sanskrit: "మూడవ అడుగు", description: "మనం ధర్మబద్ధంగా సంపదను సంరక్షిస్తూ, ప్రాపంచిక ఆస్తులను పంచుకుంటూ అభివృద్ధి చెందుతాము." },
+  { step: 4, title: "ఆనందం", sanskrit: "నాలుగవ అడుగు", description: "మనం పరస్పర ప్రేమ, గౌరవం మరియు నమ్మకం ద్వారా జ్ఞానం, ఆనందం మరియు సామరస్యాన్ని పొందుతాము." },
+  { step: 5, title: "సంతానం", sanskrit: "ఐదవ అడుగు", description: "మనం బలమైన, సద్గుణ సంపన్నమైన మరియు వీరోచిత సంతానంతో ఆశీర్వదించబడతాము." },
+  { step: 6, title: "దీర్ఘాయువు", sanskrit: "ఆరవ అడుగు", description: "మనం ప్రేమతో నిండిన సుదీర్ఘ, ఆరోగ్యకరమైన జీవితాన్ని గడుపుతాము." },
+  { step: 7, title: "ఐక్యత", sanskrit: "ఏడవ అడుగు", description: "మనం జీవితాంతం సహచరులుగా ఉంటూ, అచంచలమైన విధేయత మరియు భక్తితో ఒకరికొకరు అంకితమవుతాము." },
 ];
 
 const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => (
