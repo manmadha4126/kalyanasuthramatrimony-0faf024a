@@ -289,7 +289,7 @@ const HeroSection = () => {
                   {images.map((_, i) =>
                   <button
                     key={i}
-                    onClick={() => {setDirection(i > current ? 1 : -1);setCurrent(i);}}
+                    onClick={() => setCurrent(i)}
                     className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300"
                     style={{
                       width: i === current ? "24px" : "8px",
