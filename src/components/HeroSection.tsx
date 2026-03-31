@@ -251,7 +251,7 @@ const HeroSection = () => {
                 </button>
               </div>
 
-              <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] max-w-xs sm:max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
+              <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] max-w-[240px] sm:max-w-xs lg:max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
 
                 {/* Main image with sequential fade */}
                 <AnimatePresence mode="wait" custom={direction}>
