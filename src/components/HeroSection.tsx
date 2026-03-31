@@ -80,9 +80,9 @@ const HeroSection = () => {
   };
 
   const variants = {
-    enter: (d: number) => ({ opacity: 0, x: d > 0 ? 60 : -60, scale: 1.02 }),
-    center: { opacity: 1, x: 0, scale: 1 },
-    exit: (d: number) => ({ opacity: 0, x: d > 0 ? -60 : 60, scale: 0.98 })
+    enter: () => ({ opacity: 0, scale: 1.03 }),
+    center: { opacity: 1, scale: 1 },
+    exit: () => ({ opacity: 0, scale: 1 })
   };
 
   return (
