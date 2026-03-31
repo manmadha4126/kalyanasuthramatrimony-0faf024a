@@ -187,7 +187,7 @@ export default function AdminLogin() {
               <form onSubmit={handleLogin} className="space-y-4">
                 <div>
                   <label className="block text-xs font-semibold mb-1" style={{ color: "hsl(270, 20%, 85%)" }}>Email Address</label>
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@example.com" required className="w-full rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300" style={{ background: "hsl(0, 0%, 100% / 0.15)", border: "1px solid hsl(0, 0%, 100% / 0.2)", color: "hsl(0, 0%, 100%)" }} />
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@example.com" required className="w-full rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300" style={{ background: "hsl(0, 0%, 100% / 0.85)", border: "1px solid hsl(0, 0%, 100% / 0.3)", color: "hsl(0, 0%, 0%)" }} />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold mb-1" style={{ color: "hsl(270, 20%, 85%)" }}>Password</label>
