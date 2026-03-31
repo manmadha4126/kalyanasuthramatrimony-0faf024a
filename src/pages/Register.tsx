@@ -503,6 +503,10 @@ export default function Register() {
             height: "80px",
           }}
         >
+          {/* Back arrow - mobile only, before logo */}
+          <a href="/" className="lg:hidden flex items-center justify-center w-8 h-8 rounded-full transition-all hover:scale-110" style={{ background: "hsl(0, 0%, 100% / 0.15)" }}>
+            <ChevronLeft className="w-5 h-5 text-white" />
+          </a>
           {/* Brand name */}
           <a href="/" className="inline-flex items-center gap-3">
             <img src={logo} alt="Kalyanasuthra" className="h-10 sm:h-12 w-auto object-contain" />
@@ -513,9 +517,9 @@ export default function Register() {
               Kalyanasuthra Matrimony
             </span>
           </a>
-          {/* Right side: Home button + Contact info */}
+          {/* Right side: Home button (desktop) + Contact info */}
           <div className="flex items-center gap-4 sm:gap-6">
-            <BackButton to="/" label="Home" className="px-4 py-2 rounded-lg text-sm font-semibold bg-[hsl(42,42%,57%)] text-white" />
+            <BackButton to="/" label="Home" className="hidden lg:inline-flex px-4 py-2 rounded-lg text-sm font-semibold bg-[hsl(42,42%,57%)] text-white" />
             <div className="hidden sm:flex flex-col items-end gap-0.5 text-white text-xs sm:text-sm">
               <a href="mailto:info@kalyanasuthra.com" className="hover:underline opacity-90">info@kalyanasuthra.com</a>
               <a href="tel:+919553306667" className="hover:underline opacity-90">+91 9553306667</a>
