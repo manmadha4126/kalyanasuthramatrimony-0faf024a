@@ -159,7 +159,7 @@ const HeroSection = () => {
               transition={{ duration: 0.7, delay: 0.2 }}>
               
               {/* Decorative line */}
-              <div className="flex items-center gap-3 justify-center lg:justify-start mb-4">
+              <div className="flex items-center gap-2 justify-center lg:justify-start mb-2 lg:mb-4">
                 <div className="w-10 h-px" style={{ background: "hsl(var(--gold-accent))" }} />
                 <p
                   className="text-base md:text-lg italic"
