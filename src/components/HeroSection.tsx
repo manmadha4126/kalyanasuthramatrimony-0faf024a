@@ -162,7 +162,7 @@ const HeroSection = () => {
               <div className="flex items-center gap-2 justify-center lg:justify-start mb-2 lg:mb-4">
                 <div className="w-10 h-px" style={{ background: "hsl(var(--gold-accent))" }} />
                 <p
-                  className="text-base md:text-lg italic"
+                  className="text-xs md:text-lg italic"
                   style={{ fontFamily: "'DM Serif Display', serif", color: "hsl(var(--gold-accent))" }}>
                   
                   The Wedding Chapter Starts Here.....  
