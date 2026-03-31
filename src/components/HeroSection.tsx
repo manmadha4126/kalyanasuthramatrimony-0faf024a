@@ -222,7 +222,7 @@ const HeroSection = () => {
               transition={{ duration: 0.7, delay: 0.4 }}>
               
               {/* Large Background Rectangle Slideshow */}
-              <div className="absolute -inset-x-6 inset-y-0 sm:-inset-x-10 sm:inset-y-0 lg:-inset-x-12 lg:inset-y-0 rounded-2xl overflow-hidden">
+              <div className="absolute -inset-x-8 -inset-y-4 sm:-inset-x-10 sm:-inset-y-6 lg:-inset-x-12 lg:inset-y-0 rounded-2xl overflow-hidden">
                 {images.map((img, i) =>
                 <motion.img
                   key={`bg-large-${i}`}
@@ -230,12 +230,14 @@ const HeroSection = () => {
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover"
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: i === current ? 0.65 : 0 }}
+                  animate={{ opacity: i === (current + 1) % images.length ? 0.8 : 0 }}
                   transition={{ duration: 1.2, ease: "easeInOut" }} />
 
                 )}
                 {/* Dark overlay on background */}
-                <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.4)" }} />
+                <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.25)" }} />
+                {/* Gold border glow */}
+                <div className="absolute inset-0 rounded-2xl" style={{ border: "2px solid hsl(var(--gold-accent) / 0.3)" }} />
                 {/* Slideshow pause/play button on background */}
                 <button
                   onClick={toggleSlideshow}
