@@ -540,12 +540,7 @@ export default function CustomerDashboard() {
             </motion.div>
           }
 
-          {userProfile?.profile_status === "active" &&
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-3 flex items-center gap-2" style={{ background: "hsl(145, 55%, 95%)", border: "1px solid hsl(145, 45%, 85%)" }}>
-              <CheckCircle size={16} style={{ color: "hsl(145, 65%, 38%)" }} />
-              <span className="text-xs font-semibold" style={{ color: "hsl(145, 50%, 28%)" }}>Profile Verified ✓</span>
-            </motion.div>
-          }
+          {/* No verified banner - welcome message shown in header */}
 
           {/* Interests Section */}
           {activeNav === "Interests" &&
