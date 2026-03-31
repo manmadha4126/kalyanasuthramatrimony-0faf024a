@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion } from "framer-motion"; // soft fade slider
 import { ChevronLeft, ChevronRight, Heart, Volume2, VolumeX, Play, Pause } from "lucide-react";
 
 import wedding1 from "@/assets/wedding-1.jpeg";
