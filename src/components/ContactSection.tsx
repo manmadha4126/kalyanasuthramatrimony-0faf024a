@@ -158,7 +158,7 @@ const ContactSection = () => {
           >
             <div className="flex items-center gap-4">
               <a
-                href="https://www.instagram.com/kalyanasuthra"
+                href="https://www.instagram.com/kalyanasuthra_matrimony?igsh=dHZvcHJzZXllMW50"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-12 h-12 rounded-2xl transition-all hover:scale-110 hover:shadow-xl"
