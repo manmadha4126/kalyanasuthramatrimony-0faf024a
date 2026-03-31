@@ -158,7 +158,7 @@ const ContactSection = () => {
           >
             <div className="flex items-center gap-4">
               <a
-                href="https://www.instagram.com/kalyanasuthra"
+                href="https://www.instagram.com/kalyanasuthra_matrimony?igsh=dHZvcHJzZXllMW50"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-12 h-12 rounded-2xl transition-all hover:scale-110 hover:shadow-xl"
@@ -175,7 +175,7 @@ const ContactSection = () => {
                 </svg>
               </a>
               <a
-                href="https://www.google.com/maps?q=13.64383,79.43141"
+                href="https://www.google.com/maps/place/13%C2%B038'38.2%22N+79%C2%B025'52.9%22E/@13.6438722,79.4313197,18z"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-12 h-12 rounded-2xl transition-all hover:scale-110 hover:shadow-xl"
