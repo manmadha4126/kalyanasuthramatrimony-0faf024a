@@ -135,13 +135,13 @@ export default function CustomerLogin() {
           </div>
           {/* Brand name & tagline on mobile */}
           <div className="flex flex-col items-center mb-4 lg:hidden text-center">
-            <h1 className="text-2xl text-white font-bold italic" style={{ fontFamily: "'Kaushan Script', cursive" }}>
+            <h1 className="text-3xl text-white font-bold italic" style={{ fontFamily: "'Kaushan Script', cursive" }}>
               Welcome to the
             </h1>
-            <h1 className="text-3xl font-bold italic mt-0.5" style={{ fontFamily: "'Kaushan Script', cursive", color: "hsl(42, 60%, 80%)" }}>
+            <h1 className="text-4xl font-bold italic mt-0.5" style={{ fontFamily: "'Kaushan Script', cursive", color: "hsl(42, 60%, 80%)" }}>
               Kalyanasuthra Matrimony
             </h1>
-            <p className="text-sm text-white/80 italic mt-2" style={{ fontFamily: "'Kaushan Script', cursive" }}>
+            <p className="text-base text-white/80 italic mt-2" style={{ fontFamily: "'Kaushan Script', cursive" }}>
               The Wedding Chapter Starts Here…
             </p>
           </div>
