@@ -254,15 +254,14 @@ const HeroSection = () => {
               <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] max-w-[240px] sm:max-w-xs lg:max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl" style={{ border: "4px solid hsl(var(--gold-accent) / 0.4)" }}>
 
                 {/* Main image with sequential fade */}
-                <AnimatePresence mode="wait" custom={direction}>
+                <AnimatePresence mode="popLayout">
                   <motion.div
                     key={current}
-                    custom={direction}
                     variants={variants}
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                    transition={{ duration: 1, ease: "easeInOut" }}
                     className="absolute inset-0">
                     
                     <img
