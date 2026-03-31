@@ -128,13 +128,18 @@ export default function CustomerLogin() {
       </motion.div>
 
       {/* Right Panel */}
-      <div className="flex flex-col items-center justify-center w-full lg:w-1/2 px-6">
+      <div className="flex flex-col items-center justify-start pt-6 lg:justify-center lg:pt-0 w-full lg:w-1/2 px-6 overflow-y-auto">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="w-full max-w-sm">
-          <div className="mb-4">
+          <div className="mb-2">
             <BackButton to="/" label="Back to Home" />
           </div>
-          {/* Logo on right side */}
-          <div className="flex items-center justify-center mb-6">
+          {/* Brand name & tagline on mobile */}
+          <div className="flex flex-col items-center mb-3 lg:hidden">
+            <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "'Carattere', cursive" }}>Kalyanasuthra Matrimony</h1>
+            <p className="text-xs text-white/70 italic mt-0.5">The Wedding Chapter Starts Here…</p>
+          </div>
+          {/* Logo on desktop */}
+          <div className="hidden lg:flex items-center justify-center mb-6">
             <img src={logo} alt="Kalyanasuthra Matrimony" className="h-20 w-auto object-contain" />
           </div>
 
