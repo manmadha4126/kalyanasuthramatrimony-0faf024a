@@ -50,12 +50,10 @@ const HeroSection = () => {
   };
 
   const goNext = useCallback(() => {
-    setDirection(1);
     setCurrent((prev) => (prev + 1) % images.length);
   }, []);
 
   const goPrev = useCallback(() => {
-    setDirection(-1);
     setCurrent((prev) => (prev - 1 + images.length) % images.length);
   }, []);
 
