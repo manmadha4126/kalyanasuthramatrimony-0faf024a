@@ -17,21 +17,40 @@ const images = [wedding1, wedding2, wedding3, wedding4, wedding5, wedding6, wedd
 
 const HeroSection = () => {
   const [current, setCurrent] = useState(0);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const hasInteractedRef = useRef(false);
 
   useEffect(() => {
     audioRef.current = new Audio("/audio/background-music.mp3");
     audioRef.current.loop = true;
     audioRef.current.volume = 0.5;
-    // Auto-play on load
+
+    // Try to autoplay with sound
     const playPromise = audioRef.current.play();
     if (playPromise) {
-      playPromise.catch(() => {
-        // Browser blocked autoplay, set to muted state
-        setIsMuted(true);
-      });
+      playPromise
+        .then(() => {
+          setIsPlaying(true);
+          hasInteractedRef.current = true;
+        })
+        .catch(() => {
+          // Browser blocked autoplay — wait for first user interaction anywhere
+          setIsPlaying(false);
+          const startOnInteraction = () => {
+            if (audioRef.current && !hasInteractedRef.current) {
+              hasInteractedRef.current = true;
+              audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+            }
+            document.removeEventListener("click", startOnInteraction);
+            document.removeEventListener("touchstart", startOnInteraction);
+            document.removeEventListener("scroll", startOnInteraction);
+          };
+          document.addEventListener("click", startOnInteraction, { once: true });
+          document.addEventListener("touchstart", startOnInteraction, { once: true });
+          document.addEventListener("scroll", startOnInteraction, { once: true });
+        });
     }
     return () => {
       audioRef.current?.pause();
@@ -41,12 +60,13 @@ const HeroSection = () => {
 
   const toggleMusic = () => {
     if (!audioRef.current) return;
-    if (isMuted) {
-      audioRef.current.play();
-    } else {
+    if (isPlaying) {
       audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play().catch(() => {});
+      setIsPlaying(true);
     }
-    setIsMuted(!isMuted);
   };
 
   const goNext = useCallback(() => {
