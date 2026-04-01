@@ -246,7 +246,7 @@ const ContactSection = () => {
                   <Mail size={18} style={{ color: iconColor, marginTop: 3 }} />
                   <div>
                     <h4 className="text-sm font-bold" style={{ color: textDark, fontFamily: fontSerif }}>Email:</h4>
-                    <p className="text-sm mt-0.5" style={{ color: textMuted, fontFamily: fontSans }}>info@kalyanasuthra.com</p>
+                    <p className="text-sm mt-0.5" style={{ color: textMuted, fontFamily: fontSans }}>kalyanasuthramatrimonytpt@gmail.com</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
