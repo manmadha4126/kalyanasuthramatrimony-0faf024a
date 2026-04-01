@@ -17,21 +17,40 @@ const images = [wedding1, wedding2, wedding3, wedding4, wedding5, wedding6, wedd
 
 const HeroSection = () => {
   const [current, setCurrent] = useState(0);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const hasInteractedRef = useRef(false);
 
   useEffect(() => {
     audioRef.current = new Audio("/audio/background-music.mp3");
     audioRef.current.loop = true;
     audioRef.current.volume = 0.5;
-    // Auto-play on load
+
+    // Try to autoplay with sound
     const playPromise = audioRef.current.play();
     if (playPromise) {
-      playPromise.catch(() => {
-        // Browser blocked autoplay, set to muted state
-        setIsMuted(true);
-      });
+      playPromise
+        .then(() => {
+          setIsPlaying(true);
+          hasInteractedRef.current = true;
+        })
+        .catch(() => {
+          // Browser blocked autoplay — wait for first user interaction anywhere
+          setIsPlaying(false);
+          const startOnInteraction = () => {
+            if (audioRef.current && !hasInteractedRef.current) {
+              hasInteractedRef.current = true;
+              audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+            }
+            document.removeEventListener("click", startOnInteraction);
+            document.removeEventListener("touchstart", startOnInteraction);
+            document.removeEventListener("scroll", startOnInteraction);
+          };
+          document.addEventListener("click", startOnInteraction, { once: true });
+          document.addEventListener("touchstart", startOnInteraction, { once: true });
+          document.addEventListener("scroll", startOnInteraction, { once: true });
+        });
     }
     return () => {
       audioRef.current?.pause();
@@ -41,12 +60,13 @@ const HeroSection = () => {
 
   const toggleMusic = () => {
     if (!audioRef.current) return;
-    if (isMuted) {
-      audioRef.current.play();
-    } else {
+    if (isPlaying) {
       audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play().catch(() => {});
+      setIsPlaying(true);
     }
-    setIsMuted(!isMuted);
   };
 
   const goNext = useCallback(() => {
@@ -64,16 +84,7 @@ const HeroSection = () => {
   }, [goNext, isPaused]);
 
   const toggleSlideshow = () => {
-    // Only pause/play music, don't stop slideshow
-    if (audioRef.current) {
-      if (!isMuted) {
-        audioRef.current.pause();
-        setIsMuted(true);
-      } else {
-        audioRef.current.play().catch(() => {});
-        setIsMuted(false);
-      }
-    }
+    toggleMusic();
   };
 
 
@@ -207,10 +218,10 @@ const HeroSection = () => {
                   onClick={toggleMusic}
                   className="inline-flex items-center justify-center w-9 h-9 lg:w-10 lg:h-10 rounded-full transition-all duration-300 hover:scale-110"
                   style={{ background: "linear-gradient(135deg, hsl(348, 60%, 45%), hsl(348, 55%, 35%))", border: "2px solid hsl(var(--gold-accent) / 0.5)" }}
-                  aria-label={isMuted ? "Play music" : "Mute music"}>
-                  {isMuted ?
-                    <VolumeX className="w-4 h-4 text-white" /> :
-                    <Volume2 className="w-4 h-4 text-white" />
+                  aria-label={isPlaying ? "Pause music" : "Play music"}>
+                  {isPlaying ?
+                    <Volume2 className="w-4 h-4 text-white" /> :
+                    <VolumeX className="w-4 h-4 text-white" />
                   }
                 </button>
               </div>
@@ -245,8 +256,8 @@ const HeroSection = () => {
                   onClick={toggleSlideshow}
                   className="absolute bottom-3 right-10 lg:right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
                   style={{ background: "hsl(var(--gold-accent) / 0.8)" }}
-                  aria-label={isMuted ? "Play music" : "Pause music"}>
-                  {isMuted ?
+                  aria-label={isPlaying ? "Pause music" : "Play music"}>
+                  {isPlaying ?
                     <Pause className="w-4 h-4 text-white" fill="white" /> :
                     <Play className="w-4 h-4 text-white ml-0.5" fill="white" />
                   }
