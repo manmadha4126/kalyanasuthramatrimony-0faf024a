@@ -29,7 +29,7 @@ const Footer = () => {
             <div className="space-y-1.5 text-sm text-white/80">
               <p>📞 9553306667</p>
               <p>📞 9866288767</p>
-              <p>✉️ info@kalyanasuthra.com</p>
+              <p>✉️ kalyanasuthramatrimonytpt@gmail.com</p>
               <p>📍 4-23, Govinda Nagar, Karakambadi Road, Tirupati - 517501</p>
             </div>
           </div>
