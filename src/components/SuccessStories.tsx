@@ -12,6 +12,8 @@ import success6 from "@/assets/success-6.png";
 import success7 from "@/assets/success-7.png";
 import success8 from "@/assets/success-8.png";
 
+const successImages = [success1, success2, success3, success4, success5, success6, success7, success8];
+
 type Story = {
   id: string;
   bride_name: string;
@@ -136,7 +138,7 @@ const SuccessStories = () => {
               >
                 <div className="h-[220px] overflow-hidden">
                   <img
-                    src={story.image_url || success1}
+                    src={successImages[idx % 8]}
                     alt={`${story.bride_name} & ${story.groom_name}`}
                     className="w-full h-full object-cover object-top"
                   />
