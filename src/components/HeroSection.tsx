@@ -93,18 +93,21 @@ const HeroSection = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const toggleMusic = useCallback(async () => {
+  const toggleMusic = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
+    if (removeInteractionListenersRef.current) {
+      removeInteractionListenersRef.current();
+      removeInteractionListenersRef.current = null;
+    }
+
     if (!audio.paused) {
-      clearInteractionListeners();
       audio.pause();
     } else {
-      clearInteractionListeners();
-      await attemptPlay();
+      audio.play().then(() => setIsPlaying(true)).catch(() => {});
     }
-  }, [attemptPlay, clearInteractionListeners]);
+  }, []);
 
   const goNext = useCallback(() => {
     setCurrent((prev) => (prev + 1) % images.length);
