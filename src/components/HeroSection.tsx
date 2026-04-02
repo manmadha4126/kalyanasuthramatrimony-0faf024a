@@ -22,24 +22,6 @@ const HeroSection = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const removeInteractionListenersRef = useRef<(() => void) | null>(null);
 
-  const clearInteractionListeners = useCallback(() => {
-    removeInteractionListenersRef.current?.();
-    removeInteractionListenersRef.current = null;
-  }, []);
-
-  const attemptPlay = useCallback(async () => {
-    const audio = audioRef.current;
-    if (!audio) return false;
-
-    try {
-      await audio.play();
-      setIsPlaying(true);
-      return true;
-    } catch {
-      setIsPlaying(false);
-      return false;
-    }
-  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -47,61 +29,67 @@ const HeroSection = () => {
 
     audio.loop = true;
     audio.volume = 0.5;
+    audio.muted = false;
     audio.preload = "auto";
 
     const handlePlaying = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
 
-    const registerFirstInteractionPlayback = () => {
-      const startOnInteraction = async () => {
-        clearInteractionListeners();
-        await attemptPlay();
-      };
-
-      const options: AddEventListenerOptions = { once: true, capture: true };
-
-      window.addEventListener("pointerdown", startOnInteraction, options);
-      window.addEventListener("keydown", startOnInteraction, options);
-      window.addEventListener("touchstart", startOnInteraction, options);
-      window.addEventListener("scroll", startOnInteraction, options);
-
-      removeInteractionListenersRef.current = () => {
-        window.removeEventListener("pointerdown", startOnInteraction, options);
-        window.removeEventListener("keydown", startOnInteraction, options);
-        window.removeEventListener("touchstart", startOnInteraction, options);
-        window.removeEventListener("scroll", startOnInteraction, options);
-      };
-    };
-
     audio.addEventListener("playing", handlePlaying);
     audio.addEventListener("pause", handlePause);
 
-    attemptPlay().then((started) => {
-      if (!started) {
-        registerFirstInteractionPlayback();
-      }
-    });
+    // Try to play immediately (will work if user already interacted with the origin)
+    const playPromise = audio.play();
+    if (playPromise) {
+      playPromise.then(() => {
+        setIsPlaying(true);
+      }).catch(() => {
+        setIsPlaying(false);
+        // Autoplay blocked — register one-shot listeners on common interaction events
+        const startOnInteraction = () => {
+          // Remove all listeners first
+          ["click", "pointerdown", "keydown", "touchstart", "scroll"].forEach(evt =>
+            document.removeEventListener(evt, startOnInteraction, true)
+          );
+          audio.play().then(() => setIsPlaying(true)).catch(() => {});
+        };
+
+        ["click", "pointerdown", "keydown", "touchstart", "scroll"].forEach(evt =>
+          document.addEventListener(evt, startOnInteraction, { once: true, capture: true })
+        );
+
+        removeInteractionListenersRef.current = () => {
+          ["click", "pointerdown", "keydown", "touchstart", "scroll"].forEach(evt =>
+            document.removeEventListener(evt, startOnInteraction, true)
+          );
+        };
+      });
+    }
 
     return () => {
-      clearInteractionListeners();
+      if (removeInteractionListenersRef.current) removeInteractionListenersRef.current();
       audio.pause();
       audio.removeEventListener("playing", handlePlaying);
       audio.removeEventListener("pause", handlePause);
     };
-  }, [attemptPlay, clearInteractionListeners]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const toggleMusic = useCallback(async () => {
+  const toggleMusic = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
+    if (removeInteractionListenersRef.current) {
+      removeInteractionListenersRef.current();
+      removeInteractionListenersRef.current = null;
+    }
+
     if (!audio.paused) {
-      clearInteractionListeners();
       audio.pause();
     } else {
-      clearInteractionListeners();
-      await attemptPlay();
+      audio.play().then(() => setIsPlaying(true)).catch(() => {});
     }
-  }, [attemptPlay, clearInteractionListeners]);
+  }, []);
 
   const goNext = useCallback(() => {
     setCurrent((prev) => (prev + 1) % images.length);
