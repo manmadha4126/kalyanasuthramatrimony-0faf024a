@@ -138,7 +138,7 @@ const SuccessStories = () => {
               >
                 <div className="h-[220px] overflow-hidden">
                   <img
-                    src={story.image_url || success1}
+                    src={successImages[idx % 8]}
                     alt={`${story.bride_name} & ${story.groom_name}`}
                     className="w-full h-full object-cover object-top"
                   />
