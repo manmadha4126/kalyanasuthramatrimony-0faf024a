@@ -22,24 +22,6 @@ const HeroSection = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const removeInteractionListenersRef = useRef<(() => void) | null>(null);
 
-  const clearInteractionListeners = useCallback(() => {
-    removeInteractionListenersRef.current?.();
-    removeInteractionListenersRef.current = null;
-  }, []);
-
-  const attemptPlay = useCallback(async () => {
-    const audio = audioRef.current;
-    if (!audio) return false;
-
-    try {
-      await audio.play();
-      setIsPlaying(true);
-      return true;
-    } catch {
-      setIsPlaying(false);
-      return false;
-    }
-  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
