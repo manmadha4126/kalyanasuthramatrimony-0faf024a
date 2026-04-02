@@ -12,6 +12,8 @@ import success6 from "@/assets/success-6.png";
 import success7 from "@/assets/success-7.png";
 import success8 from "@/assets/success-8.png";
 
+const successImages = [success1, success2, success3, success4, success5, success6, success7, success8];
+
 type Story = {
   id: string;
   bride_name: string;
