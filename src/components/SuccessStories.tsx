@@ -3,16 +3,14 @@ import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { Heart, Award, Users, Star } from "lucide-react";
 
-import wedding1 from "@/assets/wedding-1.jpeg";
-import wedding2 from "@/assets/wedding-2.jpeg";
-import wedding3 from "@/assets/wedding-3.jpeg";
-import wedding4 from "@/assets/wedding-4.jpeg";
-import wedding5 from "@/assets/wedding-5.jpeg";
-import wedding6 from "@/assets/wedding-6.jpeg";
-import wedding7 from "@/assets/wedding-7.jpeg";
-import wedding8 from "@/assets/wedding-8.jpeg";
-import wedding9 from "@/assets/wedding-9.jpeg";
-import wedding10 from "@/assets/wedding-10.jpeg";
+import success1 from "@/assets/success-1.png";
+import success2 from "@/assets/success-2.png";
+import success3 from "@/assets/success-3.png";
+import success4 from "@/assets/success-4.png";
+import success5 from "@/assets/success-5.png";
+import success6 from "@/assets/success-6.png";
+import success7 from "@/assets/success-7.png";
+import success8 from "@/assets/success-8.png";
 
 type Story = {
   id: string;
@@ -24,16 +22,14 @@ type Story = {
 };
 
 const fallbackStories: Story[] = [
-  { id: "1", bride_name: "Ananya", groom_name: "Raghav", city: "Hyderabad", story: "From a simple profile match to a beautiful wedding, our journey began here. We are grateful forever!", image_url: wedding1 },
-  { id: "2", bride_name: "Divya", groom_name: "Karthik", city: "Tirupati", story: "Our families connected instantly and today we are happily married with two beautiful kids.", image_url: wedding2 },
-  { id: "3", bride_name: "Meghana", groom_name: "Arjun", city: "Bangalore", story: "Kalyanasuthra made our search easy and trustworthy. Best decision we ever made!", image_url: wedding3 },
-  { id: "4", bride_name: "Sravani", groom_name: "Nikhil", city: "Chennai", story: "A perfect blend of tradition and compatibility. Our parents are so happy with this match.", image_url: wedding4 },
-  { id: "5", bride_name: "Lakshmi", groom_name: "Harsha", city: "Vijayawada", story: "Grateful for the genuine profiles and personal guidance from the relationship managers.", image_url: wedding5 },
-  { id: "6", bride_name: "Priya", groom_name: "Vikram", city: "Mumbai", story: "We found each other through trust and transparency. Celebrating 3 years of togetherness!", image_url: wedding6 },
-  { id: "7", bride_name: "Sneha", groom_name: "Ravi", city: "Pune", story: "A beautiful match that our families loved instantly. The team was very supportive throughout.", image_url: wedding7 },
-  { id: "8", bride_name: "Kavya", groom_name: "Suresh", city: "Delhi", story: "Our love story started with a simple hello here. Now we can't imagine life without each other.", image_url: wedding8 },
-  { id: "9", bride_name: "Swathi", groom_name: "Pranav", city: "Vizag", story: "The perfect platform for finding your soulmate. Highly recommend to everyone!", image_url: wedding9 },
-  { id: "10", bride_name: "Rani", groom_name: "Deepak", city: "Warangal", story: "Blessed to have found my life partner here. The process was smooth and professional.", image_url: wedding10 },
+  { id: "1", bride_name: "Ananya", groom_name: "Raghav", city: "Hyderabad", story: "From a simple profile match to a beautiful wedding, our journey began here. We are grateful forever!", image_url: success1 },
+  { id: "2", bride_name: "Divya", groom_name: "Karthik", city: "Tirupati", story: "Our families connected instantly and today we are happily married with two beautiful kids.", image_url: success2 },
+  { id: "3", bride_name: "Meghana", groom_name: "Arjun", city: "Bangalore", story: "Kalyanasuthra made our search easy and trustworthy. Best decision we ever made!", image_url: success3 },
+  { id: "4", bride_name: "Sravani", groom_name: "Nikhil", city: "Chennai", story: "A perfect blend of tradition and compatibility. Our parents are so happy with this match.", image_url: success4 },
+  { id: "5", bride_name: "Lakshmi", groom_name: "Harsha", city: "Vijayawada", story: "Grateful for the genuine profiles and personal guidance from the relationship managers.", image_url: success5 },
+  { id: "6", bride_name: "Priya", groom_name: "Vikram", city: "Mumbai", story: "We found each other through trust and transparency. Celebrating 3 years of togetherness!", image_url: success6 },
+  { id: "7", bride_name: "Sneha", groom_name: "Ravi", city: "Pune", story: "A beautiful match that our families loved instantly. The team was very supportive throughout.", image_url: success7 },
+  { id: "8", bride_name: "Kavya", groom_name: "Suresh", city: "Delhi", story: "Our love story started with a simple hello here. Now we can't imagine life without each other.", image_url: success8 },
 ];
 
 const stats = [
@@ -138,11 +134,11 @@ const SuccessStories = () => {
                   border: "2px solid hsl(0, 0%, 22%)",
                 }}
               >
-                <div className="h-[160px] overflow-hidden">
+                <div className="h-[220px] overflow-hidden">
                   <img
-                    src={story.image_url || wedding1}
+                    src={story.image_url || success1}
                     alt={`${story.bride_name} & ${story.groom_name}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                   />
                 </div>
                 <div className="px-4 py-3 text-center">
