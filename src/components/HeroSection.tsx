@@ -18,78 +18,99 @@ const images = [wedding1, wedding2, wedding3, wedding4, wedding5, wedding6, wedd
 const HeroSection = () => {
   const [current, setCurrent] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const removeInteractionListenersRef = useRef<(() => void) | null>(null);
 
+  const clearInteractionListeners = useCallback(() => {
+    removeInteractionListenersRef.current?.();
+    removeInteractionListenersRef.current = null;
+  }, []);
+
+  const playAudio = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio) return false;
+
+    audio.muted = false;
+    audio.volume = 1;
+
+    try {
+      await audio.play();
+      setIsPlaying(true);
+      return true;
+    } catch {
+      setIsPlaying(false);
+      return false;
+    }
+  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     audio.loop = true;
-    audio.volume = 0.5;
+    audio.volume = 1;
     audio.muted = false;
     audio.preload = "auto";
+    audio.load();
 
     const handlePlaying = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
 
+    const registerFirstInteractionPlayback = () => {
+      const startOnInteraction = () => {
+        clearInteractionListeners();
+        void playAudio();
+      };
+
+      const events: Array<keyof DocumentEventMap> = ["click", "pointerdown", "keydown", "touchstart", "wheel", "scroll"];
+
+      events.forEach((eventName) => {
+        document.addEventListener(eventName, startOnInteraction, { once: true, capture: true });
+      });
+
+      removeInteractionListenersRef.current = () => {
+        events.forEach((eventName) => {
+          document.removeEventListener(eventName, startOnInteraction, true);
+        });
+      };
+    };
+
+    const handleCanPlayThrough = () => {
+      void playAudio();
+    };
+
     audio.addEventListener("playing", handlePlaying);
     audio.addEventListener("pause", handlePause);
+    audio.addEventListener("canplaythrough", handleCanPlayThrough, { once: true });
 
-    // Try to play immediately (will work if user already interacted with the origin)
-    const playPromise = audio.play();
-    if (playPromise) {
-      playPromise.then(() => {
-        setIsPlaying(true);
-      }).catch(() => {
-        setIsPlaying(false);
-        // Autoplay blocked — register one-shot listeners on common interaction events
-        const startOnInteraction = () => {
-          // Remove all listeners first
-          ["click", "pointerdown", "keydown", "touchstart", "scroll"].forEach(evt =>
-            document.removeEventListener(evt, startOnInteraction, true)
-          );
-          audio.play().then(() => setIsPlaying(true)).catch(() => {});
-        };
-
-        ["click", "pointerdown", "keydown", "touchstart", "scroll"].forEach(evt =>
-          document.addEventListener(evt, startOnInteraction, { once: true, capture: true })
-        );
-
-        removeInteractionListenersRef.current = () => {
-          ["click", "pointerdown", "keydown", "touchstart", "scroll"].forEach(evt =>
-            document.removeEventListener(evt, startOnInteraction, true)
-          );
-        };
-      });
-    }
+    void playAudio().then((started) => {
+      if (!started) {
+        registerFirstInteractionPlayback();
+      }
+    });
 
     return () => {
-      if (removeInteractionListenersRef.current) removeInteractionListenersRef.current();
+      clearInteractionListeners();
       audio.pause();
       audio.removeEventListener("playing", handlePlaying);
       audio.removeEventListener("pause", handlePause);
+      audio.removeEventListener("canplaythrough", handleCanPlayThrough);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [clearInteractionListeners, playAudio]);
 
   const toggleMusic = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    if (removeInteractionListenersRef.current) {
-      removeInteractionListenersRef.current();
-      removeInteractionListenersRef.current = null;
-    }
+    clearInteractionListeners();
 
     if (!audio.paused) {
       audio.pause();
-    } else {
-      audio.play().then(() => setIsPlaying(true)).catch(() => {});
+      return;
     }
-  }, []);
+
+    void playAudio();
+  }, [clearInteractionListeners, playAudio]);
 
   const goNext = useCallback(() => {
     setCurrent((prev) => (prev + 1) % images.length);
@@ -100,15 +121,13 @@ const HeroSection = () => {
   }, []);
 
   useEffect(() => {
-    if (isPaused) return;
     const timer = setInterval(goNext, 3500);
     return () => clearInterval(timer);
-  }, [goNext, isPaused]);
+  }, [goNext]);
 
   const toggleSlideshow = () => {
     toggleMusic();
   };
-
 
   return (
     <section id="home" className="relative w-full" style={{ marginTop: "80px" }}>
@@ -116,6 +135,7 @@ const HeroSection = () => {
         ref={audioRef}
         src="/audio/background-music.mp3"
         preload="auto"
+        autoPlay
         loop
         className="hidden"
         aria-hidden="true"

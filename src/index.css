@@ -43,6 +43,8 @@
     --gold-accent: 42 42% 57%;
     --soft-gray: 0 0% 36%;
     --rose-tint: 348 30% 96%;
+    --chatbot-trigger: 0 0% 0%;
+    --chatbot-trigger-foreground: 0 0% 100%;
 
     --sidebar-background: 348 56% 27%;
     --sidebar-foreground: 0 0% 100%;

@@ -132,12 +132,13 @@ const AIChatBot = () => {
             onClick={() => setIsOpen(true)}
             className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110"
             style={{
-              background: "linear-gradient(135deg, hsl(280, 60%, 45%), hsl(320, 70%, 50%))",
-              border: "2px solid hsl(40, 70%, 65%)",
+              background: "hsl(var(--chatbot-trigger))",
+              border: "2px solid hsl(var(--gold-accent))",
+              boxShadow: "0 16px 40px hsl(var(--chatbot-trigger) / 0.35)",
             }}
             aria-label="Open AI Chat"
           >
-            <Sparkles className="w-6 h-6 text-white" />
+            <Sparkles className="w-6 h-6" style={{ color: "hsl(var(--chatbot-trigger-foreground))" }} />
           </motion.button>
         )}
       </AnimatePresence>
