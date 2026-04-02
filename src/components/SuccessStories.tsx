@@ -134,11 +134,11 @@ const SuccessStories = () => {
                   border: "2px solid hsl(0, 0%, 22%)",
                 }}
               >
-                <div className="h-[160px] overflow-hidden">
+                <div className="h-[220px] overflow-hidden">
                   <img
-                    src={story.image_url || wedding1}
+                    src={story.image_url || success1}
                     alt={`${story.bride_name} & ${story.groom_name}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                   />
                 </div>
                 <div className="px-4 py-3 text-center">
