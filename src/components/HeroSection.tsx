@@ -20,54 +20,88 @@ const HeroSection = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const hasInteractedRef = useRef(false);
+  const removeInteractionListenersRef = useRef<(() => void) | null>(null);
 
-  useEffect(() => {
-    audioRef.current = new Audio("/audio/background-music.mp3");
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.5;
-
-    // Try to autoplay with sound
-    const playPromise = audioRef.current.play();
-    if (playPromise) {
-      playPromise
-        .then(() => {
-          setIsPlaying(true);
-          hasInteractedRef.current = true;
-        })
-        .catch(() => {
-          // Browser blocked autoplay — wait for first user interaction anywhere
-          setIsPlaying(false);
-          const startOnInteraction = () => {
-            if (audioRef.current && !hasInteractedRef.current) {
-              hasInteractedRef.current = true;
-              audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
-            }
-            document.removeEventListener("click", startOnInteraction);
-            document.removeEventListener("touchstart", startOnInteraction);
-            document.removeEventListener("scroll", startOnInteraction);
-          };
-          document.addEventListener("click", startOnInteraction, { once: true });
-          document.addEventListener("touchstart", startOnInteraction, { once: true });
-          document.addEventListener("scroll", startOnInteraction, { once: true });
-        });
-    }
-    return () => {
-      audioRef.current?.pause();
-      audioRef.current = null;
-    };
+  const clearInteractionListeners = useCallback(() => {
+    removeInteractionListenersRef.current?.();
+    removeInteractionListenersRef.current = null;
   }, []);
 
-  const toggleMusic = () => {
-    if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      audioRef.current.play().catch(() => {});
+  const attemptPlay = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio) return false;
+
+    try {
+      await audio.play();
       setIsPlaying(true);
+      return true;
+    } catch {
+      setIsPlaying(false);
+      return false;
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.loop = true;
+    audio.volume = 0.5;
+    audio.preload = "auto";
+
+    const handlePlaying = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+
+    const registerFirstInteractionPlayback = () => {
+      const startOnInteraction = async () => {
+        clearInteractionListeners();
+        await attemptPlay();
+      };
+
+      const options: AddEventListenerOptions = { once: true, capture: true };
+
+      window.addEventListener("pointerdown", startOnInteraction, options);
+      window.addEventListener("keydown", startOnInteraction, options);
+      window.addEventListener("touchstart", startOnInteraction, options);
+      window.addEventListener("scroll", startOnInteraction, options);
+
+      removeInteractionListenersRef.current = () => {
+        window.removeEventListener("pointerdown", startOnInteraction, options);
+        window.removeEventListener("keydown", startOnInteraction, options);
+        window.removeEventListener("touchstart", startOnInteraction, options);
+        window.removeEventListener("scroll", startOnInteraction, options);
+      };
+    };
+
+    audio.addEventListener("playing", handlePlaying);
+    audio.addEventListener("pause", handlePause);
+
+    attemptPlay().then((started) => {
+      if (!started) {
+        registerFirstInteractionPlayback();
+      }
+    });
+
+    return () => {
+      clearInteractionListeners();
+      audio.pause();
+      audio.removeEventListener("playing", handlePlaying);
+      audio.removeEventListener("pause", handlePause);
+    };
+  }, [attemptPlay, clearInteractionListeners]);
+
+  const toggleMusic = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (!audio.paused) {
+      clearInteractionListeners();
+      audio.pause();
+    } else {
+      clearInteractionListeners();
+      await attemptPlay();
+    }
+  }, [attemptPlay, clearInteractionListeners]);
 
   const goNext = useCallback(() => {
     setCurrent((prev) => (prev + 1) % images.length);
@@ -90,6 +124,14 @@ const HeroSection = () => {
 
   return (
     <section id="home" className="relative w-full" style={{ marginTop: "80px" }}>
+      <audio
+        ref={audioRef}
+        src="/audio/background-music.mp3"
+        preload="auto"
+        loop
+        className="hidden"
+        aria-hidden="true"
+      />
 
       {/* Main Hero - Split Layout */}
       <div className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(230, 40%, 22%) 0%, hsl(250, 35%, 30%) 20%, hsl(270, 30%, 35%) 40%, hsl(25, 45%, 40%) 65%, hsl(35, 50%, 45%) 80%, hsl(220, 35%, 30%) 100%)" }}>
