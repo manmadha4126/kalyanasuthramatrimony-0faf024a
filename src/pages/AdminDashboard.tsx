@@ -771,7 +771,7 @@ export default function AdminDashboard() {
                   <DetailRow label="Annual Income" value={p.annual_income} />
                   <DetailRow label="Citizenship" value={p.citizenship} />
                   <DetailRow label="Visa Type" value={p.visa_type} />
-                  <DetailRow label="Residence Type" value={p.residence_type} />
+                  
                 </DetailSection>
               </div>
 

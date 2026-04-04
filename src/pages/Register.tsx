@@ -841,7 +841,7 @@ export default function Register() {
                         <SummaryRow label="Currency Type" value={form.currencyType} />
                         <SummaryRow label="Annual Income" value={form.annualIncome} />
                         <SummaryRow label="Citizenship" value={form.citizenship} />
-                        <SummaryRow label="Residence Type" value={form.residenceType} />
+                        
                         <SummaryRow label="Visa Type" value={form.visaType} />
                       </SummarySection>
                       <SummarySection title="👨‍👩‍👧‍👦 Family Details">
