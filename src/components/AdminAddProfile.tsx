@@ -42,7 +42,7 @@ const incomeByCountry: Record<string, string[]> = {
   "GBP (£)": ["Below £10,000", "£10,000-£20,000", "£20,000-£40,000", "£40,000-£60,000", "£60,000-£80,000", "£80,000-£100,000", "£100,000+"],
 };
 const citizenshipOptions = ["Indian Citizen", "NRI (Non-Resident Indian)", "PIO (Person of Indian Origin)", "OCI (Overseas Citizen of India)", "US Citizen", "UK Citizen", "Canadian Citizen", "Australian Citizen", "UAE Resident", "Singapore Citizen / PR", "German Citizen", "Dual Citizenship", "Foreign National", "Other"];
-const residenceOptions = ["Own House", "Rented House", "Rented Apartment", "Own Apartment / Flat", "With Family / Parents", "Company Provided", "PG / Hostel", "Co-Living", "Independent Villa", "Other"];
+
 const visaOptions = ["Not Applicable", "H1-B (Work Visa - US)", "H4 (Dependent Visa - US)", "L1 (Intra-Company Transfer)", "Green Card / PR (US)", "PR (Canada)", "PR (Australia)", "Employment Pass (Singapore)", "Work Visa (UAE)", "Golden Visa (UAE)", "Blue Card (EU)", "Other"];
 const familyStatusOptions = ["Middle Class", "Upper Middle Class", "Rich", "Affluent"];
 const familyTypeOptions = ["Joint Family", "Nuclear Family", "Extended Family"];
