@@ -127,9 +127,6 @@ const citizenshipOptions = [
   "Dual Citizenship", "Foreign National", "Other"
 ];
 
-const residenceOptions = [
-  "Own House", "Rented House", "Rented Apartment", "Own Apartment / Flat",
-  "With Family / Parents", "Company Provided", "PG / Hostel",
   "Co-Living", "Independent Villa", "Other"
 ];
 
