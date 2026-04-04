@@ -15,18 +15,18 @@ const heightOptions = Array.from({ length: 26 }, (_, i) => {
 const maritalStatusOptions = ["Never Married", "Divorced", "Widowed", "Separated"];
 const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Jain", "Buddhist", "Parsi / Zoroastrian", "Jewish", "Bahai", "No Religion", "Spiritual", "Other"];
 const casteMappings: Record<string, string[]> = {
-  "Hindu": ["Brahmin", "Kshatriya", "Vaishya", "Shudra", "Agarwal", "Arora", "Bania", "Chettiar", "Devanga", "Ezhava", "Goud", "Gounder", "Iyer", "Iyengar", "Jat", "Kamma", "Kapu", "Kayastha", "Khandayat", "Khatri", "Kongu Vellalar", "Kurmi", "Lingayat", "Maratha", "Meena", "Mudaliar", "Nadar", "Naidu", "Nair", "Padmashali", "Patel", "Pillai", "Rajput", "Reddy", "Saini", "Sengunthar", "Thevar", "Vanniyar", "Velama", "Vishwakarma", "Vokkaliga", "Yadav", "SC / ST", "OBC", "Other", "No Caste Preference"],
-  "Muslim": ["Ansari", "Hanafi", "Jat Muslim", "Khoja", "Lebbai", "Malik", "Mappila", "Memon", "Mughal", "Pathan", "Qureshi", "Rajput Muslim", "Rowther", "Sayyid", "Shafi", "Sheikh", "Siddiqui", "Sunni", "Shia", "Other", "No Caste Preference"],
-  "Christian": ["Anglo-Indian", "Born Again", "Catholic", "CNI", "CSI", "Jacobite", "Knanaya", "Latin Catholic", "Marthoma", "Nadar Christian", "Orthodox", "Pentecostal", "Protestant", "Roman Catholic", "Syrian Catholic", "Syrian Orthodox", "Other", "No Caste Preference"],
-  "Sikh": ["Arora", "Bhatia", "Ghumar", "Jat Sikh", "Kamboj", "Khatri", "Labana", "Mazhabi", "Ramgarhia", "Ravidasia", "Saini", "Other", "No Caste Preference"],
-  "Jain": ["Agarwal", "Digamber", "Jaiswal", "KVO", "Oswal", "Porwal", "Shwetamber", "Visa Oswal", "Other", "No Caste Preference"],
-  "Buddhist": ["Mahar", "Neo-Buddhist", "Theravada", "Mahayana", "Vajrayana", "Other", "No Caste Preference"],
-  "Parsi / Zoroastrian": ["Irani", "Parsi", "Other", "No Caste Preference"],
-  "Jewish": ["Bene Israel", "Cochin Jews", "Baghdadi", "Other", "No Caste Preference"],
-  "Bahai": ["Bahai", "Other"],
+  "Hindu": ["Brahmin", "Kshatriya", "Vaishya", "Shudra", "Agarwal", "Arora", "Bania", "Chettiar", "CNB", "Devanga", "Ezhava", "Goud", "Gounder", "Iyer", "Iyengar", "Jat", "Kamma", "Kapu", "Kayastha", "Khandayat", "Khatri", "Kongu Vellalar", "Kurmi", "Lingayat", "Maratha", "Meena", "Mudaliar", "Nadar", "Naidu", "Nair", "Padmashali", "Patel", "Pillai", "Rajput", "Reddy", "Saini", "Sengunthar", "Thevar", "Vanniyar", "Velama", "Vishwakarma", "Vokkaliga", "Yadav", "SC / ST", "OBC", "Other", "No Caste Preference"],
+  "Muslim": ["Ansari", "Hanafi", "Jat Muslim", "Khoja", "Lebbai", "Malik", "Mappila", "Memon", "Mughal", "Pathan", "Qureshi", "Rajput Muslim", "Rowther", "Sayyid", "Shafi", "Sheikh", "Siddiqui", "Sunni", "Shia", "CNB", "Other", "No Caste Preference"],
+  "Christian": ["Anglo-Indian", "Born Again", "Catholic", "CNI", "CSI", "Jacobite", "Knanaya", "Latin Catholic", "Marthoma", "Nadar Christian", "Orthodox", "Pentecostal", "Protestant", "Roman Catholic", "Syrian Catholic", "Syrian Orthodox", "CNB", "Other", "No Caste Preference"],
+  "Sikh": ["Arora", "Bhatia", "Ghumar", "Jat Sikh", "Kamboj", "Khatri", "Labana", "Mazhabi", "Ramgarhia", "Ravidasia", "Saini", "CNB", "Other", "No Caste Preference"],
+  "Jain": ["Agarwal", "Digamber", "Jaiswal", "KVO", "Oswal", "Porwal", "Shwetamber", "Visa Oswal", "CNB", "Other", "No Caste Preference"],
+  "Buddhist": ["Mahar", "Neo-Buddhist", "Theravada", "Mahayana", "Vajrayana", "CNB", "Other", "No Caste Preference"],
+  "Parsi / Zoroastrian": ["Irani", "Parsi", "CNB", "Other", "No Caste Preference"],
+  "Jewish": ["Bene Israel", "Cochin Jews", "Baghdadi", "CNB", "Other", "No Caste Preference"],
+  "Bahai": ["Bahai", "CNB", "Other"],
   "No Religion": ["Not Applicable"],
   "Spiritual": ["Not Applicable"],
-  "Other": ["Other", "No Caste Preference"]
+  "Other": ["CNB", "Other", "No Caste Preference"]
 };
 const countryOptions = ["India", "USA", "UK", "Canada", "Australia", "UAE", "Singapore", "Germany", "New Zealand", "Malaysia", "South Africa", "Saudi Arabia", "Qatar", "Kuwait", "Bahrain", "Oman", "Japan", "South Korea", "France", "Italy", "Netherlands", "Sweden", "Switzerland", "Ireland", "Other"];
 const indianStates = ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"];
