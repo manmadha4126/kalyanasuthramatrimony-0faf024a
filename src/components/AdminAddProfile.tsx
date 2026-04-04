@@ -281,7 +281,17 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
 
           <SectionHeading title="Personal Details" />
           <SelectField label="Religion" value={form.religion} onChange={v => { set("religion", v); set("caste", ""); set("subCaste", ""); }} options={religionOptions} />
-          <SelectField label="Caste" value={form.caste} onChange={v => set("caste", v)} options={casteOptions} />
+          {form.caste === "Other" ? (
+            <div>
+              <label className="block text-sm font-semibold mb-1.5 text-gray-600">Caste (Type manually)</label>
+              <div className="flex gap-2">
+                <input type="text" value={form.subCaste} onChange={e => set("subCaste", e.target.value)} placeholder="Enter caste" className="flex-1 rounded-xl border border-gray-200 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white placeholder-gray-400" />
+                <button type="button" onClick={() => { set("caste", ""); set("subCaste", ""); }} className="px-3 py-1 text-xs rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200">Back</button>
+              </div>
+            </div>
+          ) : (
+            <SelectField label="Caste" value={form.caste} onChange={v => set("caste", v)} options={casteOptions} />
+          )}
           <TextField label="Sub Caste" value={form.subCaste} onChange={v => set("subCaste", v)} />
           <SelectField label="Country" value={form.country} onChange={v => set("country", v)} options={countryOptions} />
           {form.country === "India" && <SelectField label="State" value={form.state} onChange={v => set("state", v)} options={indianStates} />}

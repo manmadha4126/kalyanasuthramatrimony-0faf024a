@@ -625,7 +625,17 @@ export default function Register() {
                       <SelectField label="Height" value={form.height} onChange={v => set("height", v)} options={heightOptions} />
                       <SelectField label="Marital Status" value={form.maritalStatus} onChange={v => set("maritalStatus", v)} options={maritalStatusOptions} />
                       <SelectField label="Religion" value={form.religion} onChange={handleReligionChange} options={religionOptions} />
-                      <SelectField label="Caste" value={form.caste} onChange={v => set("caste", v)} options={casteOptions} />
+                      {form.caste === "Other" ? (
+                        <div>
+                          <label className="block text-sm font-semibold mb-1.5" style={{ color: `hsl(${THEME.primaryDeep})` }}>Caste (Type manually)</label>
+                          <div className="flex gap-2">
+                            <input type="text" value={form.subCaste} onChange={e => set("subCaste", e.target.value)} placeholder="Enter your caste" className="flex-1 rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2" style={{ border: `1.5px solid hsl(${THEME.primaryLight})` }} />
+                            <button type="button" onClick={() => { set("caste", ""); set("subCaste", ""); }} className="px-3 py-1 text-xs rounded-lg" style={{ background: `hsl(${THEME.accentLight})`, color: `hsl(${THEME.primaryDeep})` }}>Back</button>
+                          </div>
+                        </div>
+                      ) : (
+                        <SelectField label="Caste" value={form.caste} onChange={v => set("caste", v)} options={casteOptions} />
+                      )}
                       <TextField label="Sub Caste" value={form.subCaste} onChange={v => set("subCaste", v)} />
                       <SelectField label="Country" value={form.country} onChange={v => set("country", v)} options={countryOptions} />
                       <SelectField label="State" value={form.state} onChange={v => set("state", v)} options={indianStates} />
