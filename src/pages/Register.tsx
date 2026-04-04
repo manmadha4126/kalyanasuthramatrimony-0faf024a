@@ -663,7 +663,7 @@ export default function Register() {
                       <SelectField label="Currency Type" value={form.currencyType} onChange={v => { set("currencyType", v); set("annualIncome", ""); }} options={currencyOptions} />
                       <SelectField label="Annual Income" value={form.annualIncome} onChange={v => set("annualIncome", v)} options={incomeByCountry[form.currencyType] || ["Enter manually"]} />
                       <SelectField label="Citizenship" value={form.citizenship} onChange={v => set("citizenship", v)} options={citizenshipOptions} />
-                      <SelectField label="Residence Type" value={form.residenceType} onChange={v => set("residenceType", v)} options={residenceOptions} />
+                      
                       <SelectField label="Visa Type" value={form.visaType} onChange={v => set("visaType", v)} options={visaOptions} />
                     </div>
                   )}
