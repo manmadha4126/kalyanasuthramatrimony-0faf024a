@@ -41,7 +41,7 @@ const raashiOptions = ["Mesha (Aries)","Vrishabha (Taurus)","Mithuna (Gemini)","
 const starOptions = ["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishtha","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"];
 const doshamOptions = ["No Dosham","Chevvai Dosham","Rahu Dosham","Kethu Dosham","Shani Dosham","Not Known"];
 const citizenshipOptions = ["Indian Citizen","NRI","PIO","OCI","US Citizen","UK Citizen","Canadian Citizen","Australian Citizen","UAE Resident","Singapore Citizen / PR","German Citizen","Dual Citizenship","Foreign National","Other"];
-const residenceOptions = ["Own House","Rented House","Rented Apartment","Own Apartment / Flat","With Family / Parents","Company Provided","PG / Hostel","Co-Living","Independent Villa","Other"];
+
 const visaOptions = ["Not Applicable","H1-B","H4","L1","L2","F1","OPT / CPT","Green Card / PR (US)","US Citizen","Tier 2 (UK)","ILR (UK PR)","PR (Canada)","Work Permit (Canada)","PR (Australia)","Employment Pass (Singapore)","Work Visa (UAE)","Golden Visa (UAE)","Blue Card (EU)","Other"];
 const heightOptions = Array.from({ length: 26 }, (_, i) => { const t = 54 + i; return `${Math.floor(t/12)}'${t%12}"`; });
 const currencyOptions = ["INR (₹)","USD ($)","GBP (£)","EUR (€)","CAD (C$)","AUD (A$)","AED (د.إ)","SGD (S$)","Other"];
