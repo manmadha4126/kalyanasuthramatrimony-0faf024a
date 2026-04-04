@@ -650,7 +650,17 @@ export default function AdminDashboard() {
                   <EditSelect label="Height" field="height_cm" options={heightOptions} />
                   <EditSelect label="Marital Status" field="marital_status" options={maritalStatusOptions} />
                   <EditSelect label="Religion" field="religion" options={religionOptions} />
-                  <EditSelect label="Caste" field="caste" options={editCasteOptions} />
+                  {(editForm as any).caste === "Other" ? (
+                    <div className="mb-3">
+                      <label className="block text-sm font-semibold text-gray-500 mb-1">Caste (Type manually)</label>
+                      <div className="flex gap-2">
+                        <input type="text" value={(editForm as any).sub_caste || ""} onChange={e => setEditField("sub_caste", e.target.value)} placeholder="Enter caste" className="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white" />
+                        <button type="button" onClick={() => { setEditField("caste", ""); setEditField("sub_caste", ""); }} className="px-3 py-1 text-xs rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200">Back</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <EditSelect label="Caste" field="caste" options={editCasteOptions} />
+                  )}
                   <EditField label="Sub Caste" field="sub_caste" />
                   <EditSelect label="Country" field="country" options={countryOptions} />
                   <EditSelect label="State" field="state" options={(editForm as any).country === "India" ? indianStates : []} />
