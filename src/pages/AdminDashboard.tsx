@@ -682,7 +682,7 @@ export default function AdminDashboard() {
                   <EditSelect label="Annual Income" field="annual_income" options={incomeByCountry["INR (₹)"] || []} />
                   <EditSelect label="Citizenship" field="citizenship" options={citizenshipOptions} />
                   <EditSelect label="Visa Type" field="visa_type" options={visaOptions} />
-                  <EditSelect label="Residence Type" field="residence_type" options={residenceOptions} />
+                  
                 </div>
               </div>
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
