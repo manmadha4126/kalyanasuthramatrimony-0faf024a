@@ -127,8 +127,6 @@ const citizenshipOptions = [
   "Dual Citizenship", "Foreign National", "Other"
 ];
 
-  "Co-Living", "Independent Villa", "Other"
-];
 
 const visaOptions = [
   "Not Applicable", "H1-B (Work Visa - US)", "H4 (Dependent Visa - US)",
