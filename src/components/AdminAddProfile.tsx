@@ -227,7 +227,7 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
         citizenship: form.citizenship || null,
         visa_type: form.visaType || null,
         residence_type: form.residenceType || null,
-        profile_status: "pending",
+        profile_status: "active",
       } as any).select("profile_id").single();
 
       if (error) throw error;
