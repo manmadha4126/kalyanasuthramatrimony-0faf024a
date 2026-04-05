@@ -155,7 +155,7 @@ const chartStyleOptions = ["South Indian", "North Indian", "East Indian", "Sri L
 const stepTitles = ["Basic Details", "Personal Details", "Family Details", "Horoscope", "Photo Upload", "About Me", "Review & Submit"];
 
 type FormData = {
-  name: string; profileFor: string; gender: string; email: string; phone: string; password: string; confirmPassword: string;
+  firstName: string; lastName: string; profileFor: string; gender: string; email: string; phone: string; password: string; confirmPassword: string;
   dob: string; motherTongue: string; height: string; maritalStatus: string; religion: string; caste: string; subCaste: string;
   country: string; state: string; city: string; village: string;
   edu10Board: string; edu10Percentage: string; edu10School: string;
