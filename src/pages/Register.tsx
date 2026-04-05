@@ -579,9 +579,13 @@ export default function Register() {
 
                   {step === 1 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div className="sm:col-span-2">
-                        <TextField label="Full Name" value={form.name} onChange={v => set("name", v)} required />
-                        {errors.name && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{errors.name}</p>}
+                      <div>
+                        <TextField label="First Name" value={form.firstName} onChange={v => set("firstName", v)} required />
+                        {(errors as any).firstName && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{(errors as any).firstName}</p>}
+                      </div>
+                      <div>
+                        <TextField label="Last Name" value={form.lastName} onChange={v => set("lastName", v)} required />
+                        {(errors as any).lastName && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{(errors as any).lastName}</p>}
                       </div>
                       <SelectField label="Profile For" value={form.profileFor} onChange={v => set("profileFor", v)} options={profileForOptions} required />
                       <SelectField label="Gender" value={form.gender} onChange={v => set("gender", v)} options={genderOptions} required />
