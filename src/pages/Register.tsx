@@ -293,10 +293,11 @@ export default function Register() {
   const handleSave = async () => {
     setSaving(true);
     try {
+      const fullName = `${form.firstName.trim()} ${form.lastName.trim()}`;
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: form.email,
         password: form.password,
-        options: { data: { full_name: form.name } }
+        options: { data: { full_name: fullName } }
       });
       if (authError) throw authError;
 
