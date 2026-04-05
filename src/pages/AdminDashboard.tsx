@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload, FileText, Heart, UserPlus, CreditCard } from "lucide-react";
 import adminLogo from "@/assets/kalyanasuthra-logo.png";
 import AdminAddProfile from "@/components/AdminAddProfile";
+import RevenueSection from "@/components/RevenueSection";
 import { useSessionSecurity } from "@/hooks/useSessionSecurity";
 
 // ---- Dropdown options (mirrored from Register page) ----
@@ -121,7 +122,7 @@ type FeaturedProfileEntry = {
   gender: string; profile_photo_url: string | null; created_at: string;
 };
 
-const TABS = ["Dashboard", "Profile Requests", "All Profiles", "Subscription Access", "Consultations", "Featured Profiles", "Success Stories", "Add Profiles", "Interests", "Staff"];
+const TABS = ["Dashboard", "Profile Requests", "All Profiles", "Subscription Access", "Consultations", "Featured Profiles", "Success Stories", "Add Profiles", "Interests", "Staff", "Revenue"];
 
 const DetailRow = ({ label, value }: { label: string; value: string | null | undefined }) => (
   <div className="flex justify-between py-3 border-b border-gray-100 last:border-0">
@@ -1848,6 +1849,9 @@ export default function AdminDashboard() {
               </div>
             </div>
           )}
+
+          {/* Revenue Management - Admin Only */}
+          {tab === "Revenue" && <RevenueSection />}
         </div>
       </div>
     </div>

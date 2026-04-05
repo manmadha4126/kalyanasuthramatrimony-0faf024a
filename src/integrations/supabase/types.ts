@@ -398,6 +398,42 @@ export type Database = {
         }
         Relationships: []
       }
+      revenue_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+          purpose: string
+          screenshot_url: string | null
+          transaction_date: string
+          transaction_details: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+          purpose: string
+          screenshot_url?: string | null
+          transaction_date?: string
+          transaction_details?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+          purpose?: string
+          screenshot_url?: string | null
+          transaction_date?: string
+          transaction_details?: string | null
+        }
+        Relationships: []
+      }
       staff_members: {
         Row: {
           created_at: string
