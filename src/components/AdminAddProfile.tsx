@@ -53,7 +53,7 @@ const starOptions = ["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "
 const doshamOptions = ["No Dosham", "Chevvai Dosham", "Rahu Dosham", "Kethu Dosham", "Shani Dosham", "Not Known"];
 
 type AdminForm = {
-  name: string; profileFor: string; gender: string; email: string; phone: string;
+  firstName: string; lastName: string; profileFor: string; gender: string; email: string; phone: string;
   dob: string; motherTongue: string; height: string; maritalStatus: string; religion: string; caste: string; subCaste: string;
   country: string; state: string; city: string; village: string;
   edu10Board: string; edu10Percentage: string; edu10School: string;
