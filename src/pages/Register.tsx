@@ -169,7 +169,7 @@ type FormData = {
 };
 
 const defaultForm: FormData = {
-  name: "", profileFor: "", gender: "", email: "", phone: "", password: "", confirmPassword: "",
+  firstName: "", lastName: "", profileFor: "", gender: "", email: "", phone: "", password: "", confirmPassword: "",
   dob: "", motherTongue: "", height: "", maritalStatus: "", religion: "", caste: "", subCaste: "",
   country: "India", state: "", city: "", village: "",
   edu10Board: "", edu10Percentage: "", edu10School: "",
