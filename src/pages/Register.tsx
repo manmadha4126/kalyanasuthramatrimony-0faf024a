@@ -17,7 +17,7 @@ const THEME = {
   warm: "180, 30%, 85%",
 };
 
-const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative"];
+const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative", "Parents"];
 const genderOptions = ["Male", "Female"];
 const motherTongueOptions = ["Tamil", "Telugu", "Kannada", "Malayalam", "Hindi", "English", "Marathi", "Bengali", "Gujarati", "Punjabi", "Urdu", "Odia", "Assamese", "Konkani", "Sindhi", "Sanskrit", "Other"];
 const heightOptions = Array.from({ length: 26 }, (_, i) => {
