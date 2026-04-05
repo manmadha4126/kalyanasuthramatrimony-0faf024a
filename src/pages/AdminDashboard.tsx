@@ -1849,6 +1849,9 @@ export default function AdminDashboard() {
               </div>
             </div>
           )}
+
+          {/* Revenue Management - Admin Only */}
+          {tab === "Revenue" && <RevenueSection />}
         </div>
       </div>
     </div>
