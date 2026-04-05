@@ -811,7 +811,7 @@ export default function Register() {
                       )}
 
                       <SummarySection title="📋 Basic Information">
-                        <SummaryRow label="Full Name" value={form.name} />
+                        <SummaryRow label="Full Name" value={`${form.firstName} ${form.lastName}`.trim()} />
                         <SummaryRow label="Profile Created For" value={form.profileFor} />
                         <SummaryRow label="Gender" value={form.gender} />
                         <SummaryRow label="Email" value={form.email} />

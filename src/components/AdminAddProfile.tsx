@@ -270,7 +270,8 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
       <div className="p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <SectionHeading title="Basic Details" />
-          <TextField label="Full Name" value={form.name} onChange={v => set("name", v)} required />
+          <TextField label="First Name" value={form.firstName} onChange={v => set("firstName", v)} required />
+          <TextField label="Last Name" value={form.lastName} onChange={v => set("lastName", v)} required />
           <SelectField label="Profile For" value={form.profileFor} onChange={v => set("profileFor", v)} options={profileForOptions} />
           <SelectField label="Gender" value={form.gender} onChange={v => set("gender", v)} options={genderOptions} required />
           <TextField label="Email" value={form.email} onChange={v => set("email", v)} type="email" />
