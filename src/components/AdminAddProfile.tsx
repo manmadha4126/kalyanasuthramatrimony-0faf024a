@@ -142,8 +142,8 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
   };
 
   const handleSubmit = async () => {
-    if (!form.name || !form.gender || !form.dob || !form.phone) {
-      toast({ title: "Please fill required fields: Name, Gender, DOB, Phone", variant: "destructive" });
+    if (!form.firstName || !form.lastName || !form.gender || !form.dob || !form.phone) {
+      toast({ title: "Please fill required fields: First Name, Last Name, Gender, DOB, Phone", variant: "destructive" });
       return;
     }
     setSaving(true);
