@@ -320,7 +320,7 @@ export default function Register() {
 
       const { error: profileErr } = await supabase.rpc("create_profile_on_register", {
         p_user_id: userId,
-        p_full_name: form.name,
+        p_full_name: fullName,
         p_gender: form.gender,
         p_email: form.email,
         p_phone: form.phone,
