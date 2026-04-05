@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Upload, Check, Star } from "lucide-react";
 
-const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative"];
+const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative", "Parents"];
 const genderOptions = ["Male", "Female"];
 const motherTongueOptions = ["Tamil", "Telugu", "Kannada", "Malayalam", "Hindi", "English", "Marathi", "Bengali", "Gujarati", "Punjabi", "Urdu", "Odia", "Assamese", "Konkani", "Sindhi", "Sanskrit", "Other"];
 const heightOptions = Array.from({ length: 26 }, (_, i) => {
@@ -53,7 +53,7 @@ const starOptions = ["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "
 const doshamOptions = ["No Dosham", "Chevvai Dosham", "Rahu Dosham", "Kethu Dosham", "Shani Dosham", "Not Known"];
 
 type AdminForm = {
-  name: string; profileFor: string; gender: string; email: string; phone: string;
+  firstName: string; lastName: string; profileFor: string; gender: string; email: string; phone: string;
   dob: string; motherTongue: string; height: string; maritalStatus: string; religion: string; caste: string; subCaste: string;
   country: string; state: string; city: string; village: string;
   edu10Board: string; edu10Percentage: string; edu10School: string;
@@ -66,7 +66,7 @@ type AdminForm = {
 };
 
 const defaultForm: AdminForm = {
-  name: "", profileFor: "Self", gender: "", email: "", phone: "",
+  firstName: "", lastName: "", profileFor: "Self", gender: "", email: "", phone: "",
   dob: "", motherTongue: "", height: "", maritalStatus: "", religion: "", caste: "", subCaste: "",
   country: "India", state: "", city: "", village: "",
   edu10Board: "", edu10Percentage: "", edu10School: "",
@@ -142,8 +142,8 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
   };
 
   const handleSubmit = async () => {
-    if (!form.name || !form.gender || !form.dob || !form.phone) {
-      toast({ title: "Please fill required fields: Name, Gender, DOB, Phone", variant: "destructive" });
+    if (!form.firstName || !form.lastName || !form.gender || !form.dob || !form.phone) {
+      toast({ title: "Please fill required fields: First Name, Last Name, Gender, DOB, Phone", variant: "destructive" });
       return;
     }
     setSaving(true);
@@ -186,8 +186,9 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
         form.graduationDetail && `Degree: ${form.graduationDetail}`
       ].filter(Boolean).join(", ") || null;
 
+      const fullName = `${form.firstName.trim()} ${form.lastName.trim()}`;
       const { data, error } = await supabase.from("profiles").insert({
-        full_name: form.name,
+        full_name: fullName,
         gender: form.gender,
         email: form.email || null,
         phone: form.phone,
@@ -269,7 +270,8 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
       <div className="p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <SectionHeading title="Basic Details" />
-          <TextField label="Full Name" value={form.name} onChange={v => set("name", v)} required />
+          <TextField label="First Name" value={form.firstName} onChange={v => set("firstName", v)} required />
+          <TextField label="Last Name" value={form.lastName} onChange={v => set("lastName", v)} required />
           <SelectField label="Profile For" value={form.profileFor} onChange={v => set("profileFor", v)} options={profileForOptions} />
           <SelectField label="Gender" value={form.gender} onChange={v => set("gender", v)} options={genderOptions} required />
           <TextField label="Email" value={form.email} onChange={v => set("email", v)} type="email" />

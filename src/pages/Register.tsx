@@ -17,7 +17,7 @@ const THEME = {
   warm: "180, 30%, 85%",
 };
 
-const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative"];
+const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative", "Parents"];
 const genderOptions = ["Male", "Female"];
 const motherTongueOptions = ["Tamil", "Telugu", "Kannada", "Malayalam", "Hindi", "English", "Marathi", "Bengali", "Gujarati", "Punjabi", "Urdu", "Odia", "Assamese", "Konkani", "Sindhi", "Sanskrit", "Other"];
 const heightOptions = Array.from({ length: 26 }, (_, i) => {
@@ -155,7 +155,7 @@ const chartStyleOptions = ["South Indian", "North Indian", "East Indian", "Sri L
 const stepTitles = ["Basic Details", "Personal Details", "Family Details", "Horoscope", "Photo Upload", "About Me", "Review & Submit"];
 
 type FormData = {
-  name: string; profileFor: string; gender: string; email: string; phone: string; password: string; confirmPassword: string;
+  firstName: string; lastName: string; profileFor: string; gender: string; email: string; phone: string; password: string; confirmPassword: string;
   dob: string; motherTongue: string; height: string; maritalStatus: string; religion: string; caste: string; subCaste: string;
   country: string; state: string; city: string; village: string;
   edu10Board: string; edu10Percentage: string; edu10School: string;
@@ -169,7 +169,7 @@ type FormData = {
 };
 
 const defaultForm: FormData = {
-  name: "", profileFor: "", gender: "", email: "", phone: "", password: "", confirmPassword: "",
+  firstName: "", lastName: "", profileFor: "", gender: "", email: "", phone: "", password: "", confirmPassword: "",
   dob: "", motherTongue: "", height: "", maritalStatus: "", religion: "", caste: "", subCaste: "",
   country: "India", state: "", city: "", village: "",
   edu10Board: "", edu10Percentage: "", edu10School: "",
@@ -247,7 +247,8 @@ export default function Register() {
 
   const validateStep1 = () => {
     const e: typeof errors = {};
-    if (!form.name.trim()) e.name = "Name is required";
+    if (!form.firstName.trim()) e.firstName = "First name is required" as any;
+    if (!form.lastName.trim()) e.lastName = "Last name is required" as any;
     if (!form.profileFor) e.profileFor = "Required";
     if (!form.gender) e.gender = "Required";
     if (!form.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) e.email = "Invalid email";
@@ -292,10 +293,11 @@ export default function Register() {
   const handleSave = async () => {
     setSaving(true);
     try {
+      const fullName = `${form.firstName.trim()} ${form.lastName.trim()}`;
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: form.email,
         password: form.password,
-        options: { data: { full_name: form.name } }
+        options: { data: { full_name: fullName } }
       });
       if (authError) throw authError;
 
@@ -318,7 +320,7 @@ export default function Register() {
 
       const { error: profileErr } = await supabase.rpc("create_profile_on_register", {
         p_user_id: userId,
-        p_full_name: form.name,
+        p_full_name: fullName,
         p_gender: form.gender,
         p_email: form.email,
         p_phone: form.phone,
@@ -516,7 +518,7 @@ export default function Register() {
           <div className="flex items-center gap-4 sm:gap-6">
             <BackButton to="/" label="Home" className="hidden lg:inline-flex px-4 py-2 rounded-lg text-sm font-semibold bg-[hsl(42,42%,57%)] text-white" />
             <div className="hidden sm:flex flex-col items-end gap-0.5 text-white text-xs sm:text-sm">
-              <a href="mailto:info@kalyanasuthra.com" className="hover:underline opacity-90">info@kalyanasuthra.com</a>
+              <a href="mailto:kalyanasuthramatrimonytpt@gmail.com" className="hover:underline opacity-90">kalyanasuthramatrimonytpt@gmail.com</a>
               <a href="tel:+919553306667" className="hover:underline opacity-90">+91 9553306667</a>
             </div>
           </div>
@@ -577,9 +579,13 @@ export default function Register() {
 
                   {step === 1 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div className="sm:col-span-2">
-                        <TextField label="Full Name" value={form.name} onChange={v => set("name", v)} required />
-                        {errors.name && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{errors.name}</p>}
+                      <div>
+                        <TextField label="First Name" value={form.firstName} onChange={v => set("firstName", v)} required />
+                        {(errors as any).firstName && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{(errors as any).firstName}</p>}
+                      </div>
+                      <div>
+                        <TextField label="Last Name" value={form.lastName} onChange={v => set("lastName", v)} required />
+                        {(errors as any).lastName && <p className="text-xs mt-1" style={{ color: "hsl(0, 70%, 55%)" }}>{(errors as any).lastName}</p>}
                       </div>
                       <SelectField label="Profile For" value={form.profileFor} onChange={v => set("profileFor", v)} options={profileForOptions} required />
                       <SelectField label="Gender" value={form.gender} onChange={v => set("gender", v)} options={genderOptions} required />
@@ -805,7 +811,7 @@ export default function Register() {
                       )}
 
                       <SummarySection title="📋 Basic Information">
-                        <SummaryRow label="Full Name" value={form.name} />
+                        <SummaryRow label="Full Name" value={`${form.firstName} ${form.lastName}`.trim()} />
                         <SummaryRow label="Profile Created For" value={form.profileFor} />
                         <SummaryRow label="Gender" value={form.gender} />
                         <SummaryRow label="Email" value={form.email} />

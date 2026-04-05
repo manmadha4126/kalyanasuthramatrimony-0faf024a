@@ -10,7 +10,7 @@ import { useSessionSecurity } from "@/hooks/useSessionSecurity";
 
 // Dropdown options (same as AdminDashboard)
 const genderOptions = ["Male", "Female"];
-const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative"];
+const profileForOptions = ["Self", "Son", "Daughter", "Brother", "Sister", "Friend", "Relative", "Parents"];
 const motherTongueOptions = ["Tamil", "Telugu", "Kannada", "Malayalam", "Hindi", "English", "Marathi", "Bengali", "Gujarati", "Punjabi", "Urdu", "Odia", "Assamese", "Konkani", "Sindhi", "Sanskrit", "Other"];
 const maritalStatusOptions = ["Never Married", "Divorced", "Widowed", "Separated"];
 const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Jain", "Buddhist", "Parsi / Zoroastrian", "Jewish", "Bahai", "No Religion", "Spiritual", "Other"];
