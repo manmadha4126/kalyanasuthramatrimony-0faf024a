@@ -186,8 +186,9 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
         form.graduationDetail && `Degree: ${form.graduationDetail}`
       ].filter(Boolean).join(", ") || null;
 
+      const fullName = `${form.firstName.trim()} ${form.lastName.trim()}`;
       const { data, error } = await supabase.from("profiles").insert({
-        full_name: form.name,
+        full_name: fullName,
         gender: form.gender,
         email: form.email || null,
         phone: form.phone,
