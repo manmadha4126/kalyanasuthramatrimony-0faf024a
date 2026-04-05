@@ -518,7 +518,7 @@ export default function Register() {
           <div className="flex items-center gap-4 sm:gap-6">
             <BackButton to="/" label="Home" className="hidden lg:inline-flex px-4 py-2 rounded-lg text-sm font-semibold bg-[hsl(42,42%,57%)] text-white" />
             <div className="hidden sm:flex flex-col items-end gap-0.5 text-white text-xs sm:text-sm">
-              <a href="mailto:info@kalyanasuthra.com" className="hover:underline opacity-90">info@kalyanasuthra.com</a>
+              <a href="mailto:kalyanasuthramatrimonytpt@gmail.com" className="hover:underline opacity-90">kalyanasuthramatrimonytpt@gmail.com</a>
               <a href="tel:+919553306667" className="hover:underline opacity-90">+91 9553306667</a>
             </div>
           </div>
