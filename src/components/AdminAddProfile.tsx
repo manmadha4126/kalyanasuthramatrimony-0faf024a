@@ -66,7 +66,7 @@ type AdminForm = {
 };
 
 const defaultForm: AdminForm = {
-  name: "", profileFor: "Self", gender: "", email: "", phone: "",
+  firstName: "", lastName: "", profileFor: "Self", gender: "", email: "", phone: "",
   dob: "", motherTongue: "", height: "", maritalStatus: "", religion: "", caste: "", subCaste: "",
   country: "India", state: "", city: "", village: "",
   edu10Board: "", edu10Percentage: "", edu10School: "",
