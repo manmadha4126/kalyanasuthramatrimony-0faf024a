@@ -247,7 +247,8 @@ export default function Register() {
 
   const validateStep1 = () => {
     const e: typeof errors = {};
-    if (!form.name.trim()) e.name = "Name is required";
+    if (!form.firstName.trim()) e.firstName = "First name is required" as any;
+    if (!form.lastName.trim()) e.lastName = "Last name is required" as any;
     if (!form.profileFor) e.profileFor = "Required";
     if (!form.gender) e.gender = "Required";
     if (!form.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) e.email = "Invalid email";
