@@ -492,8 +492,18 @@ export default function AdminDashboard() {
 
   const activeProfiles = profiles.filter(p => p.profile_status === "active");
 
-  // Filter profiles for All Profiles tab with search
+  // Gender filter for All Profiles
+  const [genderFilter, setGenderFilter] = useState<"all" | "Male" | "Female">("all");
+
+  // Subscription Access state
+  const [subFlowActive, setSubFlowActive] = useState(false);
+
+  const maleCount = activeProfiles.filter(p => p.gender === "Male").length;
+  const femaleCount = activeProfiles.filter(p => p.gender === "Female").length;
+
+  // Filter profiles for All Profiles tab with search + gender
   const filteredAllProfiles = activeProfiles.filter(p => {
+    if (genderFilter !== "all" && p.gender !== genderFilter) return false;
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     return (
@@ -1054,6 +1064,11 @@ export default function AdminDashboard() {
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4">
                 <h3 className="text-lg font-bold text-gray-800">All Verified Profiles ({filteredAllProfiles.length})</h3>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => setGenderFilter("all")} className="px-4 py-2 rounded-xl text-sm font-semibold transition-all" style={genderFilter === "all" ? { background: "hsl(210, 80%, 50%)", color: "white" } : { background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>All ({activeProfiles.length})</button>
+                  <button onClick={() => setGenderFilter("Male")} className="px-4 py-2 rounded-xl text-sm font-semibold transition-all" style={genderFilter === "Male" ? { background: "hsl(210, 80%, 50%)", color: "white" } : { background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>👨 Male ({maleCount})</button>
+                  <button onClick={() => setGenderFilter("Female")} className="px-4 py-2 rounded-xl text-sm font-semibold transition-all" style={genderFilter === "Female" ? { background: "hsl(340, 65%, 50%)", color: "white" } : { background: "hsl(340, 65%, 96%)", color: "hsl(340, 65%, 45%)" }}>👩 Female ({femaleCount})</button>
+                </div>
                 <div className="sm:ml-auto relative">
                   <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
@@ -1254,61 +1269,83 @@ export default function AdminDashboard() {
           {/* Subscription Access */}
           {tab === "Subscription Access" && (
             <div className="space-y-6">
-              {/* Profile list */}
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4">
                   <div>
                     <h3 className="text-lg font-bold text-gray-800">Subscription Access</h3>
-                    <p className="text-sm text-gray-500 mt-0.5">Select a profile to manage subscription</p>
+                    <p className="text-sm text-gray-500 mt-0.5">Manage profile subscriptions</p>
                   </div>
-                  <div className="sm:ml-auto relative">
-                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input type="text" placeholder="Search by name, phone, email..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-                      className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-blue-200" />
-                  </div>
-                </div>
-                <div className="p-4">
-                  {loading ? (
-                    <div className="text-center py-10 text-gray-400">Loading...</div>
-                  ) : (
-                    <div className="space-y-3">
-                      {profiles.filter(p => {
-                        if (!searchQuery) return p.profile_status === "active";
-                        const q = searchQuery.toLowerCase();
-                        return p.full_name.toLowerCase().includes(q) || (p.phone?.includes(q)) || (p.email?.toLowerCase().includes(q)) || (p.city?.toLowerCase().includes(q));
-                      }).map((p, i) => (
-                        <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
-                          className={`bg-white rounded-xl border overflow-hidden transition-all hover:shadow-md flex items-center gap-4 px-5 py-4 cursor-pointer ${subSelectedProfile?.id === p.id ? "ring-2 ring-purple-400 border-purple-200" : "border-gray-100"}`}
-                          style={{ borderLeft: `4px solid ${(p as any).subscription_type === "assisted" ? "hsl(280, 65%, 55%)" : "hsl(210, 20%, 80%)"}` }}
-                          onClick={() => { setSubSelectedProfile(p); setSubPackage(""); setSubAmount(""); setSubNotes(""); setSubShowSummary(false); }}
-                        >
-                          <div className="w-12 h-12 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
-                            {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><span className="text-lg font-bold text-gray-400">{p.full_name[0]}</span></div>}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-bold text-gray-800 text-base truncate">{p.full_name}</h3>
-                            <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {p.phone || "—"}</p>
-                          </div>
-                          {(p as any).profile_id && (
-                            <span className="px-2 py-1 rounded-lg text-xs font-bold flex-shrink-0" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>{(p as any).profile_id}</span>
-                          )}
-                          <div className="flex-shrink-0">
-                            <span className="px-3 py-1 rounded-full text-xs font-bold" style={
-                              (p as any).subscription_type === "assisted"
-                                ? { background: "hsl(280, 65%, 93%)", color: "hsl(280, 65%, 40%)" }
-                                : { background: "hsl(0, 0%, 95%)", color: "hsl(0, 0%, 50%)" }
-                            }>
-                              {(p as any).subscription_type === "assisted" ? "✦ Assisted" : "Free"}
-                            </span>
-                          </div>
-                        </motion.div>
-                      ))}
-                      {profiles.filter(p => p.profile_status === "active").length === 0 && !searchQuery && (
-                        <div className="text-center py-10 text-gray-400">No active profiles to manage</div>
-                      )}
-                    </div>
+                  {!subFlowActive && !subSelectedProfile && (
+                    <button onClick={() => { setSubFlowActive(true); setSearchQuery(""); }} className="sm:ml-auto flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all" style={{ background: "hsl(280, 65%, 55%)" }}>
+                      <Plus size={16} /> Add Subscription
+                    </button>
                   )}
                 </div>
+
+                {!subFlowActive && !subSelectedProfile && (
+                  <div className="p-10 text-center">
+                    <CreditCard size={48} className="mx-auto mb-4 text-gray-300" />
+                    <p className="text-gray-500 text-sm">Click <span className="font-semibold" style={{ color: "hsl(280, 65%, 55%)" }}>Add Subscription</span> to search and select a profile</p>
+                  </div>
+                )}
+
+                {subFlowActive && !subSelectedProfile && (
+                  <>
+                    <div className="p-6 border-b border-gray-100">
+                      <div className="relative">
+                        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                        <input type="text" placeholder="Search by name, phone, email..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} autoFocus
+                          className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm w-full focus:outline-none focus:ring-2 focus:ring-purple-200" />
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      {loading ? (
+                        <div className="text-center py-10 text-gray-400">Loading...</div>
+                      ) : !searchQuery ? (
+                        <div className="text-center py-10 text-gray-400">Type a name, phone or email to search profiles</div>
+                      ) : (() => {
+                        const q = searchQuery.toLowerCase();
+                        const filtered = profiles.filter(p => p.profile_status === "active" && (p.full_name.toLowerCase().includes(q) || (p.phone?.includes(q)) || (p.email?.toLowerCase().includes(q)) || (p.city?.toLowerCase().includes(q))));
+                        return filtered.length === 0 ? (
+                          <div className="text-center py-10 text-gray-400">No profiles match your search</div>
+                        ) : (
+                          <div className="space-y-3">
+                            {filtered.map((p, i) => (
+                              <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
+                                className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md flex items-center gap-4 px-5 py-4 cursor-pointer"
+                                style={{ borderLeft: `4px solid ${(p as any).subscription_type === "assisted" ? "hsl(280, 65%, 55%)" : "hsl(210, 20%, 80%)"}` }}
+                                onClick={() => { setSubSelectedProfile(p); setSubPackage(""); setSubAmount(""); setSubNotes(""); setSubShowSummary(false); setSubFlowActive(false); }}
+                              >
+                                <div className="w-12 h-12 rounded-xl flex-shrink-0 overflow-hidden bg-gray-100">
+                                  {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><span className="text-lg font-bold text-gray-400">{p.full_name[0]}</span></div>}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="font-bold text-gray-800 text-base truncate">{p.full_name}</h3>
+                                  <p className="text-sm text-gray-500">{p.gender} • {getAge(p.date_of_birth)} yrs • {p.phone || "—"}</p>
+                                </div>
+                                {(p as any).profile_id && (
+                                  <span className="px-2 py-1 rounded-lg text-xs font-bold flex-shrink-0" style={{ background: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)" }}>{(p as any).profile_id}</span>
+                                )}
+                                <div className="flex-shrink-0">
+                                  <span className="px-3 py-1 rounded-full text-xs font-bold" style={
+                                    (p as any).subscription_type === "assisted"
+                                      ? { background: "hsl(280, 65%, 93%)", color: "hsl(280, 65%, 40%)" }
+                                      : { background: "hsl(0, 0%, 95%)", color: "hsl(0, 0%, 50%)" }
+                                  }>
+                                    {(p as any).subscription_type === "assisted" ? "✦ Assisted" : "Free"}
+                                  </span>
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
+                        );
+                      })()}
+                      <div className="mt-4 text-center">
+                        <button onClick={() => { setSubFlowActive(false); setSearchQuery(""); }} className="text-sm text-gray-500 hover:text-gray-700 font-medium">Cancel</button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Selected profile subscription panel */}
