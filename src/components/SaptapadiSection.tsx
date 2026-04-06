@@ -36,7 +36,7 @@ const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => 
       boxShadow: "0 16px 50px -10px hsla(0, 0%, 0%, 0.5)",
     }}
   >
-    <div className="flex flex-col items-center text-center p-6 sm:p-7 transition-transform duration-300 group-hover:scale-105">
+    <div className="flex flex-col items-center text-center p-6 sm:p-7 transition-transform duration-300 group-hover:scale-105 h-full justify-center">
       <div
         className="w-14 h-14 rounded-full flex items-center justify-center mb-4"
         style={{ background: "hsla(0, 0%, 100%, 0.25)" }}
