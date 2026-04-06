@@ -32,28 +32,29 @@ const FeaturedProfiles = () => {
 
   const ProfileCard = ({ profile, index }: { profile: FeaturedProfile; index: number }) => (
     <motion.div
-      className="flex flex-col items-center"
+      className="flex flex-col items-center group cursor-pointer"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.06 }}
     >
       <motion.div
-        className="w-full aspect-square rounded-full overflow-hidden shadow-lg border-4"
+        className="w-full aspect-square rounded-full overflow-hidden border-4 relative"
         style={{ borderColor: "hsl(190, 60%, 85%)" }}
-        whileHover={{ scale: 1.05, boxShadow: "0 8px 30px hsla(190, 85%, 45%, 0.25)" }}
-        transition={{ duration: 0.3 }}
+        whileHover={{ scale: 1.12, boxShadow: "0 0 30px hsla(190, 85%, 45%, 0.4), 0 0 60px hsla(190, 85%, 45%, 0.15)" }}
+        transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
       >
+        <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none" style={{ background: "radial-gradient(circle, hsla(190, 85%, 70%, 0.2) 0%, transparent 70%)" }} />
         {profile.profile_photo_url ? (
-          <img src={profile.profile_photo_url} alt={profile.name} className="w-full h-full object-cover" />
+          <img src={profile.profile_photo_url} alt={profile.name} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center" style={{ background: "hsl(190, 30%, 92%)" }}>
+          <div className="w-full h-full flex items-center justify-center transition-all duration-300 group-hover:brightness-110" style={{ background: "hsl(190, 30%, 92%)" }}>
             <span className="text-4xl font-bold" style={{ color: HEADING_COLOR }}>{profile.name[0]}</span>
           </div>
         )}
       </motion.div>
-      <div className="mt-3 text-center">
-        <h4 className="text-base font-bold" style={{ color: "hsl(220, 30%, 18%)" }}>{profile.name}</h4>
+      <div className="mt-3 text-center transition-all duration-300 group-hover:translate-y-[-2px]">
+        <h4 className="text-base font-bold transition-colors duration-300 group-hover:text-[hsl(190,85%,40%)]" style={{ color: "hsl(220, 30%, 18%)" }}>{profile.name}</h4>
         <p className="text-sm" style={{ color: "hsl(0, 0%, 50%)" }}>{profile.age} yrs • {profile.profession}</p>
         <p className="text-xs" style={{ color: "hsl(0, 0%, 60%)" }}>{profile.city}</p>
       </div>
