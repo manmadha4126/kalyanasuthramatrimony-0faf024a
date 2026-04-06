@@ -492,8 +492,18 @@ export default function AdminDashboard() {
 
   const activeProfiles = profiles.filter(p => p.profile_status === "active");
 
-  // Filter profiles for All Profiles tab with search
+  // Gender filter for All Profiles
+  const [genderFilter, setGenderFilter] = useState<"all" | "Male" | "Female">("all");
+
+  // Subscription Access state
+  const [subFlowActive, setSubFlowActive] = useState(false);
+
+  const maleCount = activeProfiles.filter(p => p.gender === "Male").length;
+  const femaleCount = activeProfiles.filter(p => p.gender === "Female").length;
+
+  // Filter profiles for All Profiles tab with search + gender
   const filteredAllProfiles = activeProfiles.filter(p => {
+    if (genderFilter !== "all" && p.gender !== genderFilter) return false;
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     return (
