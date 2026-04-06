@@ -22,7 +22,7 @@ const steps = [
 
 const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => (
   <motion.div
-    className="group relative rounded-2xl overflow-hidden cursor-pointer"
+    className="group relative rounded-2xl overflow-hidden cursor-pointer h-full"
     style={{
       background: cardColors[index],
       boxShadow: "0 4px 20px hsla(0, 0%, 0%, 0.3)",
