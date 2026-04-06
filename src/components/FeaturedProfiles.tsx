@@ -111,10 +111,10 @@ const FeaturedProfiles = () => {
           <h3 className="text-xl font-semibold mb-6 text-center" style={{ color: HEADING_COLOR, fontFamily: "'DM Serif Display', Georgia, serif" }}>
             Bride Profiles
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 max-w-5xl mx-auto">
             {brides.length > 0
-              ? brides.slice(0, 4).map((p, i) => <ProfileCard key={p.id} profile={p} index={i} />)
-              : Array.from({ length: 4 }).map((_, i) => <PlaceholderCard key={`bp${i}`} index={i} />)
+              ? brides.slice(0, 10).map((p, i) => <ProfileCard key={p.id} profile={p} index={i} />)
+              : Array.from({ length: 10 }).map((_, i) => <PlaceholderCard key={`bp${i}`} index={i} />)
             }
           </div>
         </div>
