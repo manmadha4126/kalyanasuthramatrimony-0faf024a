@@ -231,12 +231,16 @@ export default function StaffDashboard() {
 
   const pendingProfiles = profiles.filter(p => p.profile_status === "pending");
   const activeProfiles = profiles.filter(p => p.profile_status === "active");
+  const [genderFilter, setGenderFilter] = useState<"all" | "Male" | "Female">("all");
+  const maleCount = activeProfiles.filter(p => p.gender === "Male").length;
+  const femaleCount = activeProfiles.filter(p => p.gender === "Female").length;
   const getAge = (dob: string) => {
     if (!dob) return "—";
     return Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
   };
 
   const filteredAllProfiles = activeProfiles.filter(p => {
+    if (genderFilter !== "all" && p.gender !== genderFilter) return false;
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     return p.full_name.toLowerCase().includes(q) || (p.city?.toLowerCase().includes(q)) || (p.occupation?.toLowerCase().includes(q)) || (p.phone?.includes(q)) || (p.email?.toLowerCase().includes(q));
