@@ -1064,6 +1064,11 @@ export default function AdminDashboard() {
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4">
                 <h3 className="text-lg font-bold text-gray-800">All Verified Profiles ({filteredAllProfiles.length})</h3>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => setGenderFilter("all")} className="px-4 py-2 rounded-xl text-sm font-semibold transition-all" style={genderFilter === "all" ? { background: "hsl(210, 80%, 50%)", color: "white" } : { background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>All ({activeProfiles.length})</button>
+                  <button onClick={() => setGenderFilter("Male")} className="px-4 py-2 rounded-xl text-sm font-semibold transition-all" style={genderFilter === "Male" ? { background: "hsl(210, 80%, 50%)", color: "white" } : { background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>👨 Male ({maleCount})</button>
+                  <button onClick={() => setGenderFilter("Female")} className="px-4 py-2 rounded-xl text-sm font-semibold transition-all" style={genderFilter === "Female" ? { background: "hsl(340, 65%, 50%)", color: "white" } : { background: "hsl(340, 65%, 96%)", color: "hsl(340, 65%, 45%)" }}>👩 Female ({femaleCount})</button>
+                </div>
                 <div className="sm:ml-auto relative">
                   <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
