@@ -1008,7 +1008,7 @@ export default function AdminDashboard() {
           {tab === "Profile Requests" && (
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-bold text-gray-800">Profile Requests ({pendingProfiles.length})</h3>
+                <h3 className="text-xl font-bold text-gray-800" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>Profile Requests ({pendingProfiles.length})</h3>
               </div>
               <div className="p-4">
                 {loading ? (
