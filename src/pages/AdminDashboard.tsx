@@ -1238,29 +1238,66 @@ export default function AdminDashboard() {
                 {featuredEntries.length === 0 ? (
                   <div className="text-center py-10 text-gray-400">No featured profiles yet. Add some to showcase on the homepage.</div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                    {featuredEntries.map((fp) => (
-                      <div key={fp.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all">
-                        <div className="aspect-[3/4] overflow-hidden bg-gray-100">
-                          {fp.profile_photo_url ? (
-                            <img src={fp.profile_photo_url} alt={fp.name} className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <span className="text-4xl font-bold text-gray-300">{fp.name[0]}</span>
+                  <>
+                    {/* Groom Profiles */}
+                    {featuredEntries.filter(fp => fp.gender === "Groom").length > 0 && (
+                      <div className="mb-6">
+                        <h4 className="text-base font-bold text-gray-700 mb-3">👨 Groom Profiles ({featuredEntries.filter(fp => fp.gender === "Groom").length})</h4>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                          {featuredEntries.filter(fp => fp.gender === "Groom").map((fp) => (
+                            <div key={fp.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
+                              <div className="aspect-square overflow-hidden bg-gray-100">
+                                {fp.profile_photo_url ? (
+                                  <img src={fp.profile_photo_url} alt={fp.name} className="w-full h-full object-cover" />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center">
+                                    <span className="text-2xl font-bold text-gray-300">{fp.name[0]}</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="p-2.5">
+                                <h4 className="font-bold text-gray-800 text-sm truncate">{fp.name}</h4>
+                                <p className="text-xs text-gray-500">{fp.age} yrs • {fp.profession}</p>
+                                <p className="text-xs text-gray-400">{fp.city}</p>
+                                <button onClick={() => deleteFeaturedProfile(fp.id)} className="mt-2 flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg transition-all" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}>
+                                  <Trash2 size={10} /> Remove
+                                </button>
+                              </div>
                             </div>
-                          )}
-                        </div>
-                        <div className="p-4">
-                          <h4 className="font-bold text-gray-800 text-base">{fp.name}</h4>
-                          <p className="text-sm text-gray-500">{fp.age} yrs • {fp.profession}</p>
-                          <p className="text-sm text-gray-400">{fp.city} • {fp.gender}</p>
-                          <button onClick={() => deleteFeaturedProfile(fp.id)} className="mt-3 flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}>
-                            <Trash2 size={12} /> Remove
-                          </button>
+                          ))}
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    )}
+                    {/* Bride Profiles */}
+                    {featuredEntries.filter(fp => fp.gender === "Bride").length > 0 && (
+                      <div>
+                        <h4 className="text-base font-bold text-gray-700 mb-3">👩 Bride Profiles ({featuredEntries.filter(fp => fp.gender === "Bride").length})</h4>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                          {featuredEntries.filter(fp => fp.gender === "Bride").map((fp) => (
+                            <div key={fp.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
+                              <div className="aspect-square overflow-hidden bg-gray-100">
+                                {fp.profile_photo_url ? (
+                                  <img src={fp.profile_photo_url} alt={fp.name} className="w-full h-full object-cover" />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center">
+                                    <span className="text-2xl font-bold text-gray-300">{fp.name[0]}</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="p-2.5">
+                                <h4 className="font-bold text-gray-800 text-sm truncate">{fp.name}</h4>
+                                <p className="text-xs text-gray-500">{fp.age} yrs • {fp.profession}</p>
+                                <p className="text-xs text-gray-400">{fp.city}</p>
+                                <button onClick={() => deleteFeaturedProfile(fp.id)} className="mt-2 flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg transition-all" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}>
+                                  <Trash2 size={10} /> Remove
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
