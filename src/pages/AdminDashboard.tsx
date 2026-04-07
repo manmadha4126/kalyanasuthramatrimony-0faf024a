@@ -1008,7 +1008,7 @@ export default function AdminDashboard() {
           {tab === "Profile Requests" && (
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-bold text-gray-800">Profile Requests ({pendingProfiles.length})</h3>
+                <h3 className="text-xl font-bold text-gray-800" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>Profile Requests ({pendingProfiles.length})</h3>
               </div>
               <div className="p-4">
                 {loading ? (
@@ -1019,7 +1019,7 @@ export default function AdminDashboard() {
                   <div className="space-y-3">
                     {pendingProfiles.map((p, i) => (
                       <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
-                        className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md cursor-pointer"
+                        className="bg-white rounded-xl border border-gray-400 overflow-hidden transition-all hover:shadow-md cursor-pointer"
                         style={{ borderLeft: "4px solid hsl(38, 90%, 55%)" }}
                         onClick={() => openProfile(p)}
                       >
@@ -1063,7 +1063,7 @@ export default function AdminDashboard() {
           {tab === "All Profiles" && (
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4">
-                <h3 className="text-lg font-bold text-gray-800">All Verified Profiles ({filteredAllProfiles.length})</h3>
+                <h3 className="text-xl font-bold text-gray-800" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>All Verified Profiles ({filteredAllProfiles.length})</h3>
                 <div className="flex items-center gap-2">
                   <button onClick={() => setGenderFilter("all")} className="px-4 py-2 rounded-xl text-sm font-semibold transition-all" style={genderFilter === "all" ? { background: "hsl(210, 80%, 50%)", color: "white" } : { background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>All ({activeProfiles.length})</button>
                   <button onClick={() => setGenderFilter("Male")} className="px-4 py-2 rounded-xl text-sm font-semibold transition-all" style={genderFilter === "Male" ? { background: "hsl(210, 80%, 50%)", color: "white" } : { background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>👨 Male ({maleCount})</button>
@@ -1076,7 +1076,7 @@ export default function AdminDashboard() {
                     placeholder="Search by name, city, phone..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-500 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-blue-200"
                   />
                 </div>
               </div>
@@ -1089,7 +1089,7 @@ export default function AdminDashboard() {
                   <div className="space-y-3">
                     {filteredAllProfiles.map((p, i) => (
                       <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
-                        className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md cursor-pointer"
+                        className="bg-white rounded-xl border border-gray-400 overflow-hidden transition-all hover:shadow-md cursor-pointer"
                         style={{ borderLeft: "4px solid hsl(145, 65%, 45%)" }}
                         onClick={() => openProfile(p)}
                       >
@@ -1238,29 +1238,66 @@ export default function AdminDashboard() {
                 {featuredEntries.length === 0 ? (
                   <div className="text-center py-10 text-gray-400">No featured profiles yet. Add some to showcase on the homepage.</div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                    {featuredEntries.map((fp) => (
-                      <div key={fp.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all">
-                        <div className="aspect-[3/4] overflow-hidden bg-gray-100">
-                          {fp.profile_photo_url ? (
-                            <img src={fp.profile_photo_url} alt={fp.name} className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <span className="text-4xl font-bold text-gray-300">{fp.name[0]}</span>
+                  <>
+                    {/* Groom Profiles */}
+                    {featuredEntries.filter(fp => fp.gender === "Groom").length > 0 && (
+                      <div className="mb-6">
+                        <h4 className="text-base font-bold text-gray-700 mb-3">👨 Groom Profiles ({featuredEntries.filter(fp => fp.gender === "Groom").length})</h4>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                          {featuredEntries.filter(fp => fp.gender === "Groom").map((fp) => (
+                            <div key={fp.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
+                              <div className="aspect-square overflow-hidden bg-gray-100">
+                                {fp.profile_photo_url ? (
+                                  <img src={fp.profile_photo_url} alt={fp.name} className="w-full h-full object-cover" />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center">
+                                    <span className="text-2xl font-bold text-gray-300">{fp.name[0]}</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="p-2.5">
+                                <h4 className="font-bold text-gray-800 text-sm truncate">{fp.name}</h4>
+                                <p className="text-xs text-gray-500">{fp.age} yrs • {fp.profession}</p>
+                                <p className="text-xs text-gray-400">{fp.city}</p>
+                                <button onClick={() => deleteFeaturedProfile(fp.id)} className="mt-2 flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg transition-all" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}>
+                                  <Trash2 size={10} /> Remove
+                                </button>
+                              </div>
                             </div>
-                          )}
-                        </div>
-                        <div className="p-4">
-                          <h4 className="font-bold text-gray-800 text-base">{fp.name}</h4>
-                          <p className="text-sm text-gray-500">{fp.age} yrs • {fp.profession}</p>
-                          <p className="text-sm text-gray-400">{fp.city} • {fp.gender}</p>
-                          <button onClick={() => deleteFeaturedProfile(fp.id)} className="mt-3 flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}>
-                            <Trash2 size={12} /> Remove
-                          </button>
+                          ))}
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    )}
+                    {/* Bride Profiles */}
+                    {featuredEntries.filter(fp => fp.gender === "Bride").length > 0 && (
+                      <div>
+                        <h4 className="text-base font-bold text-gray-700 mb-3">👩 Bride Profiles ({featuredEntries.filter(fp => fp.gender === "Bride").length})</h4>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                          {featuredEntries.filter(fp => fp.gender === "Bride").map((fp) => (
+                            <div key={fp.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
+                              <div className="aspect-square overflow-hidden bg-gray-100">
+                                {fp.profile_photo_url ? (
+                                  <img src={fp.profile_photo_url} alt={fp.name} className="w-full h-full object-cover" />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center">
+                                    <span className="text-2xl font-bold text-gray-300">{fp.name[0]}</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="p-2.5">
+                                <h4 className="font-bold text-gray-800 text-sm truncate">{fp.name}</h4>
+                                <p className="text-xs text-gray-500">{fp.age} yrs • {fp.profession}</p>
+                                <p className="text-xs text-gray-400">{fp.city}</p>
+                                <button onClick={() => deleteFeaturedProfile(fp.id)} className="mt-2 flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg transition-all" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}>
+                                  <Trash2 size={10} /> Remove
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
