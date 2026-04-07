@@ -1019,7 +1019,7 @@ export default function AdminDashboard() {
                   <div className="space-y-3">
                     {pendingProfiles.map((p, i) => (
                       <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
-                        className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md cursor-pointer"
+                        className="bg-white rounded-xl border border-gray-400 overflow-hidden transition-all hover:shadow-md cursor-pointer"
                         style={{ borderLeft: "4px solid hsl(38, 90%, 55%)" }}
                         onClick={() => openProfile(p)}
                       >
@@ -1063,7 +1063,7 @@ export default function AdminDashboard() {
           {tab === "All Profiles" && (
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4">
-                <h3 className="text-lg font-bold text-gray-800">All Verified Profiles ({filteredAllProfiles.length})</h3>
+                <h3 className="text-xl font-bold text-gray-800" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>All Verified Profiles ({filteredAllProfiles.length})</h3>
                 <div className="flex items-center gap-2">
                   <button onClick={() => setGenderFilter("all")} className="px-4 py-2 rounded-xl text-sm font-semibold transition-all" style={genderFilter === "all" ? { background: "hsl(210, 80%, 50%)", color: "white" } : { background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>All ({activeProfiles.length})</button>
                   <button onClick={() => setGenderFilter("Male")} className="px-4 py-2 rounded-xl text-sm font-semibold transition-all" style={genderFilter === "Male" ? { background: "hsl(210, 80%, 50%)", color: "white" } : { background: "hsl(210, 80%, 96%)", color: "hsl(210, 80%, 45%)" }}>👨 Male ({maleCount})</button>
@@ -1076,7 +1076,7 @@ export default function AdminDashboard() {
                     placeholder="Search by name, city, phone..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    className="pl-10 pr-4 py-2.5 rounded-xl border border-gray-500 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-blue-200"
                   />
                 </div>
               </div>
@@ -1089,7 +1089,7 @@ export default function AdminDashboard() {
                   <div className="space-y-3">
                     {filteredAllProfiles.map((p, i) => (
                       <motion.div key={p.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
-                        className="bg-white rounded-xl border border-gray-100 overflow-hidden transition-all hover:shadow-md cursor-pointer"
+                        className="bg-white rounded-xl border border-gray-400 overflow-hidden transition-all hover:shadow-md cursor-pointer"
                         style={{ borderLeft: "4px solid hsl(145, 65%, 45%)" }}
                         onClick={() => openProfile(p)}
                       >
