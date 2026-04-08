@@ -45,7 +45,7 @@ const Header = () => {
               key={link.label}
               href={link.href}
               className="font-bold text-base px-4 py-2 rounded-lg transition-all duration-300 hover:bg-primary/10 hover:scale-105 hover:shadow-md"
-              style={{ color: "hsl(0, 0%, 100%)" }}
+              style={{ color: "hsl(0, 0%, 0%)" }}
             >
               {link.label}
             </a>
