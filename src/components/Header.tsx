@@ -32,7 +32,7 @@ const Header = () => {
           <img src={logo} alt="Kalyanasuthra Matrimony" className="h-14 w-auto object-contain" />
           <span className="text-xl sm:text-2xl font-bold tracking-wide" style={{
             fontFamily: "'Playfair Display', serif",
-            color: "hsl(0, 0%, 100%)",
+            color: "hsl(0, 0%, 0%)",
           }}>
             Kalyanasuthra Matrimony
           </span>
