@@ -24,7 +24,7 @@ const Header = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 ${
         scrolled ? "shadow-sm" : ""
       }`}
-      style={{ height: "80px", background: "hsl(0, 0%, 0%)" }}
+      style={{ height: "80px", background: "hsl(0, 0%, 100%)" }}
     >
       <div className="container mx-auto h-full flex items-center px-4 relative">
         {/* Logo */}
@@ -32,7 +32,7 @@ const Header = () => {
           <img src={logo} alt="Kalyanasuthra Matrimony" className="h-14 w-auto object-contain" />
           <span className="text-xl sm:text-2xl font-bold tracking-wide" style={{
             fontFamily: "'Playfair Display', serif",
-            color: "hsl(0, 0%, 100%)",
+            color: "hsl(0, 0%, 0%)",
           }}>
             Kalyanasuthra Matrimony
           </span>
@@ -45,7 +45,7 @@ const Header = () => {
               key={link.label}
               href={link.href}
               className="font-bold text-base px-4 py-2 rounded-lg transition-all duration-300 hover:bg-primary/10 hover:scale-105 hover:shadow-md"
-              style={{ color: "hsl(0, 0%, 100%)" }}
+              style={{ color: "hsl(0, 0%, 0%)" }}
             >
               {link.label}
             </a>
@@ -78,7 +78,7 @@ const Header = () => {
         </div>
 
         {/* Mobile */}
-        <button className="lg:hidden p-2 text-white ml-auto" onClick={() => setMobileOpen(!mobileOpen)}>
+        <button className="lg:hidden p-2 text-black ml-auto" onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
