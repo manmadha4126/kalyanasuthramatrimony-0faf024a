@@ -392,7 +392,9 @@ export default function AdminDashboard() {
   };
 
   const openProfile = (p: Profile) => {
-    navigate(`/profile/${p.id}`);
+    setSelectedProfile(p);
+    setEditMode(false);
+    setEditForm({});
   };
 
   const startEdit = () => {
