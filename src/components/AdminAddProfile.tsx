@@ -52,8 +52,11 @@ const raashiOptions = ["Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)"
 const starOptions = ["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishtha", "Shatabhisha", "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"];
 const doshamOptions = ["No Dosham", "Chevvai Dosham", "Rahu Dosham", "Kethu Dosham", "Shani Dosham", "Not Known"];
 
+const ageOptions = Array.from({ length: 33 }, (_, i) => `${18 + i}`);
+
 type AdminForm = {
   firstName: string; lastName: string; profileFor: string; gender: string; email: string; phone: string;
+  password: string; confirmPassword: string;
   dob: string; motherTongue: string; height: string; maritalStatus: string; religion: string; caste: string; subCaste: string;
   country: string; state: string; city: string; village: string;
   edu10Board: string; edu10Percentage: string; edu10School: string;
@@ -63,10 +66,13 @@ type AdminForm = {
   familyStatus: string; familyType: string; fatherName: string; fatherOccupation: string; motherName: string; motherOccupation: string; siblings: string; siblingDetails: string;
   gothram: string; raashi: string; star: string; dosham: string;
   aboutMe: string;
+  partnerMinAge: string; partnerMaxAge: string; partnerMinHeight: string; partnerMaxHeight: string;
+  partnerReligion: string; partnerCaste: string; partnerEducation: string; partnerOccupation: string; partnerCity: string;
 };
 
 const defaultForm: AdminForm = {
   firstName: "", lastName: "", profileFor: "Self", gender: "", email: "", phone: "",
+  password: "", confirmPassword: "",
   dob: "", motherTongue: "", height: "", maritalStatus: "", religion: "", caste: "", subCaste: "",
   country: "India", state: "", city: "", village: "",
   edu10Board: "", edu10Percentage: "", edu10School: "",
@@ -76,6 +82,8 @@ const defaultForm: AdminForm = {
   familyStatus: "", familyType: "", fatherName: "", fatherOccupation: "", motherName: "", motherOccupation: "", siblings: "", siblingDetails: "",
   gothram: "", raashi: "", star: "", dosham: "",
   aboutMe: "",
+  partnerMinAge: "", partnerMaxAge: "", partnerMinHeight: "", partnerMaxHeight: "",
+  partnerReligion: "", partnerCaste: "", partnerEducation: "", partnerOccupation: "", partnerCity: "",
 };
 
 const SelectField = ({ label, value, onChange, options, required }: { label: string; value: string; onChange: (v: string) => void; options: string[]; required?: boolean }) => (
@@ -131,6 +139,11 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
     return casteMappings[form.religion] || ["Other", "No Caste Preference"];
   }, [form.religion]);
 
+  const partnerCasteOptions = useMemo(() => {
+    if (!form.partnerReligion) return ["Any", "Other", "No Caste Preference"];
+    return ["Any", ...(casteMappings[form.partnerReligion] || ["Other", "No Caste Preference"])];
+  }, [form.partnerReligion]);
+
   const incomeOptions = useMemo(() => {
     return incomeByCountry[form.currencyType] || incomeByCountry["INR (₹)"];
   }, [form.currencyType]);
@@ -146,15 +159,36 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
       toast({ title: "Please fill required fields: First Name, Last Name, Gender, DOB, Phone", variant: "destructive" });
       return;
     }
+    if (!form.email) {
+      toast({ title: "Email is required to create a login account", variant: "destructive" });
+      return;
+    }
+    if (!form.password || form.password.length < 6) {
+      toast({ title: "Password must be at least 6 characters", variant: "destructive" });
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      toast({ title: "Passwords do not match", variant: "destructive" });
+      return;
+    }
+
     setSaving(true);
     try {
-      // Create a temporary auth user for admin-added profiles is not needed
-      // Insert directly into profiles table
+      // Step 1: Create auth user via edge function
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await supabase.functions.invoke("create-customer-user", {
+        body: { email: form.email, password: form.password },
+      });
+      if (res.error || res.data?.error) {
+        throw new Error(res.data?.error || res.error?.message || "Failed to create user account");
+      }
+      const newUserId = res.data.user_id;
+
+      // Step 2: Upload photos
       let profilePhotoUrl: string | null = null;
       let additionalPhotoUrls: string[] = [];
       let horoscopeUrl: string | null = null;
 
-      // Upload all photos
       for (let i = 0; i < photos.length; i++) {
         const photo = photos[i];
         const ext = photo.name.split(".").pop();
@@ -187,7 +221,10 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
       ].filter(Boolean).join(", ") || null;
 
       const fullName = `${form.firstName.trim()} ${form.lastName.trim()}`;
+
+      // Step 3: Insert profile linked to the new auth user
       const { data, error } = await supabase.from("profiles").insert({
+        user_id: newUserId,
         full_name: fullName,
         gender: form.gender,
         email: form.email || null,
@@ -229,6 +266,15 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
         visa_type: form.visaType || null,
         residence_type: form.residenceType || null,
         profile_status: "active",
+        partner_min_age: form.partnerMinAge ? parseInt(form.partnerMinAge) : null,
+        partner_max_age: form.partnerMaxAge ? parseInt(form.partnerMaxAge) : null,
+        partner_min_height: form.partnerMinHeight ? heightToCm(form.partnerMinHeight) : null,
+        partner_max_height: form.partnerMaxHeight ? heightToCm(form.partnerMaxHeight) : null,
+        partner_religion: form.partnerReligion || null,
+        partner_caste: form.partnerCaste || null,
+        partner_education: form.partnerEducation || null,
+        partner_occupation: form.partnerOccupation || null,
+        partner_city: form.partnerCity || null,
       } as any).select("profile_id").single();
 
       if (error) throw error;
@@ -236,7 +282,7 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
       setCreatedProfileId((data as any)?.profile_id || null);
       setDone(true);
       onProfileAdded();
-      toast({ title: "Profile added successfully!" });
+      toast({ title: "Profile added successfully! Customer can login with their email and password." });
     } catch (err: any) {
       toast({ title: "Error", description: err.message, variant: "destructive" });
     } finally {
@@ -254,6 +300,7 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
         {createdProfileId && (
           <p className="text-lg font-bold mb-4" style={{ color: "hsl(210, 80%, 45%)" }}>Profile ID: {createdProfileId}</p>
         )}
+        <p className="text-sm text-gray-500 mb-4">Customer can now login using their email and the password you set.</p>
         <button onClick={() => { setDone(false); setForm(defaultForm); setPhotos([]); setPrimaryPhotoIndex(0); setHoroscopeFile(null); setCreatedProfileId(null); }} className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white" style={{ background: "hsl(210, 80%, 50%)" }}>
           Add Another Profile
         </button>
@@ -274,8 +321,15 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
           <TextField label="Last Name" value={form.lastName} onChange={v => set("lastName", v)} required />
           <SelectField label="Profile For" value={form.profileFor} onChange={v => set("profileFor", v)} options={profileForOptions} />
           <SelectField label="Gender" value={form.gender} onChange={v => set("gender", v)} options={genderOptions} required />
-          <TextField label="Email" value={form.email} onChange={v => set("email", v)} type="email" />
+          <TextField label="Email" value={form.email} onChange={v => set("email", v)} type="email" required />
           <TextField label="Phone" value={form.phone} onChange={v => set("phone", v)} required />
+          <TextField label="Create Password" value={form.password} onChange={v => set("password", v)} type="password" required placeholder="Min 6 characters" />
+          <TextField label="Confirm Password" value={form.confirmPassword} onChange={v => set("confirmPassword", v)} type="password" required placeholder="Re-enter password" />
+          {form.password && form.confirmPassword && form.password !== form.confirmPassword && (
+            <div className="col-span-full">
+              <p className="text-sm text-red-500 font-medium">⚠ Passwords do not match</p>
+            </div>
+          )}
           <TextField label="Date of Birth" value={form.dob} onChange={v => set("dob", v)} type="date" required />
           <SelectField label="Mother Tongue" value={form.motherTongue} onChange={v => set("motherTongue", v)} options={motherTongueOptions} />
           <SelectField label="Height" value={form.height} onChange={v => set("height", v)} options={heightOptions} />
@@ -344,7 +398,7 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
             <textarea value={form.aboutMe} onChange={e => set("aboutMe", e.target.value)} rows={3} className="w-full rounded-xl border border-gray-200 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white" placeholder="Write a brief description..." />
           </div>
 
-          {/* Multi-photo upload like register page */}
+          {/* Multi-photo upload */}
           <div className="col-span-full">
             <label className="block text-sm font-semibold mb-2 text-gray-600">Profile Photos (Max 5, each below 25MB)</label>
             <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-8 cursor-pointer transition-colors hover:bg-gray-50 hover:border-blue-300">
@@ -391,6 +445,18 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
               <input type="file" className="hidden" accept="image/*,.pdf" onChange={e => setHoroscopeFile(e.target.files?.[0] || null)} />
             </label>
           </div>
+
+          {/* Partner Preferences Section */}
+          <SectionHeading title="Partner Preferences" />
+          <SelectField label="Min Age" value={form.partnerMinAge} onChange={v => set("partnerMinAge", v)} options={ageOptions} />
+          <SelectField label="Max Age" value={form.partnerMaxAge} onChange={v => set("partnerMaxAge", v)} options={ageOptions} />
+          <SelectField label="Min Height" value={form.partnerMinHeight} onChange={v => set("partnerMinHeight", v)} options={heightOptions} />
+          <SelectField label="Max Height" value={form.partnerMaxHeight} onChange={v => set("partnerMaxHeight", v)} options={heightOptions} />
+          <SelectField label="Preferred Religion" value={form.partnerReligion} onChange={v => { set("partnerReligion", v); set("partnerCaste", ""); }} options={["Any", ...religionOptions]} />
+          <SelectField label="Preferred Caste" value={form.partnerCaste} onChange={v => set("partnerCaste", v)} options={partnerCasteOptions} />
+          <SelectField label="Preferred Education" value={form.partnerEducation} onChange={v => set("partnerEducation", v)} options={["Any", ...educationOptions]} />
+          <TextField label="Preferred Occupation" value={form.partnerOccupation} onChange={v => set("partnerOccupation", v)} placeholder="e.g. Engineer, Doctor" />
+          <TextField label="Preferred City" value={form.partnerCity} onChange={v => set("partnerCity", v)} placeholder="e.g. Hyderabad, Chennai" />
         </div>
 
         <div className="flex gap-3 mt-8">

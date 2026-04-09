@@ -263,7 +263,16 @@ export type Database = {
           mother_tongue: string | null
           native_place: string | null
           occupation: string | null
+          partner_caste: string | null
+          partner_city: string | null
+          partner_education: string | null
           partner_expectations: string | null
+          partner_max_age: number | null
+          partner_max_height: number | null
+          partner_min_age: number | null
+          partner_min_height: number | null
+          partner_occupation: string | null
+          partner_religion: string | null
           phone: string | null
           profile_created_by: string | null
           profile_id: string | null
@@ -319,7 +328,16 @@ export type Database = {
           mother_tongue?: string | null
           native_place?: string | null
           occupation?: string | null
+          partner_caste?: string | null
+          partner_city?: string | null
+          partner_education?: string | null
           partner_expectations?: string | null
+          partner_max_age?: number | null
+          partner_max_height?: number | null
+          partner_min_age?: number | null
+          partner_min_height?: number | null
+          partner_occupation?: string | null
+          partner_religion?: string | null
           phone?: string | null
           profile_created_by?: string | null
           profile_id?: string | null
@@ -375,7 +393,16 @@ export type Database = {
           mother_tongue?: string | null
           native_place?: string | null
           occupation?: string | null
+          partner_caste?: string | null
+          partner_city?: string | null
+          partner_education?: string | null
           partner_expectations?: string | null
+          partner_max_age?: number | null
+          partner_max_height?: number | null
+          partner_min_age?: number | null
+          partner_min_height?: number | null
+          partner_occupation?: string | null
+          partner_religion?: string | null
           phone?: string | null
           profile_created_by?: string | null
           profile_id?: string | null
