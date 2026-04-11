@@ -8,8 +8,8 @@ import { loginSchema, sanitizeInput, checkRateLimit } from "@/lib/security";
 
 const ADMIN_CREDENTIALS = [
   { email: "menda.manmadha21@gmail.com", password: "0*MAha21" },
-  { email: "drakshayani@gmail.com", password: "admin@987" },
-  { email: "kalyanasuthra@gmail.com", password: "admin@123" },
+  { email: "drakshayani@gmail.com", password: "admin@5335" },
+  { email: "kalyanasuthra@gmail.com", password: "admin@5335" },
 ];
 
 export default function AdminLogin() {
