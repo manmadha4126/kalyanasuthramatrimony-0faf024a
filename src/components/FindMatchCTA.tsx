@@ -6,8 +6,8 @@ import findMatchBg from "@/assets/find-match-bg.png";
 import ConsultationForm from "@/components/ConsultationForm";
 
 const owners = [
-  { name: "Sai", phone: "9553306667", email: "info@kalyanasuthramatrimony.com" },
-  { name: "Kavya", phone: "9866288767", email: "info@kalyanasuthramatrimony.com" },
+  { name: "Sai", phone: "9553306667", email: "kalyanasuthramatrimonytpt@gmail.com" },
+  { name: "Kavya", phone: "9866288767", email: "kalyanasuthramatrimonytpt@gmail.com" },
 ];
 
 const FindMatchCTA = () => {
