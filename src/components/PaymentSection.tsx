@@ -42,8 +42,8 @@ const PaymentSection = () => {
           <motion.div className="flex justify-center gap-2 sm:gap-4 mb-6 sm:mb-8" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             {paymentIcons.map((p) => (
               <div key={p.label} className="flex flex-col items-center gap-1">
-                <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center text-xl sm:text-2xl" style={{ background: "hsl(0, 0%, 100% / 0.15)", border: "1px solid hsl(0, 0%, 100% / 0.2)" }}>
-                  {p.icon}
+                <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center overflow-hidden p-1.5" style={{ background: "hsl(0, 0%, 100%)", border: "1px solid hsl(0, 0%, 100% / 0.3)" }}>
+                  <img src={p.img} alt={p.label} className="w-full h-full object-contain" loading="lazy" />
                 </div>
                 <span className="text-[10px] sm:text-xs font-semibold" style={{ color: "hsl(0, 0%, 85%)" }}>{p.label}</span>
               </div>
