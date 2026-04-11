@@ -111,7 +111,7 @@ const FindMatchCTA = () => {
                   transition={{ duration: 0.3 }}
                 >
                   {owners.map((owner, i) => (
-                    <div key={i} className="rounded-xl p-4 text-left" style={{ background: "hsla(0, 0%, 100%, 0.1)", border: "1px solid hsla(40, 60%, 50%, 0.3)" }}>
+                    <div key={i} className="rounded-xl p-4 text-left" style={{ background: "hsla(0, 0%, 0%, 0.85)", border: "1px solid hsla(40, 60%, 50%, 0.3)" }}>
                       <div className="flex items-center gap-2 mb-2">
                         <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(45, 80%, 55%), hsl(35, 90%, 50%))" }}>
                           <User size={14} style={{ color: "hsl(348, 56%, 22%)" }} />
