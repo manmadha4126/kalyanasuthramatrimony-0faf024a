@@ -2,6 +2,11 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Phone, Mail, ChevronDown, ChevronUp, User } from "lucide-react";
 import scannerImg from "@/assets/phonepe-qr-new.jpeg";
+import phonepeLogo from "@/assets/phonepe-logo.png";
+import googlepayLogo from "@/assets/googlepay-logo.png";
+import upiLogo from "@/assets/upi-logo.png";
+import cardsLogo from "@/assets/cards-logo.png";
+import netbankingLogo from "@/assets/netbanking-logo.png";
 
 const owners = [
   { name: "Sai", phone: "9553306667", email: "info@kalyanasuthramatrimony.com" },
@@ -9,11 +14,11 @@ const owners = [
 ];
 
 const paymentIcons = [
-  { label: "PhonePe", icon: "📱" },
-  { label: "Google Pay", icon: "💳" },
-  { label: "UPI", icon: "🔗" },
-  { label: "Cards", icon: "💰" },
-  { label: "Net Banking", icon: "🏦" },
+  { label: "PhonePe", img: phonepeLogo },
+  { label: "Google Pay", img: googlepayLogo },
+  { label: "UPI", img: upiLogo },
+  { label: "Cards", img: cardsLogo },
+  { label: "Net Banking", img: netbankingLogo },
 ];
 
 const PaymentSection = () => {
