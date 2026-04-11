@@ -113,10 +113,10 @@ const FindMatchCTA = () => {
                   {owners.map((owner, i) => (
                     <div key={i} className="rounded-xl p-4 text-left" style={{ background: "hsla(0, 0%, 100%, 0.1)", border: "1px solid hsla(40, 60%, 50%, 0.3)" }}>
                       <div className="flex items-center gap-2 mb-2">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "hsl(40, 60%, 50%)" }}>
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(45, 80%, 55%), hsl(35, 90%, 50%))" }}>
                           <User size={14} style={{ color: "hsl(348, 56%, 22%)" }} />
                         </div>
-                        <span className="text-base font-bold text-white">{owner.name}</span>
+                        <span className="text-base font-bold" style={{ color: "hsl(45, 90%, 60%)", fontFamily: "'Playfair Display', serif" }}>{owner.name}</span>
                       </div>
                       <a href={`tel:${owner.phone}`} className="flex items-center gap-2 text-sm mb-1 transition-colors" style={{ color: "hsl(40, 60%, 50%)" }}>
                         <Phone size={14} /> {owner.phone}
