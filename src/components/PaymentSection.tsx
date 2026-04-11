@@ -9,8 +9,8 @@ import cardsLogo from "@/assets/cards-logo.png";
 import netbankingLogo from "@/assets/netbanking-logo.png";
 
 const owners = [
-  { name: "Sai", phone: "9553306667", email: "info@kalyanasuthramatrimony.com" },
-  { name: "Kavya", phone: "9866288767", email: "info@kalyanasuthramatrimony.com" },
+  { name: "Sai", phone: "9553306667", email: "kalyanasuthramatrimonytpt@gmail.com" },
+  { name: "Kavya", phone: "9866288767", email: "kalyanasuthramatrimonytpt@gmail.com" },
 ];
 
 const paymentIcons = [
@@ -120,17 +120,17 @@ const PaymentSection = () => {
                       style={{ background: "hsla(0,0%,100%,0.95)", border: "1px solid hsl(var(--gold-accent) / 0.4)" }}
                     >
                       <div className="flex items-center gap-3 mb-2 sm:mb-3">
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center" style={{ background: "hsl(var(--burgundy))" }}>
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(280, 70%, 50%), hsl(320, 70%, 50%))" }}>
                           <User size={16} className="text-white" />
                         </div>
-                        <span className="text-base sm:text-lg font-extrabold" style={{ color: "hsl(var(--burgundy))" }}>{owner.name}</span>
+                        <span className="text-base sm:text-lg font-extrabold" style={{ color: "hsl(280, 70%, 45%)", fontFamily: "'Playfair Display', serif" }}>{owner.name}</span>
                       </div>
                       <a href={`tel:${owner.phone}`} className="flex items-center gap-2 text-sm sm:text-base font-semibold text-foreground mb-1.5 hover:text-primary transition-colors">
-                        <Phone size={14} style={{ color: "hsl(var(--burgundy))" }} />
+                        <Phone size={14} style={{ color: "hsl(280, 70%, 45%)" }} />
                         {owner.phone}
                       </a>
                       <a href={`mailto:${owner.email}`} className="flex items-center gap-2 text-xs sm:text-sm font-medium text-muted-foreground hover:text-primary transition-colors break-all">
-                        <Mail size={14} style={{ color: "hsl(var(--burgundy))" }} />
+                        <Mail size={14} style={{ color: "hsl(280, 70%, 45%)" }} />
                         {owner.email}
                       </a>
                     </div>
