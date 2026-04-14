@@ -175,7 +175,7 @@ const ContactSection = () => {
                 </svg>
               </a>
               <a
-                href="https://www.google.com/maps/place/13%C2%B038'38.2%22N+79%C2%B025'52.9%22E/@13.6438722,79.4313197,18z"
+                href="https://www.google.com/maps/place/13%C2%B038'37.9%22N+79%C2%B025'53.0%22E/@13.6438686,79.4287118,16.95z/data=!4m4!3m3!8m2!3d13.6438654!4d79.4313801!5m2!1e4!1e2?hl=en&entry=ttu"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-12 h-12 rounded-2xl transition-all hover:scale-110 hover:shadow-xl"
