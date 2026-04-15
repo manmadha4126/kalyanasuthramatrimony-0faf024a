@@ -34,42 +34,73 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const { email, password } = await req.json();
+    let body;
+    try {
+      body = await req.json();
+    } catch {
+      return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    const { email, password } = body;
     if (!email || !password) {
       return new Response(JSON.stringify({ error: "Email and password are required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // Create the user with admin API (auto-confirms email)
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // Try to create the user
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
-      email: email.toLowerCase().trim(),
+      email: normalizedEmail,
       password,
       email_confirm: true,
     });
 
-    if (error) {
-      // If user already exists, try to find them and return their ID
-      if (error.message.includes("already been registered") || error.message.includes("already exists")) {
-        const { data: { users }, error: listError } = await supabaseAdmin.auth.admin.listUsers();
-        if (listError) {
-          return new Response(JSON.stringify({ error: "User already exists but could not retrieve their ID" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-        }
-        const existingUser = users.find((u: any) => u.email?.toLowerCase() === email.toLowerCase().trim());
-        if (existingUser) {
-          // Update password and return existing user id
-          await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
-            password,
-            email_confirm: true,
-          });
-          return new Response(JSON.stringify({ user_id: existingUser.id, existing: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-        }
-        return new Response(JSON.stringify({ error: "User already exists but could not be found" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-      }
-      return new Response(JSON.stringify({ error: error.message }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    if (!error && data?.user) {
+      return new Response(JSON.stringify({ user_id: data.user.id }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    return new Response(JSON.stringify({ user_id: data.user.id }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    // If user already exists, find them and update password
+    if (error && (error.message.includes("already") || error.message.includes("exists") || error.message.includes("registered") || error.message.includes("duplicate"))) {
+      try {
+        // Use listUsers with filter to find the specific user
+        const { data: listData, error: listError } = await supabaseAdmin.auth.admin.listUsers({
+          page: 1,
+          perPage: 1000,
+        });
+
+        if (listError) {
+          console.error("listUsers error:", listError);
+          return new Response(JSON.stringify({ error: "User already exists. Could not retrieve their account." }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
+
+        const existingUser = listData?.users?.find((u: any) => u.email?.toLowerCase() === normalizedEmail);
+        
+        if (existingUser) {
+          // Update password silently
+          try {
+            await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
+              password,
+              email_confirm: true,
+            });
+          } catch (updateErr) {
+            console.error("Password update error (non-critical):", updateErr);
+          }
+          return new Response(JSON.stringify({ user_id: existingUser.id, existing: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
+
+        // If we still can't find them, return error
+        return new Response(JSON.stringify({ error: "User account exists but could not be located. Please try a different email." }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      } catch (findErr) {
+        console.error("Find existing user error:", findErr);
+        return new Response(JSON.stringify({ error: "User may already exist. Please try a different email." }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+    }
+
+    // Other creation errors
+    console.error("createUser error:", error);
+    return new Response(JSON.stringify({ error: error?.message || "Failed to create user account" }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (err) {
     console.error("create-customer-user error:", err);
-    return new Response(JSON.stringify({ error: err.message || "Internal server error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ error: "Internal server error. Please try again." }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 });

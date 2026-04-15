@@ -175,14 +175,32 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
     setSaving(true);
     try {
       // Step 1: Create auth user via edge function
-      const { data: { session } } = await supabase.auth.getSession();
-      const res = await supabase.functions.invoke("create-customer-user", {
-        body: { email: form.email, password: form.password },
-      });
-      if (res.error || res.data?.error) {
-        throw new Error(res.data?.error || res.error?.message || "Failed to create user account");
+      let newUserId: string;
+      try {
+        const res = await supabase.functions.invoke("create-customer-user", {
+          body: { email: form.email.toLowerCase().trim(), password: form.password },
+        });
+        
+        // Parse response - handle both error formats
+        const responseData = res.data;
+        if (responseData?.error) {
+          throw new Error(responseData.error);
+        }
+        if (res.error && !responseData?.user_id) {
+          // Try to parse error response body
+          let errMsg = "Failed to create user account. Please try again.";
+          try {
+            if (res.error.message) errMsg = res.error.message;
+          } catch {}
+          throw new Error(errMsg);
+        }
+        if (!responseData?.user_id) {
+          throw new Error("Failed to create user account. Please try again.");
+        }
+        newUserId = responseData.user_id;
+      } catch (fnErr: any) {
+        throw new Error(fnErr.message || "Failed to create user account. Please try again.");
       }
-      const newUserId = res.data.user_id;
 
       // Step 2: Upload photos
       let profilePhotoUrl: string | null = null;
