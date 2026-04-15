@@ -262,7 +262,11 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           50% { opacity: 0.8; }
           100% { transform: translateY(200px) scale(0); opacity: 0; }
         }
-      `}</style>
+        @keyframes floatParticle {
+          0% { transform: translateY(0) translateX(0); opacity: 0.4; }
+          50% { opacity: 1; }
+          100% { transform: translateY(-30px) translateX(15px); opacity: 0.3; }
+        }
       <div
         className={`fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden transition-opacity duration-700 ${fadeOut ? "opacity-0" : "opacity-100"}`}
         style={{ background: "radial-gradient(ellipse at center, hsl(270,30%,15%) 0%, hsl(260,40%,8%) 100%)" }}
