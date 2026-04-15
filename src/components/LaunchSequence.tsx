@@ -206,13 +206,13 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
 
   useEffect(() => {
     if (phase === "thanks") {
-      setTimeout(() => setPhase("welcome"), 7000); // 5-8 seconds range
+      setTimeout(() => setPhase("welcome"), 15000); // 15 seconds
     }
     if (phase === "welcome") {
       setTimeout(() => {
         setFadeOut(true);
         setTimeout(onComplete, 800);
-      }, 4000);
+      }, 8000);
     }
   }, [phase, onComplete]);
 
