@@ -278,8 +278,12 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
         {phase === "launch" && (
           <div className="flex flex-col items-center gap-8 animate-fade-in z-10">
             <h1
-              className="text-3xl md:text-5xl font-bold text-center"
-              style={{ fontFamily: "'Playfair Display', serif", color: "hsl(45, 80%, 75%)" }}
+              className="text-5xl md:text-7xl lg:text-8xl font-bold text-center"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                color: "#FFD700",
+                textShadow: "0 0 40px rgba(255,215,0,0.4), 0 0 80px rgba(255,165,0,0.2)",
+              }}
             >
               Kalyanasuthra Matrimony
             </h1>
@@ -478,32 +482,82 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           </div>
         )}
 
-        {/* Phase: Welcome */}
+        {/* Phase: Welcome - styled like reference with particles */}
         {phase === "welcome" && (
-          <div className="flex flex-col items-center gap-6 z-10 animate-fade-in text-center px-6">
-            <h2
-              className="text-3xl md:text-5xl font-bold leading-tight"
-              style={{ fontFamily: "'Playfair Display', serif", color: "hsl(45,80%,75%)" }}
-            >
-              Welcome to
-            </h2>
-            <h1
-              className="text-4xl md:text-6xl font-bold"
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                background: "linear-gradient(135deg, hsl(340,70%,60%), hsl(45,80%,70%))",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              Kalyanasuthra Matrimony
-            </h1>
-            <p
-              className="text-lg md:text-xl mt-2 italic"
-              style={{ fontFamily: "'Kaushan Script', cursive", color: "hsl(45,60%,70%)" }}
-            >
-              The Wedding Chapter Starts Here…
-            </p>
+          <div className="absolute inset-0 z-10 overflow-hidden"
+            style={{ background: "radial-gradient(ellipse at center, hsl(340,40%,18%) 0%, hsl(340,50%,8%) 60%, hsl(260,40%,5%) 100%)" }}
+          >
+            {/* Floating glow particles */}
+            {Array.from({ length: 40 }, (_, i) => {
+              const size = 3 + Math.random() * 8;
+              const colors = ["#FFD700", "#FF6B35", "#FF1493", "#FFA500", "#FF4500", "#FFB6C1"];
+              return (
+                <div
+                  key={`wp-${i}`}
+                  className="absolute rounded-full"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    width: size,
+                    height: size,
+                    background: colors[i % colors.length],
+                    boxShadow: `0 0 ${size * 3}px ${colors[i % colors.length]}`,
+                    animation: `floatParticle ${3 + Math.random() * 4}s ease-in-out ${Math.random() * 2}s infinite alternate`,
+                    opacity: 0.6 + Math.random() * 0.4,
+                  }}
+                />
+              );
+            })}
+
+            {/* Center content */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center animate-fade-in text-center px-6">
+              {/* Star/sparkle icon */}
+              <div className="mb-4">
+                <span className="text-3xl" style={{ color: "#FFD700" }}>✦</span>
+              </div>
+              {/* Decorative lines */}
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 md:w-24 h-[1px]" style={{ background: "linear-gradient(to right, transparent, #FFD700)" }} />
+                <div className="w-16 md:w-24 h-[1px]" style={{ background: "linear-gradient(to left, transparent, #FFD700)" }} />
+              </div>
+
+              <h2
+                className="text-2xl md:text-4xl font-bold tracking-[0.2em] uppercase mb-2"
+                style={{ fontFamily: "'Playfair Display', serif", color: "#E8D5C0" }}
+              >
+                Welcome To
+              </h2>
+              <h1
+                className="text-5xl md:text-7xl lg:text-8xl font-bold mt-2"
+                style={{
+                  fontFamily: "'Playfair Display', serif",
+                  color: "#FFD700",
+                  textShadow: "0 0 60px rgba(255,215,0,0.5), 0 4px 20px rgba(0,0,0,0.5)",
+                }}
+              >
+                Kalyanasuthra Matrimony
+              </h1>
+              <p
+                className="text-lg md:text-2xl mt-6 italic"
+                style={{ fontFamily: "'Kaushan Script', cursive", color: "#E8C8A0" }}
+              >
+                Waiting for Someone Special...!
+              </p>
+              <p
+                className="text-xs md:text-sm mt-4 tracking-[0.3em] uppercase"
+                style={{ color: "#B89A7A" }}
+              >
+                Where Hearts Find Home 💕
+              </p>
+              {/* Hearts divider */}
+              <div className="flex items-center gap-2 mt-4">
+                <div className="w-12 md:w-20 h-[1px]" style={{ background: "linear-gradient(to right, transparent, #B89A7A)" }} />
+                <span style={{ color: "#FFB6C1" }}>♥</span>
+                <span style={{ color: "#FFD700" }}>♥</span>
+                <span style={{ color: "#FF69B4" }}>♥</span>
+                <div className="w-12 md:w-20 h-[1px]" style={{ background: "linear-gradient(to left, transparent, #B89A7A)" }} />
+              </div>
+            </div>
           </div>
         )}
       </div>
