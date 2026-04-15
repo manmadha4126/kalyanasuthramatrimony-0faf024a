@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import rocketImg from "@/assets/rocket-launch.png";
 
 interface LaunchSequenceProps {
   onComplete: () => void;
@@ -37,34 +38,58 @@ const playLaunchSound = () => {
   } catch {}
 };
 
-// Sparkle/particle component
-const Particle = ({ delay, x, color, type }: { delay: number; x: number; color: string; type: "sparkle" | "thread" }) => {
-  return type === "sparkle" ? (
-    <div
-      className="absolute rounded-full animate-pulse"
-      style={{
-        width: Math.random() * 6 + 3,
-        height: Math.random() * 6 + 3,
-        background: color,
-        left: `${x}%`,
-        bottom: `${Math.random() * 40 + 10}%`,
-        animationDelay: `${delay}ms`,
-        boxShadow: `0 0 8px ${color}`,
-        animation: `sparkleUp ${1 + Math.random()}s ease-out ${delay}ms forwards`,
-      }}
-    />
-  ) : (
+// Confetti particle for the thanks screen
+const Confetti = ({ id }: { id: number }) => {
+  const colors = ["#FF6B35", "#FFD700", "#FF4500", "#FF1493", "#00BFFF", "#7B68EE", "#FF69B4", "#FFA500", "#00FF7F", "#FF0000", "#FFFF00", "#FF00FF"];
+  const color = colors[id % colors.length];
+  const left = Math.random() * 100;
+  const delay = Math.random() * 2;
+  const duration = 2 + Math.random() * 2;
+  const size = 6 + Math.random() * 10;
+  const rotation = Math.random() * 360;
+  const shape = id % 3; // 0=circle, 1=square, 2=rectangle
+
+  return (
     <div
       className="absolute"
       style={{
-        width: 2,
-        height: Math.random() * 60 + 30,
-        background: `linear-gradient(to top, ${color}, transparent)`,
-        left: `${x}%`,
-        bottom: `${Math.random() * 20}%`,
-        animation: `threadUp ${1.5 + Math.random()}s ease-out ${delay}ms forwards`,
+        left: `${left}%`,
+        top: `-${size}px`,
+        width: shape === 2 ? size * 0.4 : size,
+        height: size,
+        background: color,
+        borderRadius: shape === 0 ? "50%" : shape === 1 ? "2px" : "1px",
+        animation: `confettiFall ${duration}s ease-in ${delay}s forwards`,
+        transform: `rotate(${rotation}deg)`,
         opacity: 0,
       }}
+    />
+  );
+};
+
+// Sparkle burst particle
+const SparkBurst = ({ id }: { id: number }) => {
+  const colors = ["#FFD700", "#FF6B35", "#FF1493", "#00BFFF", "#FF4500", "#7B68EE", "#00FF7F"];
+  const angle = (id / 30) * Math.PI * 2;
+  const distance = 100 + Math.random() * 200;
+  const size = 4 + Math.random() * 8;
+  const delay = Math.random() * 0.5;
+
+  return (
+    <div
+      className="absolute rounded-full"
+      style={{
+        left: "50%",
+        top: "50%",
+        width: size,
+        height: size,
+        background: colors[id % colors.length],
+        boxShadow: `0 0 ${size * 2}px ${colors[id % colors.length]}`,
+        animation: `sparkBurst 1.5s ease-out ${delay}s forwards`,
+        "--tx": `${Math.cos(angle) * distance}px`,
+        "--ty": `${Math.sin(angle) * distance}px`,
+        opacity: 0,
+      } as any}
     />
   );
 };
@@ -106,9 +131,8 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
       const animate = (ts: number) => {
         if (!start) start = ts;
         const progress = Math.min((ts - start) / duration, 1);
-        // Ease-in acceleration
         const eased = progress * progress * progress;
-        setRocketY(eased * 120);
+        setRocketY(eased * 130);
         if (progress < 1) {
           rocketRef.current = requestAnimationFrame(animate);
         } else {
@@ -122,7 +146,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
 
   useEffect(() => {
     if (phase === "thanks") {
-      setTimeout(() => setPhase("welcome"), 2500);
+      setTimeout(() => setPhase("welcome"), 3000);
     }
     if (phase === "welcome") {
       setTimeout(() => {
@@ -132,24 +156,19 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
     }
   }, [phase, onComplete]);
 
-  const particles = Array.from({ length: 40 }, (_, i) => ({
-    id: i,
-    delay: Math.random() * 800,
-    x: 40 + Math.random() * 20,
-    color: ["#FF6B35", "#FFD700", "#FF4500", "#FF1493", "#00BFFF", "#7B68EE", "#FF69B4", "#FFA500"][i % 8],
-    type: (i % 3 === 0 ? "thread" : "sparkle") as "sparkle" | "thread",
-  }));
+  const confettiCount = 80;
+  const sparkCount = 30;
 
   return (
     <>
       <style>{`
-        @keyframes sparkleUp {
-          0% { transform: translateY(0) scale(1); opacity: 1; }
-          100% { transform: translateY(-200px) scale(0); opacity: 0; }
+        @keyframes confettiFall {
+          0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+          100% { transform: translateY(100vh) rotate(720deg); opacity: 0.6; }
         }
-        @keyframes threadUp {
-          0% { transform: translateY(0); opacity: 0.8; }
-          100% { transform: translateY(-300px); opacity: 0; }
+        @keyframes sparkBurst {
+          0% { transform: translate(-50%, -50%) translate(0, 0) scale(1); opacity: 1; }
+          100% { transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
         }
         @keyframes fireFlicker {
           0%, 100% { transform: scaleX(1) scaleY(1); }
@@ -161,6 +180,16 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           0% { transform: scale(0.3); opacity: 0; }
           50% { transform: scale(1.15); }
           100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes popperLeft {
+          0% { transform: translate(0,0) rotate(0deg) scale(0); opacity: 0; }
+          20% { transform: translate(-30px,-60px) rotate(-20deg) scale(1.2); opacity: 1; }
+          100% { transform: translate(-80px,-120px) rotate(-45deg) scale(1); opacity: 1; }
+        }
+        @keyframes popperRight {
+          0% { transform: translate(0,0) rotate(0deg) scale(0); opacity: 0; }
+          20% { transform: translate(30px,-60px) rotate(20deg) scale(1.2); opacity: 1; }
+          100% { transform: translate(80px,-120px) rotate(45deg) scale(1); opacity: 1; }
         }
       `}</style>
       <div
@@ -227,49 +256,21 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           </div>
         )}
 
-        {/* Phase: Rocket Launch */}
+        {/* Phase: Rocket Launch with uploaded image */}
         {phase === "rocket" && (
           <div className="absolute inset-0 z-10">
-            {/* Particles and sparkles behind rocket */}
-            {particles.map(p => (
-              <Particle key={p.id} delay={p.delay} x={p.x} color={p.color} type={p.type} />
-            ))}
-
             {/* Rocket */}
             <div
               className="absolute left-1/2 -translate-x-1/2"
-              style={{
-                bottom: `${-10 + rocketY}%`,
-                transition: "none",
-              }}
+              style={{ bottom: `${-10 + rocketY}%`, transition: "none" }}
             >
-              {/* Fire trail */}
               <div className="flex flex-col items-center">
-                <span className="text-7xl md:text-8xl" style={{ filter: "drop-shadow(0 0 20px rgba(255,100,0,0.8))" }}>
-                  🚀
-                </span>
-                {/* Fire */}
-                <div
-                  className="flex flex-col items-center -mt-2"
-                  style={{ animation: "fireFlicker 0.15s infinite" }}
-                >
-                  <div
-                    className="w-10 rounded-full"
-                    style={{
-                      height: 60 + rocketY * 0.8,
-                      background: "linear-gradient(to bottom, #FF6B35, #FF4500, #FFD700, transparent)",
-                      filter: "blur(4px)",
-                    }}
-                  />
-                  <div
-                    className="w-6 rounded-full -mt-8"
-                    style={{
-                      height: 40 + rocketY * 0.5,
-                      background: "linear-gradient(to bottom, #FFD700, #FF69B4, transparent)",
-                      filter: "blur(6px)",
-                    }}
-                  />
-                </div>
+                <img
+                  src={rocketImg}
+                  alt="Rocket"
+                  className="w-40 md:w-56"
+                  style={{ filter: "drop-shadow(0 0 30px rgba(255,100,0,0.8))" }}
+                />
               </div>
             </div>
 
@@ -285,27 +286,60 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           </div>
         )}
 
-        {/* Phase: Thanks */}
+        {/* Phase: Thanks - Full screen party poppers & confetti */}
         {phase === "thanks" && (
-          <div className="flex flex-col items-center gap-6 z-10 animate-fade-in text-center px-6">
-            <div
-              className="w-32 h-32 rounded-full flex items-center justify-center"
-              style={{
-                background: "linear-gradient(135deg, hsl(120,50%,45%) 0%, hsl(160,60%,40%) 100%)",
-                boxShadow: "0 0 80px hsl(120,50%,45%,0.4)",
-              }}
-            >
-              <span className="text-5xl">✨</span>
+          <div className="absolute inset-0 z-10 overflow-hidden">
+            {/* Full screen confetti */}
+            {Array.from({ length: confettiCount }, (_, i) => (
+              <Confetti key={i} id={i} />
+            ))}
+
+            {/* Spark bursts from center */}
+            {Array.from({ length: sparkCount }, (_, i) => (
+              <SparkBurst key={`spark-${i}`} id={i} />
+            ))}
+
+            {/* Party poppers */}
+            <div className="absolute left-[15%] top-[40%]" style={{ animation: "popperLeft 0.8s ease-out forwards" }}>
+              <span className="text-6xl md:text-8xl">🎉</span>
             </div>
-            <h2
-              className="text-3xl md:text-5xl font-bold"
-              style={{ fontFamily: "'Playfair Display', serif", color: "hsl(45,80%,75%)" }}
-            >
-              Thank You for Launching!
-            </h2>
-            <p className="text-white/60 text-base md:text-lg max-w-md">
-              Your journey begins now
-            </p>
+            <div className="absolute right-[15%] top-[40%]" style={{ animation: "popperRight 0.8s ease-out forwards" }}>
+              <span className="text-6xl md:text-8xl">🎊</span>
+            </div>
+            <div className="absolute left-[25%] top-[55%]" style={{ animation: "popperLeft 0.8s ease-out 0.3s forwards", opacity: 0 }}>
+              <span className="text-5xl md:text-7xl">🎉</span>
+            </div>
+            <div className="absolute right-[25%] top-[55%]" style={{ animation: "popperRight 0.8s ease-out 0.3s forwards", opacity: 0 }}>
+              <span className="text-5xl md:text-7xl">🎊</span>
+            </div>
+            <div className="absolute left-[10%] top-[25%]" style={{ animation: "popperLeft 0.8s ease-out 0.6s forwards", opacity: 0 }}>
+              <span className="text-5xl md:text-6xl">✨</span>
+            </div>
+            <div className="absolute right-[10%] top-[25%]" style={{ animation: "popperRight 0.8s ease-out 0.6s forwards", opacity: 0 }}>
+              <span className="text-5xl md:text-6xl">✨</span>
+            </div>
+
+            {/* Center text */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center animate-fade-in text-center px-6">
+              <div
+                className="w-28 h-28 rounded-full flex items-center justify-center mb-6"
+                style={{
+                  background: "linear-gradient(135deg, hsl(120,50%,45%) 0%, hsl(160,60%,40%) 100%)",
+                  boxShadow: "0 0 80px hsl(120,50%,45%,0.4)",
+                }}
+              >
+                <span className="text-5xl">🎆</span>
+              </div>
+              <h2
+                className="text-3xl md:text-5xl font-bold"
+                style={{ fontFamily: "'Playfair Display', serif", color: "hsl(45,80%,75%)" }}
+              >
+                Thank You for Launching!
+              </h2>
+              <p className="text-white/60 text-base md:text-lg max-w-md mt-3">
+                Your journey begins now
+              </p>
+            </div>
           </div>
         )}
 
