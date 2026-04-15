@@ -17,6 +17,15 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import AIChatBot from "@/components/AIChatBot";
 
 const Index = () => {
+  const [launched, setLaunched] = useState(() => {
+    return sessionStorage.getItem("ks_launched") === "true";
+  });
+
+  const handleLaunchComplete = () => {
+    sessionStorage.setItem("ks_launched", "true");
+    setLaunched(true);
+  };
+
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -33,6 +42,10 @@ const Index = () => {
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
   }, []);
+
+  if (!launched) {
+    return <LaunchSequence onComplete={handleLaunchComplete} />;
+  }
 
   return (
     <div className="scroll-smooth">
