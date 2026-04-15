@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import rocketImg from "@/assets/rocket-launch.png";
+import rocketImg from "@/assets/rocket-only.png";
 
 interface LaunchSequenceProps {
   onComplete: () => void;
@@ -38,7 +38,6 @@ const playLaunchSound = () => {
   } catch {}
 };
 
-// Confetti particle for the thanks screen
 const Confetti = ({ id }: { id: number }) => {
   const colors = ["#FF6B35", "#FFD700", "#FF4500", "#FF1493", "#00BFFF", "#7B68EE", "#FF69B4", "#FFA500", "#00FF7F", "#FF0000", "#FFFF00", "#FF00FF"];
   const color = colors[id % colors.length];
@@ -47,7 +46,7 @@ const Confetti = ({ id }: { id: number }) => {
   const duration = 2 + Math.random() * 2;
   const size = 6 + Math.random() * 10;
   const rotation = Math.random() * 360;
-  const shape = id % 3; // 0=circle, 1=square, 2=rectangle
+  const shape = id % 3;
 
   return (
     <div
@@ -67,7 +66,6 @@ const Confetti = ({ id }: { id: number }) => {
   );
 };
 
-// Sparkle burst particle
 const SparkBurst = ({ id }: { id: number }) => {
   const colors = ["#FFD700", "#FF6B35", "#FF1493", "#00BFFF", "#FF4500", "#7B68EE", "#00FF7F"];
   const angle = (id / 30) * Math.PI * 2;
@@ -94,17 +92,79 @@ const SparkBurst = ({ id }: { id: number }) => {
   );
 };
 
+// Fire particle for rocket trail
+const FireParticle = ({ id }: { id: number }) => {
+  const colors = ["#FF4500", "#FF6B00", "#FFD700", "#FF0000", "#FFA500", "#FFFF00"];
+  const color = colors[id % colors.length];
+  const offsetX = (Math.random() - 0.5) * 80;
+  const delay = Math.random() * 0.3;
+  const size = 8 + Math.random() * 16;
+  const duration = 0.6 + Math.random() * 0.8;
+
+  return (
+    <div
+      className="absolute rounded-full"
+      style={{
+        left: `calc(50% + ${offsetX}px)`,
+        top: "100%",
+        width: size,
+        height: size,
+        background: color,
+        boxShadow: `0 0 ${size}px ${color}`,
+        animation: `fireDown ${duration}s ease-out ${delay}s infinite`,
+        opacity: 0,
+      }}
+    />
+  );
+};
+
 const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
   const [phase, setPhase] = useState<"launch" | "countdown" | "rocket" | "thanks" | "welcome">("launch");
   const [count, setCount] = useState(5);
   const [fadeOut, setFadeOut] = useState(false);
   const [rocketY, setRocketY] = useState(0);
   const rocketRef = useRef<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const startCountdown = useCallback(() => {
     setPhase("countdown");
     setCount(5);
     playBeep(600, 200);
+  }, []);
+
+  // Play Vikram BGM when rocket phase starts
+  useEffect(() => {
+    if (phase === "rocket") {
+      try {
+        const audio = new Audio("/vikram-bgm.mp3");
+        audio.currentTime = 50; // Start from 0:50
+        audio.volume = 0.7;
+        audio.play().catch(() => {});
+        audioRef.current = audio;
+      } catch {}
+    }
+    // Fade out audio when leaving
+    if (phase === "welcome" && audioRef.current) {
+      const audio = audioRef.current;
+      const fadeInterval = setInterval(() => {
+        if (audio.volume > 0.05) {
+          audio.volume = Math.max(0, audio.volume - 0.05);
+        } else {
+          audio.pause();
+          clearInterval(fadeInterval);
+        }
+      }, 200);
+    }
+  }, [phase]);
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -123,16 +183,16 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
     }
   }, [phase, count]);
 
-  // Rocket animation
+  // Rocket animation - 5 seconds
   useEffect(() => {
     if (phase === "rocket") {
       let start: number | null = null;
-      const duration = 2500;
+      const duration = 5000;
       const animate = (ts: number) => {
         if (!start) start = ts;
         const progress = Math.min((ts - start) / duration, 1);
-        const eased = progress * progress * progress;
-        setRocketY(eased * 130);
+        const eased = progress * progress;
+        setRocketY(eased * 140);
         if (progress < 1) {
           rocketRef.current = requestAnimationFrame(animate);
         } else {
@@ -146,22 +206,20 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
 
   useEffect(() => {
     if (phase === "thanks") {
-      setTimeout(() => setPhase("welcome"), 3000);
+      setTimeout(() => setPhase("welcome"), 7000); // 5-8 seconds range
     }
     if (phase === "welcome") {
       setTimeout(() => {
         setFadeOut(true);
         setTimeout(onComplete, 800);
-      }, 3500);
+      }, 4000);
     }
   }, [phase, onComplete]);
-
-  const confettiCount = 80;
-  const sparkCount = 30;
 
   return (
     <>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Great+Vibes&display=swap');
         @keyframes confettiFall {
           0% { transform: translateY(0) rotate(0deg); opacity: 1; }
           100% { transform: translateY(100vh) rotate(720deg); opacity: 0.6; }
@@ -170,11 +228,15 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           0% { transform: translate(-50%, -50%) translate(0, 0) scale(1); opacity: 1; }
           100% { transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
         }
+        @keyframes fireDown {
+          0% { transform: translateY(0) scale(1); opacity: 1; }
+          100% { transform: translateY(120px) scale(0.2); opacity: 0; }
+        }
         @keyframes fireFlicker {
-          0%, 100% { transform: scaleX(1) scaleY(1); }
-          25% { transform: scaleX(1.1) scaleY(0.9); }
-          50% { transform: scaleX(0.9) scaleY(1.1); }
-          75% { transform: scaleX(1.05) scaleY(0.95); }
+          0%, 100% { transform: scaleX(1) scaleY(1); opacity: 0.9; }
+          25% { transform: scaleX(1.2) scaleY(0.8); opacity: 1; }
+          50% { transform: scaleX(0.8) scaleY(1.2); opacity: 0.8; }
+          75% { transform: scaleX(1.1) scaleY(0.9); opacity: 1; }
         }
         @keyframes countPop {
           0% { transform: scale(0.3); opacity: 0; }
@@ -190,6 +252,15 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           0% { transform: translate(0,0) rotate(0deg) scale(0); opacity: 0; }
           20% { transform: translate(30px,-60px) rotate(20deg) scale(1.2); opacity: 1; }
           100% { transform: translate(80px,-120px) rotate(45deg) scale(1); opacity: 1; }
+        }
+        @keyframes nameGlow {
+          0%, 100% { text-shadow: 0 0 20px rgba(255,215,0,0.5), 0 0 40px rgba(255,215,0,0.3); }
+          50% { text-shadow: 0 0 40px rgba(255,215,0,0.8), 0 0 80px rgba(255,215,0,0.5), 0 0 120px rgba(255,100,0,0.3); }
+        }
+        @keyframes sparkleTrail {
+          0% { transform: translateY(0) scale(1); opacity: 1; }
+          50% { opacity: 0.8; }
+          100% { transform: translateY(200px) scale(0); opacity: 0; }
         }
       `}</style>
       <div
@@ -256,26 +327,76 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           </div>
         )}
 
-        {/* Phase: Rocket Launch with uploaded image */}
+        {/* Phase: Rocket Launch - transparent rocket with fire */}
         {phase === "rocket" && (
           <div className="absolute inset-0 z-10">
-            {/* Rocket */}
+            {/* Sparkle trails behind rocket */}
+            {Array.from({ length: 20 }, (_, i) => {
+              const offsetX = (Math.random() - 0.5) * 120;
+              const delay = Math.random() * 2;
+              const colors = ["#FFD700", "#FF6B35", "#FF4500", "#FFA500", "#FFFF00"];
+              return (
+                <div
+                  key={`trail-${i}`}
+                  className="absolute rounded-full"
+                  style={{
+                    left: `calc(50% + ${offsetX}px)`,
+                    bottom: `${Math.max(0, -10 + rocketY - 10)}%`,
+                    width: 4 + Math.random() * 6,
+                    height: 4 + Math.random() * 6,
+                    background: colors[i % colors.length],
+                    boxShadow: `0 0 10px ${colors[i % colors.length]}`,
+                    animation: `sparkleTrail ${1 + Math.random()}s ease-out ${delay}s infinite`,
+                  }}
+                />
+              );
+            })}
+
+            {/* Rocket with fire */}
             <div
               className="absolute left-1/2 -translate-x-1/2"
               style={{ bottom: `${-10 + rocketY}%`, transition: "none" }}
             >
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center relative">
+                {/* The rocket image - transparent background */}
                 <img
                   src={rocketImg}
                   alt="Rocket"
-                  className="w-40 md:w-56"
-                  style={{ filter: "drop-shadow(0 0 30px rgba(255,100,0,0.8))" }}
+                  className="w-32 md:w-44 relative z-10"
+                  style={{ filter: "drop-shadow(0 0 20px rgba(255,100,0,0.6))" }}
+                  width={512}
+                  height={1024}
                 />
+                {/* Fire trail below rocket */}
+                <div className="relative -mt-2 flex flex-col items-center">
+                  {/* Main fire */}
+                  <div
+                    className="w-16 md:w-20 h-32 md:h-44 rounded-b-full"
+                    style={{
+                      background: "linear-gradient(to bottom, #FF4500, #FF6B00, #FFD700, transparent)",
+                      filter: "blur(4px)",
+                      animation: "fireFlicker 0.15s ease-in-out infinite",
+                    }}
+                  />
+                  {/* Inner fire */}
+                  <div
+                    className="absolute top-0 w-8 md:w-10 h-24 md:h-32 rounded-b-full"
+                    style={{
+                      background: "linear-gradient(to bottom, #FFFFFF, #FFD700, #FF6B00, transparent)",
+                      filter: "blur(2px)",
+                      animation: "fireFlicker 0.1s ease-in-out infinite",
+                    }}
+                  />
+                  {/* Fire particles */}
+                  {Array.from({ length: 15 }, (_, i) => (
+                    <FireParticle key={`fire-${i}`} id={i} />
+                  ))}
+                </div>
               </div>
             </div>
 
             {/* "Launching" text */}
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <h2
                 className="text-4xl md:text-5xl font-bold text-white animate-pulse"
                 style={{ fontFamily: "'Playfair Display', serif", textShadow: "0 0 30px rgba(255,100,0,0.5)" }}
@@ -286,16 +407,16 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           </div>
         )}
 
-        {/* Phase: Thanks - Full screen party poppers & confetti */}
+        {/* Phase: Thanks - Full screen party with Vikram Anna */}
         {phase === "thanks" && (
           <div className="absolute inset-0 z-10 overflow-hidden">
             {/* Full screen confetti */}
-            {Array.from({ length: confettiCount }, (_, i) => (
+            {Array.from({ length: 100 }, (_, i) => (
               <Confetti key={i} id={i} />
             ))}
 
             {/* Spark bursts from center */}
-            {Array.from({ length: sparkCount }, (_, i) => (
+            {Array.from({ length: 40 }, (_, i) => (
               <SparkBurst key={`spark-${i}`} id={i} />
             ))}
 
@@ -319,7 +440,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
               <span className="text-5xl md:text-6xl">✨</span>
             </div>
 
-            {/* Center text */}
+            {/* Center text with Vikram Anna */}
             <div className="absolute inset-0 flex flex-col items-center justify-center animate-fade-in text-center px-6">
               <div
                 className="w-28 h-28 rounded-full flex items-center justify-center mb-6"
@@ -336,7 +457,21 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
               >
                 Thank You for Launching!
               </h2>
-              <p className="text-white/60 text-base md:text-lg max-w-md mt-3">
+              {/* Vikram Anna name - attractive Great Vibes font */}
+              <p
+                className="text-4xl md:text-6xl mt-6"
+                style={{
+                  fontFamily: "'Great Vibes', cursive",
+                  background: "linear-gradient(135deg, #FFD700, #FFA500, #FF6B35, #FFD700)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  animation: "nameGlow 2s ease-in-out infinite",
+                  filter: "drop-shadow(0 2px 10px rgba(255,215,0,0.4))",
+                }}
+              >
+                Vikram Anna
+              </p>
+              <p className="text-white/60 text-base md:text-lg max-w-md mt-4">
                 Your journey begins now
               </p>
             </div>
