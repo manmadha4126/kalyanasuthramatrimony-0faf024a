@@ -267,6 +267,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           50% { opacity: 1; }
           100% { transform: translateY(-30px) translateX(15px); opacity: 0.3; }
         }
+      `}</style>
       <div
         className={`fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden transition-opacity duration-700 ${fadeOut ? "opacity-0" : "opacity-100"}`}
         style={{ background: "radial-gradient(ellipse at center, hsl(270,30%,15%) 0%, hsl(260,40%,8%) 100%)" }}
