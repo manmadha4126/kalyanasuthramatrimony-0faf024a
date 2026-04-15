@@ -41,17 +41,35 @@ Deno.serve(async (req) => {
 
     // Create the user with admin API (auto-confirms email)
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
-      email,
+      email: email.toLowerCase().trim(),
       password,
       email_confirm: true,
     });
 
     if (error) {
+      // If user already exists, try to find them and return their ID
+      if (error.message.includes("already been registered") || error.message.includes("already exists")) {
+        const { data: { users }, error: listError } = await supabaseAdmin.auth.admin.listUsers();
+        if (listError) {
+          return new Response(JSON.stringify({ error: "User already exists but could not retrieve their ID" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
+        const existingUser = users.find((u: any) => u.email?.toLowerCase() === email.toLowerCase().trim());
+        if (existingUser) {
+          // Update password and return existing user id
+          await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
+            password,
+            email_confirm: true,
+          });
+          return new Response(JSON.stringify({ user_id: existingUser.id, existing: true }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
+        return new Response(JSON.stringify({ error: "User already exists but could not be found" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
       return new Response(JSON.stringify({ error: error.message }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     return new Response(JSON.stringify({ user_id: data.user.id }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    console.error("create-customer-user error:", err);
+    return new Response(JSON.stringify({ error: err.message || "Internal server error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 });
