@@ -528,6 +528,7 @@ export default function AdminDashboard() {
   const StatusBadge = ({ status }: { status: string }) => {
     const cfg = status === "active" ? { bg: "hsl(145, 65%, 93%)", color: "hsl(145, 65%, 32%)", label: "Verified" }
       : status === "pending" ? { bg: "hsl(38, 90%, 93%)", color: "hsl(38, 90%, 35%)", label: "Pending" }
+      : status === "rejected" ? { bg: "hsl(0, 65%, 93%)", color: "hsl(0, 65%, 40%)", label: "Rejected" }
       : status === "contacted" ? { bg: "hsl(210, 80%, 93%)", color: "hsl(210, 80%, 35%)", label: "Contacted" }
       : status === "completed" ? { bg: "hsl(145, 65%, 93%)", color: "hsl(145, 65%, 32%)", label: "Completed" }
       : status === "approved" ? { bg: "hsl(145, 65%, 93%)", color: "hsl(145, 65%, 32%)", label: "Approved" }

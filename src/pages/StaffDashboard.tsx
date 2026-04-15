@@ -249,6 +249,7 @@ export default function StaffDashboard() {
   const StatusBadge = ({ status }: { status: string }) => {
     const cfg = status === "active" ? { bg: "hsl(145, 65%, 93%)", color: "hsl(145, 65%, 32%)", label: "Verified" }
       : status === "pending" ? { bg: "hsl(38, 90%, 93%)", color: "hsl(38, 90%, 35%)", label: "Pending" }
+      : status === "rejected" ? { bg: "hsl(0, 65%, 93%)", color: "hsl(0, 65%, 40%)", label: "Rejected" }
       : status === "contacted" ? { bg: "hsl(200, 70%, 93%)", color: "hsl(200, 70%, 35%)", label: "Contacted" }
       : status === "completed" ? { bg: "hsl(145, 65%, 93%)", color: "hsl(145, 65%, 32%)", label: "Completed" }
       : { bg: "hsl(0, 65%, 93%)", color: "hsl(0, 65%, 40%)", label: status.charAt(0).toUpperCase() + status.slice(1) };
@@ -641,6 +642,7 @@ export default function StaffDashboard() {
                         <div className="flex items-center gap-2 px-4 pb-3 flex-wrap">
                           {(p as any).profile_id && <span className="px-2 py-1 rounded-lg text-xs font-bold" style={{ background: THEME.accentBg, color: THEME.accentText }}>{(p as any).profile_id}</span>}
                           <span className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold" style={{ background: THEME.accentBg, color: THEME.accentText }}><Eye size={12} /> View</span>
+                          <button onClick={(e) => { e.stopPropagation(); deleteProfile(p.id); }} className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold" style={{ background: "hsl(0, 65%, 95%)", color: "hsl(0, 65%, 45%)" }}><Trash2 size={12} /> Delete</button>
                         </div>
                       </motion.div>
                     ))}
