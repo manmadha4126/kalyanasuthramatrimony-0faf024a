@@ -38,11 +38,11 @@ const playLaunchSound = () => {
   } catch {}
 };
 
-const Confetti = ({ id }: { id: number }) => {
+const Confetti = ({ id, wave = 0 }: { id: number; wave?: number }) => {
   const colors = ["#FF6B35", "#FFD700", "#FF4500", "#FF1493", "#00BFFF", "#7B68EE", "#FF69B4", "#FFA500", "#00FF7F", "#FF0000", "#FFFF00", "#FF00FF"];
   const color = colors[id % colors.length];
   const left = Math.random() * 100;
-  const delay = Math.random() * 2;
+  const delay = Math.random() * 1.5;
   const duration = 2 + Math.random() * 2;
   const size = 6 + Math.random() * 10;
   const rotation = Math.random() * 360;
@@ -92,7 +92,6 @@ const SparkBurst = ({ id }: { id: number }) => {
   );
 };
 
-// Fire particle for rocket trail
 const FireParticle = ({ id }: { id: number }) => {
   const colors = ["#FF4500", "#FF6B00", "#FFD700", "#FF0000", "#FFA500", "#FFFF00"];
   const color = colors[id % colors.length];
@@ -118,11 +117,14 @@ const FireParticle = ({ id }: { id: number }) => {
   );
 };
 
+const BG_STYLE = "radial-gradient(ellipse at center, hsl(340,40%,18%) 0%, hsl(340,50%,8%) 60%, hsl(260,40%,5%) 100%)";
+
 const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
   const [phase, setPhase] = useState<"launch" | "countdown" | "rocket" | "thanks" | "welcome">("launch");
   const [count, setCount] = useState(5);
   const [fadeOut, setFadeOut] = useState(false);
   const [rocketY, setRocketY] = useState(0);
+  const [confettiWave, setConfettiWave] = useState(0);
   const rocketRef = useRef<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -132,32 +134,20 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
     playBeep(600, 200);
   }, []);
 
-  // Play Vikram BGM when rocket phase starts
+  // Play Vikram BGM when rocket phase starts - from 0:54
   useEffect(() => {
     if (phase === "rocket") {
       try {
         const audio = new Audio("/vikram-bgm.mp3");
-        audio.currentTime = 50; // Start from 0:50
+        audio.currentTime = 54;
         audio.volume = 0.7;
         audio.play().catch(() => {});
         audioRef.current = audio;
       } catch {}
     }
-    // Fade out audio when leaving
-    if (phase === "welcome" && audioRef.current) {
-      const audio = audioRef.current;
-      const fadeInterval = setInterval(() => {
-        if (audio.volume > 0.05) {
-          audio.volume = Math.max(0, audio.volume - 0.05);
-        } else {
-          audio.pause();
-          clearInterval(fadeInterval);
-        }
-      }, 200);
-    }
   }, [phase]);
 
-  // Cleanup audio on unmount
+  // Fade out audio only when component unmounts or site loads
   useEffect(() => {
     return () => {
       if (audioRef.current) {
@@ -166,6 +156,16 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
       }
     };
   }, []);
+
+  // Continuous confetti waves during thanks phase
+  useEffect(() => {
+    if (phase === "thanks") {
+      const interval = setInterval(() => {
+        setConfettiWave(w => w + 1);
+      }, 2500);
+      return () => clearInterval(interval);
+    }
+  }, [phase]);
 
   useEffect(() => {
     if (phase === "countdown" && count > 0) {
@@ -183,7 +183,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
     }
   }, [phase, count]);
 
-  // Rocket animation - 5 seconds
+  // Rocket animation - starts from bottom, goes to top over 5 seconds
   useEffect(() => {
     if (phase === "rocket") {
       let start: number | null = null;
@@ -206,13 +206,25 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
 
   useEffect(() => {
     if (phase === "thanks") {
-      setTimeout(() => setPhase("welcome"), 15000); // 15 seconds
+      setTimeout(() => setPhase("welcome"), 18000); // ~18 seconds
     }
     if (phase === "welcome") {
       setTimeout(() => {
         setFadeOut(true);
+        // Fade out audio
+        if (audioRef.current) {
+          const audio = audioRef.current;
+          const fadeInterval = setInterval(() => {
+            if (audio.volume > 0.05) {
+              audio.volume = Math.max(0, audio.volume - 0.05);
+            } else {
+              audio.pause();
+              clearInterval(fadeInterval);
+            }
+          }, 150);
+        }
         setTimeout(onComplete, 800);
-      }, 8000);
+      }, 12000); // ~12 seconds
     }
   }, [phase, onComplete]);
 
@@ -254,8 +266,8 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           100% { transform: translate(80px,-120px) rotate(45deg) scale(1); opacity: 1; }
         }
         @keyframes nameGlow {
-          0%, 100% { text-shadow: 0 0 20px rgba(255,215,0,0.5), 0 0 40px rgba(255,215,0,0.3); }
-          50% { text-shadow: 0 0 40px rgba(255,215,0,0.8), 0 0 80px rgba(255,215,0,0.5), 0 0 120px rgba(255,100,0,0.3); }
+          0%, 100% { text-shadow: 0 0 30px rgba(255,255,255,0.5), 0 0 60px rgba(255,255,255,0.3); }
+          50% { text-shadow: 0 0 60px rgba(255,255,255,0.8), 0 0 100px rgba(255,255,255,0.5), 0 0 140px rgba(255,200,100,0.3); }
         }
         @keyframes sparkleTrail {
           0% { transform: translateY(0) scale(1); opacity: 1; }
@@ -267,10 +279,15 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           50% { opacity: 1; }
           100% { transform: translateY(-30px) translateX(15px); opacity: 0.3; }
         }
+        @keyframes continuousBurst {
+          0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+          50% { opacity: 0.8; }
+          100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+        }
       `}</style>
       <div
         className={`fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden transition-opacity duration-700 ${fadeOut ? "opacity-0" : "opacity-100"}`}
-        style={{ background: "radial-gradient(ellipse at center, hsl(270,30%,15%) 0%, hsl(260,40%,8%) 100%)" }}
+        style={{ background: BG_STYLE }}
       >
         {/* Decorative rings */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -313,7 +330,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           </div>
         )}
 
-        {/* Phase: Countdown */}
+        {/* Phase: Countdown - same burgundy background */}
         {phase === "countdown" && (
           <div className="flex flex-col items-center gap-6 z-10">
             <p className="text-white/50 text-sm uppercase tracking-[0.3em]">Launching in</p>
@@ -336,10 +353,10 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           </div>
         )}
 
-        {/* Phase: Rocket Launch - transparent rocket with fire */}
+        {/* Phase: Rocket Launch - from bottom to top */}
         {phase === "rocket" && (
           <div className="absolute inset-0 z-10">
-            {/* Sparkle trails behind rocket */}
+            {/* Sparkle trails */}
             {Array.from({ length: 20 }, (_, i) => {
               const offsetX = (Math.random() - 0.5) * 120;
               const delay = Math.random() * 2;
@@ -361,13 +378,12 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
               );
             })}
 
-            {/* Rocket with fire */}
+            {/* Rocket starting from bottom */}
             <div
               className="absolute left-1/2 -translate-x-1/2"
-              style={{ bottom: `${-10 + rocketY}%`, transition: "none" }}
+              style={{ bottom: `${-20 + rocketY}%`, transition: "none" }}
             >
               <div className="flex flex-col items-center relative">
-                {/* The rocket image - transparent background */}
                 <img
                   src={rocketImg}
                   alt="Rocket"
@@ -376,9 +392,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
                   width={512}
                   height={1024}
                 />
-                {/* Fire trail below rocket */}
                 <div className="relative -mt-2 flex flex-col items-center">
-                  {/* Main fire */}
                   <div
                     className="w-16 md:w-20 h-32 md:h-44 rounded-b-full"
                     style={{
@@ -387,7 +401,6 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
                       animation: "fireFlicker 0.15s ease-in-out infinite",
                     }}
                   />
-                  {/* Inner fire */}
                   <div
                     className="absolute top-0 w-8 md:w-10 h-24 md:h-32 rounded-b-full"
                     style={{
@@ -396,7 +409,6 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
                       animation: "fireFlicker 0.1s ease-in-out infinite",
                     }}
                   />
-                  {/* Fire particles */}
                   {Array.from({ length: 15 }, (_, i) => (
                     <FireParticle key={`fire-${i}`} id={i} />
                   ))}
@@ -404,7 +416,6 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
               </div>
             </div>
 
-            {/* "Launching" text */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <h2
                 className="text-4xl md:text-5xl font-bold text-white animate-pulse"
@@ -416,17 +427,19 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           </div>
         )}
 
-        {/* Phase: Thanks - Full screen party with Vikram Anna */}
+        {/* Phase: Thanks - 18 seconds, continuous confetti, music continues */}
         {phase === "thanks" && (
           <div className="absolute inset-0 z-10 overflow-hidden">
-            {/* Full screen confetti */}
-            {Array.from({ length: 100 }, (_, i) => (
-              <Confetti key={i} id={i} />
-            ))}
+            {/* Continuous confetti waves */}
+            {Array.from({ length: Math.min(confettiWave + 1, 8) }, (_, wave) => (
+              Array.from({ length: 80 }, (_, i) => (
+                <Confetti key={`w${wave}-${i}`} id={i + wave * 80} wave={wave} />
+              ))
+            )).flat()}
 
-            {/* Spark bursts from center */}
+            {/* Spark bursts */}
             {Array.from({ length: 40 }, (_, i) => (
-              <SparkBurst key={`spark-${i}`} id={i} />
+              <SparkBurst key={`spark-${i}-${confettiWave}`} id={i} />
             ))}
 
             {/* Party poppers */}
@@ -449,7 +462,22 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
               <span className="text-5xl md:text-6xl">✨</span>
             </div>
 
-            {/* Center text with Vikram Anna */}
+            {/* Continuous bursting rings */}
+            {Array.from({ length: 3 }, (_, i) => (
+              <div
+                key={`ring-${i}-${confettiWave}`}
+                className="absolute left-1/2 top-1/2 rounded-full border-2"
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderColor: ["#FFD700", "#FF1493", "#00BFFF"][i],
+                  animation: `continuousBurst 2s ease-out ${i * 0.4}s infinite`,
+                  opacity: 0,
+                }}
+              />
+            ))}
+
+            {/* Center text with Vikram Anna - bigger, white */}
             <div className="absolute inset-0 flex flex-col items-center justify-center animate-fade-in text-center px-6">
               <div
                 className="w-28 h-28 rounded-full flex items-center justify-center mb-6"
@@ -466,16 +494,14 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
               >
                 Thank You for Launching!
               </h2>
-              {/* Vikram Anna name - attractive Great Vibes font */}
+              {/* Vikram Anna - BIGGER, WHITE */}
               <p
-                className="text-4xl md:text-6xl mt-6"
+                className="text-6xl md:text-8xl lg:text-9xl mt-8"
                 style={{
                   fontFamily: "'Great Vibes', cursive",
-                  background: "linear-gradient(135deg, #FFD700, #FFA500, #FF6B35, #FFD700)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
+                  color: "#FFFFFF",
                   animation: "nameGlow 2s ease-in-out infinite",
-                  filter: "drop-shadow(0 2px 10px rgba(255,215,0,0.4))",
+                  filter: "drop-shadow(0 4px 20px rgba(255,255,255,0.3))",
                 }}
               >
                 Vikram Anna
@@ -487,11 +513,9 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           </div>
         )}
 
-        {/* Phase: Welcome - styled like reference with particles */}
+        {/* Phase: Welcome - 12 seconds, same background, music continues */}
         {phase === "welcome" && (
-          <div className="absolute inset-0 z-10 overflow-hidden"
-            style={{ background: "radial-gradient(ellipse at center, hsl(340,40%,18%) 0%, hsl(340,50%,8%) 60%, hsl(260,40%,5%) 100%)" }}
-          >
+          <div className="absolute inset-0 z-10 overflow-hidden" style={{ background: BG_STYLE }}>
             {/* Floating glow particles */}
             {Array.from({ length: 40 }, (_, i) => {
               const size = 3 + Math.random() * 8;
@@ -514,13 +538,10 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
               );
             })}
 
-            {/* Center content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center animate-fade-in text-center px-6">
-              {/* Star/sparkle icon */}
               <div className="mb-4">
                 <span className="text-3xl" style={{ color: "#FFD700" }}>✦</span>
               </div>
-              {/* Decorative lines */}
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 md:w-24 h-[1px]" style={{ background: "linear-gradient(to right, transparent, #FFD700)" }} />
                 <div className="w-16 md:w-24 h-[1px]" style={{ background: "linear-gradient(to left, transparent, #FFD700)" }} />
@@ -554,7 +575,6 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
               >
                 Where Hearts Find Home 💕
               </p>
-              {/* Hearts divider */}
               <div className="flex items-center gap-2 mt-4">
                 <div className="w-12 md:w-20 h-[1px]" style={{ background: "linear-gradient(to right, transparent, #B89A7A)" }} />
                 <span style={{ color: "#FFB6C1" }}>♥</span>
