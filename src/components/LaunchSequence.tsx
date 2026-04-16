@@ -333,6 +333,44 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           </div>
         )}
 
+        {/* Phase: Welcome Vikram Anna - appears after launch button, before countdown */}
+        {phase === "welcome-vikram" && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center animate-fade-in">
+            <div
+              className="w-24 h-24 md:w-32 md:h-32 rounded-full flex items-center justify-center mb-8"
+              style={{
+                background: "linear-gradient(135deg, hsl(45,90%,55%) 0%, hsl(35,80%,45%) 100%)",
+                boxShadow: "0 0 60px hsl(45,90%,55%,0.5)",
+              }}
+            >
+              <span className="text-4xl md:text-5xl">🙏</span>
+            </div>
+            <h2
+              className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                color: "#FFFFFF",
+                textShadow: "0 0 30px rgba(255,255,255,0.4)",
+              }}
+            >
+              Welcome Vikram Anna
+            </h2>
+            <p
+              className="text-lg md:text-2xl lg:text-3xl max-w-4xl leading-relaxed"
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                color: "#FFFFFF",
+                textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+              }}
+            >
+              We are honored to launch our website in the presence of our Chief Guest, Vikram Anna, whose guidance and support inspire this initiative
+            </p>
+            <p className="text-white/60 text-sm md:text-base mt-8 tracking-widest uppercase">
+              Launching in a few moments...
+            </p>
+          </div>
+        )}
+
         {/* Phase: Countdown - same burgundy background */}
         {phase === "countdown" && (
           <div className="flex flex-col items-center gap-6 z-10">
