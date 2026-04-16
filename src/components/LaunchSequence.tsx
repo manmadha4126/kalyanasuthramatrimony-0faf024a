@@ -512,7 +512,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
                 <span className="text-5xl">🎆</span>
               </div>
               <h2
-                className="text-5xl md:text-7xl lg:text-8xl font-bold"
+                className="text-6xl md:text-8xl lg:text-9xl font-bold"
                 style={{ fontFamily: "'Playfair Display', serif", color: "hsl(45,80%,75%)", textShadow: "0 0 40px rgba(255,215,0,0.4)" }}
               >
                 Thank You for Launching!
