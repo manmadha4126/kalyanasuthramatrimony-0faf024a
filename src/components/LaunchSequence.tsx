@@ -134,12 +134,12 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
     playBeep(600, 200);
   }, []);
 
-  // Play Vikram BGM when rocket phase starts - from 0:54
+  // Play Vikram BGM when rocket phase starts - full track from beginning
   useEffect(() => {
     if (phase === "rocket") {
       try {
         const audio = new Audio("/vikram-bgm.mp3");
-        audio.currentTime = 54;
+        audio.currentTime = 0;
         audio.volume = 0.7;
         audio.play().catch(() => {});
         audioRef.current = audio;
@@ -471,8 +471,8 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
                 <span className="text-5xl">🎆</span>
               </div>
               <h2
-                className="text-3xl md:text-5xl font-bold"
-                style={{ fontFamily: "'Playfair Display', serif", color: "hsl(45,80%,75%)" }}
+                className="text-5xl md:text-7xl lg:text-8xl font-bold"
+                style={{ fontFamily: "'Playfair Display', serif", color: "hsl(45,80%,75%)", textShadow: "0 0 40px rgba(255,215,0,0.4)" }}
               >
                 Thank You for Launching!
               </h2>
@@ -561,7 +561,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
                 className="text-lg md:text-2xl mt-6 italic"
                 style={{ fontFamily: "'Kaushan Script', cursive", color: "#E8C8A0" }}
               >
-                Waiting for Someone Special...!
+                The Wedding Chapter Starts Here…
               </p>
               <p
                 className="text-xs md:text-sm mt-4 tracking-[0.3em] uppercase"
