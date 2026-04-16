@@ -224,7 +224,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           }, 150);
         }
         setTimeout(onComplete, 800);
-      }, 12000); // ~12 seconds
+      }, 6000); // 6 seconds
     }
   }, [phase, onComplete]);
 
