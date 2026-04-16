@@ -296,11 +296,11 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           <div className="w-[260px] h-[260px] rounded-full border border-white/5 absolute" />
         </div>
 
-        {/* Phase: Launch Button */}
+        {/* Phase: Launch Button - centered in circle */}
         {phase === "launch" && (
-          <div className="flex flex-col items-center gap-8 animate-fade-in z-10">
+          <div className="absolute inset-0 flex flex-col items-center justify-center animate-fade-in z-10">
             <h1
-              className="text-5xl md:text-7xl lg:text-8xl font-bold text-center"
+              className="text-5xl md:text-7xl lg:text-8xl font-bold text-center mb-4"
               style={{
                 fontFamily: "'Playfair Display', serif",
                 color: "#FFD700",
@@ -309,12 +309,12 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
             >
               Kalyanasuthra Matrimony
             </h1>
-            <p className="text-white/60 text-sm md:text-base tracking-widest uppercase">
+            <p className="text-white/60 text-sm md:text-base tracking-widest uppercase mb-8">
               Preparing to launch
             </p>
             <button
               onClick={startCountdown}
-              className="relative mt-4 w-52 h-52 md:w-60 md:h-60 rounded-full flex items-center justify-center text-xl font-bold uppercase tracking-widest transition-all duration-300 hover:scale-110 active:scale-95"
+              className="relative w-52 h-52 md:w-60 md:h-60 rounded-full flex items-center justify-center text-xl font-bold uppercase tracking-widest transition-all duration-300 hover:scale-110 active:scale-95"
               style={{
                 background: "linear-gradient(135deg, hsl(340,70%,50%) 0%, hsl(280,60%,45%) 100%)",
                 boxShadow: "0 0 60px hsl(340,70%,50%,0.4), 0 0 120px hsl(280,60%,45%,0.2)",
@@ -442,25 +442,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
               <SparkBurst key={`spark-${i}-${confettiWave}`} id={i} />
             ))}
 
-            {/* Party poppers */}
-            <div className="absolute left-[15%] top-[40%]" style={{ animation: "popperLeft 0.8s ease-out forwards" }}>
-              <span className="text-6xl md:text-8xl">🎉</span>
-            </div>
-            <div className="absolute right-[15%] top-[40%]" style={{ animation: "popperRight 0.8s ease-out forwards" }}>
-              <span className="text-6xl md:text-8xl">🎊</span>
-            </div>
-            <div className="absolute left-[25%] top-[55%]" style={{ animation: "popperLeft 0.8s ease-out 0.3s forwards", opacity: 0 }}>
-              <span className="text-5xl md:text-7xl">🎉</span>
-            </div>
-            <div className="absolute right-[25%] top-[55%]" style={{ animation: "popperRight 0.8s ease-out 0.3s forwards", opacity: 0 }}>
-              <span className="text-5xl md:text-7xl">🎊</span>
-            </div>
-            <div className="absolute left-[10%] top-[25%]" style={{ animation: "popperLeft 0.8s ease-out 0.6s forwards", opacity: 0 }}>
-              <span className="text-5xl md:text-6xl">✨</span>
-            </div>
-            <div className="absolute right-[10%] top-[25%]" style={{ animation: "popperRight 0.8s ease-out 0.6s forwards", opacity: 0 }}>
-              <span className="text-5xl md:text-6xl">✨</span>
-            </div>
+            {/* No emoji poppers - just paper/sprinkle confetti and spark bursts above */}
 
             {/* Continuous bursting rings */}
             {Array.from({ length: 3 }, (_, i) => (
@@ -513,9 +495,21 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
           </div>
         )}
 
-        {/* Phase: Welcome - 12 seconds, same background, music continues */}
+        {/* Phase: Welcome - 12 seconds, same background, music continues, confetti blasts */}
         {phase === "welcome" && (
           <div className="absolute inset-0 z-10 overflow-hidden" style={{ background: BG_STYLE }}>
+            {/* Confetti blasts 3-4 waves */}
+            {Array.from({ length: 4 }, (_, wave) => (
+              Array.from({ length: 60 }, (_, i) => (
+                <Confetti key={`wc${wave}-${i}`} id={i + wave * 60 + 500} wave={wave} />
+              ))
+            )).flat()}
+
+            {/* Spark bursts */}
+            {Array.from({ length: 30 }, (_, i) => (
+              <SparkBurst key={`wspark-${i}`} id={i + 200} />
+            ))}
+
             {/* Floating glow particles */}
             {Array.from({ length: 40 }, (_, i) => {
               const size = 3 + Math.random() * 8;
