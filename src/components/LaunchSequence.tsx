@@ -120,7 +120,7 @@ const FireParticle = ({ id }: { id: number }) => {
 const BG_STYLE = "radial-gradient(ellipse at center, hsl(340,40%,18%) 0%, hsl(340,50%,8%) 60%, hsl(260,40%,5%) 100%)";
 
 const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
-  const [phase, setPhase] = useState<"launch" | "countdown" | "rocket" | "thanks" | "welcome">("launch");
+  const [phase, setPhase] = useState<"launch" | "welcome-vikram" | "countdown" | "rocket" | "thanks" | "welcome">("launch");
   const [count, setCount] = useState(5);
   const [fadeOut, setFadeOut] = useState(false);
   const [rocketY, setRocketY] = useState(0);
@@ -128,10 +128,13 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
   const rocketRef = useRef<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const startCountdown = useCallback(() => {
-    setPhase("countdown");
-    setCount(5);
-    playBeep(600, 200);
+  const startWelcomeVikram = useCallback(() => {
+    setPhase("welcome-vikram");
+    setTimeout(() => {
+      setPhase("countdown");
+      setCount(5);
+      playBeep(600, 200);
+    }, 6000);
   }, []);
 
   // Play Vikram BGM when rocket phase starts - full track from beginning
@@ -313,7 +316,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
               Preparing to launch
             </p>
             <button
-              onClick={startCountdown}
+              onClick={startWelcomeVikram}
               className="relative w-52 h-52 md:w-60 md:h-60 rounded-full flex items-center justify-center text-xl font-bold uppercase tracking-widest transition-all duration-300 hover:scale-110 active:scale-95"
               style={{
                 background: "linear-gradient(135deg, hsl(340,70%,50%) 0%, hsl(280,60%,45%) 100%)",
