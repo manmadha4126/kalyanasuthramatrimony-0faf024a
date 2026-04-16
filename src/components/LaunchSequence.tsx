@@ -120,7 +120,7 @@ const FireParticle = ({ id }: { id: number }) => {
 const BG_STYLE = "radial-gradient(ellipse at center, hsl(340,40%,18%) 0%, hsl(340,50%,8%) 60%, hsl(260,40%,5%) 100%)";
 
 const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
-  const [phase, setPhase] = useState<"launch" | "countdown" | "rocket" | "thanks" | "welcome">("launch");
+  const [phase, setPhase] = useState<"launch" | "welcome-vikram" | "countdown" | "rocket" | "thanks" | "welcome">("launch");
   const [count, setCount] = useState(5);
   const [fadeOut, setFadeOut] = useState(false);
   const [rocketY, setRocketY] = useState(0);
@@ -128,10 +128,13 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
   const rocketRef = useRef<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const startCountdown = useCallback(() => {
-    setPhase("countdown");
-    setCount(5);
-    playBeep(600, 200);
+  const startWelcomeVikram = useCallback(() => {
+    setPhase("welcome-vikram");
+    setTimeout(() => {
+      setPhase("countdown");
+      setCount(5);
+      playBeep(600, 200);
+    }, 6000);
   }, []);
 
   // Play Vikram BGM when rocket phase starts - full track from beginning
@@ -313,7 +316,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
               Preparing to launch
             </p>
             <button
-              onClick={startCountdown}
+              onClick={startWelcomeVikram}
               className="relative w-52 h-52 md:w-60 md:h-60 rounded-full flex items-center justify-center text-xl font-bold uppercase tracking-widest transition-all duration-300 hover:scale-110 active:scale-95"
               style={{
                 background: "linear-gradient(135deg, hsl(340,70%,50%) 0%, hsl(280,60%,45%) 100%)",
@@ -327,6 +330,44 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
                 style={{ background: "hsl(340,70%,50%)" }}
               />
             </button>
+          </div>
+        )}
+
+        {/* Phase: Welcome Vikram Anna - appears after launch button, before countdown */}
+        {phase === "welcome-vikram" && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center animate-fade-in">
+            <div
+              className="w-24 h-24 md:w-32 md:h-32 rounded-full flex items-center justify-center mb-8"
+              style={{
+                background: "linear-gradient(135deg, hsl(45,90%,55%) 0%, hsl(35,80%,45%) 100%)",
+                boxShadow: "0 0 60px hsl(45,90%,55%,0.5)",
+              }}
+            >
+              <span className="text-4xl md:text-5xl">🙏</span>
+            </div>
+            <h2
+              className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                color: "#FFFFFF",
+                textShadow: "0 0 30px rgba(255,255,255,0.4)",
+              }}
+            >
+              Welcome Vikram Anna
+            </h2>
+            <p
+              className="text-lg md:text-2xl lg:text-3xl max-w-4xl leading-relaxed"
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                color: "#FFFFFF",
+                textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+              }}
+            >
+              We are honored to launch our website in the presence of our Chief Guest, Vikram Anna, whose guidance and support inspire this initiative
+            </p>
+            <p className="text-white/60 text-sm md:text-base mt-8 tracking-widest uppercase">
+              Launching in a few moments...
+            </p>
           </div>
         )}
 
@@ -471,7 +512,7 @@ const LaunchSequence = ({ onComplete }: LaunchSequenceProps) => {
                 <span className="text-5xl">🎆</span>
               </div>
               <h2
-                className="text-5xl md:text-7xl lg:text-8xl font-bold"
+                className="text-6xl md:text-8xl lg:text-9xl font-bold"
                 style={{ fontFamily: "'Playfair Display', serif", color: "hsl(45,80%,75%)", textShadow: "0 0 40px rgba(255,215,0,0.4)" }}
               >
                 Thank You for Launching!
