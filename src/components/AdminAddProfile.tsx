@@ -180,24 +180,31 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
         const res = await supabase.functions.invoke("create-customer-user", {
           body: { email: form.email.toLowerCase().trim(), password: form.password },
         });
-        
-        // Parse response - handle both error formats
-        const responseData = res.data;
-        if (responseData?.error) {
-          throw new Error(responseData.error);
-        }
-        if (res.error && !responseData?.user_id) {
-          // Try to parse error response body
-          let errMsg = "Failed to create user account. Please try again.";
+
+        // The edge function always returns 200 with either { user_id } or { error }
+        // res.error is only set on transport / non-2xx responses
+        let payload: any = res.data;
+
+        // Fallback: if invoke flagged a non-2xx, try to read the body from the underlying response
+        if (res.error && !payload) {
           try {
-            if (res.error.message) errMsg = res.error.message;
+            const ctx: any = (res.error as any).context;
+            if (ctx && typeof ctx.json === "function") {
+              payload = await ctx.json();
+            } else if (ctx && typeof ctx.text === "function") {
+              const t = await ctx.text();
+              try { payload = JSON.parse(t); } catch { payload = { error: t }; }
+            }
           } catch {}
-          throw new Error(errMsg);
         }
-        if (!responseData?.user_id) {
-          throw new Error("Failed to create user account. Please try again.");
+
+        if (payload?.error) {
+          throw new Error(payload.error);
         }
-        newUserId = responseData.user_id;
+        if (!payload?.user_id) {
+          throw new Error(res.error?.message || "Failed to create user account. Please try again.");
+        }
+        newUserId = payload.user_id;
       } catch (fnErr: any) {
         throw new Error(fnErr.message || "Failed to create user account. Please try again.");
       }
