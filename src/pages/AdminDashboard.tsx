@@ -472,13 +472,29 @@ export default function AdminDashboard() {
 
   const deleteProfile = async (id: string) => {
     if (!window.confirm("Are you sure you want to permanently delete this profile? This action cannot be undone.")) return;
-    const { error } = await supabase.from("profiles").delete().eq("id", id);
-    if (!error) {
+    try {
+      const { data, error } = await supabase.functions.invoke("delete-customer-user", {
+        body: { profile_id: id },
+      });
+      if (error) {
+        const msg = (data as any)?.error || error.message || "Failed to delete profile";
+        toast({ title: "Error deleting profile", description: msg, variant: "destructive" });
+        return;
+      }
+      if ((data as any)?.error) {
+        toast({ title: "Error deleting profile", description: (data as any).error, variant: "destructive" });
+        return;
+      }
       setProfiles(prev => prev.filter(p => p.id !== id));
       if (selectedProfile?.id === id) setSelectedProfile(null);
-      toast({ title: "Profile permanently deleted" });
-    } else {
-      toast({ title: "Error deleting profile", description: error.message, variant: "destructive" });
+      const warning = (data as any)?.warning;
+      toast({
+        title: "Profile permanently deleted",
+        description: warning || "All associated data has been removed.",
+        variant: warning ? "destructive" : "default",
+      });
+    } catch (e: any) {
+      toast({ title: "Error deleting profile", description: e?.message || "Unexpected error", variant: "destructive" });
     }
   };
 
