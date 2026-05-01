@@ -37,7 +37,10 @@ const employmentOptions = ["Private Sector","Government","Self Employed / Busine
 const familyStatusOptions = ["Middle Class","Upper Middle Class","Rich","Affluent"];
 const familyTypeOptions = ["Joint Family","Nuclear Family","Extended Family"];
 const siblingsOptions = ["No Siblings","1 Brother","2 Brothers","3+ Brothers","1 Sister","2 Sisters","3+ Sisters","1 Brother 1 Sister","Multiple Siblings"];
-const gothramOptions = ["Kashyapa","Bharadwaja","Vasistha","Atri","Viswamitra","Agastya","Garga","Jamadagni","Shandilya","Koundinya","Dhananjaya","Haritasa","Other","Not Applicable"];
+const gothramOptions = [
+  "Agastya","Angirasa","Atri","Aupamanyava","Babhravya","Bhaargava","Bharadwaja","Bhrigu","Chandilya","Chyavana","Daksha","Dhananjaya","Galava","Gargeya","Gautama","Harita","Haritasa","Jamadagni","Jaimini","Kanva","Kapi","Kashyapa","Katyayana","Kaundinya","Kausika","Koundinya","Krishnatreya","Kutsa","Lohita","Madgalya","Maitreya","Mandavya","Markandeya","Maudgalya","Mudgala","Naidhruva","Parashara","Paingya","Paippalada","Pulastya","Pulaha","Sankrithi","Sankhyayana","Saraswata","Saunaka","Saunkayana","Savarna","Shandilya","Shatamarshana","Shaunaka","Shrivatsa","Sounaka","Srivatsa","Sumantu","Suparna","Tittiri","Upamanyu","Vadhula","Vaishampayana","Vamadeva","Vasishta","Vasistha","Vatsa","Vatsya","Vishnuvardhana","Vishvamitra","Viswamitra","Yaska",
+  "Other","Not Applicable"
+];
 const raashiOptions = ["Mesha (Aries)","Vrishabha (Taurus)","Mithuna (Gemini)","Karka (Cancer)","Simha (Leo)","Kanya (Virgo)","Tula (Libra)","Vrishchika (Scorpio)","Dhanu (Sagittarius)","Makara (Capricorn)","Kumbha (Aquarius)","Meena (Pisces)"];
 const starOptions = ["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishtha","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"];
 const doshamOptions = ["No Dosham","Chevvai Dosham","Rahu Dosham","Kethu Dosham","Shani Dosham","Not Known"];
