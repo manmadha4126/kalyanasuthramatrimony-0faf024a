@@ -1450,9 +1450,10 @@ export default function AdminDashboard() {
                       <p className="text-sm text-gray-600 mb-4">This profile currently has <span className="font-bold" style={{ color: "hsl(280, 65%, 50%)" }}>Assisted Access</span>.</p>
                       <button
                         onClick={async () => {
-                          const { error } = await supabase.from("profiles").update({ subscription_type: "free" } as any).eq("id", subSelectedProfile.id);
+                          const cleared: any = { subscription_type: "free", subscription_package: null, subscription_amount: null, subscription_start_date: null, subscription_end_date: null, subscription_notes: null };
+                          const { error } = await supabase.from("profiles").update(cleared).eq("id", subSelectedProfile.id);
                           if (!error) {
-                            setProfiles(prev => prev.map(pr => pr.id === subSelectedProfile.id ? { ...pr, subscription_type: "free" } as any : pr));
+                            setProfiles(prev => prev.map(pr => pr.id === subSelectedProfile.id ? { ...pr, ...cleared } as any : pr));
                             setSubSelectedProfile(null);
                             toast({ title: "Reverted to free account" });
                           }
