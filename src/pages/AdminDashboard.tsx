@@ -1556,9 +1556,22 @@ export default function AdminDashboard() {
                           disabled={subSaving}
                           onClick={async () => {
                             setSubSaving(true);
-                            const { error } = await supabase.from("profiles").update({ subscription_type: "assisted" } as any).eq("id", subSelectedProfile.id);
+                            const selectedPkgInner = MATRIMONY_PACKAGES.flatMap(c => c.options).find(p => p.value === subPackage);
+                            const selectedCatInner = MATRIMONY_PACKAGES.find(c => c.options.some(o => o.value === subPackage))?.category;
+                            const startDate = new Date();
+                            const endDate = new Date();
+                            if (selectedPkgInner) endDate.setMonth(endDate.getMonth() + selectedPkgInner.months);
+                            const updates: any = {
+                              subscription_type: "assisted",
+                              subscription_package: selectedPkgInner ? `${selectedCatInner} — ${selectedPkgInner.label}` : null,
+                              subscription_amount: subAmount ? Number(subAmount) : null,
+                              subscription_start_date: startDate.toISOString().slice(0, 10),
+                              subscription_end_date: endDate.toISOString().slice(0, 10),
+                              subscription_notes: subNotes || null,
+                            };
+                            const { error } = await supabase.from("profiles").update(updates).eq("id", subSelectedProfile.id);
                             if (!error) {
-                              setProfiles(prev => prev.map(pr => pr.id === subSelectedProfile.id ? { ...pr, subscription_type: "assisted" } as any : pr));
+                              setProfiles(prev => prev.map(pr => pr.id === subSelectedProfile.id ? { ...pr, ...updates } as any : pr));
                               toast({ title: "Assisted access granted successfully!" });
                               setSubSelectedProfile(null);
                               setSubShowSummary(false);
