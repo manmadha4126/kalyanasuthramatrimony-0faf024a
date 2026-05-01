@@ -1431,6 +1431,69 @@ export default function AdminDashboard() {
                 )}
               </div>
 
+              {/* Granted Subscriptions Cards */}
+              {(() => {
+                const granted = profiles.filter(p => (p as any).subscription_type === "assisted");
+                if (granted.length === 0) return null;
+                return (
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-bold text-gray-800">Granted Subscriptions</h3>
+                        <p className="text-sm text-gray-500 mt-0.5">{granted.length} profile{granted.length > 1 ? "s" : ""} with assisted access</p>
+                      </div>
+                    </div>
+                    <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {granted.map(p => {
+                        const pkg = (p as any).subscription_package as string | null;
+                        const amt = (p as any).subscription_amount as number | null;
+                        const start = (p as any).subscription_start_date as string | null;
+                        const end = (p as any).subscription_end_date as string | null;
+                        const fmt = (d: string | null) => d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "—";
+                        const expired = end ? new Date(end) < new Date() : false;
+                        return (
+                          <motion.div key={p.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                            onClick={() => { setSubSelectedProfile(p); setSubPackage(""); setSubAmount(""); setSubNotes(""); setSubShowSummary(false); setSubFlowActive(false); }}
+                            className="rounded-xl border bg-white shadow-sm hover:shadow-md transition-all cursor-pointer overflow-hidden"
+                            style={{ borderColor: "hsl(280, 65%, 90%)" }}>
+                            <div className="p-4 flex items-start gap-3" style={{ background: "hsl(280, 65%, 97%)" }}>
+                              <div className="w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden bg-white">
+                                {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-lg font-bold text-gray-400">{p.full_name[0]}</div>}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-bold text-gray-800 text-sm truncate">{p.full_name}</h4>
+                                <p className="text-xs text-gray-500 mt-0.5 truncate">{(p as any).profile_id || "—"} • {p.gender} • {getAge(p.date_of_birth)} yrs</p>
+                                <span className="mt-1 inline-block px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: expired ? "hsl(0, 65%, 93%)" : "hsl(280, 65%, 90%)", color: expired ? "hsl(0, 65%, 40%)" : "hsl(280, 65%, 35%)" }}>
+                                  {expired ? "✕ Expired" : "✦ Assisted"}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-2 text-xs">
+                              <div className="flex justify-between gap-2">
+                                <span className="text-gray-500 font-medium">Plan</span>
+                                <span className="font-bold text-gray-800 text-right truncate max-w-[60%]">{pkg || "—"}</span>
+                              </div>
+                              <div className="flex justify-between gap-2">
+                                <span className="text-gray-500 font-medium">Amount</span>
+                                <span className="font-bold text-gray-800">{amt != null ? `₹${Number(amt).toLocaleString("en-IN")}` : "—"}</span>
+                              </div>
+                              <div className="flex justify-between gap-2">
+                                <span className="text-gray-500 font-medium">Validity</span>
+                                <span className="font-semibold text-gray-700 text-right">{fmt(start)} → {fmt(end)}</span>
+                              </div>
+                              <div className="flex justify-between gap-2">
+                                <span className="text-gray-500 font-medium">Phone</span>
+                                <span className="font-semibold text-gray-700">{p.phone || "—"}</span>
+                              </div>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })()}
+
               {/* Selected profile subscription panel */}
               {subSelectedProfile && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
