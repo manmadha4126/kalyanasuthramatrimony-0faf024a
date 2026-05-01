@@ -731,12 +731,36 @@ export default function AdminDashboard() {
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">🔮 Horoscope Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <EditSelect label="Gothram" field="gothra" options={gothramOptions} />
+                  {((editForm as any).gothra === "__manual__" || ((editForm as any).gothra && !gothramOptions.includes((editForm as any).gothra))) ? (
+                    <div className="mb-3">
+                      <label className="block text-sm font-semibold text-gray-500 mb-1">Gothram (Type manually)</label>
+                      <div className="flex gap-2">
+                        <input type="text" value={(editForm as any).gothra === "__manual__" ? "" : ((editForm as any).gothra || "")} onChange={e => setEditField("gothra", e.target.value)} placeholder="Enter Gothram" className="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white" />
+                        <button type="button" onClick={() => setEditField("gothra", "")} className="px-3 py-1 text-xs rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200">Back</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mb-3">
+                      <label className="block text-sm font-semibold text-gray-500 mb-1">Gothram</label>
+                      <select value={(editForm as any).gothra || ""} onChange={e => setEditField("gothra", e.target.value === "Other" ? "__manual__" : e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white">
+                        <option value="">Select Gothram</option>
+                        {gothramOptions.map(o => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    </div>
+                  )}
                   <EditSelect label="Raasi" field="raasi" options={raashiOptions} />
                   <EditSelect label="Star" field="star" options={starOptions} />
                   <EditSelect label="Dosham" field="dosham" options={doshamOptions} />
                 </div>
               </div>
+              {/* Photos & Horoscope edit */}
+              <ProfileImagesEditor
+                profileId={selectedProfile.id}
+                primaryUrl={(editForm as any).profile_photo_url || null}
+                additionalUrls={(editForm as any).additional_photos || []}
+                horoscopeUrl={(editForm as any).horoscope_url || null}
+                onChange={(updates) => setEditForm(prev => ({ ...prev, ...updates }))}
+              />
             </div>
           ) : (
             /* View Mode - About Me first, then Personal Details with all fields */
