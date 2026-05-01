@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload, FileText, Heart, UserPlus, CreditCard } from "lucide-react";
 import adminLogo from "@/assets/kalyanasuthra-logo.png";
 import AdminAddProfile from "@/components/AdminAddProfile";
+import ProfileImagesEditor from "@/components/ProfileImagesEditor";
 import RevenueSection from "@/components/RevenueSection";
 import { useSessionSecurity } from "@/hooks/useSessionSecurity";
 
@@ -37,7 +38,10 @@ const employmentOptions = ["Private Sector","Government","Self Employed / Busine
 const familyStatusOptions = ["Middle Class","Upper Middle Class","Rich","Affluent"];
 const familyTypeOptions = ["Joint Family","Nuclear Family","Extended Family"];
 const siblingsOptions = ["No Siblings","1 Brother","2 Brothers","3+ Brothers","1 Sister","2 Sisters","3+ Sisters","1 Brother 1 Sister","Multiple Siblings"];
-const gothramOptions = ["Kashyapa","Bharadwaja","Vasistha","Atri","Viswamitra","Agastya","Garga","Jamadagni","Shandilya","Koundinya","Dhananjaya","Haritasa","Other","Not Applicable"];
+const gothramOptions = [
+  "Agastya","Angirasa","Atri","Aupamanyava","Babhravya","Bhaargava","Bharadwaja","Bhrigu","Chandilya","Chyavana","Daksha","Dhananjaya","Galava","Gargeya","Gautama","Harita","Haritasa","Jamadagni","Jaimini","Kanva","Kapi","Kashyapa","Katyayana","Kaundinya","Kausika","Koundinya","Krishnatreya","Kutsa","Lohita","Madgalya","Maitreya","Mandavya","Markandeya","Maudgalya","Mudgala","Naidhruva","Parashara","Paingya","Paippalada","Pulastya","Pulaha","Sankrithi","Sankhyayana","Saraswata","Saunaka","Saunkayana","Savarna","Shandilya","Shatamarshana","Shaunaka","Shrivatsa","Sounaka","Srivatsa","Sumantu","Suparna","Tittiri","Upamanyu","Vadhula","Vaishampayana","Vamadeva","Vasishta","Vasistha","Vatsa","Vatsya","Vishnuvardhana","Vishvamitra","Viswamitra","Yaska",
+  "Other","Not Applicable"
+];
 const raashiOptions = ["Mesha (Aries)","Vrishabha (Taurus)","Mithuna (Gemini)","Karka (Cancer)","Simha (Leo)","Kanya (Virgo)","Tula (Libra)","Vrishchika (Scorpio)","Dhanu (Sagittarius)","Makara (Capricorn)","Kumbha (Aquarius)","Meena (Pisces)"];
 const starOptions = ["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishtha","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"];
 const doshamOptions = ["No Dosham","Chevvai Dosham","Rahu Dosham","Kethu Dosham","Shani Dosham","Not Known"];
@@ -407,6 +411,7 @@ export default function AdminDashboard() {
     if (!selectedProfile) return;
     setSavingEdit(true);
     const { id, created_at, ...updateData } = editForm as any;
+    if (updateData.gothra === "__manual__") updateData.gothra = null;
     const { error } = await supabase.from("profiles").update(updateData).eq("id", selectedProfile.id);
     if (!error) {
       const updated = { ...selectedProfile, ...updateData };
@@ -728,12 +733,36 @@ export default function AdminDashboard() {
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">🔮 Horoscope Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <EditSelect label="Gothram" field="gothra" options={gothramOptions} />
+                  {((editForm as any).gothra === "__manual__" || ((editForm as any).gothra && !gothramOptions.includes((editForm as any).gothra))) ? (
+                    <div className="mb-3">
+                      <label className="block text-sm font-semibold text-gray-500 mb-1">Gothram (Type manually)</label>
+                      <div className="flex gap-2">
+                        <input type="text" value={(editForm as any).gothra === "__manual__" ? "" : ((editForm as any).gothra || "")} onChange={e => setEditField("gothra", e.target.value)} placeholder="Enter Gothram" className="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white" />
+                        <button type="button" onClick={() => setEditField("gothra", "")} className="px-3 py-1 text-xs rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200">Back</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mb-3">
+                      <label className="block text-sm font-semibold text-gray-500 mb-1">Gothram</label>
+                      <select value={(editForm as any).gothra || ""} onChange={e => setEditField("gothra", e.target.value === "Other" ? "__manual__" : e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white">
+                        <option value="">Select Gothram</option>
+                        {gothramOptions.map(o => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    </div>
+                  )}
                   <EditSelect label="Raasi" field="raasi" options={raashiOptions} />
                   <EditSelect label="Star" field="star" options={starOptions} />
                   <EditSelect label="Dosham" field="dosham" options={doshamOptions} />
                 </div>
               </div>
+              {/* Photos & Horoscope edit */}
+              <ProfileImagesEditor
+                profileId={selectedProfile.id}
+                primaryUrl={(editForm as any).profile_photo_url || null}
+                additionalUrls={(editForm as any).additional_photos || []}
+                horoscopeUrl={(editForm as any).horoscope_url || null}
+                onChange={(updates) => setEditForm(prev => ({ ...prev, ...updates }))}
+              />
             </div>
           ) : (
             /* View Mode - About Me first, then Personal Details with all fields */
@@ -1402,6 +1431,69 @@ export default function AdminDashboard() {
                 )}
               </div>
 
+              {/* Granted Subscriptions Cards */}
+              {(() => {
+                const granted = profiles.filter(p => (p as any).subscription_type === "assisted");
+                if (granted.length === 0) return null;
+                return (
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-bold text-gray-800">Granted Subscriptions</h3>
+                        <p className="text-sm text-gray-500 mt-0.5">{granted.length} profile{granted.length > 1 ? "s" : ""} with assisted access</p>
+                      </div>
+                    </div>
+                    <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {granted.map(p => {
+                        const pkg = (p as any).subscription_package as string | null;
+                        const amt = (p as any).subscription_amount as number | null;
+                        const start = (p as any).subscription_start_date as string | null;
+                        const end = (p as any).subscription_end_date as string | null;
+                        const fmt = (d: string | null) => d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "—";
+                        const expired = end ? new Date(end) < new Date() : false;
+                        return (
+                          <motion.div key={p.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                            onClick={() => { setSubSelectedProfile(p); setSubPackage(""); setSubAmount(""); setSubNotes(""); setSubShowSummary(false); setSubFlowActive(false); }}
+                            className="rounded-xl border bg-white shadow-sm hover:shadow-md transition-all cursor-pointer overflow-hidden"
+                            style={{ borderColor: "hsl(280, 65%, 90%)" }}>
+                            <div className="p-4 flex items-start gap-3" style={{ background: "hsl(280, 65%, 97%)" }}>
+                              <div className="w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden bg-white">
+                                {p.profile_photo_url ? <img src={p.profile_photo_url} alt={p.full_name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-lg font-bold text-gray-400">{p.full_name[0]}</div>}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-bold text-gray-800 text-sm truncate">{p.full_name}</h4>
+                                <p className="text-xs text-gray-500 mt-0.5 truncate">{(p as any).profile_id || "—"} • {p.gender} • {getAge(p.date_of_birth)} yrs</p>
+                                <span className="mt-1 inline-block px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: expired ? "hsl(0, 65%, 93%)" : "hsl(280, 65%, 90%)", color: expired ? "hsl(0, 65%, 40%)" : "hsl(280, 65%, 35%)" }}>
+                                  {expired ? "✕ Expired" : "✦ Assisted"}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="p-4 space-y-2 text-xs">
+                              <div className="flex justify-between gap-2">
+                                <span className="text-gray-500 font-medium">Plan</span>
+                                <span className="font-bold text-gray-800 text-right truncate max-w-[60%]">{pkg || "—"}</span>
+                              </div>
+                              <div className="flex justify-between gap-2">
+                                <span className="text-gray-500 font-medium">Amount</span>
+                                <span className="font-bold text-gray-800">{amt != null ? `₹${Number(amt).toLocaleString("en-IN")}` : "—"}</span>
+                              </div>
+                              <div className="flex justify-between gap-2">
+                                <span className="text-gray-500 font-medium">Validity</span>
+                                <span className="font-semibold text-gray-700 text-right">{fmt(start)} → {fmt(end)}</span>
+                              </div>
+                              <div className="flex justify-between gap-2">
+                                <span className="text-gray-500 font-medium">Phone</span>
+                                <span className="font-semibold text-gray-700">{p.phone || "—"}</span>
+                              </div>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })()}
+
               {/* Selected profile subscription panel */}
               {subSelectedProfile && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
@@ -1421,9 +1513,10 @@ export default function AdminDashboard() {
                       <p className="text-sm text-gray-600 mb-4">This profile currently has <span className="font-bold" style={{ color: "hsl(280, 65%, 50%)" }}>Assisted Access</span>.</p>
                       <button
                         onClick={async () => {
-                          const { error } = await supabase.from("profiles").update({ subscription_type: "free" } as any).eq("id", subSelectedProfile.id);
+                          const cleared: any = { subscription_type: "free", subscription_package: null, subscription_amount: null, subscription_start_date: null, subscription_end_date: null, subscription_notes: null };
+                          const { error } = await supabase.from("profiles").update(cleared).eq("id", subSelectedProfile.id);
                           if (!error) {
-                            setProfiles(prev => prev.map(pr => pr.id === subSelectedProfile.id ? { ...pr, subscription_type: "free" } as any : pr));
+                            setProfiles(prev => prev.map(pr => pr.id === subSelectedProfile.id ? { ...pr, ...cleared } as any : pr));
                             setSubSelectedProfile(null);
                             toast({ title: "Reverted to free account" });
                           }
@@ -1527,9 +1620,22 @@ export default function AdminDashboard() {
                           disabled={subSaving}
                           onClick={async () => {
                             setSubSaving(true);
-                            const { error } = await supabase.from("profiles").update({ subscription_type: "assisted" } as any).eq("id", subSelectedProfile.id);
+                            const selectedPkgInner = MATRIMONY_PACKAGES.flatMap(c => c.options).find(p => p.value === subPackage);
+                            const selectedCatInner = MATRIMONY_PACKAGES.find(c => c.options.some(o => o.value === subPackage))?.category;
+                            const startDate = new Date();
+                            const endDate = new Date();
+                            if (selectedPkgInner) endDate.setMonth(endDate.getMonth() + selectedPkgInner.months);
+                            const updates: any = {
+                              subscription_type: "assisted",
+                              subscription_package: selectedPkgInner ? `${selectedCatInner} — ${selectedPkgInner.label}` : null,
+                              subscription_amount: subAmount ? Number(subAmount) : null,
+                              subscription_start_date: startDate.toISOString().slice(0, 10),
+                              subscription_end_date: endDate.toISOString().slice(0, 10),
+                              subscription_notes: subNotes || null,
+                            };
+                            const { error } = await supabase.from("profiles").update(updates).eq("id", subSelectedProfile.id);
                             if (!error) {
-                              setProfiles(prev => prev.map(pr => pr.id === subSelectedProfile.id ? { ...pr, subscription_type: "assisted" } as any : pr));
+                              setProfiles(prev => prev.map(pr => pr.id === subSelectedProfile.id ? { ...pr, ...updates } as any : pr));
                               toast({ title: "Assisted access granted successfully!" });
                               setSubSelectedProfile(null);
                               setSubShowSummary(false);
