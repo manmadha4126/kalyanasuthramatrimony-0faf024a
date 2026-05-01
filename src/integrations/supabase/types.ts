@@ -285,6 +285,11 @@ export type Database = {
           star: string | null
           state: string | null
           sub_caste: string | null
+          subscription_amount: number | null
+          subscription_end_date: string | null
+          subscription_notes: string | null
+          subscription_package: string | null
+          subscription_start_date: string | null
           subscription_type: string
           updated_at: string
           user_id: string | null
@@ -350,6 +355,11 @@ export type Database = {
           star?: string | null
           state?: string | null
           sub_caste?: string | null
+          subscription_amount?: number | null
+          subscription_end_date?: string | null
+          subscription_notes?: string | null
+          subscription_package?: string | null
+          subscription_start_date?: string | null
           subscription_type?: string
           updated_at?: string
           user_id?: string | null
@@ -415,6 +425,11 @@ export type Database = {
           star?: string | null
           state?: string | null
           sub_caste?: string | null
+          subscription_amount?: number | null
+          subscription_end_date?: string | null
+          subscription_notes?: string | null
+          subscription_package?: string | null
+          subscription_start_date?: string | null
           subscription_type?: string
           updated_at?: string
           user_id?: string | null
