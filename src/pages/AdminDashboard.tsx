@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Users, Star, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, BookHeart, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload, FileText, Heart, UserPlus, CreditCard } from "lucide-react";
 import adminLogo from "@/assets/kalyanasuthra-logo.png";
 import AdminAddProfile from "@/components/AdminAddProfile";
+import ProfileImagesEditor from "@/components/ProfileImagesEditor";
 import RevenueSection from "@/components/RevenueSection";
 import { useSessionSecurity } from "@/hooks/useSessionSecurity";
 
