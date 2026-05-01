@@ -411,6 +411,7 @@ export default function AdminDashboard() {
     if (!selectedProfile) return;
     setSavingEdit(true);
     const { id, created_at, ...updateData } = editForm as any;
+    if (updateData.gothra === "__manual__") updateData.gothra = null;
     const { error } = await supabase.from("profiles").update(updateData).eq("id", selectedProfile.id);
     if (!error) {
       const updated = { ...selectedProfile, ...updateData };
