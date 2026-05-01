@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Users, CheckCircle, Clock, LogOut, Menu, X, Home, ArrowLeft, CalendarCheck, Eye, Edit3, ChevronLeft, Save, UserCheck, UserX, Plus, Trash2, Search, Upload, FileText, Heart, UserPlus } from "lucide-react";
 import adminLogo from "@/assets/kalyanasuthra-logo.png";
 import AdminAddProfile from "@/components/AdminAddProfile";
+import ProfileImagesEditor from "@/components/ProfileImagesEditor";
 import { useSessionSecurity } from "@/hooks/useSessionSecurity";
 
 // Dropdown options (same as AdminDashboard)
@@ -36,7 +37,10 @@ const employmentOptions = ["Private Sector","Government","Self Employed / Busine
 const familyStatusOptions = ["Middle Class","Upper Middle Class","Rich","Affluent"];
 const familyTypeOptions = ["Joint Family","Nuclear Family","Extended Family"];
 const siblingsOptions = ["No Siblings","1 Brother","2 Brothers","3+ Brothers","1 Sister","2 Sisters","3+ Sisters","1 Brother 1 Sister","Multiple Siblings"];
-const gothramOptions = ["Kashyapa","Bharadwaja","Vasistha","Atri","Viswamitra","Agastya","Garga","Jamadagni","Shandilya","Koundinya","Dhananjaya","Haritasa","Other","Not Applicable"];
+const gothramOptions = [
+  "Agastya","Angirasa","Atri","Aupamanyava","Babhravya","Bhaargava","Bharadwaja","Bhrigu","Chandilya","Chyavana","Daksha","Dhananjaya","Galava","Gargeya","Gautama","Harita","Haritasa","Jamadagni","Jaimini","Kanva","Kapi","Kashyapa","Katyayana","Kaundinya","Kausika","Koundinya","Krishnatreya","Kutsa","Lohita","Madgalya","Maitreya","Mandavya","Markandeya","Maudgalya","Mudgala","Naidhruva","Parashara","Paingya","Paippalada","Pulastya","Pulaha","Sankrithi","Sankhyayana","Saraswata","Saunaka","Saunkayana","Savarna","Shandilya","Shatamarshana","Shaunaka","Shrivatsa","Sounaka","Srivatsa","Sumantu","Suparna","Tittiri","Upamanyu","Vadhula","Vaishampayana","Vamadeva","Vasishta","Vasistha","Vatsa","Vatsya","Vishnuvardhana","Vishvamitra","Viswamitra","Yaska",
+  "Other","Not Applicable"
+];
 const raashiOptions = ["Mesha (Aries)","Vrishabha (Taurus)","Mithuna (Gemini)","Karka (Cancer)","Simha (Leo)","Kanya (Virgo)","Tula (Libra)","Vrishchika (Scorpio)","Dhanu (Sagittarius)","Makara (Capricorn)","Kumbha (Aquarius)","Meena (Pisces)"];
 const starOptions = ["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishtha","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"];
 const doshamOptions = ["No Dosham","Chevvai Dosham","Rahu Dosham","Kethu Dosham","Shani Dosham","Not Known"];
@@ -387,12 +391,35 @@ export default function StaffDashboard() {
               <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-5 pb-3 border-b border-gray-100">🔮 Horoscope Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <EditSelect label="Gothram" field="gothra" options={gothramOptions} />
+                  {((editForm as any).gothra === "__manual__" || ((editForm as any).gothra && !gothramOptions.includes((editForm as any).gothra))) ? (
+                    <div className="mb-3">
+                      <label className="block text-sm font-semibold text-gray-500 mb-1">Gothram (Type manually)</label>
+                      <div className="flex gap-2">
+                        <input type="text" value={(editForm as any).gothra === "__manual__" ? "" : ((editForm as any).gothra || "")} onChange={e => setEditField("gothra", e.target.value)} placeholder="Enter Gothram" className="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 bg-white" />
+                        <button type="button" onClick={() => setEditField("gothra", "")} className="px-3 py-1 text-xs rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200">Back</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mb-3">
+                      <label className="block text-sm font-semibold text-gray-500 mb-1">Gothram</label>
+                      <select value={(editForm as any).gothra || ""} onChange={e => setEditField("gothra", e.target.value === "Other" ? "__manual__" : e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 bg-white">
+                        <option value="">Select Gothram</option>
+                        {gothramOptions.map(o => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    </div>
+                  )}
                   <EditSelect label="Raasi" field="raasi" options={raashiOptions} />
                   <EditSelect label="Star" field="star" options={starOptions} />
                   <EditSelect label="Dosham" field="dosham" options={doshamOptions} />
                 </div>
               </div>
+              <ProfileImagesEditor
+                profileId={selectedProfile.id}
+                primaryUrl={(editForm as any).profile_photo_url || null}
+                additionalUrls={(editForm as any).additional_photos || []}
+                horoscopeUrl={(editForm as any).horoscope_url || null}
+                onChange={(updates) => setEditForm(prev => ({ ...prev, ...updates }))}
+              />
             </div>
           ) : (
             <div className="space-y-6">
