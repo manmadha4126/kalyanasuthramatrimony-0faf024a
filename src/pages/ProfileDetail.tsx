@@ -284,7 +284,7 @@ export default function ProfileDetail() {
                 )}
                 {userSubscription === "assisted" && contactRevealed && (
                   <span className="text-xs font-semibold px-2 py-1 rounded-lg" style={{ background: "hsl(38, 90%, 96%)", color: "hsl(38, 60%, 35%)" }}>
-                    {contactViewCount}/7 profiles viewed
+                    {contactViewCount}/7 today
                   </span>
                 )}
               </div>
@@ -319,8 +319,8 @@ export default function ProfileDetail() {
                   <h3 className="font-bold text-[15px]" style={{ color: "hsl(310, 40%, 35%)", fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>Horoscope Details</h3>
                 </div>
                 {userSubscription === "assisted" && !horoscopeRevealed && (
-                  <button onClick={() => revealDetails("horoscope")} disabled={horoscopeViewCount >= 7} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" style={{ background: "hsl(310, 40%, 40%)" }}>
-                    <Eye size={13} /> {horoscopeViewCount >= 7 ? `Limit Reached (7/7)` : `View Horoscope (${horoscopeViewCount}/7)`}
+                  <button onClick={() => revealDetails("horoscope")} disabled={!horoscopeRevealed && horoscopeViewCount >= 7} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" style={{ background: "hsl(310, 40%, 40%)" }}>
+                    <Eye size={13} /> {horoscopeViewCount >= 7 && !horoscopeRevealed ? `Daily Limit (7/7)` : `View Horoscope (${horoscopeViewCount}/7 today)`}
                   </button>
                 )}
                 {userSubscription === "assisted" && horoscopeRevealed && (
