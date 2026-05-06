@@ -64,6 +64,8 @@ export default function CustomerDashboard() {
   const [interestTab, setInterestTab] = useState<"sent" | "received">("sent");
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
+  const [contactViewCount, setContactViewCount] = useState(0);
+  const [horoscopeViewCount, setHoroscopeViewCount] = useState(0);
   const notifRef = useRef<HTMLDivElement>(null);
   const [preferences, setPreferences] = useState<Preferences>(() => {
     const saved = localStorage.getItem("matchPreferences");
@@ -97,11 +99,19 @@ export default function CustomerDashboard() {
     fetchMatches(pData?.gender || "Male");
     fetchInterests(user.id);
     fetchNotifications(user.id);
+    fetchViewCounts(user.id);
   };
 
   const fetchNotifications = async (uid: string) => {
     const { data } = await supabase.from("notifications").select("*").eq("user_id", uid).order("created_at", { ascending: false }).limit(20);
     if (data) setNotifications(data as Notification[]);
+  };
+
+  const fetchViewCounts = async (uid: string) => {
+    const { count: cCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", uid).eq("view_type", "contact");
+    const { count: hCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", uid).eq("view_type", "horoscope");
+    setContactViewCount(cCount || 0);
+    setHoroscopeViewCount(hCount || 0);
   };
 
   const markNotifRead = async (id: string) => {
@@ -483,7 +493,7 @@ export default function CustomerDashboard() {
           </div>
         </header>
 
-        <div className="p-4 sm:p-6 pt-20 sm:pt-36 pb-20 lg:pb-6">
+        <div className="p-4 sm:p-6 pt-16 sm:pt-24 pb-20 lg:pb-6">
           {/* Profile Status Banner */}
           {userProfile?.profile_status && userProfile.profile_status !== "active" &&
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 rounded-xl p-4 mx-0 sm:mx-4 lg:mx-8 flex-col flex items-center justify-center gap-[15px]" style={
@@ -555,11 +565,11 @@ export default function CustomerDashboard() {
           {/* Home content */}
           {activeNav === "Home" &&
           <>
-              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mb-4">
                 <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
                   Welcome back, <span style={{ color: themeDark }}>{userProfile?.full_name?.split(" ")[0] || "Friend"}</span> 👋
                 </h1>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-gray-500 mt-0.5">
                   {prefApplied ? "Showing matches based on your preferences" : "Here are your recommended matches"}
                 </p>
               </motion.div>
@@ -587,9 +597,25 @@ export default function CustomerDashboard() {
                       <span className="text-sm font-medium" style={{ color: "hsl(0, 0%, 45%)" }}>Benefits</span>
                       <span className="text-sm font-bold" style={{ color: themeDark }}>Full Contact Details Visible</span>
                     </div>
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <div className="rounded-xl p-3 border" style={{ background: "white", borderColor: "hsl(185, 30%, 85%)" }}>
+                        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "hsl(0, 0%, 50%)" }}>Contact Views</p>
+                        <p className="text-lg font-extrabold mt-1" style={{ color: themeDark }}>{contactViewCount} <span className="text-xs font-semibold text-gray-500">/ 7 used</span></p>
+                        <p className="text-[11px] mt-0.5" style={{ color: contactViewCount >= 7 ? "hsl(0, 60%, 50%)" : "hsl(145, 50%, 30%)" }}>
+                          {contactViewCount >= 7 ? "Limit reached" : `${7 - contactViewCount} remaining`}
+                        </p>
+                      </div>
+                      <div className="rounded-xl p-3 border" style={{ background: "white", borderColor: "hsl(185, 30%, 85%)" }}>
+                        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "hsl(0, 0%, 50%)" }}>Horoscope Views</p>
+                        <p className="text-lg font-extrabold mt-1" style={{ color: themeDark }}>{horoscopeViewCount} <span className="text-xs font-semibold text-gray-500">/ 7 used</span></p>
+                        <p className="text-[11px] mt-0.5" style={{ color: horoscopeViewCount >= 7 ? "hsl(0, 60%, 50%)" : "hsl(145, 50%, 30%)" }}>
+                          {horoscopeViewCount >= 7 ? "Limit reached" : `${7 - horoscopeViewCount} remaining`}
+                        </p>
+                      </div>
+                    </div>
                     <div className="mt-2 rounded-xl p-3 flex items-center gap-2" style={{ background: "hsl(145, 50%, 93%)" }}>
                       <CheckCircle size={14} style={{ color: "hsl(145, 55%, 35%)" }} />
-                      <span className="text-xs font-semibold" style={{ color: "hsl(145, 50%, 25%)" }}>You can view phone, email & WhatsApp of all profiles</span>
+                      <span className="text-xs font-semibold" style={{ color: "hsl(145, 50%, 25%)" }}>You can view contact & horoscope details for up to 7 profiles each</span>
                     </div>
                   </div>
                 </motion.div>
