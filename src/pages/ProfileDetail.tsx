@@ -278,8 +278,8 @@ export default function ProfileDetail() {
                   <h3 className="font-bold text-[15px]" style={{ color: "hsl(38, 60%, 30%)", fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>Contact Details</h3>
                 </div>
                 {userSubscription === "assisted" && !contactRevealed && (
-                  <button onClick={() => revealDetails("contact")} disabled={contactViewCount >= 7} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" style={{ background: "hsl(38, 60%, 40%)" }}>
-                    <Eye size={13} /> {contactViewCount >= 7 ? `Limit Reached (7/7)` : `View Contact (${contactViewCount}/7)`}
+                  <button onClick={() => revealDetails("contact")} disabled={!contactRevealed && contactViewCount >= 7} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" style={{ background: "hsl(38, 60%, 40%)" }}>
+                    <Eye size={13} /> {contactViewCount >= 7 && !contactRevealed ? `Daily Limit (7/7)` : `View Contact (${contactViewCount}/7 today)`}
                   </button>
                 )}
                 {userSubscription === "assisted" && contactRevealed && (
