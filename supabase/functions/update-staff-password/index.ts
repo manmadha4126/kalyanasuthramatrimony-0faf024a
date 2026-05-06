@@ -31,8 +31,14 @@ Deno.serve(async (req) => {
 
     const user = users.find((u: any) => u.email?.toLowerCase() === email.toLowerCase());
     if (!user) {
-      return new Response(JSON.stringify({ error: "User not found" }), {
-        status: 404,
+      // Auto-provision auth user for existing staff member
+      const { data: created, error: createError } = await supabaseAdmin.auth.admin.createUser({
+        email: email.toLowerCase(),
+        password: newPassword,
+        email_confirm: true,
+      });
+      if (createError) throw createError;
+      return new Response(JSON.stringify({ success: true, created: true, userId: created.user?.id }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
