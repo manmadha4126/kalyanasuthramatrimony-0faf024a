@@ -71,16 +71,20 @@ export default function ProfileDetail() {
       const { data: existing } = await supabase.from("profile_interests").select("id").eq("from_user_id", user.id).eq("to_profile_id", id!).maybeSingle();
       if (existing) setInterestSent(true);
 
-      // Check if already viewed contact/horoscope for this profile
-      const { data: contactView } = await supabase.from("detail_views").select("id").eq("viewer_user_id", user.id).eq("viewed_profile_id", id!).eq("view_type", "contact").maybeSingle();
+      // Per-day window (resets at local midnight)
+      const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
+      const startIso = startOfDay.toISOString();
+
+      // Check if already viewed contact/horoscope for this profile TODAY
+      const { data: contactView } = await supabase.from("detail_views").select("id").eq("viewer_user_id", user.id).eq("viewed_profile_id", id!).eq("view_type", "contact").gte("viewed_at", startIso).maybeSingle();
       if (contactView) setContactRevealed(true);
-      const { data: horoscopeView } = await supabase.from("detail_views").select("id").eq("viewer_user_id", user.id).eq("viewed_profile_id", id!).eq("view_type", "horoscope").maybeSingle();
+      const { data: horoscopeView } = await supabase.from("detail_views").select("id").eq("viewer_user_id", user.id).eq("viewed_profile_id", id!).eq("view_type", "horoscope").gte("viewed_at", startIso).maybeSingle();
       if (horoscopeView) setHoroscopeRevealed(true);
 
-      // Get total view counts
-      const { count: cCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", user.id).eq("view_type", "contact");
+      // Get TODAY's view counts
+      const { count: cCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", user.id).eq("view_type", "contact").gte("viewed_at", startIso);
       setContactViewCount(cCount || 0);
-      const { count: hCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", user.id).eq("view_type", "horoscope");
+      const { count: hCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", user.id).eq("view_type", "horoscope").gte("viewed_at", startIso);
       setHoroscopeViewCount(hCount || 0);
     }
     setLoading(false);
@@ -97,13 +101,17 @@ export default function ProfileDetail() {
     const currentCount = viewType === "contact" ? contactViewCount : horoscopeViewCount;
     const alreadyViewed = viewType === "contact" ? contactRevealed : horoscopeRevealed;
     if (!alreadyViewed && currentCount >= 7) {
-      alert(`You have reached the limit of 7 ${viewType} views per subscription. Please contact us to upgrade.`);
+      alert(`You have reached today's limit of 7 ${viewType} views. The limit resets tomorrow.`);
       return;
     }
-    await supabase.from("detail_views").upsert(
-      { viewer_user_id: currentUserId, viewed_profile_id: id, view_type: viewType },
-      { onConflict: "viewer_user_id,viewed_profile_id,view_type" }
-    );
+    // Insert a new row each time (per-day tracking via viewed_at). If already viewed today, skip insert.
+    if (!alreadyViewed) {
+      await supabase.from("detail_views").insert({
+        viewer_user_id: currentUserId,
+        viewed_profile_id: id,
+        view_type: viewType,
+      });
+    }
     if (viewType === "contact") {
       setContactRevealed(true);
       setContactViewCount(prev => prev + 1);
@@ -270,13 +278,13 @@ export default function ProfileDetail() {
                   <h3 className="font-bold text-[15px]" style={{ color: "hsl(38, 60%, 30%)", fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>Contact Details</h3>
                 </div>
                 {userSubscription === "assisted" && !contactRevealed && (
-                  <button onClick={() => revealDetails("contact")} disabled={contactViewCount >= 7} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" style={{ background: "hsl(38, 60%, 40%)" }}>
-                    <Eye size={13} /> {contactViewCount >= 7 ? `Limit Reached (7/7)` : `View Contact (${contactViewCount}/7)`}
+                  <button onClick={() => revealDetails("contact")} disabled={!contactRevealed && contactViewCount >= 7} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" style={{ background: "hsl(38, 60%, 40%)" }}>
+                    <Eye size={13} /> {contactViewCount >= 7 && !contactRevealed ? `Daily Limit (7/7)` : `View Contact (${contactViewCount}/7 today)`}
                   </button>
                 )}
                 {userSubscription === "assisted" && contactRevealed && (
                   <span className="text-xs font-semibold px-2 py-1 rounded-lg" style={{ background: "hsl(38, 90%, 96%)", color: "hsl(38, 60%, 35%)" }}>
-                    {contactViewCount}/7 profiles viewed
+                    {contactViewCount}/7 today
                   </span>
                 )}
               </div>
@@ -311,13 +319,13 @@ export default function ProfileDetail() {
                   <h3 className="font-bold text-[15px]" style={{ color: "hsl(310, 40%, 35%)", fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>Horoscope Details</h3>
                 </div>
                 {userSubscription === "assisted" && !horoscopeRevealed && (
-                  <button onClick={() => revealDetails("horoscope")} disabled={horoscopeViewCount >= 7} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" style={{ background: "hsl(310, 40%, 40%)" }}>
-                    <Eye size={13} /> {horoscopeViewCount >= 7 ? `Limit Reached (7/7)` : `View Horoscope (${horoscopeViewCount}/7)`}
+                  <button onClick={() => revealDetails("horoscope")} disabled={!horoscopeRevealed && horoscopeViewCount >= 7} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" style={{ background: "hsl(310, 40%, 40%)" }}>
+                    <Eye size={13} /> {horoscopeViewCount >= 7 && !horoscopeRevealed ? `Daily Limit (7/7)` : `View Horoscope (${horoscopeViewCount}/7 today)`}
                   </button>
                 )}
                 {userSubscription === "assisted" && horoscopeRevealed && (
                   <span className="text-xs font-semibold px-2 py-1 rounded-lg" style={{ background: "hsl(310, 40%, 96%)", color: "hsl(310, 40%, 35%)" }}>
-                    {horoscopeViewCount}/7 profiles viewed
+                    {horoscopeViewCount}/7 today
                   </span>
                 )}
               </div>

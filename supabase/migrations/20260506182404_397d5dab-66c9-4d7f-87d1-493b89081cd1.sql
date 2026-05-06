@@ -1,0 +1,2 @@
+ALTER TABLE public.detail_views DROP CONSTRAINT IF EXISTS detail_views_viewer_user_id_viewed_profile_id_view_type_key;
+CREATE INDEX IF NOT EXISTS idx_detail_views_viewer_type_date ON public.detail_views (viewer_user_id, view_type, viewed_at);
