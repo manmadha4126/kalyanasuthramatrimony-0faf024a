@@ -71,16 +71,20 @@ export default function ProfileDetail() {
       const { data: existing } = await supabase.from("profile_interests").select("id").eq("from_user_id", user.id).eq("to_profile_id", id!).maybeSingle();
       if (existing) setInterestSent(true);
 
-      // Check if already viewed contact/horoscope for this profile
-      const { data: contactView } = await supabase.from("detail_views").select("id").eq("viewer_user_id", user.id).eq("viewed_profile_id", id!).eq("view_type", "contact").maybeSingle();
+      // Per-day window (resets at local midnight)
+      const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
+      const startIso = startOfDay.toISOString();
+
+      // Check if already viewed contact/horoscope for this profile TODAY
+      const { data: contactView } = await supabase.from("detail_views").select("id").eq("viewer_user_id", user.id).eq("viewed_profile_id", id!).eq("view_type", "contact").gte("viewed_at", startIso).maybeSingle();
       if (contactView) setContactRevealed(true);
-      const { data: horoscopeView } = await supabase.from("detail_views").select("id").eq("viewer_user_id", user.id).eq("viewed_profile_id", id!).eq("view_type", "horoscope").maybeSingle();
+      const { data: horoscopeView } = await supabase.from("detail_views").select("id").eq("viewer_user_id", user.id).eq("viewed_profile_id", id!).eq("view_type", "horoscope").gte("viewed_at", startIso).maybeSingle();
       if (horoscopeView) setHoroscopeRevealed(true);
 
-      // Get total view counts
-      const { count: cCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", user.id).eq("view_type", "contact");
+      // Get TODAY's view counts
+      const { count: cCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", user.id).eq("view_type", "contact").gte("viewed_at", startIso);
       setContactViewCount(cCount || 0);
-      const { count: hCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", user.id).eq("view_type", "horoscope");
+      const { count: hCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", user.id).eq("view_type", "horoscope").gte("viewed_at", startIso);
       setHoroscopeViewCount(hCount || 0);
     }
     setLoading(false);
@@ -97,13 +101,17 @@ export default function ProfileDetail() {
     const currentCount = viewType === "contact" ? contactViewCount : horoscopeViewCount;
     const alreadyViewed = viewType === "contact" ? contactRevealed : horoscopeRevealed;
     if (!alreadyViewed && currentCount >= 7) {
-      alert(`You have reached the limit of 7 ${viewType} views per subscription. Please contact us to upgrade.`);
+      alert(`You have reached today's limit of 7 ${viewType} views. The limit resets tomorrow.`);
       return;
     }
-    await supabase.from("detail_views").upsert(
-      { viewer_user_id: currentUserId, viewed_profile_id: id, view_type: viewType },
-      { onConflict: "viewer_user_id,viewed_profile_id,view_type" }
-    );
+    // Insert a new row each time (per-day tracking via viewed_at). If already viewed today, skip insert.
+    if (!alreadyViewed) {
+      await supabase.from("detail_views").insert({
+        viewer_user_id: currentUserId,
+        viewed_profile_id: id,
+        view_type: viewType,
+      });
+    }
     if (viewType === "contact") {
       setContactRevealed(true);
       setContactViewCount(prev => prev + 1);
