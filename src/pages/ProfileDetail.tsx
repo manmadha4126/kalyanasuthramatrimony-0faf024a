@@ -94,6 +94,12 @@ export default function ProfileDetail() {
 
   const revealDetails = async (viewType: "contact" | "horoscope") => {
     if (!currentUserId || !id) return;
+    const currentCount = viewType === "contact" ? contactViewCount : horoscopeViewCount;
+    const alreadyViewed = viewType === "contact" ? contactRevealed : horoscopeRevealed;
+    if (!alreadyViewed && currentCount >= 7) {
+      alert(`You have reached the limit of 7 ${viewType} views per subscription. Please contact us to upgrade.`);
+      return;
+    }
     await supabase.from("detail_views").upsert(
       { viewer_user_id: currentUserId, viewed_profile_id: id, view_type: viewType },
       { onConflict: "viewer_user_id,viewed_profile_id,view_type" }
