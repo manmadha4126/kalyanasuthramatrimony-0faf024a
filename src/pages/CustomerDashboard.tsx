@@ -237,8 +237,6 @@ export default function CustomerDashboard() {
           {profile.occupation && <p className="text-xs text-gray-600">💼 {profile.occupation}</p>}
           {(profile.city || profile.state) && <p className="text-xs text-gray-500">📍 {[profile.city, profile.state].filter(Boolean).join(", ")}</p>}
           {profile.annual_income && <p className="text-xs text-gray-500">💰 {profile.annual_income}</p>}
-          {userProfile?.subscription_type === "assisted" && profile.phone && <p className="text-xs text-gray-600">📞 {profile.phone}</p>}
-          {userProfile?.subscription_type === "assisted" && profile.email && <p className="text-xs text-gray-600">✉️ {profile.email}</p>}
           {userProfile?.subscription_type !== "assisted" &&
         <p className="text-[10px] mt-1 px-2 py-1 rounded-md" style={{ background: "hsl(38, 90%, 95%)", color: "hsl(38, 70%, 35%)" }}>🔒 Upgrade to see contact details</p>
         }
