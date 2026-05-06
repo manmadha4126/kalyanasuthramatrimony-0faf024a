@@ -64,6 +64,8 @@ export default function CustomerDashboard() {
   const [interestTab, setInterestTab] = useState<"sent" | "received">("sent");
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
+  const [contactViewCount, setContactViewCount] = useState(0);
+  const [horoscopeViewCount, setHoroscopeViewCount] = useState(0);
   const notifRef = useRef<HTMLDivElement>(null);
   const [preferences, setPreferences] = useState<Preferences>(() => {
     const saved = localStorage.getItem("matchPreferences");
@@ -97,11 +99,19 @@ export default function CustomerDashboard() {
     fetchMatches(pData?.gender || "Male");
     fetchInterests(user.id);
     fetchNotifications(user.id);
+    fetchViewCounts(user.id);
   };
 
   const fetchNotifications = async (uid: string) => {
     const { data } = await supabase.from("notifications").select("*").eq("user_id", uid).order("created_at", { ascending: false }).limit(20);
     if (data) setNotifications(data as Notification[]);
+  };
+
+  const fetchViewCounts = async (uid: string) => {
+    const { count: cCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", uid).eq("view_type", "contact");
+    const { count: hCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", uid).eq("view_type", "horoscope");
+    setContactViewCount(cCount || 0);
+    setHoroscopeViewCount(hCount || 0);
   };
 
   const markNotifRead = async (id: string) => {
