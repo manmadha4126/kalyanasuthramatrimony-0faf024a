@@ -108,8 +108,10 @@ export default function CustomerDashboard() {
   };
 
   const fetchViewCounts = async (uid: string) => {
-    const { count: cCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", uid).eq("view_type", "contact");
-    const { count: hCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", uid).eq("view_type", "horoscope");
+    const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
+    const startIso = startOfDay.toISOString();
+    const { count: cCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", uid).eq("view_type", "contact").gte("viewed_at", startIso);
+    const { count: hCount } = await supabase.from("detail_views").select("id", { count: "exact", head: true }).eq("viewer_user_id", uid).eq("view_type", "horoscope").gte("viewed_at", startIso);
     setContactViewCount(cCount || 0);
     setHoroscopeViewCount(hCount || 0);
   };
@@ -599,14 +601,14 @@ export default function CustomerDashboard() {
                     </div>
                     <div className="grid grid-cols-2 gap-3 pt-2">
                       <div className="rounded-xl p-3 border" style={{ background: "white", borderColor: "hsl(185, 30%, 85%)" }}>
-                        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "hsl(0, 0%, 50%)" }}>Contact Views</p>
+                        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "hsl(0, 0%, 50%)" }}>Contact Views (Today)</p>
                         <p className="text-lg font-extrabold mt-1" style={{ color: themeDark }}>{contactViewCount} <span className="text-xs font-semibold text-gray-500">/ 7 used</span></p>
                         <p className="text-[11px] mt-0.5" style={{ color: contactViewCount >= 7 ? "hsl(0, 60%, 50%)" : "hsl(145, 50%, 30%)" }}>
                           {contactViewCount >= 7 ? "Limit reached" : `${7 - contactViewCount} remaining`}
                         </p>
                       </div>
                       <div className="rounded-xl p-3 border" style={{ background: "white", borderColor: "hsl(185, 30%, 85%)" }}>
-                        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "hsl(0, 0%, 50%)" }}>Horoscope Views</p>
+                        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "hsl(0, 0%, 50%)" }}>Horoscope Views (Today)</p>
                         <p className="text-lg font-extrabold mt-1" style={{ color: themeDark }}>{horoscopeViewCount} <span className="text-xs font-semibold text-gray-500">/ 7 used</span></p>
                         <p className="text-[11px] mt-0.5" style={{ color: horoscopeViewCount >= 7 ? "hsl(0, 60%, 50%)" : "hsl(145, 50%, 30%)" }}>
                           {horoscopeViewCount >= 7 ? "Limit reached" : `${7 - horoscopeViewCount} remaining`}
@@ -615,7 +617,7 @@ export default function CustomerDashboard() {
                     </div>
                     <div className="mt-2 rounded-xl p-3 flex items-center gap-2" style={{ background: "hsl(145, 50%, 93%)" }}>
                       <CheckCircle size={14} style={{ color: "hsl(145, 55%, 35%)" }} />
-                      <span className="text-xs font-semibold" style={{ color: "hsl(145, 50%, 25%)" }}>You can view contact & horoscope details for up to 7 profiles each</span>
+                      <span className="text-xs font-semibold" style={{ color: "hsl(145, 50%, 25%)" }}>You can view contact & horoscope details for 7 profiles each per day. Resets daily.</span>
                     </div>
                   </div>
                 </motion.div>
