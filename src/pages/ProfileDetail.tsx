@@ -325,7 +325,7 @@ export default function ProfileDetail() {
                 )}
                 {userSubscription === "assisted" && horoscopeRevealed && (
                   <span className="text-xs font-semibold px-2 py-1 rounded-lg" style={{ background: "hsl(310, 40%, 96%)", color: "hsl(310, 40%, 35%)" }}>
-                    {horoscopeViewCount}/7 profiles viewed
+                    {horoscopeViewCount}/7 today
                   </span>
                 )}
               </div>
