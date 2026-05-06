@@ -270,13 +270,13 @@ export default function ProfileDetail() {
                   <h3 className="font-bold text-[15px]" style={{ color: "hsl(38, 60%, 30%)", fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>Contact Details</h3>
                 </div>
                 {userSubscription === "assisted" && !contactRevealed && (
-                  <button onClick={() => revealDetails("contact")} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105" style={{ background: "hsl(38, 60%, 40%)" }}>
-                    <Eye size={13} /> View Contact Details
+                  <button onClick={() => revealDetails("contact")} disabled={contactViewCount >= 7} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" style={{ background: "hsl(38, 60%, 40%)" }}>
+                    <Eye size={13} /> {contactViewCount >= 7 ? `Limit Reached (7/7)` : `View Contact (${contactViewCount}/7)`}
                   </button>
                 )}
                 {userSubscription === "assisted" && contactRevealed && (
                   <span className="text-xs font-semibold px-2 py-1 rounded-lg" style={{ background: "hsl(38, 90%, 96%)", color: "hsl(38, 60%, 35%)" }}>
-                    {contactViewCount} profile{contactViewCount !== 1 ? "s" : ""} viewed
+                    {contactViewCount}/7 profiles viewed
                   </span>
                 )}
               </div>
@@ -311,13 +311,13 @@ export default function ProfileDetail() {
                   <h3 className="font-bold text-[15px]" style={{ color: "hsl(310, 40%, 35%)", fontFamily: "'Noto Sans', sans-serif", letterSpacing: "0.3px" }}>Horoscope Details</h3>
                 </div>
                 {userSubscription === "assisted" && !horoscopeRevealed && (
-                  <button onClick={() => revealDetails("horoscope")} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105" style={{ background: "hsl(310, 40%, 40%)" }}>
-                    <Eye size={13} /> View Horoscope Details
+                  <button onClick={() => revealDetails("horoscope")} disabled={horoscopeViewCount >= 7} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" style={{ background: "hsl(310, 40%, 40%)" }}>
+                    <Eye size={13} /> {horoscopeViewCount >= 7 ? `Limit Reached (7/7)` : `View Horoscope (${horoscopeViewCount}/7)`}
                   </button>
                 )}
                 {userSubscription === "assisted" && horoscopeRevealed && (
                   <span className="text-xs font-semibold px-2 py-1 rounded-lg" style={{ background: "hsl(310, 40%, 96%)", color: "hsl(310, 40%, 35%)" }}>
-                    {horoscopeViewCount} profile{horoscopeViewCount !== 1 ? "s" : ""} viewed
+                    {horoscopeViewCount}/7 profiles viewed
                   </span>
                 )}
               </div>
