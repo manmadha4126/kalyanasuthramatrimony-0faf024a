@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://kalyanasuthramatrimony.lovable.app/sitemap.xml

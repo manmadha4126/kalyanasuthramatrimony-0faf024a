@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Check, ArrowLeft, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +48,27 @@ const MembershipPlans = () => {
 
   return (
     <div className="min-h-screen" style={{ background: "linear-gradient(160deg, hsl(140, 30%, 85%) 0%, hsl(180, 25%, 88%) 50%, hsl(50, 40%, 90%) 100%)" }}>
+      <Helmet>
+        <title>Membership Plans — Kalyanasuthra Matrimony</title>
+        <meta name="description" content="Compare matrimony membership plans: Online, Support and Affluent packages with verified profiles, relationship managers, and tailored matchmaking." />
+        <link rel="canonical" href="/membership-plans" />
+        <meta property="og:title" content="Membership Plans — Kalyanasuthra Matrimony" />
+        <meta property="og:description" content="Compare matrimony membership plans with verified profiles and dedicated relationship managers." />
+        <meta property="og:url" content="/membership-plans" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "Kalyanasuthra Matrimony Membership Plans",
+          itemListElement: packages.flatMap((pkg, pi) =>
+            pkg.plans.map((p, idx) => ({
+              "@type": "Product",
+              position: pi * 10 + idx + 1,
+              name: `${pkg.name} — ${p.duration}`,
+              offers: { "@type": "Offer", price: p.price.replace(/[^0-9]/g, ""), priceCurrency: "INR" },
+            }))
+          ),
+        })}</script>
+      </Helmet>
       {/* Header */}
       <div className="py-6 px-4" style={{ background: "hsla(0,0%,0%,0.35)" }}>
         <div className="container mx-auto max-w-6xl flex items-center gap-4">

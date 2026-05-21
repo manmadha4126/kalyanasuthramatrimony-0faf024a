@@ -36,17 +36,19 @@ const Index = () => {
   return (
     <div className="scroll-smooth">
       <Header />
-      <HeroSection />
-      <AboutSection />
-      <SaptapadiSection />
-      <BringingTogetherSection />
-      <FeaturedProfiles />
-      <SuccessStories />
-      <OurFeaturesSection />
-      <PaymentSection />
-      <FindMatchCTA />
-      <ServicesSection />
-      <ContactSection />
+      <main>
+        <HeroSection />
+        <AboutSection />
+        <SaptapadiSection />
+        <BringingTogetherSection />
+        <FeaturedProfiles />
+        <SuccessStories />
+        <OurFeaturesSection />
+        <PaymentSection />
+        <FindMatchCTA />
+        <ServicesSection />
+        <ContactSection />
+      </main>
       <Footer />
       <WhatsAppButton />
       <AIChatBot />

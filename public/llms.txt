@@ -1,0 +1,14 @@
+# Kalyanasuthra Matrimony
+
+> South India's trusted matrimony service for Telugu, Tamil and Kannada families. Verified profiles and dedicated relationship managers help families find compatible matches.
+
+## Pages
+
+- [Home](/): About Kalyanasuthra, featured profiles, success stories, services and contact.
+- [Membership Plans](/membership-plans): Online, Support and Affluent matrimony packages with pricing.
+- [Register](/register): Create a new matrimony profile.
+
+## Optional
+
+- [Privacy Policy](/privacy-policy)
+- [Terms of Service](/terms-of-service)

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
@@ -146,6 +147,30 @@ export default function ProfileDetail() {
 
   return (
     <div className="min-h-screen" style={{ background: "hsl(160, 15%, 97%)" }}>
+      <Helmet>
+        <title>{`${profile.full_name} — Profile | Kalyanasuthra Matrimony`}</title>
+        <meta name="description" content={`${profile.full_name}, ${profile.gender}${profile.city ? `, ${profile.city}` : ""}${profile.occupation ? `, ${profile.occupation}` : ""}. View matrimony profile on Kalyanasuthra.`.slice(0, 160)} />
+        <link rel="canonical" href={`/profile/${profile.id}`} />
+        <meta name="robots" content="noindex" />
+        <meta property="og:title" content={`${profile.full_name} — Kalyanasuthra Matrimony`} />
+        <meta property="og:url" content={`/profile/${profile.id}`} />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfilePage",
+          mainEntity: {
+            "@type": "Person",
+            name: profile.full_name,
+            gender: profile.gender,
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: profile.city || undefined,
+              addressRegion: profile.state || undefined,
+              addressCountry: profile.country,
+            },
+            jobTitle: profile.occupation || undefined,
+          },
+        })}</script>
+      </Helmet>
       {/* Fixed Header */}
       <header className="fixed top-0 left-0 right-0 z-20 bg-white/90 backdrop-blur-sm border-b border-gray-100 px-4 sm:px-6 py-3">
         <div className="max-w-6xl mx-auto flex items-center gap-3">
