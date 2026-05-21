@@ -318,11 +318,14 @@ const HeroSection = () => {
 
                 {/* Main image with soft fade */}
                 <div className="absolute inset-0">
-                  {images.map((img, i) => (
+                   {images.map((img, i) => (
                     <img
                       key={`main-${i}`}
                       src={img}
                       alt={`Wedding ${i + 1}`}
+                      width={480}
+                      height={640}
+                      {...(i === 0 ? { fetchPriority: "high" as const } : { loading: "lazy" as const })}
                       className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${i === current ? "opacity-100" : "opacity-0"}`}
                     />
                   ))}
