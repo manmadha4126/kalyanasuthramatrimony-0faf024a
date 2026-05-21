@@ -11,16 +11,57 @@ Deno.serve(async (req) => {
   }
 
   try {
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const supabaseAdmin = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
+
+    const callerClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+    const { data: caller, error: callerErr } = await callerClient.auth.getUser();
+    if (callerErr || !caller?.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const { data: isAdmin } = await supabaseAdmin.rpc("is_admin", { check_user_id: caller.user.id });
+    if (!isAdmin) {
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const { email, newPassword } = await req.json();
 
     if (!email || !newPassword || newPassword.length < 6) {
       return new Response(JSON.stringify({ error: "Email and password (min 6 chars) required" }), {
         status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Only allow targeting emails that are in staff_members
+    const { data: staffRow } = await supabaseAdmin
+      .from("staff_members")
+      .select("email")
+      .eq("email", email.toLowerCase())
+      .maybeSingle();
+    if (!staffRow) {
+      return new Response(JSON.stringify({ error: "Target is not a staff member" }), {
+        status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

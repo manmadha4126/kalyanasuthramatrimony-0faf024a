@@ -6,12 +6,6 @@ import { Eye, EyeOff, Shield, Heart, Users, Star, Gem, ArrowLeft } from "lucide-
 import logo from "@/assets/kalyanasuthra-logo.png";
 import { loginSchema, sanitizeInput, checkRateLimit } from "@/lib/security";
 
-const ADMIN_CREDENTIALS = [
-  { email: "menda.manmadha21@gmail.com", password: "0*MAha21" },
-  { email: "drakshayani@gmail.com", password: "ADmin@5335" },
-  { email: "kalyanasuthra@gmail.com", password: "ADmin@5335" },
-];
-
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,65 +31,44 @@ export default function AdminLogin() {
     setLoading(true);
     setError("");
     try {
-      // Check if admin
-      const adminCred = ADMIN_CREDENTIALS.find(
-        (c) => c.email === email.toLowerCase() && c.password === password
-      );
-
-      if (adminCred) {
-        let { error: signInError } = await supabase.auth.signInWithPassword({ email: adminCred.email, password: adminCred.password });
-        if (signInError) {
-          if (signInError.message.includes("Invalid login credentials")) {
-            const { error: signUpError } = await supabase.auth.signUp({
-              email: adminCred.email,
-              password: adminCred.password,
-              options: { data: { full_name: "Admin", role: "admin" } }
-            });
-            if (signUpError && !signUpError.message.includes("already registered")) throw signUpError;
-            const { error: retryError } = await supabase.auth.signInWithPassword({ email: adminCred.email, password: adminCred.password });
-            if (retryError) throw retryError;
-          } else {
-            throw signInError;
-          }
-        }
-        sessionStorage.setItem("admin_auth", JSON.stringify({ email: adminCred.email, loggedIn: true }));
-        navigate("/admin/dashboard");
-        return;
-      }
-
-      // Staff must sign in first because staff_members is only readable by authenticated users
-      const { data: staffSignInData, error: signInError } = await supabase.auth.signInWithPassword({
+      // Sign in with provided credentials, then verify admin/staff status server-side
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
         email: email.toLowerCase(),
         password,
       });
 
-      if (!signInError) {
-        const { data: staffData, error: staffError } = await supabase
-          .from("staff_members" as any)
-          .select("email, is_active")
-          .eq("email", email.toLowerCase())
-          .eq("is_active", true)
-          .limit(1);
-
-        if (!staffError && staffData && (staffData as any[]).length > 0) {
-          sessionStorage.setItem("staff_auth", JSON.stringify({ email: email.toLowerCase(), loggedIn: true }));
-          navigate("/staff/dashboard");
-          return;
-        }
-
-        await supabase.auth.signOut();
-        setError("Access denied. This account is not an active staff account.");
-        setLoading(false);
-        return;
-      }
-
-      if (signInError.message.includes("Invalid login credentials")) {
+      if (signInError || !signInData?.user) {
         setError("Invalid email or password.");
         setLoading(false);
         return;
       }
 
-      setError("Invalid email or password. Access denied.");
+      // Server-side admin check
+      const { data: isAdmin } = await supabase.rpc("is_admin", { check_user_id: signInData.user.id });
+      if (isAdmin) {
+        sessionStorage.setItem("admin_auth", JSON.stringify({ email: email.toLowerCase(), loggedIn: true }));
+        navigate("/admin/dashboard");
+        return;
+      }
+
+      // Otherwise check staff
+      const { data: staffData } = await supabase
+        .from("staff_members" as any)
+        .select("email, is_active")
+        .eq("email", email.toLowerCase())
+        .eq("is_active", true)
+        .limit(1);
+
+      if (staffData && (staffData as any[]).length > 0) {
+        sessionStorage.setItem("staff_auth", JSON.stringify({ email: email.toLowerCase(), loggedIn: true }));
+        navigate("/staff/dashboard");
+        return;
+      }
+
+      await supabase.auth.signOut();
+      setError("Access denied. This account is not an active staff or admin account.");
+      setLoading(false);
+      return;
     } catch (err: any) {
       setError(err.message || "Login failed. Please try again.");
     } finally {
