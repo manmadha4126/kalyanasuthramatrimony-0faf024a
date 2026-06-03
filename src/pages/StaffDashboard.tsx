@@ -150,8 +150,22 @@ export default function StaffDashboard() {
 
   const fetchProfiles = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
-    if (!error && data) setProfiles(data as Profile[]);
+    const all: Profile[] = [];
+    const pageSize = 1000;
+    let from = 0;
+    while (true) {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .range(from, from + pageSize - 1);
+      if (error) break;
+      if (!data || data.length === 0) break;
+      all.push(...(data as Profile[]));
+      if (data.length < pageSize) break;
+      from += pageSize;
+    }
+    setProfiles(all);
     setLoading(false);
   };
 
