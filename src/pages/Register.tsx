@@ -37,11 +37,11 @@ const religionOptions = [
 // Caste mapping based on religion
 const casteMappings: Record<string, string[]> = {
   "Hindu": [
-    "Brahmin", "Kshatriya", "Vaishya", "Shudra", "Agarwal", "Arora", "Bania", "Chettiar",
+    "Brahmin", "Kshatriya", "Vaishya", "Shudra", "Agarwal", "Arora", "Aryavyshya", "Balija", "Bania", "Chettiar",
     "CNB", "Devanga", "Ezhava", "Goud", "Gounder", "Iyer", "Iyengar", "Jat", "Kamma", "Kapu",
     "Kayastha", "Khandayat", "Khatri", "Kongu Vellalar", "Kurmi", "Lingayat", "Maratha",
     "Meena", "Mudaliar", "Nadar", "Naidu", "Nair", "Padmashali", "Patel", "Pillai",
-    "Rajput", "Reddy", "Saini", "Sengunthar", "Thevar", "Vanniyar", "Velama", "Vishwakarma",
+    "Rajput", "Reddy", "Saini", "Sengunthar", "Thevar", "Vadera", "Vanniyar", "Velama", "Vishwakarma",
     "Vokkaliga", "Yadav", "SC / ST", "OBC", "Other", "No Caste Preference"
   ],
   "Muslim": [
