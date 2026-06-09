@@ -64,9 +64,18 @@ Deno.serve(async (req) => {
     if (createError) {
       // If user already exists, just update password
       if (createError.message.includes("already been registered") || createError.message.includes("already exists")) {
-        const { data: { users }, error: listError } = await supabaseAdmin.auth.admin.listUsers();
-        if (listError) throw listError;
-        const existingUser = users.find((u: any) => u.email?.toLowerCase() === email.toLowerCase());
+        const targetEmail = email.toLowerCase();
+        let existingUser: any = null;
+        let page = 1;
+        const perPage = 1000;
+        while (true) {
+          const { data, error: listError } = await supabaseAdmin.auth.admin.listUsers({ page, perPage });
+          if (listError) throw listError;
+          const found = data.users.find((u: any) => u.email?.toLowerCase() === targetEmail);
+          if (found) { existingUser = found; break; }
+          if (data.users.length < perPage) break;
+          page++;
+        }
         if (existingUser) {
           // Confirm email and update password
           const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
