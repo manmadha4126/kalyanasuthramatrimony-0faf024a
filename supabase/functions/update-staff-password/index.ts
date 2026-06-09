@@ -66,11 +66,19 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Find user by email
-    const { data: { users }, error: listError } = await supabaseAdmin.auth.admin.listUsers();
-    if (listError) throw listError;
-
-    const user = users.find((u: any) => u.email?.toLowerCase() === email.toLowerCase());
+    // Find user by email (paginate, since listUsers defaults to a small page size)
+    const targetEmail = email.toLowerCase();
+    let user: any = null;
+    let page = 1;
+    const perPage = 1000;
+    while (true) {
+      const { data, error: listError } = await supabaseAdmin.auth.admin.listUsers({ page, perPage });
+      if (listError) throw listError;
+      const found = data.users.find((u: any) => u.email?.toLowerCase() === targetEmail);
+      if (found) { user = found; break; }
+      if (data.users.length < perPage) break;
+      page++;
+    }
     if (!user) {
       // Auto-provision auth user for existing staff member
       const { data: created, error: createError } = await supabaseAdmin.auth.admin.createUser({
