@@ -166,8 +166,14 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
       toast({ title: "Email is required to create a login account", variant: "destructive" });
       return;
     }
-    if (!form.password || form.password.length < 6) {
-      toast({ title: "Password must be at least 6 characters", variant: "destructive" });
+    const hasStrongPassword =
+      form.password.length >= 10 &&
+      /[a-z]/.test(form.password) &&
+      /[A-Z]/.test(form.password) &&
+      /\d/.test(form.password) &&
+      /[^A-Za-z0-9]/.test(form.password);
+    if (!hasStrongPassword) {
+      toast({ title: "Use a stronger password", description: "Enter at least 10 characters with uppercase, lowercase, a number, and a symbol.", variant: "destructive" });
       return;
     }
     if (form.password !== form.confirmPassword) {
@@ -351,7 +357,7 @@ export default function AdminAddProfile({ onProfileAdded }: { onProfileAdded: ()
           <SelectField label="Gender" value={form.gender} onChange={v => set("gender", v)} options={genderOptions} required />
           <TextField label="Email" value={form.email} onChange={v => set("email", v)} type="email" required />
           <TextField label="Phone" value={form.phone} onChange={v => set("phone", v)} required />
-          <TextField label="Create Password" value={form.password} onChange={v => set("password", v)} type="password" required placeholder="Min 6 characters" />
+          <TextField label="Create Password" value={form.password} onChange={v => set("password", v)} type="password" required placeholder="10+ characters, number & symbol" />
           <TextField label="Confirm Password" value={form.confirmPassword} onChange={v => set("confirmPassword", v)} type="password" required placeholder="Re-enter password" />
           {form.password && form.confirmPassword && form.password !== form.confirmPassword && (
             <div className="col-span-full">

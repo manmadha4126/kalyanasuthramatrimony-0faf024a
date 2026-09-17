@@ -75,12 +75,14 @@ Deno.serve(async (req) => {
     }
 
     const errMsg = (error?.message || "").toLowerCase();
+    const errCode = ((error as { code?: string } | null)?.code || "").toLowerCase();
     const isDuplicate =
+      errCode === "user_already_exists" ||
+      errCode === "email_exists" ||
       errMsg.includes("already") ||
       errMsg.includes("exists") ||
       errMsg.includes("registered") ||
-      errMsg.includes("duplicate") ||
-      (error as any)?.status === 422;
+      errMsg.includes("duplicate");
 
     if (isDuplicate) {
       console.log("User exists, looking up:", normalizedEmail);
@@ -131,6 +133,11 @@ Deno.serve(async (req) => {
 
 
     console.error("createUser error:", error);
+    if (errCode === "weak_password" || errMsg.includes("weak") || errMsg.includes("easy to guess")) {
+      return jsonResponse({
+        error: "This password is too easy to guess. Use at least 10 characters with uppercase, lowercase, a number, and a symbol.",
+      });
+    }
     return jsonResponse({ error: error?.message || "Failed to create user account" });
   } catch (err) {
     console.error("create-customer-user error:", err);
