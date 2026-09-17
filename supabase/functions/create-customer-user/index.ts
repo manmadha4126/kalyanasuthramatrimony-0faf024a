@@ -83,22 +83,37 @@ Deno.serve(async (req) => {
       (error as any)?.status === 422;
 
     if (isDuplicate) {
-      console.log("User exists, looking up via SQL:", normalizedEmail);
+      console.log("User exists, looking up:", normalizedEmail);
 
-      // Look up directly in auth.users via service-role SQL — avoids listUsers pagination
-      const { data: existingRows, error: lookupErr } = await supabaseAdmin
-        .schema("auth" as any)
-        .from("users" as any)
-        .select("id")
-        .ilike("email", normalizedEmail)
-        .limit(1);
+      let existingId: string | undefined;
 
-      const existingId = existingRows?.[0]?.id;
+      // 1) Secure RPC lookup (fast, no pagination)
+      const { data: rpcId, error: rpcErr } = await supabaseAdmin.rpc("get_auth_user_id_by_email", {
+        p_email: normalizedEmail,
+      });
+      if (rpcErr) console.error("rpc lookup error:", rpcErr);
+      if (rpcId) existingId = rpcId as string;
+
+      // 2) Fallback: paginate listUsers
+      if (!existingId) {
+        for (let page = 1; page <= 50; page++) {
+          const { data: list, error: listErr } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 1000 });
+          if (listErr) {
+            console.error("listUsers error:", listErr);
+            break;
+          }
+          const found = list?.users?.find((u: any) => (u.email || "").toLowerCase() === normalizedEmail);
+          if (found) {
+            existingId = found.id;
+            break;
+          }
+          if (!list?.users?.length || list.users.length < 1000) break;
+        }
+      }
 
       if (!existingId) {
-        console.error("Lookup failed for existing user:", lookupErr);
         return jsonResponse({
-          error: "An account with this email already exists but could not be located. Please use a different email.",
+          error: "This email is already registered with another account. Please use a different email address.",
         });
       }
 
@@ -113,6 +128,7 @@ Deno.serve(async (req) => {
       console.log("Updated existing user:", existingId);
       return jsonResponse({ user_id: existingId, existing: true });
     }
+
 
     console.error("createUser error:", error);
     return jsonResponse({ error: error?.message || "Failed to create user account" });
